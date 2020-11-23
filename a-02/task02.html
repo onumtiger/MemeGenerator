@@ -37,29 +37,39 @@
         
     </style>
     <script>
+        let imgUrl = ""
         async function generate() {
-        let form = document.getElementById("memeForm");
-        let memeURL = document.getElementById("memeURL");
-        // add logic to create meme from api
-        const params = {
-            template_id: 61527,
-            text0: form.firstCaption.value,
-            text1: form.lastCaption.value,
-            username: "onumUni",
-            password: "copquh-pywciC-kubho4"
-        };
-        var queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-        const response = await fetch(
-            `https://api.imgflip.com/caption_image?${queryString}`
-        );
-        const json = await response.json();
-        memeURL.href = json.data.url;
-        memeURL.innerHTML = "Click to see meme";
-        console.log(json.data.url);
-    }
+            let form = document.getElementById("memeForm");
+            let button = document.getElementById("button");
+            button.value = "building";
+
+            const params = {
+                template_id: imgUrl,
+                text0: form.firstCaption.value,
+                text1: form.lastCaption.value,
+                username: "onumUni",
+                password: "copquh-pywciC-kubho4"
+            };
+            var queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+            const response = await fetch(
+                `https://api.imgflip.com/caption_image?${queryString}`
+            );
+            const json = await response.json();
+            button.value = "Generate";
+            document.getElementById("meme").src = json.data.url;
+        }
+
+        async function getMemes() {
+            let response = await fetch(`https://api.imgflip.com/get_memes`);
+            let data = await response.json();
+            random = Math.floor(Math.random() * 100) 
+            imgUrl = data.data.memes[random].id
+            document.getElementById("meme").src = data.data.memes[random].url;
+        }
+
     </script>
 </head>
-<body>
+<body onload="getMemes()">
 
 <div class="container">
     <h2>Meme Generator</h2>
@@ -71,10 +81,11 @@
       Last caption:<br>
       <input type="text" name="lastCaption" value="">
       <br><br>
-      <input class="signup-button" type="button" onclick="generate()" value="Generate" >
+      <input id="button" class="signup-button" type="button" onclick="generate()" value="Generate" >
     </form> 
 
-    <a id="memeURL" href="/" target="_blank">wait</a>
+    <img src="" id="meme"/>
+
 </div>
 
 
