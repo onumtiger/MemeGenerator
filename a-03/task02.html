@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Meme Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font: 12pt 'Montserrat', 'Helvetica', 'Arial', sans-serif;
+            height: 100%;
+        }
+        body {
+            background-color: #ced1dd;
+        }
+
+        #container, #templateContainer {
+            padding: 1em;
+            width: 1000px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        form {
+            margin-bottom: 40px;
+        }
+
+        #formtable {
+            width: 100%;
+        }
+
+        #formtable th {
+            width: 7em;
+            text-align: left;
+        }
+
+        #formtable th, #formtable td {
+            padding-bottom: 15px;
+        }
+
+        #submit-button {
+            background-color: #6079d7;
+            color: #fff;
+            letter-spacing: .0625rem;
+            box-shadow: 0 3px 5px 1px rgb(163, 166, 168);
+            padding: 8px;
+            border: 1px solid #2c6799;
+            border-radius: 3px;
+            font-size: 12pt;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #firstCaption, #lastCaption {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .meme {
+            width: 20%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .highlighted {
+            broder: 1px solid #2c6799;
+            margin: 5px;
+            width: 50%;
+            display: block;
+        }
+        
+        
+        @media screen and (max-width: 1100px) {
+            #container {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        let imgUrl = ""
+        async function generate() {
+            document.getElementById("templateContainer").classList.add("hidden") 
+
+            let form = document.getElementById("memeForm");
+            let button = document.getElementById("submit-button");
+            button.innerText = "building...";
+
+            const params = {
+                template_id: imgUrl,
+                text0: form.firstCaption.value,
+                text1: form.lastCaption.value,
+                username: "onumUni",
+                password: "copquh-pywciC-kubho4"
+            };
+            let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+            const response = await fetch(
+                `https://api.imgflip.com/caption_image?${queryString}`, {method: 'POST'}
+            );
+            const json = await response.json();
+            button.innerText = "Generate";
+
+            document.getElementById("meme").src = json.data.url;       
+        }
+
+        function init(){ //called when the DOM is ready so that getElementById etc will work
+            setUpTemplate();
+            document.getElementById('submit-button').addEventListener("click", generate);
+        }
+        
+        async function getTemplates() {
+            let memes = []
+            let response = await fetch(`https://api.imgflip.com/get_memes`);
+            let data = await response.json();
+            let templateLength = 10
+            for (let i = 0; i < templateLength; i++){
+                let img = {
+                    id: "",
+                    url: ""
+                }
+                random = Math.floor(Math.random() * 100) 
+                img.id = data.data.memes[random].id
+                img.url = data.data.memes[random].url
+                memes.push(img)
+            }
+            return memes
+        }
+
+        async function setUpTemplate() {
+            let memes = await getTemplates()
+            for (let i = 0; i < memes.length; i++){
+                var newImg = document.createElement('img')
+                newImg.src = memes[i].url;
+                newImg.classList.add("meme")
+                newImg.setAttribute("id", memes[i].id)
+                newImg.onclick = function() {
+                    selectImage(this.id)
+                    let img = document.getElementById(this.id)
+                    img.classList.add("highlighted")
+                    imgUrl = img.id
+                }
+                document.getElementById('templateContainer').appendChild(newImg);
+            }
+        }
+
+        function selectImage(image){
+            let template = document.getElementsByClassName("meme")
+            for (let i = 0; i < template.length; i++){
+                template[i].classList.add("hidden")
+            }  
+            document.getElementById("task").innerHTML = "Add captions"
+
+            let img = document.getElementById(image)
+            img.classList.add("highlighted")
+            imgUrl = img.id
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</head>
+<body>
+    <div id="container">
+        <h2>Meme Generator</h2>
+
+        <form id="memeForm" action="" method="">
+        <table id="formtable">
+            <tbody>
+                <tr>
+                    <th><label for="firstCaption">First caption:</label></th>
+                    <td><input type="text" name="firstCaption" id="firstCaption" value=""></td>
+                </tr>
+                <tr>
+                    <th><label for="lastCaption">Last caption:</label></th>
+                    <td><input type="text" name="lastCaption" id="lastCaption" value=""></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="submit-button" type="button">Generate</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </form> 
+
+        <div id="templateContainer">
+            <h1 id="task">select an image</h1>
+            
+        </div>
+        <img src="" id="meme">
+
+    </div>
+</body>
+</html>
