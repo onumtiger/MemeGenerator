@@ -137,9 +137,6 @@
                 newImg.setAttribute("id", memes[i].id)
                 newImg.onclick = function() {
                     selectImage(this.id)
-                    let img = document.getElementById(this.id)
-                    img.classList.add("highlighted")
-                    imgUrl = img.id
                 }
                 document.getElementById('templateContainer').appendChild(newImg);
             }
