@@ -81,7 +81,7 @@
     </style>
     <script>
         let imgUrl = ""
-        async function generate() {
+        async function generate() { // generate meme
             document.getElementById("templateContainer").classList.add("hidden") 
 
             let form = document.getElementById("memeForm");
@@ -110,7 +110,7 @@
             document.getElementById('submit-button').addEventListener("click", generate);
         }
         
-        async function getTemplates() {
+        async function getTemplates() { // get templates images
             let memes = []
             let response = await fetch(`https://api.imgflip.com/get_memes`);
             let data = await response.json();
@@ -128,7 +128,7 @@
             return memes
         }
 
-        async function setUpTemplate() {
+        async function setUpTemplate() { // add template images to dom
             let memes = await getTemplates()
             for (let i = 0; i < memes.length; i++){
                 var newImg = document.createElement('img')
@@ -145,7 +145,7 @@
             }
         }
 
-        function selectImage(image){
+        function selectImage(image){ // not selected pictures
             let template = document.getElementsByClassName("meme")
             for (let i = 0; i < template.length; i++){
                 template[i].classList.add("hidden")
