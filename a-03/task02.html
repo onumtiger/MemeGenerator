@@ -15,15 +15,33 @@
             background-color: #ced1dd;
         }
 
-        #container, #templateContainer {
+        #container {
             padding: 1em;
             width: 1000px;
             margin: 0 auto;
             box-sizing: border-box;
         }
 
-        form {
-            margin-bottom: 40px;
+        #templateContainer {
+            height: 300px;
+            padding: 5px 0;
+            box-sizing: border-box;
+            white-space: nowrap;
+            overflow: auto;
+        }
+
+        #templateContainer img {
+            height: 100%;
+            margin-right: 10px;
+        }
+
+        #templateContainer img:hover {
+            border: 3px solid #2c6799;
+            box-sizing: border-box;
+        }
+
+        #meme {
+            width: 100%;
         }
 
         #formtable {
@@ -50,6 +68,13 @@
             font-size: 12pt;
             width: 100%;
             box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        #submit-button.disabledButton {
+            cursor: not-allowed;
+            background-color: #96979b;
+            border: 1px solid gray;
         }
 
         #firstCaption, #lastCaption {
@@ -57,19 +82,8 @@
             box-sizing: border-box;
         }
 
-        .meme {
-            width: 20%;
-        }
-
         .hidden {
             display: none;
-        }
-
-        .highlighted {
-            broder: 1px solid #2c6799;
-            margin: 5px;
-            width: 50%;
-            display: block;
         }
         
         
@@ -80,12 +94,15 @@
         }
     </style>
     <script>
-        let imgUrl = ""
-        async function generate() { // generate meme
-            document.getElementById("templateContainer").classList.add("hidden") 
+        let imgUrl = "";
+        let taskString_select = "First, select an image...";
+        let taskString_caption = "Now, add captions:";
+        let templateContainer, form, mainMeme;
 
-            let form = document.getElementById("memeForm");
+        async function generate() { // generate meme
             let button = document.getElementById("submit-button");
+
+            button.classList.add('disabledButton');
             button.innerText = "building...";
 
             const params = {
@@ -100,58 +117,60 @@
                 `https://api.imgflip.com/caption_image?${queryString}`, {method: 'POST'}
             );
             const json = await response.json();
-            button.innerText = "Generate";
 
-            document.getElementById("meme").src = json.data.url;       
+            mainMeme.src = json.data.url;
+
+            button.classList.remove('disabledButton');
+            button.innerText = "Generate";    
         }
 
         function init(){ //called when the DOM is ready so that getElementById etc will work
+            templateContainer = document.getElementById("templateContainer");
+            form = document.getElementById("memeForm");
+            mainMeme = document.getElementById("meme");
+
             setUpTemplate();
             document.getElementById('submit-button').addEventListener("click", generate);
         }
         
         async function getTemplates() { // get templates images
-            let memes = []
+            let memes = [];
             let response = await fetch(`https://api.imgflip.com/get_memes`);
             let data = await response.json();
-            let templateLength = 10
+            let templateLength = 10;
             for (let i = 0; i < templateLength; i++){
                 let img = {
                     id: "",
                     url: ""
-                }
-                random = Math.floor(Math.random() * 100) 
-                img.id = data.data.memes[random].id
-                img.url = data.data.memes[random].url
-                memes.push(img)
+                };
+                random = Math.floor(Math.random() * 100); //TODO randomized approach means we can sometimes get the same meme multiple times
+                img.id = data.data.memes[random].id;
+                img.url = data.data.memes[random].url;
+                memes.push(img);
             }
-            return memes
+            return memes;
         }
 
         async function setUpTemplate() { // add template images to dom
-            let memes = await getTemplates()
+            let memes = await getTemplates();
             for (let i = 0; i < memes.length; i++){
-                var newImg = document.createElement('img')
+                var newImg = document.createElement('img');
                 newImg.src = memes[i].url;
-                newImg.classList.add("meme")
-                newImg.setAttribute("id", memes[i].id)
+                newImg.setAttribute("id", memes[i].id);
                 newImg.onclick = function() {
-                    selectImage(this.id)
+                    selectImage(this.id);
                 }
-                document.getElementById('templateContainer').appendChild(newImg);
+                templateContainer.appendChild(newImg);
             }
         }
 
-        function selectImage(image){ // not selected pictures
-            let template = document.getElementsByClassName("meme")
-            for (let i = 0; i < template.length; i++){
-                template[i].classList.add("hidden")
-            }  
-            document.getElementById("task").innerHTML = "Add captions"
+        function selectImage(image){ // hide non-selected pictures
+            form.classList.remove('hidden');
+            mainMeme.src = document.getElementById(image).src;
 
-            let img = document.getElementById(image)
-            img.classList.add("highlighted")
-            imgUrl = img.id
+            document.getElementById("task").innerHTML = taskString_caption;
+
+            imgUrl = image;
         }
 
         document.addEventListener("DOMContentLoaded", init);
@@ -160,8 +179,8 @@
 <body>
     <div id="container">
         <h2>Meme Generator</h2>
-
-        <form id="memeForm" action="" method="">
+        <h3 id="task">Select an image...</h3>
+        <form id="memeForm" class="hidden" action="" method="">
         <table id="formtable">
             <tbody>
                 <tr>
@@ -179,14 +198,13 @@
                 </tr>
             </tbody>
         </table>
-        </form> 
+        </form>
 
-        <div id="templateContainer">
-            <h1 id="task">select an image</h1>
-            
-        </div>
         <img src="" id="meme">
 
+        <div id="templateContainer">
+            
+        </div>
     </div>
 </body>
 </html>
