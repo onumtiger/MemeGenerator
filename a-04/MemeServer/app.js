@@ -10,6 +10,7 @@ var templatesRouter = require('./routes/templates');
 var memesRouter = require('./routes/memes');
 
 var app = express();
+const port = 4000
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,5 +42,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.listen(port, function(){
+	console.log(`Example app listening at http://localhost:${port}`)
+})
 
 module.exports = app;
