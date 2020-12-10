@@ -10,64 +10,66 @@ export default class Form extends Component {
         })
     }
 
-    clearInput = (event) => {
-        if (this.state.firstCaption === 'Add caption' && this.state.secondCaption === 'Add caption'){
-            this.setState(this.cleared)
-        }
-    }
-
     submitForm = () => {
         console.log(this.state)
         if (this.state.firstCaption !== '' && this.state.secondCaption !== '') {
             this.props.handleSubmit(this.state)
-            this.setState(this.afterGeneration)
+            this.setState({
+                firstCaption: '',
+                secondCaption: '',
+                thirdCaption: ''
+            })
         }
-        else{
-            this.setState(this.initialState)
-        }
-    }
-
-    cleared = {
-        firstCaption: '',
-        secondCaption: '',
-        buttonText: 'Generate'
-    }
-
-    afterGeneration = {
-        firstCaption: '',
-        secondCaption: '',
-        buttonText: 'Building...'
     }
 
     initialState = {
-        firstCaption: 'Add caption',
-        secondCaption: 'Add caption',
-        buttonText: 'Generate'
+        boxCount: 2,
+        buttonText: 'Generate',
+        firstCaption: '',
+        secondCaption: '',
+        thirdCaption: ''
     }
 
     state = this.initialState
 
     render() {
-        const {firstCaption, secondCaption, buttonText} = this.state
+        const {boxCount, buttonText, firstCaption, secondCaption, thirdCaption} = this.state
+
+        var inputs = [];
+        if(boxCount > 2) {
+            inputs.push(
+                <label htmlFor="thirdCaption">Third caption:</label>
+            )
+            inputs.push(
+                <input
+                    type="text"
+                    name='thirdCaption'
+                    id ='thirdCaption'
+                    value= {thirdCaption}
+                    onChange={this.handleChange}
+                    />
+            );
+        }
 
         return (
             <form>
                 <label htmlFor="firstCaption">First caption:</label>
                 <input
                     type="text"
-                    name="firstCaption"
-                    id="firstCaption"
-                    value={firstCaption}
+                    name='firstCaption'
+                    id ='firstCaption'
+                    value= {firstCaption}
                     onChange={this.handleChange}
-                    onClick={this.clearInput}  />
-                <label htmlFor="secondCaption">Last caption:</label>
-                <input 
+                    />
+                <label htmlFor="secondCaption">Second caption:</label>
+                <input
                     type="text"
-                    name="secondCaption"
-                    id="secondCaption"
-                    value={secondCaption}
+                    name='secondCaption'
+                    id ='secondCaption'
+                    value= {secondCaption}
                     onChange={this.handleChange}
-                    onClick={this.clearInput} />
+                    />
+                {inputs}
                 <input type="button" value={buttonText} onClick={this.submitForm} />
             </form>
         )

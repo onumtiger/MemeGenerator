@@ -1,12 +1,16 @@
-import React, {Component} from 'react'
-import Table from './Table.js'
+    import React, {Component} from 'react'
 import Form from './components/Form.js'
-import Meme from './components/Meme.js'
+// import Meme from './components/Meme.js'
 import Gallery from './components/Gallery.js'
 
 export default class App extends Component {
     state = {
-        characters: []
+        characters: [],
+        image: {
+            boxCount: '',
+            id: '',
+            src: ''
+        }
     }
 
     removeCharacter = (index) => {
@@ -22,14 +26,33 @@ export default class App extends Component {
     handleSubmit = (character) => {
         this.setState({characters: [...this.state.characters, character]})
     }
-    render() {
-      const  {characters } = this.state
-  
+
+    handleSelection = (imageClicked) => {
+        let newState = {
+            boxCount: imageClicked.boxcount,
+            id: imageClicked.id,
+            src: imageClicked.src
+        }
+        console.log(newState)
+
+        // this.setState({...this.state.image, 
+        //     boxCount: imageClicked.boxCount,
+        //     id: imageClicked.id,
+        //     src: imageClicked.src
+        // })
+
+        this.setState({
+            image: newState
+        })
+        console.log(this.state)
+
+    }
+    render() {  
       return (
         <div className="container">
-            <Gallery onClick={this.selectImage}/>
+            <Gallery handleSelection={this.handleSelection}/>
             <Form handleSubmit={this.handleSubmit}/>
-            <Meme />
+            {/* <Meme /> */}
         </div>
       )
     }
