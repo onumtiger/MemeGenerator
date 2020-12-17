@@ -9,7 +9,7 @@ export default class Form extends Component {
     handleInput = (event) => {
         this.setState(prevState => {
             let captions = prevState.captions
-            captions[event.target.id] = event.target.value
+            captions[event.target.name] = event.target.value
             return { captions }
         }) 
     }
@@ -17,29 +17,25 @@ export default class Form extends Component {
     state = {
         buttonText: 'Generate Meme',
         captions: [],
-        inputs : 2
     }
 
     render() {
+        let inputs = [];
+        for (let i = 0; i < this.props.boxCount; i++) {
+            inputs.push(<label htmlFor={i}>First caption:</label>)
+            inputs.push(<input 
+                type="text" 
+                name={i}
+                key = {i}
+                value={this.state.captions[i]} 
+                onChange={this.handleInput}
+                />)
+        }
+
         return (
             <form>
-                <label htmlFor="firstCaption">First caption:</label>
-                <input
-                    type="text"
-                    name='firstCaption'
-                    id ='0'
-                    value={this.state.captions[0]} 
-                    onChange={this.handleInput}
-                    />
-                <label htmlFor="secondCaption">Second caption:</label>
-                <input
-                    type="text"
-                    name='secondCaption'
-                    id ='1'
-                    value={this.state.captions[1]} 
-                    onChange={this.handleInput}
-                    />
-               <input type="button" value={this.state.buttonText} onClick={this.handleSubmit} />
+                {inputs}
+                <input type="button" value={this.state.buttonText} onClick={this.handleSubmit} />
             </form>
         )
     }

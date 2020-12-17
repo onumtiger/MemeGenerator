@@ -14,7 +14,6 @@ export default class App extends Component {
     }
 
     handleCaptionSubmit = (submitInput) => {
-        console.log("app.js", submitInput)
         this.setState(() => {
             let captions = []
             for(let i = 0; i < submitInput.length; i++){
@@ -22,12 +21,9 @@ export default class App extends Component {
             }
             return { captions }
         })
-        console.log("new state", this.state)
     }
 
     handleTemplateImageSelection = (imageClicked) => {
-        console.log("app.js", imageClicked)
-
         this.setState(prevState => {
             let image = Object.assign({}, prevState.image)
             image.id = imageClicked.id             
@@ -35,14 +31,13 @@ export default class App extends Component {
             image.url = imageClicked.url                 
             return { image }
         })
-        console.log("new state", this.state)
     }
 
     render() {  
       return (
         <div className="container">
             <Gallery handleTemplateImageSelection={this.handleTemplateImageSelection}/>
-            <Form handleCaptionSubmit={this.handleCaptionSubmit}/>
+            <Form handleCaptionSubmit={this.handleCaptionSubmit} boxCount={this.state.image.boxCount}/>
             {/* <Meme /> */}
         </div>
       )
