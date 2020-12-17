@@ -21,8 +21,9 @@ export default class Form extends Component {
 
     render() {
         let inputs = [];
-        for (let i = 0; i < this.props.boxCount; i++) {
-            inputs.push(<label htmlFor={i}>First caption:</label>)
+        for (let i = 1; i < this.props.boxCount+1; i++) {
+            inputs[0] = <h1>Add Captions</h1>
+            inputs.push(<label htmlFor={i}>Caption:</label>)
             inputs.push(<input 
                 type="text" 
                 name={i}
@@ -31,11 +32,16 @@ export default class Form extends Component {
                 onChange={this.handleInput}
                 />)
         }
+        if (inputs.length > 0) {
+            inputs.push(
+                <input type="button" value={this.state.buttonText} onClick={this.handleSubmit} />
+            )
+        }
+        
 
         return (
             <form>
                 {inputs}
-                <input type="button" value={this.state.buttonText} onClick={this.handleSubmit} />
             </form>
         )
     }

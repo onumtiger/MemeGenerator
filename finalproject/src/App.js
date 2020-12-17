@@ -33,12 +33,26 @@ export default class App extends Component {
         })
     }
 
+    resetPage = () => {
+        this.setState(() => {
+            let captions = []
+            let image = {
+                boxCount: '',
+                id: '',
+                url: ''
+            }
+
+            return { captions, image }
+        })
+    }
+
     render() {  
       return (
         <div className="container">
             <Gallery handleTemplateImageSelection={this.handleTemplateImageSelection}/>
             <Form handleCaptionSubmit={this.handleCaptionSubmit} boxCount={this.state.image.boxCount}/>
             {/* <Meme /> */}
+            <input type="button" value="reset" onClick={this.resetPage} />
         </div>
       )
     }
