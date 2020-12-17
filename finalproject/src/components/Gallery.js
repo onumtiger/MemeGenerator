@@ -5,10 +5,10 @@ import {
 
  export default class Gallery extends Component {
 
-    selectImage = (event) => {
-      let clickedImage = this.state.memes.find(meme => meme.url === event.target.src)
-      this.props.handleTemplateImageSelection(clickedImage)
-    }
+  selectImage = (event) => {
+    let clickedImage = this.state.memes.find(meme => meme.url === event.target.src)
+    this.props.handleTemplateImageSelection(clickedImage)
+  }
 
   state = {
     memes: [],

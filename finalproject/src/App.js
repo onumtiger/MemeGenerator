@@ -13,8 +13,16 @@ export default class App extends Component {
         }
     }
 
-    handleSubmit = (character) => {
-        this.setState({characters: [...this.state.characters, character]})
+    handleCaptionSubmit = (submitInput) => {
+        console.log("app.js", submitInput)
+        this.setState(() => {
+            let captions = []
+            for(let i = 0; i < submitInput.length; i++){
+                captions[i] = submitInput[i]
+            }
+            return { captions }
+        })
+        console.log("new state", this.state)
     }
 
     handleTemplateImageSelection = (imageClicked) => {
@@ -34,7 +42,7 @@ export default class App extends Component {
       return (
         <div className="container">
             <Gallery handleTemplateImageSelection={this.handleTemplateImageSelection}/>
-            <Form handleSubmit={this.handleSubmit}/>
+            <Form handleCaptionSubmit={this.handleCaptionSubmit}/>
             {/* <Meme /> */}
         </div>
       )

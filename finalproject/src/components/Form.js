@@ -2,75 +2,44 @@ import React, {Component} from 'react'
 
 export default class Form extends Component {
 
-    handleChange = (event) => {
-        const {name, value} = event.target
-
-        this.setState({
-            [name]: value
-        })
+    handleSubmit = () => {
+        this.props.handleCaptionSubmit(this.state.captions)
     }
 
-    submitForm = () => {
-        console.log(this.state)
-        if (this.state.firstCaption !== '' && this.state.secondCaption !== '') {
-            this.props.handleSubmit(this.state)
-            this.setState({
-                firstCaption: '',
-                secondCaption: '',
-                thirdCaption: ''
-            })
-        }
+    handleInput = (event) => {
+        this.setState(prevState => {
+            let captions = prevState.captions
+            captions[event.target.id] = event.target.value
+            return { captions }
+        }) 
     }
 
-    initialState = {
-        boxCount: 2,
-        buttonText: 'Generate',
-        firstCaption: '',
-        secondCaption: '',
-        thirdCaption: ''
+    state = {
+        buttonText: 'Generate Meme',
+        captions: [],
+        inputs : 2
     }
-
-    state = this.initialState
 
     render() {
-        const {boxCount, buttonText, firstCaption, secondCaption, thirdCaption} = this.state
-
-        var inputs = [];
-        if(boxCount > 2) {
-            inputs.push(
-                <label htmlFor="thirdCaption">Third caption:</label>
-            )
-            inputs.push(
-                <input
-                    type="text"
-                    name='thirdCaption'
-                    id ='thirdCaption'
-                    value= {thirdCaption}
-                    onChange={this.handleChange}
-                    />
-            );
-        }
-
         return (
             <form>
                 <label htmlFor="firstCaption">First caption:</label>
                 <input
                     type="text"
                     name='firstCaption'
-                    id ='firstCaption'
-                    value= {firstCaption}
-                    onChange={this.handleChange}
+                    id ='0'
+                    value={this.state.captions[0]} 
+                    onChange={this.handleInput}
                     />
                 <label htmlFor="secondCaption">Second caption:</label>
                 <input
                     type="text"
                     name='secondCaption'
-                    id ='secondCaption'
-                    value= {secondCaption}
-                    onChange={this.handleChange}
+                    id ='1'
+                    value={this.state.captions[1]} 
+                    onChange={this.handleInput}
                     />
-                {inputs}
-                <input type="button" value={buttonText} onClick={this.submitForm} />
+               <input type="button" value={this.state.buttonText} onClick={this.handleSubmit} />
             </form>
         )
     }
