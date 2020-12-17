@@ -6,8 +6,8 @@ import {
  export default class Gallery extends Component {
 
     selectImage = (event) => {
-        console.log(event.target)
-        this.props.handleSelection(event.target)
+      let clickedImage = this.state.memes.find(meme => meme.url === event.target.src)
+      this.props.handleTemplateImageSelection(clickedImage)
     }
 
   state = {
@@ -24,11 +24,13 @@ import {
   render() {
     const result = this.state.memes.map((meme, index) => {
       return <li key={index}>
-        {/* <img src={meme.url} alt={meme.name} width={200} height={200}/> */}
-        <img src={meme.url} alt={meme.name} width={200} height={200} id={meme.id} boxcount={meme.box_count} onClick={this.selectImage}/>
+        <img src={meme.url} alt={meme.name} width={200} height={200} onClick={this.selectImage}/>
       </li>
     })
 
-    return <ul>{result}</ul>
+    return <div>
+        <h1>Select an Image</h1>
+        <ul>{result}</ul>
+      </div>
   }
 }

@@ -1,56 +1,39 @@
-    import React, {Component} from 'react'
+import React, {Component} from 'react'
 import Form from './components/Form.js'
 // import Meme from './components/Meme.js'
 import Gallery from './components/Gallery.js'
 
 export default class App extends Component {
     state = {
-        characters: [],
+        captions: [],
         image: {
             boxCount: '',
             id: '',
-            src: ''
+            url: ''
         }
-    }
-
-    removeCharacter = (index) => {
-        const {characters} = this.state
-
-        this.setState({
-            characters: characters.filter((character, i) =>{
-                return i !== index
-            })
-        })
     }
 
     handleSubmit = (character) => {
         this.setState({characters: [...this.state.characters, character]})
     }
 
-    handleSelection = (imageClicked) => {
-        let newState = {
-            boxCount: imageClicked.boxcount,
-            id: imageClicked.id,
-            src: imageClicked.src
-        }
-        console.log(newState)
+    handleTemplateImageSelection = (imageClicked) => {
+        console.log("app.js", imageClicked)
 
-        // this.setState({...this.state.image, 
-        //     boxCount: imageClicked.boxCount,
-        //     id: imageClicked.id,
-        //     src: imageClicked.src
-        // })
-
-        this.setState({
-            image: newState
+        this.setState(prevState => {
+            let image = Object.assign({}, prevState.image)
+            image.id = imageClicked.id             
+            image.boxCount = imageClicked.box_count               
+            image.url = imageClicked.url                 
+            return { image }
         })
-        console.log(this.state)
-
+        console.log("new state", this.state)
     }
+
     render() {  
       return (
         <div className="container">
-            <Gallery handleSelection={this.handleSelection}/>
+            <Gallery handleTemplateImageSelection={this.handleTemplateImageSelection}/>
             <Form handleSubmit={this.handleSubmit}/>
             {/* <Meme /> */}
         </div>
