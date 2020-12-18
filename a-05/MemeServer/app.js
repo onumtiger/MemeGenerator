@@ -12,6 +12,21 @@ var memesRouter = require('./routes/memes');
 var app = express();
 const port = 4000
 
+//MongoDB integration
+const mongoose = require('mongoose');
+const Meme = require('./models/meme.js');
+
+//Set up default mongoose connection
+const mongoDB =
+'mongodb://localhost:27017/memes'; 
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true}); //added new parser bcs old call is deprecated
+const db = mongoose.connection;
+
+//Bind connection to error event (Mongo)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
