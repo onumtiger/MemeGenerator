@@ -6,29 +6,21 @@ export const generateMeme = async (imgID, captions) => { // generate meme
         captionObject[`text${i}`] = captions[i]
     }
 
-    let responseJSON
-    Axios({
+    let request = await Axios({
         method: 'post',
         url: 'https://api.imgflip.com/caption_image',
         template_id: imgID,
         username: creds[0],
         password: creds[1],
-        data: {
-            captionObject
-        }
-      }).then(async (response) => {
-        console.log("res", response)
-        responseJSON = await response.json()
-      })
-
-    console.log("response", responseJSON)
+        // data: {
+            
+        //     captionObject
+        // }
+    })
 
     let meme = {
-        height: responseJSON.data.height,
-        id: responseJSON.data.id,
-        name: responseJSON.data.name,
-        url: responseJSON.data.url,
-        width: responseJSON.data.width
+        id: request.config.template_id,
+        url: request.config.url,
     } 
 
     return meme
