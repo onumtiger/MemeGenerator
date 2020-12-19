@@ -1,23 +1,38 @@
-export const generateMeme = async (imgUrl) => { // generate meme
-    document.getElementById("templateContainer").classList.add("hidden") 
+import Axios from "axios"
+export const generateMeme = async (imgID, captions) => { // generate meme
+    const creds = ["onumUni", "copquh-pywciC-kubho4"]
+    let captionObject = {}
+    for(let i = 0; i < captions.length; i++) {
+        captionObject[`text${i}`] = captions[i]
+    }
 
-    let form = document.getElementById("memeForm");
-    let button = document.getElementById("submit-button");
-    button.innerText = "building...";
+    let responseJSON
+    Axios({
+        method: 'post',
+        url: 'https://api.imgflip.com/caption_image',
+        template_id: imgID,
+        username: creds[0],
+        password: creds[1],
+        data: {
+            captionObject
+        }
+      }).then(async (response) => {
+        console.log("res", response)
+        responseJSON = await response.json()
+      })
 
-    const params = {
-        template_id: imgUrl,
-        text0: form.firstCaption.value,
-        text1: form.lastCaption.value,
-        username: "onumUni",
-        password: "copquh-pywciC-kubho4"
-    };
-    let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-    const response = await fetch(
-        `https://api.imgflip.com/caption_image?${queryString}`, {method: 'POST'}
-    );
-    const json = await response.json();
-    button.innerText = "Generate";
+    console.log("response", responseJSON)
 
-    document.getElementById("meme").src = json.data.url;
+    let meme = {
+        height: responseJSON.data.height,
+        id: responseJSON.data.id,
+        name: responseJSON.data.name,
+        url: responseJSON.data.url,
+        width: responseJSON.data.width
+    } 
+
+    return meme
 }
+
+
+/// query string aus img url + captions array + creds
