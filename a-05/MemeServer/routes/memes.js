@@ -7,13 +7,18 @@ const Meme = require('../models/meme.js');
 
 //Mongo 
 router.get('/', function(req, res, next) {
-  Meme.find({},function(err, list){ if (err) {
-    console.log(err); console.log("hihi");}
-  else {
-    console.log(list);
-    console.log("hoho");
-    res.render('memes', {memelist: list}); }
-  }) 
+  Meme.find({},function(err, list){
+    if (err) {
+      console.log("Error: "+err);
+    } else {
+      console.log(list);
+      res.send({
+          code: 200,
+          memes: list[0]
+        });
+      //res.render('memes', {memelist: list});
+    }
+  });
 });
 
 
@@ -26,12 +31,13 @@ router.get('/', function(req, res, next) {
 //   });
 
 /* GET meme URLs. */
+/*
  router.get('/', function(req, res, next) {
    res.send({
        code: 200,
        memes
      });
- });
+ }); */
 
 /* POST a meme URL */
 router.post('/', function(req, res, next) {

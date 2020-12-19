@@ -18,8 +18,9 @@ const Schema = mongoose.Schema;
         memeURLs: {           
             'type': {type: String},
             'value': [String]
-            },
-    }); 
+            }
+    }
+  ); 
 
 
 module.exports = mongoose.model('meme', MemeSchema );
