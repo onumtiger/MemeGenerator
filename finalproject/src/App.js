@@ -1,8 +1,12 @@
 import React, {Component} from 'react'
 import Form from './components/Form.js'
-// import Meme from './components/Meme.js'
+import Meme from './components/Meme.js'
 import Gallery from './components/Gallery.js'
-import { generateMeme } from './functions/_index.js'
+import { 
+    addClass,
+    generateMeme,
+    removeClass
+} from './functions/_index.js'
 
 export default class App extends Component {
     state = {
@@ -13,11 +17,7 @@ export default class App extends Component {
             url: ''
         },
         meme: {
-            height: '',
-            id: '',
-            name: '',
             url: '',
-            width: ''
         }
     }
 
@@ -50,16 +50,15 @@ export default class App extends Component {
 
         this.setState(prevState => {
             let meme = Object.assign({}, prevState.meme)
-
-            meme.height = generatedMeme.height                 
-            meme.id = generatedMeme.id             
-            meme.name = generatedMeme.name               
+            
             meme.url = generatedMeme.url                 
-            meme.width = generatedMeme.width  
 
             return { meme }
         })
 
+        removeClass("memeContainer", "hidden")
+        addClass("galleryContainer", "hidden")
+        addClass("formContainer", "hidden")
     }
 
     resetPage = () => {
@@ -73,14 +72,24 @@ export default class App extends Component {
 
             return { captions, image }
         })
+
+        addClass("memeContainer", "hidden")
+        removeClass("galleryContainer", "hidden")
+        removeClass("formContainer", "hidden")
     }
 
     render() {  
       return (
         <div className="container">
-            <Gallery handleTemplateImageSelection={this.handleTemplateImageSelection}/>
-            <Form handleCaptionSubmit={this.handleCaptionSubmit} boxCount={this.state.image.boxCount}/>
-            {/* <Meme /> */}
+            <div id="galleryContainer">
+                <Gallery handleTemplateImageSelection={this.handleTemplateImageSelection}/>
+            </div>
+            <div id="formContainer">
+            <Form id="captionsInput" handleCaptionSubmit={this.handleCaptionSubmit} boxCount={this.state.image.boxCount}/>
+            </div>
+            <div id="memeContainer" class="hidden">
+                <Meme memeURL={this.state.meme.url}/>
+            </div>
             <input type="button" value="reset" onClick={this.resetPage} />
         </div>
       )
