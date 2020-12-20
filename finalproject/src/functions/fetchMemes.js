@@ -1,8 +1,13 @@
-export const fetchMemes = async (templateLength) => { // get templates images
-    const url = 'https://api.imgflip.com/get_memes'
+/**
+ * fetch template images from api
+ * @param {how many template images should be loaded} templateLength 
+ */
+
+export const fetchMemes = async (templateLength) => {
+    const api = 'https://api.imgflip.com/get_memes'
     let memes = []
 
-    let response = await fetch(url)
+    let response = await fetch(api)
     let responseJSON = await response.json()
 
     for (let i = 0; i < templateLength; i++) {

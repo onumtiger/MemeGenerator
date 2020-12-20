@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
-
+/**
+ * Display input fields and save entered captions in parent component
+ */
 export default class Form extends Component {
 
     handleSubmit = () => {

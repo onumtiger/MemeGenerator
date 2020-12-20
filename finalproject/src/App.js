@@ -8,6 +8,13 @@ import {
     removeClass
 } from './functions/_index.js'
 
+/**
+ * MAIN COMPONENT
+ * 
+ * display template images
+ * caption input fields
+ * generated meme
+ */
 export default class App extends Component {
     state = {
         captions: [],

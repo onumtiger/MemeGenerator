@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 
+/**
+ * display generated meme
+ */
 export default class Meme extends Component {
     render() {
         return (

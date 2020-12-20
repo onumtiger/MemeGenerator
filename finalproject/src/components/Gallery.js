@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import {
   fetchMemes
 } from '../functions/_index.js'
-
+/**
+ * fetch template images from api and display them
+ */
  export default class Gallery extends Component {
 
   selectImage = (event) => {

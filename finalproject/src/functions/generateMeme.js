@@ -1,8 +1,15 @@
 import Axios from "axios"
+
+/**
+ * Send post request to api to receive meme
+ * @param {id of memetemplate} imgID 
+ * @param {meme captions entered by user} captions 
+ */
 export const generateMeme = async (imgID, captions) => { // generate meme
     const creds = ["onumUni", "copquh-pywciC-kubho4"]
+    const api = 'https://api.imgflip.com/caption_image'
 
-    let request = await Axios.post(`https://api.imgflip.com/caption_image`, 
+    let request = await Axios.post(api, 
                                     null, 
                                     { params: {
                                         template_id: imgID,
@@ -22,6 +29,3 @@ export const generateMeme = async (imgID, captions) => { // generate meme
 
     return meme
 }
-
-
-/// query string aus img url + captions array + creds
