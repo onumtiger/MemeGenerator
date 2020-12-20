@@ -25,7 +25,9 @@ const db = mongoose.connection;
 //Bind connection to error event (Mongo)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-
+//db const accessible everywhere
+app.use(function(req,res,next){ req.db = db;
+  next(); });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
