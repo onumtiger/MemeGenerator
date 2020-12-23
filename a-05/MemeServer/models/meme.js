@@ -17,14 +17,14 @@ const MemeSchema = new Schema(
     runtime: Number
  }); //comments, voting, stats tbd
 
- /*const MemeSchema = new Schema(
-    {
-        memeURLs: {           
-            'type': {type: String},
-            'value': [String]
-            }
-    }
-  );*/
+//  const MemeSchema = new Schema(
+//     {
+//         memeURLs: {           
+//             'type': {type: String},
+//             'value': [String]
+//             }
+//     },
+//     { collection : 'memes' });
 
 
 module.exports = mongoose.model('meme', MemeSchema );

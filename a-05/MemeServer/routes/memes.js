@@ -39,26 +39,19 @@ router.get('/', function(req, res, next) {
      });
  }); */
 
+ 
 /* POST a meme URL */
 router.post('/', function(req, res, next) {
     let newMeme = req.body.url;
     console.log(newMeme);
 
-    //integrate in database
-    // req.db.memes.update({"_id" : ObjectId("5fde40976d7bd19a6927f765")}, 
-    //              {'$set': {'memeURLs.-1': newMeme}})
-    // req.db.memes.update({ _id: ObjectId("5fde40976d7bd19a6927f765")},
-    //   { $push: {
-    //     MemeURLs: {
-    //       $each: [ {name: newMeme} ],
-    //       $position: 1
-    //     }
-    //   }}
-    // )
+  
+    
 
-    req.db.memes.updateOne(
-      { _id: ObjectId("5fde40976d7bd19a6927f765") },
+    Meme.updateOne(
+      { _id: "5fde40976d7bd19a6927f765" },
       { $push: { MemeURLs: [newMeme] } },
+    
       function(err, result) {
         if (err) {
           res.send(err);
@@ -67,6 +60,9 @@ router.post('/', function(req, res, next) {
         }
       }
     );
+
+    //console.log(req.db)
+    //console.log(Meme);
 
     // memes.memeURLs.push(newMeme);
     // res.send({
