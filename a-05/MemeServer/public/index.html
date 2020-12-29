@@ -140,13 +140,21 @@
             });
             //the server returns the new stock memes array including the new one
             const serverResJson = await serverRes.json();
-            updateStockMemes(serverResJson.memes.memeURLs);
+
+            //new - is this useful??
+            //updateStockMemes(serverResJson.memes);
+            //old
+            //updateStockMemesGenerated(serverResJson.memes);
         }
 
         async function setUpStockMemes(){
             const serverRes = await fetch('/memes');
             const serverResJson = await serverRes.json();
-            updateStockMemes(serverResJson.memes.memeURLs);
+            
+            //new 
+            updateStockMemes(serverResJson.memes);
+            //old
+            //updateStockMemes(serverResJson.memes.memeURLs);
         }
 
         function init(){ //called when the DOM is ready so that getElementById etc will work
@@ -202,6 +210,9 @@
             imgUrl = image;
         }
 
+        
+
+        //current method
         function updateStockMemes(memeArray){ //update the stock memes bar
             memeContainer.textContent = '';
             for(let meme of memeArray){

@@ -22,6 +22,11 @@ const mongoDB =
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true}); //added new parser bcs old call is deprecated
 const db = mongoose.connection;
 
+//Connected?
+mongoose.connection.on('connected', ()=>{
+  console.log('Mongoose is connected!')
+});
+
 //Bind connection to error event (Mongo)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -38,6 +43,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//for mongoose
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 
 //app.use('/', indexRouter);
 //app.use('/users', usersRouter);
