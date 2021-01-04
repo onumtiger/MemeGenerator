@@ -17,7 +17,7 @@ export default class EditorCanvas extends React.Component {
             bgImage: this.props.bgImage,
             canvasWidth: 1, //small initial values so that the canvas won't mess with the default layout before it can calculate its appropriate size
             canvasHeight: 1,
-            cursor: 'text'
+            cursor: 'text' //TODO move out of state, reintegrate repaint()s
         };
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -161,14 +161,19 @@ export default class EditorCanvas extends React.Component {
         if(!this.draggingTextBox){
             this.addCaptionAt(e.offsetX, e.offsetY);
         }else{
+            this.stopDragging();
+        }
+    }
+
+    stopDragging(){
+        if(this.draggingTextBox){
             //exit dragging mode
             this.draggingTextBox = false;
-            //reset hover
-            this.checkForHoverChange(e.offsetX, e.offsetY);
+            //reset hover - not necessary at this point
+            // this.checkForHoverChange(e.offsetX, e.offsetY);
             //reset cursor accordingly, will trigger repaint
             this.setState({cursor: (this.hoveringTextBoxIndex > -1) ? 'grab' : 'text'});
         }
-        e.stopPropagation();
     }
 
     checkForHoverChange(mouseX, mouseY){

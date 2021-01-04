@@ -8,7 +8,7 @@ export default class App extends React.Component {
     this.canvasCompRef = createRef();
     this.canvasRef = createRef();
     this.state = {
-
+      textBoxIndices: []
     };
     this.globalFunctions = {
       hideAllCaptionBoxesExcept: function(ref){
@@ -25,8 +25,10 @@ export default class App extends React.Component {
         element.style.backgroundColor = "#d9e5ee";
       },
       addCaptionInput: function(textbox, index){
-        //TODO add <CaptionInput textBoxIndex={index} />
-        //TODO attach handlers, manage focus etc
+        this.setState((prevState)=>(
+          {textBoxIndices: [...prevState.textBoxIndices, index]}
+          ));
+        //TODO attach handlers, manage focus etc - need a ref to li
       }
     };
     this.handlePageWrapperMouseUp = this.handlePageWrapperMouseUp.bind(this);
@@ -46,7 +48,7 @@ export default class App extends React.Component {
   handlePageWrapperMouseUp(e){
     if(e.button!=0) return; //only watch for the left mouse button
 
-    this.canvasCompRef.current.handleMouseUp(e); //TODO this also forwards unrelated events, we have to call the else case separately here.
+    this.canvasCompRef.current.stopDragging();
   }
 
   handlePageRightClick(e){
@@ -67,7 +69,13 @@ export default class App extends React.Component {
               <form>
                 <h2>Add some Captions to your Meme</h2>
                 <p>Click somewhere in the image to add a caption at that point.<span id="force-font-preload"></span></p>
-                <ul id="in-captions-list"></ul>
+                <ul id="in-captions-list">
+                  {this.state.textBoxIndices.map((v,i)=>{
+                    return (
+                      <CaptionInput key={'captionInput'+v} textBoxIndex={v} />
+                    );
+                  })}
+                </ul>
                 <a id="download-anchor" download="Your Meme.png">
                   <button type="button" id="download-btn" onClick={this.handleDownloadButtonClick}>Download image</button>
                 </a>

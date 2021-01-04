@@ -3,7 +3,7 @@ import React from 'react';
 export default class CaptionInput extends React.Component {
     render(){
         return (
-        <li key={'captionInput'+this.props.textBoxIndex}>
+        <li key={'captionInputLi'+this.props.textBoxIndex}>
             <details>
                 <summary>
                     <input class="in-caption" type="text" placeholder="Please enter a caption..." />
