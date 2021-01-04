@@ -472,7 +472,6 @@
             document.getElementById('in-captions-list').appendChild(li);
             let captionInput = li.querySelector('.in-caption');
             let captionDetails = li.querySelector('details');
-            let captionSummary = li.querySelector('summary');
             let captionRemove = li.querySelector('.in-caption-delete');
             let fontSizeInput = li.querySelector('input[name=fontSize]');
             let fontSizeLabel = li.querySelector('.label-fontSize');
@@ -506,7 +505,7 @@
 
             hideAllCaptionBoxesExcept(captionDetails);
             captionRemove.addEventListener('click', (e2)=>{
-                e2.stopPropagation();
+                // e2.stopPropagation();
                 newTextBox.disable();
                 selectedTextBoxIndex = -1;
                 repaint();
@@ -563,12 +562,6 @@
         function setCanvasCursor(cursor){
             cElem.style.cursor = cursor;
         }
-
-        function addCaption(text, x, y, fs=60, c="white", b=false, ff="Impact"){
-            let tb = new TextBox(x, y, text, fs, c, b, ff);
-            textBoxes.push(tb);
-        }
-
 
         window.onload = init;
     </script>

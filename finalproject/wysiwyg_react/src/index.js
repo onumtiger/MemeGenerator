@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import WYSIWYGEditor from './WYSIWYGEditor';
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<WYSIWYGEditor templateImagePath="testmeme.png" />, document.getElementById('app'));
