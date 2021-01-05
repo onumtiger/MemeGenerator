@@ -97,6 +97,10 @@
     }
 }
 
+#in-captions-template-li {
+    display: none;
+}
+
 .in-caption-formatting-wrapper {
     padding-left: 33px;
 }
@@ -120,19 +124,4 @@
 
 #canvas-editor {
     cursor: text;
-}
-
-#download-btn {
-    background-color: #6079d7;
-    color: #fff;
-    letter-spacing: .0625rem;
-    box-shadow: 0 3px 5px 1px rgb(163, 166, 168);
-    padding: 8px;
-    border: 1px solid #2c6799;
-    border-radius: 3px;
-    font-size: 12pt;
-    width: 100%;
-    box-sizing: border-box;
-    margin: 20px 0;
-    cursor: pointer;
 }

@@ -1,4 +1,5 @@
 import React, { createRef } from 'react';
+import CanvasDownloadButton from './CanvasDownloadButton';
 import './drawtemplate.scss';
 
 export default class DrawTemplate extends React.Component {
@@ -12,6 +13,7 @@ export default class DrawTemplate extends React.Component {
             G: 0,
             B: 0
         };
+        this.canvasBackgroundColor = "white";
         this.lastPos = {x: -1, y: -1};
         [
             'handleCanvasMouseDown',
@@ -22,7 +24,9 @@ export default class DrawTemplate extends React.Component {
             'handleStrokeWidthInput',
             'handleStrokeColorRInput',
             'handleStrokeColorGInput',
-            'handleStrokeColorBInput'
+            'handleStrokeColorBInput',
+            'handleDownloadButtonClick',
+            'handleClearButtonClick'
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
@@ -31,6 +35,18 @@ export default class DrawTemplate extends React.Component {
     setCanvasReferences(){
         this.cElem = this.canvasRef.current;
         this.cContext = this.canvasRef.current.getContext('2d');
+    }
+
+    setCanvasWidth() {
+        let availSpace = document.getElementById('canvas-column').offsetWidth;
+        //account for canvas border
+        availSpace -= 2;
+        this.cElem.width = availSpace;
+    }
+
+    setCanvasBackground(color) {
+        this.cContext.fillStyle = color;
+        this.cContext.fillRect(0, 0, this.cElem.width, this.cElem.height);
     }
 
     handleCanvasMouseDown(e){
@@ -108,13 +124,26 @@ export default class DrawTemplate extends React.Component {
         document.getElementById('label-strokeColorB').textContent = input;
     }
 
+    handleDownloadButtonClick(e){
+        //get the current canvas image
+        let url = this.cElem.toDataURL('image/png');
+        
+        //download it
+        let a = document.getElementById('download-anchor');
+        a.href = url;
+    }
+
+    handleClearButtonClick(e){
+        // this.cContext.clearRect(0, 0, this.cElem.width, this.cElem.height);
+        this.setCanvasBackground(this.canvasBackgroundColor);
+    }
+
     componentDidMount(){
         this.setCanvasReferences();
+        this.setCanvasWidth();
 
-        let availSpace = document.getElementById('canvas-column').offsetWidth;
-        //account for canvas border
-        availSpace -= 2;
-        this.cElem.width = availSpace;
+        //make the background white instead of transparent (to be removed once we're drawing on top of images)
+        this.setCanvasBackground(this.canvasBackgroundColor);
     }
 
     componentDidUpdate(){
@@ -131,7 +160,7 @@ export default class DrawTemplate extends React.Component {
                             <td id="canvas-column">
                                 <canvas
                                     width="1"
-                                    height="600"
+                                    height="800"
                                     ref={this.canvasRef}
                                     onMouseDown={this.handleCanvasMouseDown}
                                     onMouseUp={this.handleCanvasMouseUp}
@@ -167,11 +196,14 @@ export default class DrawTemplate extends React.Component {
                                     <input type="range" name="strokeColorB" min="0" max="255" defaultValue={this.strokeColor.B} step="1" onInput={this.handleStrokeColorBInput} />
                                     <span id="label-strokeColorB">{this.strokeColor.B}</span>
                                 </label>
+                                <hr />
+                                <button type="button" id="clear-btn" onClick={this.handleClearButtonClick}>Clear Canvas</button>
+                                <CanvasDownloadButton placeholderFileName="Your Work of Art.png" onButtonClick={this.handleDownloadButtonClick} />
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-        ); //TODO download button (convert to re-usable component with canvasRef and getFileName function as props)
+        );
     }
 }

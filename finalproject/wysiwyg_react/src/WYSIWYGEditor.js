@@ -1,4 +1,5 @@
 import React, { createRef } from 'react';
+import CanvasDownloadButton from './CanvasDownloadButton';
 import TextBox from './TextBox';
 import './wysiwyg.scss';
 
@@ -17,6 +18,12 @@ export default class WYSIWYGEditor extends React.Component {
     this.hoveringTextBoxIndex = -1;
     this.draggingTextBox = false;
     this.placeholderFileName = 'Your Meme';
+    this.textBoxDefaults = {
+      fontSize: 60,
+      colorR: 255,
+      colorG: 255,
+      colorB: 255
+    };
     
     this.state = {
       image: null,
@@ -129,7 +136,7 @@ export default class WYSIWYGEditor extends React.Component {
   addCaptionAt(x, y){
     //add new textbox
     let newIndex = this.textBoxes.length;
-    let newTextBox = new TextBox(this.canvasRef, parseInt(x), parseInt(y), " ", 60, "white");
+    let newTextBox = new TextBox(this.canvasRef, parseInt(x), parseInt(y), " ", this.textBoxDefaults.fontSize, `rgb(${this.textBoxDefaults.colorR},${this.textBoxDefaults.colorG},${this.textBoxDefaults.colorB})`);
     this.textBoxes.push(newTextBox);
 
     //add new caption input elements
@@ -151,12 +158,6 @@ export default class WYSIWYGEditor extends React.Component {
       labelG: li.querySelector('.label-colorG'),
       labelB: li.querySelector('.label-colorB'),
     };
-    let colorRInput = li.querySelector('input[name=colorR]');
-    let colorRLabel = li.querySelector('.label-colorR');
-    let colorGInput = li.querySelector('input[name=colorG]');
-    let colorGLabel = li.querySelector('.label-colorG');
-    let colorBInput = li.querySelector('input[name=colorB]');
-    let colorBLabel = li.querySelector('.label-colorB');
     let fontFaceInput = li.querySelector('select[name=fontFace]');
 
     //link the new textbox with the corresponding input wrapper
@@ -220,71 +221,8 @@ export default class WYSIWYGEditor extends React.Component {
 
   createCaptionInputLi(){
     let li = document.createElement('li');
-    li.innerHTML = `
-      <details>
-          <summary>
-              <input class="in-caption" type="text" placeholder="Please enter a caption...">
-              <button type="button" class="in-caption-delete" title="Remove this caption">&#10006;</button>
-          </summary>
-          <div class="in-caption-formatting-wrapper">
-              <table class="in-caption-formatting-table">
-                  <tbody>
-                      <tr>
-                          <th>Font Size:</th>
-                          <td>
-                              <label>
-                                  <input type="range" name="fontSize" min="10" max="200" value="60" step="1">
-                                  <span class="label-fontSize">60px</span>
-                              </label>
-                              <label>
-                                  <input type="checkbox" name="bold">
-                                  bold
-                              </label>
-                          </td>
-                      </tr>
-                      <tr>
-                          <th>Font Color:</th>
-                          <td>
-                              <label>
-                                  <abbr title="Red color value (0-255)">R</abbr>:
-                                  <input type="range" name="colorR" min="0" max="255" value="255" step="1">
-                                  <span class="label-colorR">255</span>
-                              </label>
-                              <label>
-                                  <abbr title="Green color value (0-255)">G</abbr>:
-                                  <input type="range" name="colorG" min="0" max="255" value="255" step="1">
-                                  <span class="label-colorG">255</span>
-                              </label>
-                              <label>
-                                  <abbr title="Blue color value (0-255)">B</abbr>:
-                                  <input type="range" name="colorB" min="0" max="255" value="255" step="1">
-                                  <span class="label-colorB">255</span>
-                              </label>
-                          </td>
-                      </tr>
-                      <tr>
-                          <th>Font Face:</th>
-                          <td>
-                              <select name="fontFace">
-                                  <option value="Impact" selected>Impact</option>
-                                  <option value="Arial">Arial</option>
-                                  <option value="Verdana">Verdana</option>
-                                  <option value="Helvetica">Helvetica</option>
-                                  <option value="Tahoma">Tahoma</option>
-                                  <option value="Trebuchet MS">Trebuchet MS</option>
-                                  <option value="Times New Roman">Times New Roman</option>
-                                  <option value="Georgia">Georgia</option>
-                                  <option value="Garamond">Garamond</option>
-                                  <option value="Courier New">Courier New</option>
-                                  <option value="Brush Script MT">Brush Script MT</option>
-                              </select>
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-      </details>
-    `; //TODO make template node with display:none in JSX, clone on demand
+    let child = document.getElementById('in-captions-template-li').firstChild.cloneNode(true);
+    li.appendChild(child);
     return li;
   }
 
@@ -437,10 +375,74 @@ export default class WYSIWYGEditor extends React.Component {
               <form>
                 <h2>Add some Captions to your Meme</h2>
                 <p>Click somewhere in the image to add a caption at that point.<span id="force-font-preload"></span></p>
-                <ul id="in-captions-list"></ul>
-                <a id="download-anchor" download={this.placeholderFileName+".png"}>
-                  <button type="button" id="download-btn" onClick={this.handleDownloadButtonClick}>Download image</button>
-                </a>
+                <ul id="in-captions-list">
+                  <li id="in-captions-template-li">
+                    <details>
+                      <summary>
+                        <input class="in-caption" type="text" placeholder="Please enter a caption..." />
+                        <button type="button" class="in-caption-delete" title="Remove this caption">&#10006;</button>
+                      </summary>
+                      <div class="in-caption-formatting-wrapper">
+                        <table class="in-caption-formatting-table">
+                          <tbody>
+                            <tr>
+                              <th>Font Size:</th>
+                              <td>
+                                <label>
+                                  <input type="range" name="fontSize" min="10" max="200" value={this.textBoxDefaults.fontSize} step="1" />
+                                  <span class="label-fontSize">{this.textBoxDefaults.fontSize+'px'}</span>
+                                </label>
+                                <label>
+                                  <input type="checkbox" name="bold" />
+                                  bold
+                                </label>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Font Color:</th>
+                              <td>
+                                <label>
+                                  <abbr title="Red color value (0-255)">R</abbr>:
+                                  <input type="range" name="colorR" min="0" max="255" value={this.textBoxDefaults.colorR} step="1" />
+                                  <span class="label-colorR">{this.textBoxDefaults.colorR}</span>
+                                </label>
+                                <label>
+                                  <abbr title="Green color value (0-255)">G</abbr>:
+                                  <input type="range" name="colorG" min="0" max="255" value={this.textBoxDefaults.colorG} step="1" />
+                                  <span class="label-colorG">{this.textBoxDefaults.colorG}</span>
+                                </label>
+                                <label>
+                                  <abbr title="Blue color value (0-255)">B</abbr>:
+                                  <input type="range" name="colorB" min="0" max="255" value={this.textBoxDefaults.colorB} step="1" />
+                                  <span class="label-colorB">{this.textBoxDefaults.colorB}</span>
+                                </label>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Font Face:</th>
+                              <td>
+                                <select name="fontFace">
+                                  <option value="Impact" selected>Impact</option>
+                                  <option value="Arial">Arial</option>
+                                  <option value="Verdana">Verdana</option>
+                                  <option value="Helvetica">Helvetica</option>
+                                  <option value="Tahoma">Tahoma</option>
+                                  <option value="Trebuchet MS">Trebuchet MS</option>
+                                  <option value="Times New Roman">Times New Roman</option>
+                                  <option value="Georgia">Georgia</option>
+                                  <option value="Garamond">Garamond</option>
+                                  <option value="Courier New">Courier New</option>
+                                  <option value="Brush Script MT">Brush Script MT</option>
+                                </select>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </details>
+                  </li>
+                </ul>
+                <CanvasDownloadButton placeholderFileName={this.placeholderFileName+".png"} onButtonClick={this.handleDownloadButtonClick} />
               </form>
             </td>
           </tr>
