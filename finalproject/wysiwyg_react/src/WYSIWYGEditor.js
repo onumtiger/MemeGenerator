@@ -284,7 +284,7 @@ export default class WYSIWYGEditor extends React.Component {
               </table>
           </div>
       </details>
-    `;
+    `; //TODO make template node with display:none in JSX, clone on demand
     return li;
   }
 
