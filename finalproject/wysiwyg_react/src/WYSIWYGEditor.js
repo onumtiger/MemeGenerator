@@ -379,18 +379,18 @@ export default class WYSIWYGEditor extends React.Component {
                   <li id="in-captions-template-li">
                     <details>
                       <summary>
-                        <input class="in-caption" type="text" placeholder="Please enter a caption..." />
-                        <button type="button" class="in-caption-delete" title="Remove this caption">&#10006;</button>
+                        <input className="in-caption" type="text" placeholder="Please enter a caption..." />
+                        <button type="button" className="in-caption-delete" title="Remove this caption">&#10006;</button>
                       </summary>
-                      <div class="in-caption-formatting-wrapper">
-                        <table class="in-caption-formatting-table">
+                      <div className="in-caption-formatting-wrapper">
+                        <table className="in-caption-formatting-table">
                           <tbody>
                             <tr>
                               <th>Font Size:</th>
                               <td>
                                 <label>
                                   <input type="range" name="fontSize" min="10" max="200" value={this.textBoxDefaults.fontSize} step="1" />
-                                  <span class="label-fontSize">{this.textBoxDefaults.fontSize+'px'}</span>
+                                  <span className="label-fontSize">{this.textBoxDefaults.fontSize+'px'}</span>
                                 </label>
                                 <label>
                                   <input type="checkbox" name="bold" />
@@ -404,17 +404,17 @@ export default class WYSIWYGEditor extends React.Component {
                                 <label>
                                   <abbr title="Red color value (0-255)">R</abbr>:
                                   <input type="range" name="colorR" min="0" max="255" value={this.textBoxDefaults.colorR} step="1" />
-                                  <span class="label-colorR">{this.textBoxDefaults.colorR}</span>
+                                  <span className="label-colorR">{this.textBoxDefaults.colorR}</span>
                                 </label>
                                 <label>
                                   <abbr title="Green color value (0-255)">G</abbr>:
                                   <input type="range" name="colorG" min="0" max="255" value={this.textBoxDefaults.colorG} step="1" />
-                                  <span class="label-colorG">{this.textBoxDefaults.colorG}</span>
+                                  <span className="label-colorG">{this.textBoxDefaults.colorG}</span>
                                 </label>
                                 <label>
                                   <abbr title="Blue color value (0-255)">B</abbr>:
                                   <input type="range" name="colorB" min="0" max="255" value={this.textBoxDefaults.colorB} step="1" />
-                                  <span class="label-colorB">{this.textBoxDefaults.colorB}</span>
+                                  <span className="label-colorB">{this.textBoxDefaults.colorB}</span>
                                 </label>
                               </td>
                             </tr>

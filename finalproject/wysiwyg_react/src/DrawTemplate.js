@@ -169,28 +169,28 @@ export default class DrawTemplate extends React.Component {
                             </td>
                             <td id="options-column">
                                 <label>
-                                    <span class="option-desc">Stroke Width:</span><br />
+                                    <span className="option-desc">Stroke Width:</span><br />
                                     <input type="range" name="strokeWidth" min="1" max="20" defaultValue={this.strokeWidth} step="1" onInput={this.handleStrokeWidthInput} />
                                     <span id="label-strokeWidth">{this.strokeWidth}</span>
                                 </label>
                                 <hr />
-                                <span class="option-desc">Stroke Color:</span><br />
+                                <span className="option-desc">Stroke Color:</span><br />
                                 <label>
-                                    <span class="option-desc">
+                                    <span className="option-desc">
                                         <abbr title="Red color value (0-255)">R</abbr>:
                                     </span>
                                     <input type="range" name="strokeColorR" min="0" max="255" defaultValue={this.strokeColor.R} step="1" onInput={this.handleStrokeColorRInput} />
                                     <span id="label-strokeColorR">{this.strokeColor.R}</span>
                                 </label><br />
                                 <label>
-                                    <span class="option-desc">
+                                    <span className="option-desc">
                                         <abbr title="Green color value (0-255)">G</abbr>:
                                     </span>
                                     <input type="range" name="strokeColorG" min="0" max="255" defaultValue={this.strokeColor.G} step="1" onInput={this.handleStrokeColorGInput} />
                                     <span id="label-strokeColorG">{this.strokeColor.G}</span>
                                 </label><br />
                                 <label>
-                                    <span class="option-desc">
+                                    <span className="option-desc">
                                         <abbr title="Blue color value (0-255)">B</abbr>:
                                     </span>
                                     <input type="range" name="strokeColorB" min="0" max="255" defaultValue={this.strokeColor.B} step="1" onInput={this.handleStrokeColorBInput} />
