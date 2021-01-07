@@ -19,6 +19,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//CORS handling: if the front-end HTML is run locally, it's a different origin, so let's allow it.
+app.use(function(req, res, next){
+  res.setHeader('Access-Control-Allow-Origin','*');
+  next();
+});
+
 app.use('/users', usersRouter);
 app.use('/images', imagesRouter);
 

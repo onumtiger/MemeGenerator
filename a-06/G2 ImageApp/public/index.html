@@ -147,7 +147,7 @@
                 showImage(currentImageID);
             });
             nextButton.addEventListener('click', function () {
-                currentImageID = currentImageID == numberOfImages()-1 ? 0 : currentImageID + 1;
+                currentImageID = currentImageID >= numberOfImages()-1 ? 0 : currentImageID + 1; //was given with == instead of >= but that means the button won't work if you're on a higher index before switching to a smaller image set
                 showImage(currentImageID);
             });
 
@@ -189,7 +189,8 @@
 
             				document.getElementById('slideShowImages').appendChild(figure);
             				console.log('added image')
-            			}
+                        }
+                        currentImageID = 0; //fixes yet another bug in the given code where currentImageID does not reflect the current image ID and the buttons won't work until you manually re-align the counter -.-
             			showImage(0)
             		}).catch(jsonParseError => {
             			console.error(jsonParseError);
@@ -313,14 +314,15 @@
 		<input type="url" placeholder="http://www.example.com/myimage.jpg">
 		<input type="file" accept="image/png, image/jpeg, image/jpg">
 		<fieldset>
-			<input type="radio" class="upload-1-radio-item" id="radio-landscape" name="photo_category_upload1" value="landscape">
-			<label for="radio-landscape">Landscape</label>
-			<input type="radio" class="upload-1-radio-item" id="radio-wildlife" name="photo_category_upload1" value="wildlife">
-			<label for="radio-wildlife">Wildlife</label>
-			<input type="radio" class="upload-1-radio-item" id="radio-urban" name="photo_category_upload1" value="urban">
-			<label for="radio-urban">Urban</label>
-			<input type="radio" class="upload-1-radio-item" id="radio-travel" name="photo_category_upload1" value="travel">
-			<label for="radio-urban">Travel</label>
+            <!-- JFC yet another error in the given code... the IDs and for attributes for inputs and labels were copied from #filterContainerSelect (radio-urban was even used twice), so by selecting something here you'd be involuntary filtering the current image set -.- -->
+			<input type="radio" class="upload-1-radio-item" id="radio-landscape_upload" name="photo_category_upload1" value="landscape">
+			<label for="radio-landscape_upload">Landscape</label>
+			<input type="radio" class="upload-1-radio-item" id="radio-wildlife_upload" name="photo_category_upload1" value="wildlife">
+			<label for="radio-wildlife_upload">Wildlife</label>
+			<input type="radio" class="upload-1-radio-item" id="radio-urban_upload" name="photo_category_upload1" value="urban">
+			<label for="radio-urban_upload">Urban</label>
+			<input type="radio" class="upload-1-radio-item" id="radio-travel_upload" name="photo_category_upload1" value="travel">
+			<label for="radio-travel_upload">Travel</label>
 		</fieldset>
 		<input id="location" type="text">
 		<label for="location">Location</label>
