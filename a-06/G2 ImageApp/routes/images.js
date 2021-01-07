@@ -1,4 +1,5 @@
 var express = require('express');
+var fileUpload = require('express-fileupload');
 var router = express.Router();
 
 const imageDBClass = require('../model/ImageDB');
@@ -25,20 +26,46 @@ router.get('/:category', function(req, res, next) {
     res.send({images: imgArr});
 });
 
+router.use(fileUpload()); //without this, the body and files properties won't be there!
+
 router.post('/:category', function(req, res, next) {
     let cat = req.params.category;
     let [url, loc] = [req.body.url, req.body.location];
 
-    if((cat && url && loc)){
-        db.addImage({
-            url: url,
-            categories: [cat],
-            location: loc
-        });
-        console.log(db.getAllImages());
-        res.sendStatus(201);
-    }else{
-        res.sendStatus(400);
+    if(!url){ //no url given - try to upload file if given
+        if(req.files && req.files.image){
+            //no url sent indicates a file upload, the other conditions make sure there actually is a file under req.files.image. If there is no file, url will remain undefined and a 400 code will be sent below.
+            let img = req.files.image;
+            img.mv('public/images/'+img.name, function(err){ //this overwrites an existing image at that filepath if there is one!
+                if(err){
+                    res.status(500).send(err);
+                }else{
+                    url = 'images/'+img.name;
+
+                    //store the new image
+                    db.addImage({
+                        url: url,
+                        categories: [cat],
+                        location: loc
+                    });
+                    res.sendStatus(201);
+                }
+            });
+        }else{
+            res.status(400).send('Neither a URL nor a file was received!');
+        }
+    }else{ //url given
+        //store the new image
+        if((cat && loc)){
+            db.addImage({
+                url: url,
+                categories: [cat],
+                location: loc
+            });
+            res.sendStatus(201);
+        }else{
+            res.status(400).send('No valid category and/or location given!');
+        }
     }
 });
 
