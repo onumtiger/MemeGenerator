@@ -39,6 +39,19 @@
     // TODO: insert your code here to generate the screenshot.
     // how? make an Ajax POST request to 'screenshots/create?url={insert-url-here}'
     // show a loading animation while the request is loading
+    let inputElem = document.getElementById('urlInput');
+    $('#urlForm').on('submit', function(e){
+      e.preventDefault();
+      $('#result').append(makeCSSLoader());
+      fetch('screenshots/create?url='+inputElem.value, {
+        method: 'post'
+      }).then(res=>res.json()).then(data=>{
+        if(data.status=='ok'){
+          let newElem = $(`<img src="${data.path}">`);
+          $('#result').empty().append(newElem);
+        };
+      });
+    })
     // ***
     // ******************************************************
   })();

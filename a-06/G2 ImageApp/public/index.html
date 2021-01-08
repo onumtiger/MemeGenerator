@@ -190,7 +190,7 @@
             				document.getElementById('slideShowImages').appendChild(figure);
             				console.log('added image')
                         }
-                        currentImageID = 0; //fixes yet another bug in the given code where currentImageID does not reflect the current image ID and the buttons won't work until you manually re-align the counter -.-
+                        currentImageID = 0; //fixes yet another bug in the given code where currentImageID does not reflect the current image ID and the buttons won't work until you re-align the ID
             			showImage(0)
             		}).catch(jsonParseError => {
             			console.error(jsonParseError);
@@ -314,7 +314,7 @@
 		<input type="url" placeholder="http://www.example.com/myimage.jpg">
 		<input type="file" accept="image/png, image/jpeg, image/jpg">
 		<fieldset>
-            <!-- JFC yet another error in the given code... the IDs and for attributes for inputs and labels were copied from #filterContainerSelect (radio-urban was even used twice), so by selecting something here you'd be involuntary filtering the current image set -.- -->
+            <!-- yet another error in the given code... the IDs and for attributes for inputs and labels were copied from #filterContainerSelect (radio-urban was even used twice), so by selecting something here you'd be involuntary filtering the current image set -->
 			<input type="radio" class="upload-1-radio-item" id="radio-landscape_upload" name="photo_category_upload1" value="landscape">
 			<label for="radio-landscape_upload">Landscape</label>
 			<input type="radio" class="upload-1-radio-item" id="radio-wildlife_upload" name="photo_category_upload1" value="wildlife">
