@@ -44,7 +44,7 @@ router.use(routes.root, express.static(path.join(__dirname, shootRootDirectory))
  * }
  * if there was an error, the response also contains a "reason" property.
  */
-router.get(routes.create, function(req, res) {
+router.post(routes.create, function(req, res) {
   // performance metrics.
   var startTime = Date.now(), elapsedMilliseconds;
   var targetURL = req.query.url || '';
