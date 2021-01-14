@@ -11,8 +11,11 @@ const MemeSchema = new Schema(
     name: { type: String, required: false},
     captions: { type: [String], required: true },
     runtime: { type: Number, required: false},
+    comments: { type: [String], required: false },
+    votes: { type: Number, required: false },
+    views: { type: Number, required: false},
+    creationDate: { type: String, required: false}
  }); 
-//comments, voting, stats tbd
 
 
 module.exports = mongoose.model('Meme', MemeSchema );
