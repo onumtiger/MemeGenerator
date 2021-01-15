@@ -17,19 +17,19 @@ db.collection('memes').deleteMany({}).then(function(){
 
 
 var defaultMeme = {
-    id: '0',
+    _id: '0',
     url: 'testURL',
     captions: ['testCaption1', 'testCaption2']
 };
 
 var defaultMeme2 = {
-    id: '1',
+    _id: '1',
     url: 'testURL',
     captions: ['testCaption1', 'testCaption2']
 };
 
 var defaultMeme3 = {
-    id: '2',
+    _id: '2',
     url: 'testURL',
     captions: ['testCaption1', 'testCaption2']
 };

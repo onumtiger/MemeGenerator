@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const MemeSchema = new Schema(
   {
-    id: { type: Number, required: true},
+    _id: { type: Number, required: true},
     url: { type: String, required: true},
     captions: { type: [String], required: true },
     box_count: { type: Number, required: false},
