@@ -2,7 +2,7 @@
 
 ## How to install the project
 
-The project is split up in two folders: **./api** containing an Express server for the API and **./client** containing a React client with the frontend. Both are separate node projects, so you will first have to install both by navigating into each of those two folders and run ``npm install`` in them. Especially the React install might take a little while.
+The project is split up in two folders: **./backend** containing an Express server for the API and **./frontend** containing a React client with the frontend. Both are separate node projects, so you will first have to install both by navigating into each of those two folders and run ``npm install`` in them. Especially the React install might take a little while.
 
 ## How to start the project
 
@@ -11,9 +11,9 @@ After installation you can start the project by again navigating into both afore
 ## External tech we used during development
 
 - The React frontend was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-- The Express backend was generated with [express-generator](https://www.npmjs.com/package/express-generator).
+- The Express backend was generated with [express-generator](https://www.npmjs.com/package/express-generator). (TODO was it, still?)
 
 ## TODO
 
-- guide to MongoDB setup
+- guide to MongoDB setup (run mongod before, no need to also run mongo again then... I think? Yes? Maybe?)
 - ...

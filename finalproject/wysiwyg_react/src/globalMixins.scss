@@ -1,0 +1,19 @@
+@mixin largeButton($primaryColor, $secondaryColor){
+    background-color: $primaryColor;
+    color: #fff;
+    letter-spacing: .0625rem;
+    box-shadow: 0 3px 5px 1px rgb(163, 166, 168);
+    padding: 8px;
+    border: 1px solid $secondaryColor;
+    border-radius: 3px;
+    font-size: 12pt;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: background-color .3s;
+    
+    &:hover {
+        background-color: $secondaryColor;
+    }
+}

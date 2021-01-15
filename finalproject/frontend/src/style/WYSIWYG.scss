@@ -3,20 +3,17 @@
     border: 0;
 }
 
-@font-face {
-    font-family: Impact;
-    src: url(impact.ttf) format("truetype");
-}
-#force-font-preload { // the <span> this applies to is empty, but specifying the font forces it to be downloaded immediately, effectively delaying the window.load event and thereby avoiding bugs stemming from the font being loaded after canvas already started processing text
-    font-family: Impact;
-}
-
 #page-wrapper, .in-caption-formatting-table {
     width: 100%;
     border: 0;
     padding: 0;
     margin: 0;
     border-collapse: collapse;
+}
+
+#page-wrapper {
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 #page-left, #page-right {
@@ -82,6 +79,7 @@
 .in-caption-delete {
     @include unstyled-input;
     color: darkred;
+    font-family: initial;
     cursor: pointer;
     transition: color .3s;
     position: absolute;
