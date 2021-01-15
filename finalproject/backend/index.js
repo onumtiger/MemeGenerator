@@ -6,7 +6,7 @@ const memeRouter = require('./routes/meme-router.js')
 const app = express()
 const path = require('path');
 
-const PORT = 3000
+const PORT = 3001
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())

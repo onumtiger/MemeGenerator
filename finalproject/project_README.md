@@ -6,7 +6,7 @@ The project is split up in two folders: **./backend** containing an Express serv
 
 ## How to start the project
 
-After installation you can start the project by again navigating into both aforementioned folders and run ``npm start`` in them. The React app will open in development mode on localhost:8000, while the Express backend will run in the background on localhost:3000 (We proxy API calls to the right port in package.json to simplify the URLs in the frontend).
+After installation you can start the project by again navigating into both aforementioned folders and run ``npm start`` in them. The React app will open in development mode on localhost:3000, while the Express backend will run in the background on localhost:3001 (We proxy API calls to the right port in package.json to simplify the URLs in the frontend).
 
 ## External tech we used during development
 
@@ -15,5 +15,5 @@ After installation you can start the project by again navigating into both afore
 
 ## TODO
 
-- guide to MongoDB setup (mongod, mongo...)
+- guide to MongoDB setup (run mongod before, no need to also run mongo again then... I think? Yes? Maybe?)
 - ...
