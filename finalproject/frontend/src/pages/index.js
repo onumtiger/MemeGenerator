@@ -1,4 +1,5 @@
 import MemesList from './MemesList'
 import MemesInsert from './MemesInsert'
+import UploadMeme from './Upload'
 
-export { MemesList, MemesInsert }
+export { MemesList, MemesInsert, UploadMeme }

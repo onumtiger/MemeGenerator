@@ -33,6 +33,12 @@ class Links extends Component {
                                 Create Meme
                             </Link>
                         </Item>
+                        <Item>
+                            <Link to="/memes/createViaUpload" className="nav-link">
+                                Create Meme Via Upload
+                            </Link>
+                        </Item>
+
                     </List>
                 </Collapse>
             </React.Fragment>
