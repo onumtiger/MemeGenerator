@@ -21,7 +21,7 @@ export default class DrawTemplate extends React.Component {
         };
         this.clearButtonTexts = {
             default: 'Clear Drawing',
-            bgToClear: 'Clear Background'
+            bgToClear: 'Clear Canvas'
         };
         this.lastPos = {x: -1, y: -1};
         [
@@ -74,6 +74,14 @@ export default class DrawTemplate extends React.Component {
 
         this.drawing = true;
         this.lastPos = {x: e.offsetX, y: e.offsetY};
+
+        //if we have previously snapped a webcam image and cleared the drawing, the clear button would now clear the entire canvas onClick. Since we now start drawing again, revert the button back to clearing only the drawing first.
+        if(this.snappedImage){
+            let clearBtn = document.getElementById('clear-btn');
+            if(clearBtn.innerText == this.clearButtonTexts.bgToClear){
+                clearBtn.innerText = this.clearButtonTexts.default;
+            }
+        }
     }
 
     handleCanvasMouseUp(e){
