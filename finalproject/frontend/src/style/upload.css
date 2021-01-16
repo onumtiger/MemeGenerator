@@ -11,11 +11,11 @@
     border: 1px solid #ccc;
     margin-top: 25px;
 }
-  
+
 .button:hover {
     background: #ddd;
 }
-  
+
 #fileElem {
     display: none;
 }
@@ -23,12 +23,35 @@
 #drop-area {
     border: 2px dotted lightgrey;
     border-radius: 20px;
-    width: 580px;    
+    width: 580px;
     padding: 36px;
     background-color: #f6f6f6;
-  }
-  
+}
+
 #drop-area.highlight {
     border-color: grey;
     background-color: #eaf9ff;
+}
+
+#uploadButtonFile {
+    background-color: #6078d7;
+    color: white;
+    box-shadow: 0 3px 5px 1px rgb(163, 166, 168);
+    padding: 8px;
+    border: 1px solid #4e67b7;
+    border-radius: 3px;
+    font-size: 12pt;
+    width: 580px;
+    box-sizing: border-box;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: background-color .3s;
+}
+
+#drag {
+    border: 2px dotted lightgrey;
+    border-radius: 20px;
+    width: 580px;
+    padding: 36px;
+    background-color: #f6f6f6;
 }

@@ -16,7 +16,7 @@ function App() {
                     <WYSIWYGEditor templateImagePath="/templates/_dummy.png" />
                 </Route>
                 <Route path="/memes/create-template" exact component={DrawTemplate} />
-                <Route path="/memes/createViaUpload" exact component={UploadMeme} />
+                <Route path="/memes/uploadMeme" exact component={UploadMeme} />
             </Switch>
         </Router>
     )

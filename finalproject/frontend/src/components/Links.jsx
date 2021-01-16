@@ -44,8 +44,8 @@ class Links extends Component {
                             </Link>
                         </Item>
                         <Item>
-                            <Link to="/memes/createViaUpload" className="nav-link">
-                                Create Meme Via Upload
+                            <Link to="/memes/uploadMeme" className="nav-link">
+                                Upload a Meme
                             </Link>
                         </Item>
 
