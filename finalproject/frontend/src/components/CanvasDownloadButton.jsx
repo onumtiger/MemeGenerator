@@ -2,10 +2,6 @@ import React from 'react';
 import '../style/CanvasDownloadButton.scss';
 
 export default class CanvasDownloadButton extends React.Component {
-    constructor(props){
-        super(props);
-    }
-
     render(){
         return (
             <a id="download-anchor" download={this.props.placeholderFileName}>
