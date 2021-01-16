@@ -14,6 +14,11 @@ export default class DrawTemplate extends React.Component {
             B: 0
         };
         this.canvasBackgroundColor = "white";
+        this.snappedImage = null;
+        this.camButtonTexts = {
+            default: 'Insert Webcam Photo',
+            streaming: 'Snap this Picture'
+        };
         this.lastPos = {x: -1, y: -1};
         [
             'handleCanvasMouseDown',
@@ -26,7 +31,8 @@ export default class DrawTemplate extends React.Component {
             'handleStrokeColorGInput',
             'handleStrokeColorBInput',
             'handleDownloadButtonClick',
-            'handleClearButtonClick'
+            'handleClearButtonClick',
+            'handleCamButtonClick'
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
@@ -138,6 +144,55 @@ export default class DrawTemplate extends React.Component {
         this.setCanvasBackground(this.canvasBackgroundColor);
     }
 
+    handleCamButtonClick(e){
+        let button = e.target;
+        let vid = document.getElementById('webcam-input');
+
+        if(vid.classList.contains('active')){ //snap a picture on click
+            //clear the canvas just to be sure
+            this.cContext.clearRect(0, 0, this.cElem.width, this.cElem.height);
+
+            //draw the current image on the canvas
+            context.drawImage(vid, 0, 0, this.cElem.width, this.cElem.height);
+            
+            //store the snapped image for later use (TODO give the user the choice to keep the image on clearButtonClick)
+            this.snappedImage = new Image();
+            this.snappedImage.src = this.cElem.toDataURL('image/png');
+
+            //reset the button
+            button.innerText = this.camButtonTexts.default;
+
+            //hide the video
+            vid.classList.add('remove');
+        }else{ //setup the webcam stream on click
+            let permissionRequest = { audio: false, video: true };
+            if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){ //if these are falsy, the browser does not support webcam input
+                alert('Your browser does not support webcam input! :/');
+                button.disabled = true;
+                return;
+            }
+            navigator.mediaDevices.getUserMedia(permissionRequest)
+                .then((stream)=>{ //webcam access is granted
+                    //change the button to snap the current picture
+                    button.innerText = this.camButtonTexts.streaming;
+
+                    //let the video be as big as the canvas to take its exact place in the page layout
+                    vid.width = this.cElem.width;
+                    vid.height = this.cElem.height; //TODO set appropriate AR
+
+                    //insert the webcam stream into the video
+                    vid.srcObject = stream;
+
+                    //show the video
+                    vid.classList.add('active');
+                })
+                .catch((err) => { //no webcam access (no camera / no permission / ...)
+                    console.log(err);
+                    alert('Failed to access your webcam! You can find more information on this error in your browser console.')
+                });
+        }
+    }
+
     componentDidMount(){
         this.setCanvasReferences();
         this.setCanvasWidth();
@@ -158,6 +213,7 @@ export default class DrawTemplate extends React.Component {
                     <tbody>
                         <tr>
                             <td id="canvas-column">
+                                <video id="webcam-input" width="1" />
                                 <canvas
                                     width="1"
                                     height="800"
@@ -197,6 +253,7 @@ export default class DrawTemplate extends React.Component {
                                     <span id="label-strokeColorB">{this.strokeColor.B}</span>
                                 </label>
                                 <hr />
+                                <button type="button" id="camera-btn" onClick={this.handleCamButtonClick}>{this.camButtonTexts.default}</button>
                                 <button type="button" id="clear-btn" onClick={this.handleClearButtonClick}>Clear Canvas</button>
                                 <CanvasDownloadButton placeholderFileName="Your Work of Art.png" onButtonClick={this.handleDownloadButtonClick} />
                             </td>

@@ -16,4 +16,16 @@
     &:hover {
         background-color: $secondaryColor;
     }
+
+    &:active {
+        border-width: 0;
+    }
+
+    &:disabled {
+        background-color: gray;
+
+        &:active {
+            border-width: 1px;
+        }
+    }
 }

@@ -22,6 +22,18 @@
     canvas {
         border: 1px solid gray;
     }
+
+    #webcam-input {
+        display: none;
+        border: 1px solid gray;
+        box-sizing: content-box;
+
+        &.active {
+            display: block;
+            position: absolute;
+            z-index: 100;
+        }
+    }
 }
 #options-column {
     width: 20%;
@@ -44,5 +56,9 @@
 
     #clear-btn {
         @include largeButton(#d76079, #bb2f4d);
+    }
+
+    #camera-btn {
+        @include largeButton(#79d760, #4dbb2f);
     }
 }
