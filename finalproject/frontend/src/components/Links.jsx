@@ -43,6 +43,12 @@ class Links extends Component {
                                 Draw a Template
                             </Link>
                         </Item>
+                        <Item>
+                            <Link to="/memes/uploadMeme" className="nav-link">
+                                Upload a Meme
+                            </Link>
+                        </Item>
+
                     </List>
                 </Collapse>
             </React.Fragment>

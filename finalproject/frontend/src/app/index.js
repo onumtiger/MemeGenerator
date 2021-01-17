@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { NavBar } from '../components'
-import { MemesList, MemesInsert, WYSIWYGEditor, DrawTemplate } from '../pages'
+import { MemesList, MemesInsert, WYSIWYGEditor, DrawTemplate, UploadMeme } from '../pages'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -16,6 +16,7 @@ function App() {
                     <WYSIWYGEditor templateImagePath="/templates/_dummy.png" />
                 </Route>
                 <Route path="/memes/create-template" exact component={DrawTemplate} />
+                <Route path="/memes/uploadMeme" exact component={UploadMeme} />
             </Switch>
         </Router>
     )
