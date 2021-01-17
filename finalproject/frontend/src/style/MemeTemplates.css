@@ -1,0 +1,12 @@
+.memeContainer {
+    height: 500px;
+    width: 300px;
+    border: solid 2px grey;
+    overflow: auto;
+    text-align: center;
+}
+
+img {
+    margin: 10px;
+    display: block;
+}
