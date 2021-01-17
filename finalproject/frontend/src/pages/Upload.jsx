@@ -45,7 +45,7 @@ class UploadMeme extends React.Component {
         formData.append('name', name)
 
         // --- the REQUEST which is used for FILE UPLOAD ---
-        fetch(`http://localhost:3000/images/${id}`, {
+        fetch(`http://localhost:3000/meme/${id}`, {
             method: 'POST',
             mode: 'cors',
             body: formData
