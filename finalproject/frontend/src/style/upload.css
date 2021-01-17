@@ -55,3 +55,9 @@
     padding: 36px;
     background-color: #f6f6f6;
 }
+
+td,
+th {
+    padding-right: 8px;
+    padding-top: 8px;
+}
