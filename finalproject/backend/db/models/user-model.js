@@ -7,7 +7,7 @@ const UserSchema = new Schema(
     username: { type: String, required: true}, // displayed username 
     password: { type: [String], required: true }, // password for login
     meme_ids: { type: [Number], required: false} // user created memes (Array)
- }); 
+ }, { collection: 'users' }); 
 
 
-module.exports = mongoose.model('User', UserSchema );
+module.exports = mongoose.model('user', UserSchema );

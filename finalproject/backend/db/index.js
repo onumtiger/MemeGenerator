@@ -9,7 +9,9 @@ mongoose
 const db = mongoose.connection
 
 
-// mongoose lokal db MEMES reset 
+// -- Comment out everything (l.13 - l.59) if you dont want the database to reset --
+
+// mongoose lokal db MEMES reset, without SCHMEMA
 db.collection('memes').deleteMany({}).then(function(){ 
     console.log("Old memes deleted") });
 
@@ -22,7 +24,7 @@ var defaultMeme = {
 var defaultMeme2 = {
     _id: '1',
     url: 'testURL',
-    captions: ['testCaption1', 'testCaption2']
+    captions: ['testCaption1', 'testCaption2'],
 };
 
 var defaultMeme3 = {
@@ -35,7 +37,7 @@ db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]).the
     console.log("Default memes inserted") });
 
 
-// mongoose lokal db USER reset
+// mongoose lokal db USER reset, without SCHMEMA
 db.collection('users').deleteMany({}).then(function(){ 
     console.log("Old users deleted") });
 

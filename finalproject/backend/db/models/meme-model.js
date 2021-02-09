@@ -16,7 +16,7 @@ const MemeSchema = new Schema(
     views: { type: Number, required: false}, // view for meme (must be public then)
     creationDate: { type: String, required: false}, // date of creation
     public: {type: Boolean, required: true} // if user sets his meme to public -> true
- }); 
+ }, { collection: 'memes' }); 
 
 
-module.exports = mongoose.model('Meme', MemeSchema );
+module.exports = mongoose.model('meme', MemeSchema );

@@ -1,6 +1,8 @@
 const Meme = require('../db/models/meme-model')
 
+
 const createMeme = (req, res) => {
+    
     const body = req.body
 
     if (!body) {
@@ -87,6 +89,7 @@ const getMemeById = async (req, res) => {
 }
 
 const getMemes = async (req, res) => {
+    console.log("Entered!")
     await Meme.find({}, (err, meme) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -94,15 +97,16 @@ const getMemes = async (req, res) => {
         if (!meme.length) {
             return res
                 .status(404)
-                .json({ success: false, error: `Movie not found` })
+                .json({ success: false, error: `Meme not found` })
         }
         return res.status(200).json({ success: true, data: meme })
     }).catch(err => console.log(err))
 }
 
+
 module.exports = {
     createMeme,
     deleteMeme,
     getMemes,
-    getMemeById,
+    getMemeById
 }
