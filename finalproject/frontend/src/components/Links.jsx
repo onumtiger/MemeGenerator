@@ -29,18 +29,8 @@ class Links extends Component {
                             </Link>
                         </Item>
                         <Item>
-                            <Link to="/memes/create-via-api" className="nav-link">
-                                Create Meme via ImgFlip
-                            </Link>
-                        </Item>
-                        <Item>
                             <Link to="/memes/create" className="nav-link">
-                                Create Meme locally
-                            </Link>
-                        </Item>
-                        <Item>
-                            <Link to="/memes/create-template" className="nav-link">
-                                Draw a Template
+                                Create Meme
                             </Link>
                         </Item>
                         <Item>
