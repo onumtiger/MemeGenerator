@@ -7,6 +7,12 @@ import styled from 'styled-components'
 import '../style/react-table.css'
 
 
+
+// ---- DOMI ---- // 
+// endless scroll, image & title, passive information (views, votes, comments), interaction (up/down vote, download, share) //
+
+
+
 const Wrapper = styled.div`
 padding: 0 40px 40px 40px;
 `
