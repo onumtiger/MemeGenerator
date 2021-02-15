@@ -89,7 +89,7 @@ const getMemeById = async (req, res) => {
 }
 
 const getMemes = async (req, res) => {
-    console.log("Entered!")
+    console.log("Trying to get memes!")
     await Meme.find({}, (err, meme) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
