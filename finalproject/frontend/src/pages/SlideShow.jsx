@@ -52,6 +52,7 @@ background-color: white;
   text-align: center;
   text-decoration: none;
   display: inline-block;
+  font-weight: bold; 
   font-size: 16px;
 `
 
@@ -78,7 +79,7 @@ display: block;
 
 const StatsTable = styled.table`
   margin: auto;
-  width: 65%;
+  width: 75%;
   padding: 10px;
   text-align: center;
 `
@@ -159,10 +160,11 @@ class SlideShow extends Component {
             //This is for view testing
             <Wrapper>
                 <CenterDiv>  
+                
                 <Right>
-                    <label>Goethe // </label>
-                    <ActionButton>↓</ActionButton>
-                    <ActionButton>→</ActionButton>
+                
+                    <ActionButton>Shuffle ↔</ActionButton>
+                    <ActionButton>Diashow ►</ActionButton>
                    </Right>
                     <SlideShowTable>
                     <td><SlideButton>←</SlideButton></td>
@@ -175,6 +177,7 @@ class SlideShow extends Component {
                             <td><DownVotes>↓ 22</DownVotes></td>
                             <td><label>11 comments</label></td>
                             <td><label>230 views</label></td>
+                            <td><label>// Goethe</label></td>
                         </tr>
                     </StatsTable>
                 </CenterDiv>
