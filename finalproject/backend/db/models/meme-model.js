@@ -10,7 +10,7 @@ const MemeSchema = new Schema(
     stats_id: { type: Number, required: true }, // stats id -> linked meme statistics 
     comment_ids: { type: [Number], required: true }, // comment_ids for comments added to the meme (must be public then)
     user_id: { type: Number, required: true }, // user id -> who created meme
-    visibility: {type: Number, required: true}, // user sets his meme to public (2), not listed (1), private (0)
+    visibility: {type: Number, required: true}, // visibility of the meme: public / unlisted / private - possible values in constants.js
     creationDate: { type: String, required: false} // date of creation
  }, { collection: 'memes' }); 
 
