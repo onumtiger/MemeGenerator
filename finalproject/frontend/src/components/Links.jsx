@@ -29,6 +29,11 @@ class Links extends Component {
                             </Link>
                         </Item>
                         <Item>
+                            <Link to="/memes/slideshow" className="nav-link">
+                                Slide Show
+                            </Link>
+                        </Item>
+                        <Item>
                             <Link to="/memes/create-via-api" className="nav-link">
                                 Create Meme via ImgFlip
                             </Link>

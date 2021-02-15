@@ -55,11 +55,23 @@ background-color: white;
   font-size: 16px;
 `
 
+const SlideButton = styled.button`
+background-color: black; 
+border-radius: 5px;
+  border: none;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  color: white
+`
+
 const MemeImg = styled.img`
 display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 90%;
   max-width: 500px;
   
 `
@@ -69,6 +81,10 @@ const StatsTable = styled.table`
   width: 65%;
   padding: 10px;
   text-align: center;
+`
+
+const SlideShowTable = styled.table`
+    vertical-align: middle;
 `
 
 const ButtonTable = styled.table`
@@ -81,12 +97,11 @@ const ButtonTable = styled.table`
 const CenterDiv = styled.div`
 margin: auto;
   width: 45%;
-  border-bottom: 2px solid grey;
   padding: 10px;
   text-align: center;
 `
 
-class MemesList extends Component {
+class SlideShow extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -149,7 +164,11 @@ class MemesList extends Component {
                     <ActionButton>↓</ActionButton>
                     <ActionButton>→</ActionButton>
                    </Right>
-                    <MemeImg src="https://adz.ro/fileadmin/_processed_/5/e/csm_meme1_9e3229f399.jpg" alt="Goethe"></MemeImg>
+                    <SlideShowTable>
+                    <td><SlideButton>←</SlideButton></td>
+                    <td><MemeImg src="https://adz.ro/fileadmin/_processed_/5/e/csm_meme1_9e3229f399.jpg" alt="Goethe"></MemeImg></td>   
+                    <td><SlideButton>→</SlideButton></td>
+                    </SlideShowTable>
                     <StatsTable>
                         <tr>
                             <td><UpVotes>↑ 412</UpVotes></td>
@@ -160,40 +179,7 @@ class MemesList extends Component {
                     </StatsTable>
                 </CenterDiv>
 
-                <CenterDiv>  
-                <Right>
-                    <label>Stuff // </label>
-                    <ActionButton>↓</ActionButton>
-                    <ActionButton>→</ActionButton>
-                   </Right>
-                    <MemeImg src="https://lh3.googleusercontent.com/proxy/f_a9u6It28uXF5oRkGziafKHIeBxk0zyo-8HJAfWe15wAKzDcRUWeiIXgdvM0KiWleA53AtU97bvZSab_atxWTdQK8WFki908FtMTuP-id2lNAU0jffAUJmBCY6cvPuU3oEwRrcWjF86" alt="Goethe"></MemeImg>
-                    <StatsTable>
-                        <tr>
-                            <td><UpVotes>↑ 412</UpVotes></td>
-                            <td><DownVotes>↓ 32</DownVotes></td>
-                            <td><label>11 comments</label></td>
-                            <td><label>230 views</label></td>
-                        </tr>
-                    </StatsTable>
-                </CenterDiv>
-
-                <CenterDiv>  
-                <Right>
-                    <label>Cat // </label>
-                    <ActionButton>↓</ActionButton>
-                    <ActionButton>→</ActionButton>
-                   </Right>
-                    <MemeImg src="https://i.pinimg.com/originals/b7/1f/4b/b71f4bf1cbeecc1db2971156993fbffa.jpg" alt="Goethe"></MemeImg>
-                    <StatsTable>
-                        <tr>
-                            <td><UpVotes>↑ 412</UpVotes></td>
-                            <td><DownVotes>↓ 12</DownVotes></td>
-                            <td><label>11 comments</label></td>
-                            <td><label>230 views</label></td>
-                        </tr>
-                    </StatsTable>
-                </CenterDiv>
-
+               
 
                 <div></div>
                 {showTable && (
@@ -211,4 +197,4 @@ class MemesList extends Component {
     }
 }
 
-export default MemesList
+export default SlideShow
