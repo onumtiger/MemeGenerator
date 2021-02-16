@@ -16,6 +16,11 @@
     background: #ddd;
 }
 
+.center {
+    width: 50%; margin: 0 auto;
+    text-align: center;
+}
+
 #fileElem {
     display: none;
 }

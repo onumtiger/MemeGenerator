@@ -55,6 +55,14 @@ background-color: white;
   font-size: 16px;
 `
 
+const CommentButton = styled.button`
+    background-color: white; 
+  border: none;
+  text-align: center;
+  
+  
+`
+
 const MemeImg = styled.img`
 display: block;
   margin-left: auto;
@@ -179,7 +187,7 @@ class MemesList extends Component {
                         <option value="gif">gif</option>
                         <option value="image">image</option>
                         <option value="template">template</option>
-                        <option value="template" disabled>video</option>
+                        <option value="template">video</option>
                     </Select>
                 </CenterSearch>
                 <CenterDiv>  
@@ -193,7 +201,7 @@ class MemesList extends Component {
                         <tr>
                             <td><UpVotes>↑ 412</UpVotes></td>
                             <td><DownVotes>↓ 22</DownVotes></td>
-                            <td><label>11 comments</label></td>
+                            <td><CommentButton>11 comments</CommentButton></td>
                             <td><label>230 views</label></td>
                         </tr>
                     </StatsTable>
