@@ -64,6 +64,19 @@ display: block;
   
 `
 
+const Select = styled.select`
+width:20%;
+margin-left: 10px;
+height:10%;
+  box-sizing:border-box;
+
+`
+const Search = styled.input`
+width:20%;
+height:10%;
+  box-sizing:border-box;
+`
+
 const StatsTable = styled.table`
   margin: auto;
   width: 65%;
@@ -144,6 +157,26 @@ class MemesList extends Component {
             //This is for view testing
             <Wrapper>
                 <CenterDiv>  
+                <Search type="text" id="search" name="search" placeholder="search"></Search>
+                    
+                     <Select name="sort" id="sort">
+                        <option value="newest" selected disabled>sort</option>
+                        <option value="newest">newest</option>
+                        <option value="oldest">oldest</option>
+                        <option value="top rating">rating (best)</option>
+                        <option value="top rating">rating (worst)</option>
+                        <option value="most viewed">views (most)</option> 
+                        <option value="most viewed">views (least)</option> 
+                    </Select> 
+                    <Select name="filter" id="filter">
+                        <option value="newest" selected disabled>filter</option>
+                        <option value="gif">gif</option>
+                        <option value="image">image</option>
+                        <option value="template">template</option>
+                        <option value="template" disabled>video</option>
+                    </Select>
+                </CenterDiv>
+                <CenterDiv>  
                 <Right>
                     <label>Goethe // </label>
                     <ActionButton>↓</ActionButton>
@@ -166,7 +199,7 @@ class MemesList extends Component {
                     <ActionButton>↓</ActionButton>
                     <ActionButton>→</ActionButton>
                    </Right>
-                    <MemeImg src="https://lh3.googleusercontent.com/proxy/f_a9u6It28uXF5oRkGziafKHIeBxk0zyo-8HJAfWe15wAKzDcRUWeiIXgdvM0KiWleA53AtU97bvZSab_atxWTdQK8WFki908FtMTuP-id2lNAU0jffAUJmBCY6cvPuU3oEwRrcWjF86" alt="Goethe"></MemeImg>
+                    <MemeImg src="https://i.pinimg.com/originals/b7/1f/4b/b71f4bf1cbeecc1db2971156993fbffa.jpg" alt="Goethe"></MemeImg>
                     <StatsTable>
                         <tr>
                             <td><UpVotes>↑ 412</UpVotes></td>

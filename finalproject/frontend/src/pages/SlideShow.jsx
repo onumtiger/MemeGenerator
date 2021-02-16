@@ -35,9 +35,24 @@ const MemeTitle = styled.h4.attrs({
 
 `
 
+
+
 const UpVotes = styled.label`
 color: green;
 font-weight: bold
+`
+
+const Select = styled.select`
+width:20%;
+margin-left: 10px;
+height:10%;
+  box-sizing:border-box;
+
+`
+const Search = styled.input`
+width:20%;
+height:10%;
+  box-sizing:border-box;
 `
 
 const DownVotes = styled.label`
@@ -159,13 +174,29 @@ class SlideShow extends Component {
 
             //This is for view testing
             <Wrapper>
+
+
                 <CenterDiv>  
-                
-                <Right>
-                
-                    <ActionButton>Shuffle ↔</ActionButton>
-                    <ActionButton>Diashow ►</ActionButton>
-                   </Right>
+                    
+                    <Search type="text" id="search" name="search" placeholder="search"></Search>
+                    
+                     <Select name="sort" id="sort">
+                        <option value="newest" selected disabled>sort</option>
+                        <option value="newest">newest</option>
+                        <option value="oldest">oldest</option>
+                        <option value="top rating">rating (best)</option>
+                        <option value="top rating">rating (worst)</option>
+                        <option value="most viewed">views (most)</option> 
+                        <option value="most viewed">views (least)</option> 
+                    </Select> 
+                    <Select name="filter" id="filter">
+                        <option value="newest" selected disabled>filter</option>
+                        <option value="gif">gif</option>
+                        <option value="image">image</option>
+                        <option value="template">template</option>
+                        <option value="template" disabled>video</option>
+                    </Select>
+
                     <SlideShowTable>
                     <td><SlideButton>←</SlideButton></td>
                     <td><MemeImg src="https://adz.ro/fileadmin/_processed_/5/e/csm_meme1_9e3229f399.jpg" alt="Goethe"></MemeImg></td>   
@@ -180,6 +211,11 @@ class SlideShow extends Component {
                             <td><label>// Goethe</label></td>
                         </tr>
                     </StatsTable>
+                    <Right>
+                
+                    <ActionButton>Shuffle ↔</ActionButton>
+                    <ActionButton>Diashow ►</ActionButton>
+                   </Right>
                 </CenterDiv>
 
                
