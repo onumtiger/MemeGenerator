@@ -24,11 +24,6 @@ class Links extends Component {
                 <Collapse>
                     <List>
                         <Item>
-                            <Link to="/memes/list" className="nav-link">
-                                List Memes
-                            </Link>
-                        </Item>
-                        <Item>
                             <Link to="/memes/slideshow" className="nav-link">
                                 Slide Show
                             </Link>

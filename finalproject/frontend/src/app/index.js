@@ -11,7 +11,6 @@ function App() {
             <NavBar />
             <Switch>
                 <Route path="/" exact component={MemesList} />
-                <Route path="/memes/list" exact component={MemesList} />
                 <Route path="/memes/slideshow" exact component={SlideShow} />
                 <Route path="/memes/create-via-api" exact component={MemesInsert} />
                 <Route path="/memes/create" exact>
