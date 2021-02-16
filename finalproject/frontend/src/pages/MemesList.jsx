@@ -98,6 +98,12 @@ margin: auto;
   padding: 10px;
   text-align: center;
 `
+const CenterSearch = styled.div`
+margin: auto;
+  width: 45%;
+  padding: 10px;
+  text-align: center;
+`
 
 class MemesList extends Component {
     constructor(props) {
@@ -156,7 +162,7 @@ class MemesList extends Component {
 
             //This is for view testing
             <Wrapper>
-                <CenterDiv>  
+                <CenterSearch>  
                 <Search type="text" id="search" name="search" placeholder="search"></Search>
                     
                      <Select name="sort" id="sort">
@@ -175,7 +181,7 @@ class MemesList extends Component {
                         <option value="template">template</option>
                         <option value="template" disabled>video</option>
                     </Select>
-                </CenterDiv>
+                </CenterSearch>
                 <CenterDiv>  
                 <Right>
                     <label>Goethe // </label>
