@@ -13,7 +13,7 @@ export default function Comment() {
         });
 
         setCommentCounter(prevCount => prevCount + 1);
-        document.getElementById('commentInput').value='';
+        document.getElementById('commentInput').value = '';
     }
 
     const removeComment = (targetIndex) => {
@@ -26,18 +26,19 @@ export default function Comment() {
 
     return (
         <div>
-            <p>{commentCounter} comments</p>
-            <ul>
+            <p class="commentNumber">{commentCounter} comments</p>
+            <div>
                 {comments.map((comment, index) => (
-                    <li onClick={() => removeComment(index)} key={index}>
-                        {comment}
+                    <div onClick={() => removeComment(index)} key={index}>
+                        <div class="userInfo"><label class="username">DerMemeKritiker</label> said:</div>
+                        <label class="commentText">{comment}</label>
                         <div class="deleteIcon">&times;</div>
-                    </li>
+                    </div>
                 ))}
-            </ul>
+            </div>
             <div id="commentContainer">
                 <input id="commentInput" placeholder="add a comment..."></input>
-                <button onClick={handlePost}>Post</button>
+                <button class="postButton" onClick={handlePost}>Post</button>
             </div>
         </div >
     );
