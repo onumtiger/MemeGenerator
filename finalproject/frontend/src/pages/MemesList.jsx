@@ -6,7 +6,7 @@ import api from '../api'
 import styled from 'styled-components'
 import '../style/react-table.css'
 import Counter from '../components/MemeVoteCounter'
-
+import Comment from '../components/MemeComment'
 
 
 // ---- DOMI ---- // 
@@ -201,10 +201,11 @@ class MemesList extends Component {
                     <StatsTable>
                         <tr>
                             <td><Counter></Counter></td>
-                            <td><CommentButton>11 comments</CommentButton></td>
+                            {/* <td><CommentButton>11 comments</CommentButton></td> */}
                             <td><label>230 views</label></td>
                         </tr>
                     </StatsTable>
+                    <Comment></Comment>
                 </CenterDiv>
 
                 <CenterDiv>
