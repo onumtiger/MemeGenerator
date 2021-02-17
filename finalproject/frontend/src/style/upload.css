@@ -16,6 +16,12 @@
     background: #ddd;
 }
 
+.center {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+}
+
 #fileElem {
     display: none;
 }
@@ -26,6 +32,7 @@
     width: 580px;
     padding: 36px;
     background-color: #f6f6f6;
+    margin: auto;
 }
 
 #drop-area.highlight {
@@ -60,4 +67,8 @@ td,
 th {
     padding-right: 8px;
     padding-top: 8px;
+}
+
+table {
+    margin: auto;
 }

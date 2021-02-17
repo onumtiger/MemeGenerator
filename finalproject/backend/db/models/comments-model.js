@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const CommentsSchema = new Schema(
+const CommentSchema = new Schema(
   {
     _id: { type: Number, required: true}, // comment id
     user_id: { type: [String], required: true }, // user_id for comment author
@@ -10,4 +10,4 @@ const CommentsSchema = new Schema(
  }, { collection: 'comments' }); 
 
 
-module.exports = mongoose.model('comment', CommentsSchema );
+module.exports = mongoose.model('comment', CommentSchema );

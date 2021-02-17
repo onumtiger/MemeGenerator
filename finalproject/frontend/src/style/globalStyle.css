@@ -1,0 +1,53 @@
+.upVotes {
+    background-color: rgb(85, 207, 85);
+    margin: 3px;
+    padding: 5px;
+    color: white;
+    border-radius: 7px;
+    border: white;
+}
+
+.downVotes {
+    background-color: rgb(235, 82, 82);
+    margin: 3px;
+    padding: 5px;
+    color: white;
+    border-radius: 7px;
+    border: white;
+}
+
+.deleteIcon {
+    display: inline;
+    float: right;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.commentText {
+    background-color: rgb(117, 117, 238);
+    padding: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+    color: white;
+    border-radius: 5px;
+}
+
+.postButton {
+    background-color: rgb(209, 79, 209);
+    color: white;
+    border-radius: 7px;
+    margin-left: 5px;
+}
+
+.commentNumber {
+    font-weight: bold;
+}
+
+.userInfo {
+    float: left;
+}
+
+.username {
+    font-weight: bold;
+}

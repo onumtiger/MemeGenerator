@@ -12,7 +12,8 @@ const MemeSchema = new Schema(
     user_id: { type: Number, required: true }, // user id -> who created meme
     visibility: {type: Number, required: true}, // visibility of the meme: public / unlisted / private - possible values in constants.js
     creationDate: { type: String, required: false} // date of creation
- }, { collection: 'memes' }); 
+ }, { collection: 'memes' });
+
 
 
 module.exports = mongoose.model('meme', MemeSchema );

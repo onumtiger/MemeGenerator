@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 mongoose
-    .connect('mongodb://127.0.0.1:27017/memeApp', { useNewUrlParser: true })
+    .connect('mongodb://127.0.0.1:27017/memeApp', { useNewUrlParser: true, useUnifiedTopology: true })
     .catch(e => {
         console.error('Connection error', e.message)
     })
@@ -16,21 +16,39 @@ db.collection('memes').deleteMany({}).then(function(){
     console.log("Old memes deleted") });
 
 var defaultMeme = {
-    _id: '0',
-    url: 'testURL',
-    captions: ['testCaption1', 'testCaption2']
+    _id: 0,
+    url: '/memes/jan_domi_zusammentreffen',
+    captions: ['Domi', 'Jan Jbernolte'], 
+    name: 'Jan und Domi unterwegs', 
+    stats_id: 0, 
+    comment_ids: [0, 1],
+    user_id: 0, 
+    visibilty: 2,
+    creationDate: '12021997'
 };
 
 var defaultMeme2 = {
-    _id: '1',
-    url: 'testURL',
-    captions: ['testCaption1', 'testCaption2'],
+    _id: 1,
+    url: '/memes/jan_domi_punch',
+    captions: ['Domi', 'Jan Obernolte'], 
+    name: 'Jan und Domis Gefühle füreinander <3', 
+    stats_id: 1, 
+    comment_ids: [2, 3],
+    user_id: 1, 
+    visibilty: 2,
+    creationDate: '12021997'
 };
 
 var defaultMeme3 = {
-    _id: '2',
-    url: 'testURL',
-    captions: ['testCaption1', 'testCaption2']
+    _id: 2,
+    url: '/memes/jan_domi_cat',
+    captions: ['Dominik', 'Jan Obernolte'], 
+    name: 'Jan als Katze', 
+    stats_id: 2, 
+    comment_ids: [3, 4],
+    user_id: 2, 
+    visibilty: 2,
+    creationDate: '12021997'
 };
 
 db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]).then(function(){ 
@@ -38,6 +56,7 @@ db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]).the
 
 
 // mongoose lokal db USER reset, without SCHMEMA
+
 db.collection('users').deleteMany({}).then(function(){ 
     console.log("Old users deleted") });
 
