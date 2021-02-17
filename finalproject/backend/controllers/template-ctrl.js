@@ -1,4 +1,5 @@
-const Template = require('../db/models/template-model')
+const Template = require('../db/models/template-model');
+const Stats = require('../db/models/stats-model');
 
 const createTemplate = (req, res) => {
     const body = req.body
@@ -12,14 +13,26 @@ const createTemplate = (req, res) => {
 
     if(req.files && req.files.image){ //check if we actually received a file
         let img = req.files.image;
-        let filename = img.name; //TODO we probably should pass an additional ID to the filename in order to prevent unwanted overrides.
+        let prevTemplates = await Template.find({});
+        let id = prevTemplates.length; //get new unique ID
+        let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
         img.mv('public/templates/'+filename, function(err){ //this overwrites an existing image at that filepath if there is one!
             if(err){
                 res.status(500).send(err);
             }else{
-                url = 'templates/'+filename;
+                let url = '/templates/'+filename;
+
+                let prevStats = await Stats.find({});
+                let statsID = prevStats.length;
                 
-                const template = new Template(body) //TODO change to actual properties, add the url, and store the data as we need it.
+                const template = new Template({
+                    _id: id,
+                    url: url,
+                    name: img.name,
+                    user_id: body.userID,
+                    visibility: body.visibility,
+                    stats_id: statsID
+                });
 
 
                 if (!template) {
@@ -34,7 +47,7 @@ const createTemplate = (req, res) => {
                     .then(() => {
                         return res.status(201).json({
                             success: true,
-                            id: template._id, //TODO maybe change depending on what a stored Template looks like and which ID we will work with
+                            id: template._id,
                             error: 'Template successfully stored!'
                         })
                     })
@@ -87,16 +100,16 @@ const getTemplateById = async (req, res) => {
 }
 
 const getTemplates = async (req, res) => {
-    await Template.find({}, (err, template) => {
+    await Template.find({}, (err, templateArray) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        if (!template.length) {
+        if (!templateArray.length) {
             return res
                 .status(404)
                 .json({ success: false, error: `No templates found` })
         }
-        return res.status(200).json({ success: true, data: template })
+        return res.status(200).json({ success: true, data: templateArray })
     }).catch(err => console.log(err))
 }
 
