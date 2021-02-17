@@ -127,19 +127,37 @@ class MemesList extends Component {
     /*componentDidMount = async () => {
         this.setState({ isLoading: true })
 
-        await api.getAllMemes().then(memes => {
+        await api.getAllMovies().then(movies => {
             this.setState({
-                memes: memes.data.data,
+                movies: movies.data.data,
                 isLoading: false,
             })
         })
     }*/
 
-    render() {
+    componentDidMount = async () => {
+        this.setState({ isLoading: true })
+
+        await api.getAllMemes().then(memes => {
+            console.log("test", memes)
+            this.setState({
+                memes: memes.data.data,
+                isLoading: false,
+            })
+        })
+    }
+
+    render () {
+        
         const { memes, isLoading } = this.state
         console.log('TCL: memesList -> render -> memes', memes)
 
-        const columns = [
+        
+
+       
+
+
+        /*const columns = [
             {
                 Header: 'ID',
                 accessor: '_id',
@@ -160,7 +178,7 @@ class MemesList extends Component {
             //     accessor: 'time',
             //     Cell: props => <span>{props.value.join(' / ')}</span>,
             // },
-        ]
+        ]*/
 
         let showTable = true
         if (!memes.length) {
@@ -168,7 +186,7 @@ class MemesList extends Component {
         }
 
         return (
-
+            showTable&&(
             //This is for view testing
             <Wrapper>
                 <CenterSearch>
@@ -191,13 +209,15 @@ class MemesList extends Component {
                         <option value="template">video</option>
                     </Select>
                 </CenterSearch>
+
+                {memes.map(meme => (
                 <CenterDiv>
                     <Right>
-                        <label>Goethe // </label>
+                        <label>{meme.name} // </label>
                         <ActionButton>↓</ActionButton>
                         <ActionButton>→</ActionButton>
                     </Right>
-                    <MemeImg src="https://adz.ro/fileadmin/_processed_/5/e/csm_meme1_9e3229f399.jpg" alt="Goethe"></MemeImg>
+                    <MemeImg src={meme.url} alt={meme.name}></MemeImg>
                     <StatsTable>
                         <tr>
                             <td><Counter></Counter></td>
@@ -207,44 +227,11 @@ class MemesList extends Component {
                     </StatsTable>
                     <Comment></Comment>
                 </CenterDiv>
-
-                <CenterDiv>
-                    <Right>
-                        <label>Stuff // </label>
-                        <ActionButton>↓</ActionButton>
-                        <ActionButton>→</ActionButton>
-                    </Right>
-                    <MemeImg src="https://i.pinimg.com/originals/b7/1f/4b/b71f4bf1cbeecc1db2971156993fbffa.jpg" alt="Goethe"></MemeImg>
-                    <StatsTable>
-                        <tr>
-                            <td><UpVotes>↑ 412</UpVotes></td>
-                            <td><DownVotes>↓ 32</DownVotes></td>
-                            <td><label>11 comments</label></td>
-                            <td><label>230 views</label></td>
-                        </tr>
-                    </StatsTable>
-                </CenterDiv>
-
-                <CenterDiv>
-                    <Right>
-                        <label>Cat // </label>
-                        <ActionButton>↓</ActionButton>
-                        <ActionButton>→</ActionButton>
-                    </Right>
-                    <MemeImg src="https://i.pinimg.com/originals/b7/1f/4b/b71f4bf1cbeecc1db2971156993fbffa.jpg" alt="Goethe"></MemeImg>
-                    <StatsTable>
-                        <tr>
-                            <td><UpVotes>↑ 412</UpVotes></td>
-                            <td><DownVotes>↓ 12</DownVotes></td>
-                            <td><label>11 comments</label></td>
-                            <td><label>230 views</label></td>
-                        </tr>
-                    </StatsTable>
-                </CenterDiv>
-
-
+                ))}
+            
+                
                 <div></div>
-                {showTable && (
+                {/* {showTable && (
                     <ReactTable
                         data={memes}
                         columns={columns}
@@ -253,8 +240,8 @@ class MemesList extends Component {
                         showPageSizeOptions={true}
                         minRows={0}
                     />
-                )}
-            </Wrapper>
+                )} */}
+            </Wrapper>)
         )
     }
 }

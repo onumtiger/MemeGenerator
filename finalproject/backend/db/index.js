@@ -17,7 +17,7 @@ db.collection('memes').deleteMany({}).then(function(){
 
 var defaultMeme = {
     _id: 0,
-    url: '/memes/jan_domi_zusammentreffen',
+    url: '/memes/jan_domi_zusammentreffen.png',
     captions: ['Domi', 'Jan Jbernolte'], 
     name: 'Jan und Domi unterwegs', 
     stats_id: 0, 
@@ -29,7 +29,7 @@ var defaultMeme = {
 
 var defaultMeme2 = {
     _id: 1,
-    url: '/memes/jan_domi_punch',
+    url: '/memes/jan_domi_punch.png',
     captions: ['Domi', 'Jan Obernolte'], 
     name: 'Jan und Domis Gefühle füreinander <3', 
     stats_id: 1, 
@@ -41,11 +41,11 @@ var defaultMeme2 = {
 
 var defaultMeme3 = {
     _id: 2,
-    url: '/memes/jan_domi_cat',
+    url: '/memes/jan_domi_cat.jpg',
     captions: ['Dominik', 'Jan Obernolte'], 
     name: 'Jan als Katze', 
     stats_id: 2, 
-    comment_ids: [3, 4],
+    comment_ids: [4, 5],
     user_id: 2, 
     visibilty: 2,
     creationDate: '12021997'
