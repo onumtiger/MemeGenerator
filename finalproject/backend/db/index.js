@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 mongoose
-    .connect('mongodb://127.0.0.1:27017/memeApp', { useNewUrlParser: true })
+    .connect('mongodb://127.0.0.1:27017/memeApp', { useNewUrlParser: true, useUnifiedTopology: true })
     .catch(e => {
         console.error('Connection error', e.message)
     })
@@ -16,21 +16,39 @@ db.collection('memes').deleteMany({}).then(function(){
     console.log("Old memes deleted") });
 
 var defaultMeme = {
-    _id: '0',
+    _id: 0,
     url: 'testURL',
-    captions: ['testCaption1', 'testCaption2']
+    captions: ['testCaption1', 'testCaption2'], 
+    name: 'memeName', 
+    stats_id: 0, 
+    comment_ids: [0, 1],
+    user_id: 0, 
+    visibilty: 2,
+    creationDate: '12021997'
 };
 
 var defaultMeme2 = {
-    _id: '1',
+    _id: 1,
     url: 'testURL',
-    captions: ['testCaption1', 'testCaption2'],
+    captions: ['testCaption1', 'testCaption2'], 
+    name: 'memeName', 
+    stats_id: 1, 
+    comment_ids: [2, 3],
+    user_id: 1, 
+    visibilty: 2,
+    creationDate: '12021997'
 };
 
 var defaultMeme3 = {
-    _id: '2',
+    _id: 2,
     url: 'testURL',
-    captions: ['testCaption1', 'testCaption2']
+    captions: ['testCaption1', 'testCaption2'], 
+    name: 'memeName', 
+    stats_id: 2, 
+    comment_ids: [3, 4],
+    user_id: 0, 
+    visibilty: 2,
+    creationDate: '12021997'
 };
 
 db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]).then(function(){ 
