@@ -58,34 +58,34 @@ class UploadMeme extends React.Component {
         return (
             <div className="wrapper" >
                 <div class="center">
-                <h2>Upload a meme and add it to your templates</h2>
-                <form id="uploadContainer" onSubmit={this.handleSubmit} encType='multipart/form-data'>
-                    <label>Upload your own meme: </label>
-                    <div id="drop-area">
-                        <div><img id="output" src={this.state.image} /></div>
-                        <input type="file" id="fileElem" multiple accept="image/*" onChange={this.onImageChange} />
-                        <label className="button" htmlFor="fileElem">Choose a meme</label>
-                    </div>
-                    <table>
-                        <tr>
-                            <td><label for="id">ID</label></td>
-                            <td><input id="id" type="text" /></td>
-                        </tr>
-                        <tr>
-                            <td><label for="name">Name</label></td>
-                            <td><input id="name" type="text" /></td>
-                        </tr>
-                    </table>
-                    <button id="uploadButtonFile" type="submit">Upload File</button>
-                </form>
+                    <h2>Upload a meme and add it to your templates</h2>
+                    <form id="uploadContainer" onSubmit={this.handleSubmit} encType='multipart/form-data'>
+                        <label>Upload your own meme: </label>
+                        <div id="drop-area">
+                            <div><img id="output" src={this.state.image} /></div>
+                            <input type="file" id="fileElem" multiple accept="image/*" onChange={this.onImageChange} />
+                            <label className="button" htmlFor="fileElem">Choose a meme</label>
+                        </div>
+                        <table>
+                            <tr>
+                                <td><label for="id">ID</label></td>
+                                <td><input id="id" type="text" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="name">Name</label></td>
+                                <td><input id="name" type="text" /></td>
+                            </tr>
+                        </table>
+                        <button id="uploadButtonFile" type="submit">Upload File</button>
+                    </form>
 
-                <div>
-                    <label>Template memes:</label>
-                    <div id="uploadedTemplates">
-                        <MemeTemplates />
-                        {/* display the images from templates folder */}
+                    <div>
+                        <h3>Template memes:</h3>
+                        <div id="uploadedTemplates">
+                            <MemeTemplates />
+                            {/* display the images from templates folder */}
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
         );

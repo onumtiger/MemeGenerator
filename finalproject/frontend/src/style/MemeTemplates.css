@@ -4,6 +4,7 @@
     border: solid 2px grey;
     overflow: auto;
     text-align: center;
+    margin: auto;
 }
 
 img {
