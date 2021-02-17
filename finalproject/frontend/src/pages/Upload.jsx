@@ -62,7 +62,7 @@ class UploadMeme extends React.Component {
                     <form id="uploadContainer" onSubmit={this.handleSubmit} encType='multipart/form-data'>
                         <label>Upload your own meme: </label>
                         <div id="drop-area">
-                            <div><img id="output" src={this.state.image} /></div>
+                            <div><img id="output" src={this.state.image} width="480"/></div>
                             <input type="file" id="fileElem" multiple accept="image/*" onChange={this.onImageChange} />
                             <label className="button" htmlFor="fileElem">Choose a meme</label>
                         </div>

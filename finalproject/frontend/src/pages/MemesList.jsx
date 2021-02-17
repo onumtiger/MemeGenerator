@@ -5,6 +5,7 @@ import api from '../api'
 
 import styled from 'styled-components'
 import '../style/react-table.css'
+import Counter from '../components/MemeVoteCounter'
 
 
 
@@ -170,18 +171,18 @@ class MemesList extends Component {
 
             //This is for view testing
             <Wrapper>
-                <CenterSearch>  
-                <Search type="text" id="search" name="search" placeholder="search"></Search>
-                    
-                     <Select name="sort" id="sort">
+                <CenterSearch>
+                    <Search type="text" id="search" name="search" placeholder="search"></Search>
+
+                    <Select name="sort" id="sort">
                         <option value="newest" selected disabled>sort</option>
                         <option value="newest">newest</option>
                         <option value="oldest">oldest</option>
                         <option value="top rating">rating (best)</option>
                         <option value="top rating">rating (worst)</option>
-                        <option value="most viewed">views (most)</option> 
-                        <option value="most viewed">views (least)</option> 
-                    </Select> 
+                        <option value="most viewed">views (most)</option>
+                        <option value="most viewed">views (least)</option>
+                    </Select>
                     <Select name="filter" id="filter">
                         <option value="newest" selected disabled>filter</option>
                         <option value="gif">gif</option>
@@ -190,29 +191,28 @@ class MemesList extends Component {
                         <option value="template">video</option>
                     </Select>
                 </CenterSearch>
-                <CenterDiv>  
-                <Right>
-                    <label>Goethe // </label>
-                    <ActionButton>↓</ActionButton>
-                    <ActionButton>→</ActionButton>
-                   </Right>
+                <CenterDiv>
+                    <Right>
+                        <label>Goethe // </label>
+                        <ActionButton>↓</ActionButton>
+                        <ActionButton>→</ActionButton>
+                    </Right>
                     <MemeImg src="https://adz.ro/fileadmin/_processed_/5/e/csm_meme1_9e3229f399.jpg" alt="Goethe"></MemeImg>
                     <StatsTable>
                         <tr>
-                            <td><UpVotes>↑ 412</UpVotes></td>
-                            <td><DownVotes>↓ 22</DownVotes></td>
+                            <td><Counter></Counter></td>
                             <td><CommentButton>11 comments</CommentButton></td>
                             <td><label>230 views</label></td>
                         </tr>
                     </StatsTable>
                 </CenterDiv>
 
-                <CenterDiv>  
-                <Right>
-                    <label>Stuff // </label>
-                    <ActionButton>↓</ActionButton>
-                    <ActionButton>→</ActionButton>
-                   </Right>
+                <CenterDiv>
+                    <Right>
+                        <label>Stuff // </label>
+                        <ActionButton>↓</ActionButton>
+                        <ActionButton>→</ActionButton>
+                    </Right>
                     <MemeImg src="https://i.pinimg.com/originals/b7/1f/4b/b71f4bf1cbeecc1db2971156993fbffa.jpg" alt="Goethe"></MemeImg>
                     <StatsTable>
                         <tr>
@@ -224,12 +224,12 @@ class MemesList extends Component {
                     </StatsTable>
                 </CenterDiv>
 
-                <CenterDiv>  
-                <Right>
-                    <label>Cat // </label>
-                    <ActionButton>↓</ActionButton>
-                    <ActionButton>→</ActionButton>
-                   </Right>
+                <CenterDiv>
+                    <Right>
+                        <label>Cat // </label>
+                        <ActionButton>↓</ActionButton>
+                        <ActionButton>→</ActionButton>
+                    </Right>
                     <MemeImg src="https://i.pinimg.com/originals/b7/1f/4b/b71f4bf1cbeecc1db2971156993fbffa.jpg" alt="Goethe"></MemeImg>
                     <StatsTable>
                         <tr>

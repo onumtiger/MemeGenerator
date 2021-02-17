@@ -1,0 +1,17 @@
+.upVotes {
+    background-color: rgb(85, 207, 85);
+    margin: 3px;
+    padding: 5px;
+    color: white;
+    border-radius: 7px;
+    border: white;
+}
+
+.downVotes {
+    background-color: rgb(235, 82, 82);
+    margin: 3px;
+    padding: 5px;
+    color: white;
+    border-radius: 7px;
+    border: white;
+}
