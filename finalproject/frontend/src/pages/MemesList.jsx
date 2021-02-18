@@ -8,7 +8,6 @@ import '../style/react-table.css'
 import Counter from '../components/MemeVoteCounter'
 import Comment from '../components/MemeComment'
 
-
 // ---- DOMI ---- // 
 // endless scroll, image & title, passive information (views, votes, comments), interaction (up/down vote, download, share) //
 
@@ -121,6 +120,7 @@ margin: auto;
 `
 
 class MemesList extends Component {
+
     constructor(props) {
         super(props)
         this.state = {
@@ -128,7 +128,19 @@ class MemesList extends Component {
             stats: [],
             columns: [],
             isLoading: false,
+            search: null,
+            filter: "all"
         }
+    }
+
+    startSearch = (e) => {
+        let keyword = e.target.value;
+        this.setState({ search: keyword })
+    }
+
+    setFilter = () => {
+        var filter = document.getElementById("filter").value
+        this.setState({ filter: filter })
     }
 
     /*componentDidMount = async () => {
@@ -162,17 +174,14 @@ class MemesList extends Component {
         })
     }
 
-    render () {
-        
+    render() {
+
         const { memes, stats, isLoading } = this.state
         console.log('TCL: memesList -> render -> memes', memes)
         console.log('TCL: STATS -> render -> stats', stats[0])
 
-        
 
-       
-
-
+        console.log("filter value: " + this.state.filter)
         /*const columns = [
             {
                 Header: 'ID',
@@ -202,56 +211,67 @@ class MemesList extends Component {
         }
 
         return (
-            showTable&&(
-            //This is for view testing
-            <Wrapper>
-                <CenterSearch>
-                    <Search type="text" id="search" name="search" placeholder="search"></Search>
+            showTable && (
+                //This is for view testing
+                <Wrapper>
+                    <CenterSearch>
+                        <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-                    <Select name="sort" id="sort">
-                        <option value="newest" selected disabled>sort</option>
-                        <option value="newest">newest</option>
-                        <option value="oldest">oldest</option>
-                        <option value="top rating">rating (best)</option>
-                        <option value="top rating">rating (worst)</option>
-                        <option value="most viewed">views (most)</option>
-                        <option value="most viewed">views (least)</option>
-                    </Select>
-                    <Select name="filter" id="filter">
-                        <option value="newest" selected disabled>filter</option>
-                        <option value="gif">gif</option>
-                        <option value="image">image</option>
-                        <option value="template">template</option>
-                        <option value="template">video</option>
-                    </Select>
-                </CenterSearch>
+                        Sort: <Select name="sort" id="sort">
+                            <option value="newest" selected disabled>sort</option>
+                            <option value="newest">newest</option>
+                            <option value="oldest">oldest</option>
+                            <option value="best rating">rating (best)</option>
+                            <option value="worst rating">rating (worst)</option>
+                            <option value="most viewed">views (most)</option>
+                            <option value="least viewed">views (least)</option>
+                        </Select>
+                        Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
+                            <option value="all">all</option>
+                            <option value="jpg">jpg</option>
+                            <option value="png">png</option>
+                            <option value="katze">katze</option>
+                            <option value="gif">gif</option>
+                            <option value="image">image</option>
+                            <option value="template">template</option>
+                            <option value="video">video</option>
+                        </Select>
+                    </CenterSearch>
 
-                {memes.map(meme => (
-                <CenterDiv>
-                    <Right>
-                        <label>{meme.name} // </label>
-                        <ActionButton>↓</ActionButton>
-                        <ActionButton>→</ActionButton>
-                    </Right>
-                    <MemeImg src={meme.url} alt={meme.name}></MemeImg>
-                    
-                    <StatsTable>
-                        <tr>          
-                            <td><p>{stats[meme.stats_id].views} views</p></td>
-                            <td><p><Counter></Counter></p></td>
-                            <td><p>{meme.creationDate}</p></td>
-                        </tr>
-                    </StatsTable>
-                    
-                    <Comment id={meme._id}></Comment>
-                    
-                </CenterDiv>))
-                
-                }
-            
-                
-                <div></div>
-                {/* {showTable && (
+                    {memes.filter((meme) => {
+                        if (this.state.filter == "all")
+                            return meme
+                        else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
+                            return meme
+                        }
+                    }).filter((meme) => {
+                        if (this.state.search == null)
+                            return meme
+                        else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                            return meme
+                        }
+                    }).map(meme => (
+                        <CenterDiv>
+                            <Right>
+                                <label>{meme.name} // </label>
+                                <ActionButton>↓</ActionButton>
+                                <ActionButton>→</ActionButton>
+                            </Right>
+                            <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                            <StatsTable>
+                                <tr>
+                                    <td><p>{stats[meme.stats_id].views} views</p></td>
+                                    <td><p><Counter></Counter></p></td>
+                                    <td><p>{meme.creationDate}</p></td>
+                                </tr>
+                            </StatsTable>
+                            <Comment id={meme._id}></Comment>
+                        </CenterDiv>
+                    ))}
+
+
+                    <div></div>
+                    {/* {showTable && (
                     <ReactTable
                         data={memes}
                         columns={columns}
@@ -261,7 +281,7 @@ class MemesList extends Component {
                         minRows={0}
                     />
                 )} */}
-            </Wrapper>)
+                </Wrapper>)
         )
     }
 }
