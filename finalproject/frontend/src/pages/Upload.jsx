@@ -1,7 +1,6 @@
 import React from 'react';
 import '../style/upload.css';
 import DragAndDrop from '../components/DragAndDrop'
-import MemeTemplates from '../components/MemeTemplates'
 
 
 class UploadMeme extends React.Component {
@@ -78,14 +77,6 @@ class UploadMeme extends React.Component {
                         </table>
                         <button id="uploadButtonFile" type="submit">Upload File</button>
                     </form>
-
-                    <div>
-                        <h3>Template memes:</h3>
-                        <div id="uploadedTemplates">
-                            <MemeTemplates />
-                            {/* display the images from templates folder */}
-                        </div>
-                    </div>
                 </div>
             </div>
         );
