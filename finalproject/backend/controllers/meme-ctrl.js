@@ -1,27 +1,40 @@
-const Meme = require('../db/models/meme-model')
-
+const Meme = require('../db/models/meme-model');
+const Stats = require('../db/models/stats-model');
+const globalHelpers = require('../globalHelpers');
 
 const createMeme = (req, res) => {
-    
-    const body = req.body
+    const body = req.body;
 
     if (!body) {
         return res.status(400).json({
             success: false,
-            error: 'No meme data received!',
+            error: 'No meme data received!'
         })
     }
 
     if(req.files && req.files.image){ //check if we actually received a file
         let img = req.files.image;
-        let filename = img.name; //TODO we probably should pass an additional ID to the filename in order to prevent unwanted overrides.
+        let id = globalHelpers.getNewEmptyMemeID();
+        let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
         img.mv('public/memes/'+filename, function(err){ //this overwrites an existing image at that filepath if there is one!
             if(err){
                 res.status(500).send(err);
             }else{
-                url = 'memes/'+filename;
+                let url = 'memes/'+filename;
                 
-                const meme = new Meme(body) //TODO change to actual properties, add the url, and store the data as we need it.
+                let statsID = globalHelpers.getNewFullStatsID();
+                
+                const meme = new Meme({
+                    _id: id,
+                    url: url,
+                    name: body.name,
+                    user_id: body.userID,
+                    visibility: body.visibility,
+                    stats_id: statsID,
+                    captions: body.captions,
+                    comment_ids: [],
+                    creationDate: globalHelpers.getTodayString()
+                });
 
 
                 if (!meme) {
@@ -36,7 +49,7 @@ const createMeme = (req, res) => {
                     .then(() => {
                         return res.status(201).json({
                             success: true,
-                            id: meme._id, //TODO maybe change depending on what a stored Meme looks like and which ID we will work with
+                            id: meme._id,
                             error: 'Meme successfully stored!'
                         })
                     })
@@ -90,16 +103,16 @@ const getMemeById = async (req, res) => {
 
 const getMemes = async (req, res) => {
     console.log("Trying to get memes!")
-    await Meme.find({}, (err, meme) => {
+    await Meme.find({}, (err, memeArray) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        if (!meme.length) {
+        if (!memeArray.length) {
             return res
                 .status(404)
                 .json({ success: false, error: `No memes found` })
         }
-        return res.status(200).json({ success: true, data: meme })
+        return res.status(200).json({ success: true, data: memeArray })
     }).catch(err => console.log(err))
 }
 

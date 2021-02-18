@@ -1,29 +1,28 @@
 const Template = require('../db/models/template-model');
 const Stats = require('../db/models/stats-model');
+const globalHelpers = require('../globalHelpers');
 
-const createTemplate = (req, res) => {
-    const body = req.body
+const createTemplate = async (req, res) => {
+    const body = req.body;
 
     if (!body) {
         return res.status(400).json({
             success: false,
-            error: 'No template data received!',
+            error: 'No template data received!'
         })
     }
 
     if(req.files && req.files.image){ //check if we actually received a file
         let img = req.files.image;
-        let prevTemplates = await Template.find({});
-        let id = prevTemplates.length; //get new unique ID
+        let id = globalHelpers.getNewEmptyTemplateID();
         let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
-        img.mv('public/templates/'+filename, function(err){ //this overwrites an existing image at that filepath if there is one!
+        img.mv('public/templates/'+filename, async function(err){ //this overwrites an existing image at that filepath if there is one!
             if(err){
                 res.status(500).send(err);
             }else{
                 let url = '/templates/'+filename;
 
-                let prevStats = await Stats.find({});
-                let statsID = prevStats.length;
+                let statsID = globalHelpers.getNewFullStatsID();
                 
                 const template = new Template({
                     _id: id,
