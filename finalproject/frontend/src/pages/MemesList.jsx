@@ -56,6 +56,8 @@ background-color: white;
   font-size: 16px;
 `
 
+
+
 const CommentButton = styled.button`
     background-color: white; 
   border: none;
@@ -91,6 +93,10 @@ const StatsTable = styled.table`
   width: 65%;
   padding: 10px;
   text-align: center;
+  
+  
+  text-align: center;
+  
 `
 
 const ButtonTable = styled.table`
@@ -119,6 +125,7 @@ class MemesList extends Component {
         super(props)
         this.state = {
             memes: [],
+            stats: [],
             columns: [],
             isLoading: false,
         }
@@ -145,12 +152,21 @@ class MemesList extends Component {
                 isLoading: false,
             })
         })
+
+        await api.getAllStats().then(stats => {
+            console.log("test", stats)
+            this.setState({
+                stats: stats.data.data,
+                isLoading: false,
+            })
+        })
     }
 
     render () {
         
-        const { memes, isLoading } = this.state
+        const { memes, stats, isLoading } = this.state
         console.log('TCL: memesList -> render -> memes', memes)
+        console.log('TCL: STATS -> render -> stats', stats[0])
 
         
 
@@ -181,7 +197,7 @@ class MemesList extends Component {
         ]*/
 
         let showTable = true
-        if (!memes.length) {
+        if (!memes.length || !stats.length) {
             showTable = false
         }
 
@@ -218,16 +234,20 @@ class MemesList extends Component {
                         <ActionButton>→</ActionButton>
                     </Right>
                     <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                    
                     <StatsTable>
-                        <tr>
-                            <td><Counter></Counter></td>
-                            {/* <td><CommentButton>11 comments</CommentButton></td> */}
-                            <td><label>230 views</label></td>
+                        <tr>          
+                            <td><p>{stats[meme.stats_id].views} views</p></td>
+                            <td><p><Counter></Counter></p></td>
+                            <td><p>{meme.creationDate}</p></td>
                         </tr>
                     </StatsTable>
+                    
                     <Comment id={meme._id}></Comment>
-                </CenterDiv>
-                ))}
+                    
+                </CenterDiv>))
+                
+                }
             
                 
                 <div></div>

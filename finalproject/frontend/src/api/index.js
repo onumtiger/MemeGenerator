@@ -6,11 +6,13 @@ const api = axios.create({
 
 export const insertMeme = payload => api.post(`/meme`, payload)
 export const getAllMemes = () => api.get(`/meme`)
+export const getAllStats = () => api.get(`/stats`)
 export const getMemeById = id => api.get(`/meme/${id}`)
 
 const apis = {
     insertMeme,
     getAllMemes,
+    getAllStats,
     getMemeById,
 }
 

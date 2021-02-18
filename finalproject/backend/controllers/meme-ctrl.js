@@ -1,4 +1,5 @@
 const Meme = require('../db/models/meme-model')
+const Stats = require('../db/models/stats-model')
 
 
 const createMeme = (req, res) => {
@@ -103,10 +104,26 @@ const getMemes = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+const getStats = async (req, res) => {
+    console.log("Trying to get stats!")
+    await Stats.find({}, (err, stats) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if (!stats.length) {
+            return res
+                .status(404)
+                .json({ success: false, error: `Statistics not found` })
+        }
+        return res.status(200).json({ success: true, data: stats })
+    }).catch(err => console.log(err))
+}
+
 
 module.exports = {
     createMeme,
     deleteMeme,
     getMemes,
+    getStats,
     getMemeById
 }

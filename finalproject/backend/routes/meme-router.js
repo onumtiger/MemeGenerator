@@ -10,5 +10,6 @@ router.use(fileUpload()); //populates req.file for files uploads
 router.post('/meme', MemeCtrl.createMeme)
 router.get('/meme/:id', MemeCtrl.getMemeById)
 router.get('/meme', MemeCtrl.getMemes)
+router.get('/stats', MemeCtrl.getStats)
 
 module.exports = router
