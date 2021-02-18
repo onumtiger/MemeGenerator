@@ -225,7 +225,7 @@ class MemesList extends Component {
                             <td><label>230 views</label></td>
                         </tr>
                     </StatsTable>
-                    <Comment></Comment>
+                    <Comment id={meme._id}></Comment>
                 </CenterDiv>
                 ))}
             

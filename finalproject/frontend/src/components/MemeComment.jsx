@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import '../style/globalStyle.css';
 
-export default function Comment() {
+export default function Comment(props) {
 
     const [comments, setComments] = useState([]);
     const [commentCounter, setCommentCounter] = useState(0);
 
     const handlePost = () => {
-        const input = document.getElementById('commentContainer').querySelector('#commentInput').value
+        const input = document.getElementsByClassName('commentInput')[props.id].value
         setComments((prev) => {
             return [...prev, input];
         });
 
         setCommentCounter(prevCount => prevCount + 1);
-        document.getElementById('commentInput').value = '';
+        document.getElementsByClassName('commentInput')[props.id].value = '';
     }
 
     const removeComment = (targetIndex) => {
@@ -43,8 +43,8 @@ export default function Comment() {
                     </div>
                 ))}
             </div>
-            <div id="commentContainer">
-                <input id="commentInput" placeholder="add a comment..." onKeyPress={handleKeypress}></input>
+            <div class="commentContainer">
+                <input class="commentInput" placeholder="add a comment..." onKeyPress={handleKeypress}></input>
                 <button class="postButton" onClick={handlePost}>Post</button>
             </div>
         </div >
