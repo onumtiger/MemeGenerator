@@ -8,7 +8,6 @@ import '../style/react-table.css'
 import Counter from '../components/MemeVoteCounter'
 import Comment from '../components/MemeComment'
 
-
 // ---- DOMI ---- // 
 // endless scroll, image & title, passive information (views, votes, comments), interaction (up/down vote, download, share) //
 
@@ -121,7 +120,13 @@ class MemesList extends Component {
             memes: [],
             columns: [],
             isLoading: false,
+            search: null
         }
+    }
+
+    startSearch = (e) => {
+        let keyword = e.target.value;
+        this.setState({ search: keyword })
     }
 
     /*componentDidMount = async () => {
@@ -147,16 +152,10 @@ class MemesList extends Component {
         })
     }
 
-    render () {
-        
+    render() {
+
         const { memes, isLoading } = this.state
         console.log('TCL: memesList -> render -> memes', memes)
-
-        
-
-       
-
-
         /*const columns = [
             {
                 Header: 'ID',
@@ -186,52 +185,58 @@ class MemesList extends Component {
         }
 
         return (
-            showTable&&(
-            //This is for view testing
-            <Wrapper>
-                <CenterSearch>
-                    <Search type="text" id="search" name="search" placeholder="search"></Search>
+            showTable && (
+                //This is for view testing
+                <Wrapper>
+                    <CenterSearch>
+                        <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-                    <Select name="sort" id="sort">
-                        <option value="newest" selected disabled>sort</option>
-                        <option value="newest">newest</option>
-                        <option value="oldest">oldest</option>
-                        <option value="top rating">rating (best)</option>
-                        <option value="top rating">rating (worst)</option>
-                        <option value="most viewed">views (most)</option>
-                        <option value="most viewed">views (least)</option>
-                    </Select>
-                    <Select name="filter" id="filter">
-                        <option value="newest" selected disabled>filter</option>
-                        <option value="gif">gif</option>
-                        <option value="image">image</option>
-                        <option value="template">template</option>
-                        <option value="template">video</option>
-                    </Select>
-                </CenterSearch>
+                        <Select name="sort" id="sort">
+                            <option value="newest" selected disabled>sort</option>
+                            <option value="newest">newest</option>
+                            <option value="oldest">oldest</option>
+                            <option value="top rating">rating (best)</option>
+                            <option value="top rating">rating (worst)</option>
+                            <option value="most viewed">views (most)</option>
+                            <option value="most viewed">views (least)</option>
+                        </Select>
+                        <Select name="filter" id="filter">
+                            <option value="newest" selected disabled>filter</option>
+                            <option value="gif">gif</option>
+                            <option value="image">image</option>
+                            <option value="template">template</option>
+                            <option value="template">video</option>
+                        </Select>
+                    </CenterSearch>
 
-                {memes.map(meme => (
-                <CenterDiv>
-                    <Right>
-                        <label>{meme.name} // </label>
-                        <ActionButton>↓</ActionButton>
-                        <ActionButton>→</ActionButton>
-                    </Right>
-                    <MemeImg src={meme.url} alt={meme.name}></MemeImg>
-                    <StatsTable>
-                        <tr>
-                            <td><Counter></Counter></td>
-                            {/* <td><CommentButton>11 comments</CommentButton></td> */}
-                            <td><label>230 views</label></td>
-                        </tr>
-                    </StatsTable>
-                    <Comment id={meme._id}></Comment>
-                </CenterDiv>
-                ))}
-            
-                
-                <div></div>
-                {/* {showTable && (
+                    {memes.filter((meme) => {
+                            if (this.state.search == null)
+                                return meme
+                            else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                                return meme
+                            }
+                    }).map(meme => (
+                        <CenterDiv>
+                            <Right>
+                                <label>{meme.name} // </label>
+                                <ActionButton>↓</ActionButton>
+                                <ActionButton>→</ActionButton>
+                            </Right>
+                            <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                            <StatsTable>
+                                <tr>
+                                    <td><Counter></Counter></td>
+                                    {/* <td><CommentButton>11 comments</CommentButton></td> */}
+                                    <td><label>230 views</label></td>
+                                </tr>
+                            </StatsTable>
+                            <Comment id={meme._id}></Comment>
+                        </CenterDiv>
+                    ))}
+
+
+                    <div></div>
+                    {/* {showTable && (
                     <ReactTable
                         data={memes}
                         columns={columns}
@@ -241,7 +246,7 @@ class MemesList extends Component {
                         minRows={0}
                     />
                 )} */}
-            </Wrapper>)
+                </Wrapper>)
         )
     }
 }
