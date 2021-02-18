@@ -114,19 +114,28 @@ margin: auto;
 `
 
 class MemesList extends Component {
+    
     constructor(props) {
         super(props)
         this.state = {
             memes: [],
             columns: [],
             isLoading: false,
-            search: null
+            search: null,
+            filter: "all"
         }
+
+        // var filter = document.getElementById("filter").value
     }
 
     startSearch = (e) => {
         let keyword = e.target.value;
         this.setState({ search: keyword })
+    }
+
+    setFilter = () => {
+        var filter = document.getElementById("filter").value
+        this.setState({ filter: filter})
     }
 
     /*componentDidMount = async () => {
@@ -150,12 +159,18 @@ class MemesList extends Component {
                 isLoading: false,
             })
         })
+        // var filter = document.getElementById("filter").value
+
+        
     }
 
     render() {
 
         const { memes, isLoading } = this.state
         console.log('TCL: memesList -> render -> memes', memes)
+
+        
+        console.log("filter value: " + this.state.filter)
         /*const columns = [
             {
                 Header: 'ID',
@@ -191,7 +206,7 @@ class MemesList extends Component {
                     <CenterSearch>
                         <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-                        <Select name="sort" id="sort">
+                        Sort: <Select name="sort" id="sort">
                             <option value="newest" selected disabled>sort</option>
                             <option value="newest">newest</option>
                             <option value="oldest">oldest</option>
@@ -200,8 +215,11 @@ class MemesList extends Component {
                             <option value="most viewed">views (most)</option>
                             <option value="most viewed">views (least)</option>
                         </Select>
-                        <Select name="filter" id="filter">
-                            <option value="newest" selected disabled>filter</option>
+                        Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
+                            <option value="all">all</option>
+                            <option value="jpg">jpg</option>
+                            <option value="png">png</option>
+                            <option value="katze">katze</option>
                             <option value="gif">gif</option>
                             <option value="image">image</option>
                             <option value="template">template</option>
@@ -210,9 +228,14 @@ class MemesList extends Component {
                     </CenterSearch>
 
                     {memes.filter((meme) => {
-                            if (this.state.search == null)
+                            // if (this.state.search == null)
+                            //     return meme
+                            if (this.state.filter == "all")
                                 return meme
-                            else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                            // else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                            //     return meme
+                            // }
+                            else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
                                 return meme
                             }
                     }).map(meme => (
