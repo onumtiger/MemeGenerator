@@ -507,4 +507,9 @@
 
 #search {
     width: 200px;
+    margin-right: 7px;
+}
+
+#sort {
+    margin-right: 7px;
 }
