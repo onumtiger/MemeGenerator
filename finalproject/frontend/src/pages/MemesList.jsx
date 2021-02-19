@@ -129,8 +129,7 @@ class MemesList extends Component {
             columns: [],
             isLoading: false,
             search: null,
-            filter: "all",
-            sort: "newest"
+            filter: "all"
         }
     }
 
@@ -152,28 +151,19 @@ class MemesList extends Component {
     }
 
     sortMemeList = () => {
-        const {memes} = this.state;
-        let newMemeList = memes;
-
+        const {memes} = this.state;    
         var sort = document.getElementById("sort").value;
-        // this.setState({ sort: sort});
-
+        
+        let newMemeList;
         if(sort == "newest") {
-            // newMemeList = memes.sort((a,b) => new Date(a.creationDate) > new Date(b.creationDate))
             console.log(memes)
-            newMemeList = memes.sort((a,b) => a.creationDate - b.creationDate)
+            let newMemeList = [...memes].sort((a,b) => a.creationDate - b.creationDate)
             console.log(newMemeList)
-            // this.setState({
-            //     memes: newMemeList
-            // })
         }
         else if (sort == "oldest") {
             console.log(memes)
-            newMemeList = memes.sort((a,b) => b.creationDate - a.creationDate)
+            let newMemeList = [...memes].sort((a,b) => b.creationDate - a.creationDate)
             console.log(newMemeList)
-            // this.setState({
-            //     memes: newMemeList
-            // })
         }
 
         this.setState({
