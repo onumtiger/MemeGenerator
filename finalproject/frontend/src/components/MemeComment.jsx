@@ -33,7 +33,7 @@ export default function Comment(props) {
 
     return (
         <div>
-            <p class="commentNumber">{commentCounter} comments</p>
+            <p class="commentNumber">{props.commentCount} comments</p>
             <div>
                 {comments.map((comment, index) => (
                     <div key={index}>

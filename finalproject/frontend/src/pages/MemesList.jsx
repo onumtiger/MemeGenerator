@@ -275,11 +275,11 @@ class MemesList extends Component {
                             <StatsTable>
                                 <tr>
                                     <td><p>{stats[meme.stats_id].views} views</p></td>
-                                    <td><p><Counter></Counter></p></td>
+                                    <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
                                     <td><p>{meme.creationDate}</p></td>
                                 </tr>
                             </StatsTable>
-                            <Comment id={meme._id}></Comment>
+                            <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
                         </CenterDiv>
                     ))}
 

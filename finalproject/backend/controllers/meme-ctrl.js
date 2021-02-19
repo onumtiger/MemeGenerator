@@ -103,10 +103,12 @@ const getMemesWithStats = async (req, res) => {
         let stats = await Stats.find({});
         let result = memeArray.map(meme => {
             let linkedStats = stats.filter(s => s._id == meme.stats_id)[0];
-            meme.stats = linkedStats;
+            let newMeme = meme.toObject();
+            newMeme.stats = linkedStats;
+            return newMeme
         })
-        console.log("result: "+stats)
-        return res.status(200).json({ success: true, data: memeArray })
+        console.log("result: ", result)
+        return res.status(200).json({ success: true, data: result })
     }).catch(err => console.log(err))
 }
 
