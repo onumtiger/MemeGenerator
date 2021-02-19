@@ -161,7 +161,7 @@ class MemesList extends Component {
         if(sort == "newest") {
             // newMemeList = memes.sort((a,b) => new Date(a.creationDate) > new Date(b.creationDate))
             console.log(memes)
-            newMemeList = memes.sort((a,b) => a.creationDate > b.creationDate)
+            newMemeList = memes.sort((a,b) => a.creationDate - b.creationDate)
             console.log(newMemeList)
             // this.setState({
             //     memes: newMemeList
@@ -169,17 +169,16 @@ class MemesList extends Component {
         }
         else if (sort == "oldest") {
             console.log(memes)
-            newMemeList = memes.sort((a,b) => a.creationDate < b.creationDate)
+            newMemeList = memes.sort((a,b) => b.creationDate - a.creationDate)
             console.log(newMemeList)
             // this.setState({
             //     memes: newMemeList
             // })
         }
 
-        
-        // this.setState({
-        //     memes: newMemeList
-        // })
+        this.setState({
+            memes: newMemeList
+        })
 
         console.log("memes order: " + newMemeList + memes + memes[1].creationDate)
     }
