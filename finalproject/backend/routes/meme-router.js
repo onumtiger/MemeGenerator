@@ -11,5 +11,6 @@ router.post('/meme', MemeCtrl.createMeme)
 router.get('/meme/:id', MemeCtrl.getMemeById)
 router.get('/meme', MemeCtrl.getMemes)
 router.get('/stats', MemeCtrl.getStats)
+router.get('/memeswithstats', MemeCtrl.getMemesWithStats)
 
 module.exports = router
