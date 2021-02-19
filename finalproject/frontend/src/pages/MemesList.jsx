@@ -157,13 +157,22 @@ class MemesList extends Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true })
 
-        await api.getAllMemes().then(memes => {
+        /*await api.getAllMemes().then(memes => {
             console.log("test", memes)
             this.setState({
                 memes: memes.data.data,
                 isLoading: false,
             })
+        })*/
+
+        await api.getMemesWithStats().then(memes => {
+            console.log("Memes with stats: ", memes)
+            this.setState({
+                memes: memes.data.data,
+                isLoading: false,
+            })
         })
+
 
         await api.getAllStats().then(stats => {
             console.log("test", stats)
