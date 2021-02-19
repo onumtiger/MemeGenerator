@@ -157,12 +157,12 @@ class MemesList extends Component {
         let newMemeList;
         if(sort == "newest") {
             console.log(memes)
-            let newMemeList = [...memes].sort((a,b) => a.creationDate - b.creationDate)
+            newMemeList = [...memes].sort((a,b) => a.creationDate - b.creationDate)
             console.log(newMemeList)
         }
         else if (sort == "oldest") {
             console.log(memes)
-            let newMemeList = [...memes].sort((a,b) => b.creationDate - a.creationDate)
+            newMemeList = [...memes].sort((a,b) => b.creationDate - a.creationDate)
             console.log(newMemeList)
         }
 
