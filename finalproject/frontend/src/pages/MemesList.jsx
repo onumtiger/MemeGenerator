@@ -149,27 +149,16 @@ class MemesList extends Component {
         let newMemeList;
 
         if (sort == "newest") {
-            newMemeList = [...memes].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
+            newMemeList = [...memes].sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
         }
         else if (sort == "oldest") {
-            newMemeList = [...memes].sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+            newMemeList = [...memes].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
         }
 
         this.setState({
             memes: newMemeList
         })
     }
-
-    /*componentDidMount = async () => {
-        this.setState({ isLoading: true })
-
-        await api.getAllMovies().then(movies => {
-            this.setState({
-                movies: movies.data.data,
-                isLoading: false,
-            })
-        })
-    }*/
 
     componentDidMount = async () => {
         this.setState({ isLoading: true })
@@ -189,6 +178,8 @@ class MemesList extends Component {
                 isLoading: false,
             })
         })
+
+        this.sortMemeList();
     }
 
     render() {
