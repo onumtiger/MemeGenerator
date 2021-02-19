@@ -129,19 +129,62 @@ class MemesList extends Component {
             columns: [],
             isLoading: false,
             search: null,
-            filter: "all"
+            filter: "all",
+            sort: "newest"
         }
     }
 
     startSearch = (e) => {
         let keyword = e.target.value;
-        this.setState({ search: keyword })
+        this.setState({ search: keyword });
     }
 
     setFilter = () => {
-        var filter = document.getElementById("filter").value
-        this.setState({ filter: filter })
+        var filter = document.getElementById("filter").value;
+        this.setState({ filter: filter });
     }
+
+    setSort = () => {
+        // var sort = document.getElementById("sort").value;
+        // this.setState({ sort: sort});
+        // console.log("sort value: " + sort)
+        this.sortMemeList();
+    }
+
+    sortMemeList = () => {
+        const {memes} = this.state;
+        let newMemeList = memes;
+
+        var sort = document.getElementById("sort").value;
+        // this.setState({ sort: sort});
+
+        if(sort == "newest") {
+            // newMemeList = memes.sort((a,b) => new Date(a.creationDate) > new Date(b.creationDate))
+            console.log(memes)
+            newMemeList = memes.sort((a,b) => a.creationDate > b.creationDate)
+            console.log(newMemeList)
+            // this.setState({
+            //     memes: newMemeList
+            // })
+        }
+        else if (sort == "oldest") {
+            console.log(memes)
+            newMemeList = memes.sort((a,b) => a.creationDate < b.creationDate)
+            console.log(newMemeList)
+            // this.setState({
+            //     memes: newMemeList
+            // })
+        }
+
+        
+        // this.setState({
+        //     memes: newMemeList
+        // })
+
+        console.log("memes order: " + newMemeList + memes + memes[1].creationDate)
+    }
+
+  
 
     /*componentDidMount = async () => {
         this.setState({ isLoading: true })
@@ -217,10 +260,10 @@ class MemesList extends Component {
                     <CenterSearch>
                         <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-                        Sort: <Select name="sort" id="sort">
-                            <option value="newest" selected disabled>sort</option>
+                        Sort: <Select name="sort" id="sort" onChange={this.setSort}>
                             <option value="newest">newest</option>
                             <option value="oldest">oldest</option>
+                            <option value="reverse">reverse</option>
                             <option value="best rating">rating (best)</option>
                             <option value="worst rating">rating (worst)</option>
                             <option value="most viewed">views (most)</option>
@@ -250,6 +293,14 @@ class MemesList extends Component {
                         else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
                             return meme
                         }
+                    // }).sort((a,b) => {
+                    //     let newMemeList = memes;
+                    //     if (this.state.sort == "newest") {
+                    //         a.creationDate > b.creationDate
+                    //     }
+                    //     else if (this.state.sort == "oldest") {
+                    //         a.creationDate < b.creationDate
+                    //     }
                     }).map(meme => (
                         <CenterDiv>
                             <Right>
