@@ -25,7 +25,7 @@ var defaultMeme = {
     comment_ids: [0, 1],
     user_id: 0,
     visibilty: 2,
-    creationDate: 2
+    creationDate: "2021-02-12"
 };
 
 var defaultMeme2 = {
@@ -37,7 +37,7 @@ var defaultMeme2 = {
     comment_ids: [2, 3],
     user_id: 1,
     visibilty: 2,
-    creationDate: 3
+    creationDate: "2021-02-13"
 };
 
 var defaultMeme3 = {
@@ -49,7 +49,7 @@ var defaultMeme3 = {
     comment_ids: [4, 5],
     user_id: 2,
     visibilty: 2,
-    creationDate: 4
+    creationDate: "2021-02-14"
 };
 
 db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]).then(function() {

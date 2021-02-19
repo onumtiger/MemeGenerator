@@ -143,37 +143,22 @@ class MemesList extends Component {
         this.setState({ filter: filter });
     }
 
-    setSort = () => {
-        // var sort = document.getElementById("sort").value;
-        // this.setState({ sort: sort});
-        // console.log("sort value: " + sort)
-        this.sortMemeList();
-    }
-
     sortMemeList = () => {
-        const {memes} = this.state;    
+        const { memes } = this.state;
         var sort = document.getElementById("sort").value;
-        
         let newMemeList;
-        if(sort == "newest") {
-            console.log(memes)
-            newMemeList = [...memes].sort((a,b) => a.creationDate - b.creationDate)
-            console.log(newMemeList)
+
+        if (sort == "newest") {
+            newMemeList = [...memes].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
         }
         else if (sort == "oldest") {
-            console.log(memes)
-            newMemeList = [...memes].sort((a,b) => b.creationDate - a.creationDate)
-            console.log(newMemeList)
+            newMemeList = [...memes].sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
         }
 
         this.setState({
             memes: newMemeList
         })
-
-        console.log("memes order: " + newMemeList + memes + memes[1].creationDate)
     }
-
-  
 
     /*componentDidMount = async () => {
         this.setState({ isLoading: true })
@@ -212,8 +197,6 @@ class MemesList extends Component {
         console.log('TCL: memesList -> render -> memes', memes)
         console.log('TCL: STATS -> render -> stats', stats[0])
 
-
-        console.log("filter value: " + this.state.filter)
         /*const columns = [
             {
                 Header: 'ID',
@@ -249,10 +232,9 @@ class MemesList extends Component {
                     <CenterSearch>
                         <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-                        Sort: <Select name="sort" id="sort" onChange={this.setSort}>
+                        Sort: <Select name="sort" id="sort" onChange={this.sortMemeList}>
                             <option value="newest">newest</option>
                             <option value="oldest">oldest</option>
-                            <option value="reverse">reverse</option>
                             <option value="best rating">rating (best)</option>
                             <option value="worst rating">rating (worst)</option>
                             <option value="most viewed">views (most)</option>
@@ -282,14 +264,6 @@ class MemesList extends Component {
                         else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
                             return meme
                         }
-                    // }).sort((a,b) => {
-                    //     let newMemeList = memes;
-                    //     if (this.state.sort == "newest") {
-                    //         a.creationDate > b.creationDate
-                    //     }
-                    //     else if (this.state.sort == "oldest") {
-                    //         a.creationDate < b.creationDate
-                    //     }
                     }).map(meme => (
                         <CenterDiv>
                             <Right>
