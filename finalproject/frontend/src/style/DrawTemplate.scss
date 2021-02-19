@@ -61,4 +61,8 @@
     #camera-btn {
         @include largeButton(#79d760, #4dbb2f);
     }
+
+    #publish-btn {
+        @include largeButton(#6079d7, #2f4dbb);
+    }
 }

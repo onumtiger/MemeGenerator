@@ -6,14 +6,17 @@ export default class CreateCustom extends React.Component {
     constructor(props){
         super(props);
 
+        this.editorRef = createRef();
+        this.initialTemplate = "/templates/_dummy.png";
+
         this.state = {
-            showDrawTemplate: false
+            showDrawTemplate: false,
+            showEditor: false
         };
         
         //this binding for React event handlers
         [
             'letCreateTemplate',
-            'selectTemplate'
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
@@ -23,9 +26,20 @@ export default class CreateCustom extends React.Component {
         this.setState({showDrawTemplate: true});
     }
 
-    selectTemplate(e){
+    selectTemplate(src){
+        if (this.state.showEditor){
+            this.editorRef.current.setTemplateImage(src);
+        }else{
+            this.initialTemplate = src;
+            this.setState({showEditor: true});
+        }
         this.setState({showDrawTemplate: false});
-        //TODO
+    }
+
+    handlePublishedTemplate(templateID){
+        let selectedElem = document.getElementById('template_'+templateID);
+        selectedElem.classList.add('selected');
+        this.selectTemplate(selectedElem.src);
     }
 
     render(){
@@ -33,9 +47,9 @@ export default class CreateCustom extends React.Component {
             <div id="page-wrapper">
                 <h2>Custom Meme Creation</h2>
                 <h3>First, choose a template:</h3>
-                <TemplatesList handleTemplateClick={this.selectTemplate} handlePlusButtonClick={this.letCreateTemplate} />
-                {this.state.showDrawTemplate && <DrawTemplate />}
-                <WYSIWYGEditor templateImagePath="/templates/_dummy.png" />
+                <TemplatesList handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letCreateTemplate} />
+                {this.state.showDrawTemplate && <DrawTemplate handlePublishing={this.handlePublishedTemplate} />}
+                {this.state.showEditor && <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} />}
             </div>
         );
     }

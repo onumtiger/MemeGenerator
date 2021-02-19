@@ -109,7 +109,7 @@ const getMemes = async (req, res) => {
         }
         if (!memeArray.length) {
             return res
-                .status(404)
+                .status(204)
                 .json({ success: false, error: `No memes found` })
         }
         return res.status(200).json({ success: true, data: memeArray })

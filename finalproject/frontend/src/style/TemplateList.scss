@@ -1,0 +1,27 @@
+#template-container {
+    height: 250px;
+    padding: 5px 0;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: auto;
+    background-color: #eee;
+    
+    img {
+        height: 100%;
+        margin-right: 10px;
+        box-sizing: border-box;
+
+        &:hover, &.selected {
+            border: 3px solid #2c6799;
+        }
+    }
+
+    #template-plus {
+        padding: 25px;
+    }
+
+    #loader, #loader div {
+        display: inline-block;
+        margin: 0 30px;
+    }
+}

@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 import CanvasDownloadButton from '../components/CanvasDownloadButton';
 import '../style/DrawTemplate.scss';
+import api from '../api';
 
 export default class DrawTemplate extends React.Component {
     constructor(props){
@@ -23,6 +24,10 @@ export default class DrawTemplate extends React.Component {
             default: 'Clear Drawing',
             bgToClear: 'Clear Canvas'
         };
+        this.publishButtonTexts = {
+            default: 'Publish and Use this Image',
+            loading: 'Publishing...'
+        };
         this.lastPos = {x: -1, y: -1};
         [
             'handleCanvasMouseDown',
@@ -36,7 +41,8 @@ export default class DrawTemplate extends React.Component {
             'handleStrokeColorBInput',
             'handleDownloadButtonClick',
             'handleClearButtonClick',
-            'handleCamButtonClick'
+            'handleCamButtonClick',
+            'handlePublishButtonClick'
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
@@ -229,6 +235,20 @@ export default class DrawTemplate extends React.Component {
         }
     }
 
+    handlePublishButtonClick(e){
+        e.target.innerText = this.publishButtonTexts.loading;
+        
+        const formData = new FormData();
+        //TODO add file & metadata
+
+        api.insertTemplate(formData).then((res)=>{
+            if(res.data.success){
+                this.props.handlePublishing(res.data.id);
+            }
+            e.target.innerText = this.publishButtonTexts.default;
+        });
+    }
+
     componentDidMount(){
         this.setCanvasReferences();
         this.setCanvasDimensions();
@@ -292,6 +312,7 @@ export default class DrawTemplate extends React.Component {
                                 <button type="button" id="camera-btn" onClick={this.handleCamButtonClick}>{this.camButtonTexts.default}</button>
                                 <button type="button" id="clear-btn" onClick={this.handleClearButtonClick}>{this.clearButtonTexts.default}</button>
                                 <CanvasDownloadButton placeholderFileName="Your Work of Art.png" onButtonClick={this.handleDownloadButtonClick} />
+                                <button type="button" id="publish-btn" onClick={this.handlePublishButtonClick}>{this.publishButtonTexts.default}</button>
                             </td>
                         </tr>
                     </tbody>

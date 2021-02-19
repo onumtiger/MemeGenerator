@@ -98,14 +98,14 @@ const getTemplateById = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getTemplates = async (req, res) => {
+const getTemplates = async (req, res) => { //TODO filter by visibility to current user
     await Template.find({}, (err, templateArray) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
         if (!templateArray.length) {
             return res
-                .status(404)
+                .status(204)
                 .json({ success: false, error: `No templates found` })
         }
         return res.status(200).json({ success: true, data: templateArray })

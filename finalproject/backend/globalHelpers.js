@@ -1,6 +1,6 @@
-const Template = require('../db/models/template-model');
-const Meme = require('../db/models/meme-model');
-const Stats = require('../db/models/stats-model');
+const Template = require('./db/models/template-model');
+const Meme = require('./db/models/meme-model');
+const Stats = require('./db/models/stats-model');
 
 module.exports = {
     getTodayString: ()=>{
