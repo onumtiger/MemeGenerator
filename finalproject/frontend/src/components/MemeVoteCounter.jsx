@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../style/globalStyle.css';
 
-export default function Counter() {
+export default function Counter(props) {
 
     //counter for upVotes
     const [upVote, setUpVote] = useState(0);
@@ -13,8 +13,8 @@ export default function Counter() {
 
     return (
         <div>
-            <button class="upVotes" onClick={incrementUpVotes}>↑ {upVote}</button>
-            <button class="downVotes" onClick={incrementDownVotes}>↓ {downVote}</button>
+            <button class="upVotes" onClick={incrementUpVotes}>↑ {props.upVotes}</button>
+            <button class="downVotes" onClick={incrementDownVotes}>↓ {props.downVotes}</button>
         </div>
     );
 }

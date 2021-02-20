@@ -8,4 +8,7 @@ router.get('/meme/:id', MemeCtrl.getMemeById);
 router.get('/meme', MemeCtrl.getMemes);
 router.delete('/meme/:id', MemeCtrl.deleteMeme);
 
+router.get('/stats', MemeCtrl.getStats);
+router.get('/memeswithstats', MemeCtrl.getMemesWithStats);
+
 module.exports = router;

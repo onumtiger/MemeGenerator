@@ -8,7 +8,6 @@ import '../style/react-table.css'
 import Counter from '../components/MemeVoteCounter'
 import Comment from '../components/MemeComment'
 
-
 // ---- DOMI ---- // 
 // endless scroll, image & title, passive information (views, votes, comments), interaction (up/down vote, download, share) //
 
@@ -56,6 +55,8 @@ background-color: white;
   font-size: 16px;
 `
 
+
+
 const CommentButton = styled.button`
     background-color: white; 
   border: none;
@@ -91,6 +92,10 @@ const StatsTable = styled.table`
   width: 65%;
   padding: 10px;
   text-align: center;
+  
+  
+  text-align: center;
+  
 `
 
 const ButtonTable = styled.table`
@@ -115,31 +120,84 @@ margin: auto;
 `
 
 class MemesList extends Component {
+
     constructor(props) {
         super(props)
         this.state = {
             memes: [],
+            stats: [],
             columns: [],
             isLoading: false,
+            search: null,
+            filter: "all"
         }
     }
 
-    /*componentDidMount = async () => {
+    startSearch = (e) => {
+        let keyword = e.target.value;
+        this.setState({ search: keyword });
+    }
+
+    setFilter = () => {
+        var filter = document.getElementById("filter").value;
+        this.setState({ filter: filter });
+    }
+
+    sortMemeList = () => {
+        const { memes } = this.state;
+        var sort = document.getElementById("sort").value;
+        let newMemeList;
+
+        if (sort == "newest") {
+            newMemeList = [...memes].sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+        }
+        else if (sort == "oldest") {
+            newMemeList = [...memes].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
+        }
+
+        this.setState({
+            memes: newMemeList
+        })
+    }
+
+    componentDidMount = async () => {
         this.setState({ isLoading: true })
 
-        await api.getAllMemes().then(memes => {
+        /*await api.getAllMemes().then(memes => {
+            console.log("test", memes)
+            this.setState({
+                memes: memes.data.data,
+                isLoading: false,
+            })
+        })*/
+
+        await api.getMemesWithStats().then(memes => {
+            console.log("Memes with stats: ", memes)
             this.setState({
                 memes: memes.data.data,
                 isLoading: false,
             })
         })
-    }*/
+
+
+        await api.getAllStats().then(stats => {
+            console.log("test", stats)
+            this.setState({
+                stats: stats.data.data,
+                isLoading: false,
+            })
+        })
+
+        this.sortMemeList();
+    }
 
     render() {
-        const { memes, isLoading } = this.state
-        console.log('TCL: memesList -> render -> memes', memes)
 
-        const columns = [
+        const { memes, stats, isLoading } = this.state
+        console.log('TCL: memesList -> render -> memes', memes)
+        console.log('TCL: STATS -> render -> stats', stats[0])
+
+        /*const columns = [
             {
                 Header: 'ID',
                 accessor: '_id',
@@ -160,91 +218,74 @@ class MemesList extends Component {
             //     accessor: 'time',
             //     Cell: props => <span>{props.value.join(' / ')}</span>,
             // },
-        ]
+        ]*/
 
         let showTable = true
-        if (!memes.length) {
+        if (!memes.length || !stats.length) {
             showTable = false
         }
 
         return (
+            showTable && (
+                //This is for view testing
+                <Wrapper>
+                    <CenterSearch>
+                        <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-            //This is for view testing
-            <Wrapper>
-                <CenterSearch>
-                    <Search type="text" id="search" name="search" placeholder="search"></Search>
+                        Sort: <Select name="sort" id="sort" onChange={this.sortMemeList}>
+                            <option value="newest">newest</option>
+                            <option value="oldest">oldest</option>
+                            <option value="best rating">rating (best)</option>
+                            <option value="worst rating">rating (worst)</option>
+                            <option value="most viewed">views (most)</option>
+                            <option value="least viewed">views (least)</option>
+                        </Select>
+                        Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
+                            <option value="all">all</option>
+                            <option value="jpg">jpg</option>
+                            <option value="png">png</option>
+                            <option value="katze">katze</option>
+                            <option value="gif">gif</option>
+                            <option value="image">image</option>
+                            <option value="template">template</option>
+                            <option value="video">video</option>
+                        </Select>
+                    </CenterSearch>
 
-                    <Select name="sort" id="sort">
-                        <option value="newest" selected disabled>sort</option>
-                        <option value="newest">newest</option>
-                        <option value="oldest">oldest</option>
-                        <option value="top rating">rating (best)</option>
-                        <option value="top rating">rating (worst)</option>
-                        <option value="most viewed">views (most)</option>
-                        <option value="most viewed">views (least)</option>
-                    </Select>
-                    <Select name="filter" id="filter">
-                        <option value="newest" selected disabled>filter</option>
-                        <option value="gif">gif</option>
-                        <option value="image">image</option>
-                        <option value="template">template</option>
-                        <option value="template">video</option>
-                    </Select>
-                </CenterSearch>
-                <CenterDiv>
-                    <Right>
-                        <label>Goethe // </label>
-                        <ActionButton>↓</ActionButton>
-                        <ActionButton>→</ActionButton>
-                    </Right>
-                    <MemeImg src="https://adz.ro/fileadmin/_processed_/5/e/csm_meme1_9e3229f399.jpg" alt="Goethe"></MemeImg>
-                    <StatsTable>
-                        <tr>
-                            <td><Counter></Counter></td>
-                            {/* <td><CommentButton>11 comments</CommentButton></td> */}
-                            <td><label>230 views</label></td>
-                        </tr>
-                    </StatsTable>
-                    <Comment></Comment>
-                </CenterDiv>
-
-                <CenterDiv>
-                    <Right>
-                        <label>Stuff // </label>
-                        <ActionButton>↓</ActionButton>
-                        <ActionButton>→</ActionButton>
-                    </Right>
-                    <MemeImg src="https://i.pinimg.com/originals/b7/1f/4b/b71f4bf1cbeecc1db2971156993fbffa.jpg" alt="Goethe"></MemeImg>
-                    <StatsTable>
-                        <tr>
-                            <td><UpVotes>↑ 412</UpVotes></td>
-                            <td><DownVotes>↓ 32</DownVotes></td>
-                            <td><label>11 comments</label></td>
-                            <td><label>230 views</label></td>
-                        </tr>
-                    </StatsTable>
-                </CenterDiv>
-
-                <CenterDiv>
-                    <Right>
-                        <label>Cat // </label>
-                        <ActionButton>↓</ActionButton>
-                        <ActionButton>→</ActionButton>
-                    </Right>
-                    <MemeImg src="https://i.pinimg.com/originals/b7/1f/4b/b71f4bf1cbeecc1db2971156993fbffa.jpg" alt="Goethe"></MemeImg>
-                    <StatsTable>
-                        <tr>
-                            <td><UpVotes>↑ 412</UpVotes></td>
-                            <td><DownVotes>↓ 12</DownVotes></td>
-                            <td><label>11 comments</label></td>
-                            <td><label>230 views</label></td>
-                        </tr>
-                    </StatsTable>
-                </CenterDiv>
+                    {memes.filter((meme) => {
+                        if (this.state.filter == "all")
+                            return meme
+                        else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
+                            return meme
+                        }
+                    }).filter((meme) => {
+                        if (this.state.search == null)
+                            return meme
+                        else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                            return meme
+                        }
+                    }).map(meme => (
+                        <CenterDiv>
+                            <Right>
+                                <label>{meme.name} // </label>
+                                <ActionButton>↓</ActionButton>
+                                <ActionButton>→</ActionButton>
+                            </Right>
+                            <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                            <StatsTable>
+                                <tr>
+                                    <td><p>{stats[meme.stats_id].views} views</p></td>
+                                    <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
+                                    <td><p>{meme.creationDate}</p></td>
+                                </tr>
+                            </StatsTable>
+                            <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
+                        </CenterDiv>
+                    ))}
 
 
-                <div></div>
-                {showTable && (
+                    <div></div>
+                    {/* {showTable && (
                     <ReactTable
                         data={memes}
                         columns={columns}
@@ -253,8 +294,8 @@ class MemesList extends Component {
                         showPageSizeOptions={true}
                         minRows={0}
                     />
-                )}
-            </Wrapper>
+                )} */}
+                </Wrapper>)
         )
     }
 }

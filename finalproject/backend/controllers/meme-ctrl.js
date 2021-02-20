@@ -13,7 +13,7 @@ const createMeme = async (req, res) => {
         })
     }
 
-    if(req.files && req.files.image){ //check if we actually received a file
+    if (req.files && req.files.image) { //check if we actually received a file
         let img = req.files.image;
         let id = await dbUtils.getNewEmptyMemeID();
         let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
@@ -44,7 +44,7 @@ const createMeme = async (req, res) => {
                         error: "Meme data could not be parsed for storing!"
                     });
                 }
-            
+
                 meme
                     .save()
                     .then(() => {
@@ -63,7 +63,7 @@ const createMeme = async (req, res) => {
                     })
             }
         });
-    }else{
+    } else {
         res.status(400).json({
             success: false,
             error: 'No valid file received!'
@@ -102,9 +102,9 @@ const getMemeById = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getMemes = async (req, res) => {
+const getMemesWithStats = async (req, res) => {
     console.log("Trying to get memes!")
-    await Meme.find({}, (err, memeArray) => {
+    await Meme.find({}, async (err, memeArray) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -113,14 +113,53 @@ const getMemes = async (req, res) => {
                 .status(204)
                 .json({ success: false, error: `No memes found` })
         }
-        return res.status(200).json({ success: true, data: memeArray })
+        let stats = await Stats.find({});
+        let result = memeArray.map(meme => {
+            let linkedStats = stats.filter(s => s._id == meme.stats_id)[0];
+            let newMeme = meme.toObject();
+            newMeme.stats = linkedStats;
+            return newMeme;
+        })
+        console.log("result: ", result)
+        return res.status(200).json({ success: true, data: result })
     }).catch(err => console.log(err))
 }
 
+const getMemes = async (req, res) => {
+    console.log("Trying to get memes!")
+    await Meme.find({}, (err, memes) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if (!memes.length) {
+            return res
+                .status(204)
+                .json({ success: false, error: `No memes found` })
+        }
+        return res.status(200).json({ success: true, data: memes })
+    }).catch(err => console.log(err))
+}
+
+const getStats = async (req, res) => {
+    console.log("Trying to get stats!")
+    await Stats.find({}, (err, stats) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if (!stats.length) {
+            return res
+                .status(204)
+                .json({ success: false, error: `No Statistics found` })
+        }
+        return res.status(200).json({ success: true, data: stats })
+    }).catch(err => console.log(err))
+}
 
 module.exports = {
     createMeme,
     deleteMeme,
     getMemes,
+    getMemesWithStats,
+    getStats,
     getMemeById
 }
