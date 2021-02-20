@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import api from '../api';
 import '../style/globalStyle.css';
+
+
 
 export default function Counter(props) {
 
@@ -11,10 +14,15 @@ export default function Counter(props) {
     const [downVote, setDownVote] = useState(0);
     const incrementDownVotes = () => setDownVote(prevCount => prevCount + 1);
 
+    const updateDataBase = async () => {
+        api.updateStatsById()
+    }
+    
+
     return (
         <div>
-            <button class="upVotes" onClick={incrementUpVotes}>↑ {props.upVotes}</button>
-            <button class="downVotes" onClick={incrementDownVotes}>↓ {props.downVotes}</button>
+            <button class="upVotes" onClick={incrementUpVotes, updateDataBase}>↑ {props.upVotes}</button>
+            <button class="downVotes" onClick={incrementDownVotes, updateDataBase}>↓ {props.downVotes}</button>
         </div>
     );
 }
