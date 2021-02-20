@@ -8,10 +8,13 @@
     
     img {
         height: 100%;
-        margin-right: 10px;
+        margin: 0 5px;
         box-sizing: border-box;
 
-        &:hover, &.selected {
+        &:hover {
+            border: 3px solid #5688b4;
+        }
+        &.selected {
             border: 3px solid #2c6799;
         }
     }

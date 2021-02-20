@@ -29,7 +29,7 @@ export default class CreateCustom extends React.Component {
     }
 
     letCreateTemplate(e){
-        this.setState({showDrawTemplate: true});
+        this.setState({showDrawTemplate: true, showEditor: false});
     }
 
     selectTemplate(src){
@@ -62,10 +62,16 @@ export default class CreateCustom extends React.Component {
         }
     }
 
+    changeSelection(selectedElem){
+        let prevSelection = document.querySelector('#template-container .selected');
+        if (prevSelection) prevSelection.classList.remove('selected');
+        if(selectedElem) selectedElem.classList.add('selected');
+    }
+
     handlePublishedTemplate = async (templateID)=>{
         await this.loadTemplatesIntoList();
         let selectedElem = document.getElementById('template_'+templateID);
-        selectedElem.classList.add('selected');
+        this.changeSelection(selectedElem);
         this.selectTemplate(selectedElem.src);
     }
 
@@ -78,7 +84,7 @@ export default class CreateCustom extends React.Component {
             <div id="page-wrapper">
                 <h2>Custom Meme Creation</h2>
                 <h3>First, choose a template:</h3>
-                <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letCreateTemplate} />
+                <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letCreateTemplate} handleSelectionChange={this.changeSelection} />
                 {this.state.showDrawTemplate && <DrawTemplate handlePublishing={this.handlePublishedTemplate} />}
                 {this.state.showEditor && <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} />}
             </div>

@@ -10,6 +10,7 @@ export default class TemplatesList extends React.Component {
         //this binding for React event handlers
         [
             'handleTemplateClick',
+            'handlePlusButtonClick'
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
@@ -17,7 +18,13 @@ export default class TemplatesList extends React.Component {
 
     handleTemplateClick(e){
         let src = e.target.src;
+        this.props.handleSelectionChange(e.target);
         this.props.handleTemplateSelection(src);
+    }
+
+    handlePlusButtonClick(e){
+        this.props.handleSelectionChange(e.target);
+        this.props.handlePlusButtonClick();
     }
 
     render(){
@@ -33,7 +40,7 @@ export default class TemplatesList extends React.Component {
                             <img src={t.url} alt={t.name} title={t.name} id={'template_'+t._id} onClick={this.handleTemplateClick} />
                         ))
                     )}
-                    <img id="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.props.handlePlusButtonClick} />
+                    <img id="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />
                 </div>
             </div>
         );
