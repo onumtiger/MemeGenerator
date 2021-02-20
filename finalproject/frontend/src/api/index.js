@@ -5,7 +5,7 @@ const api = axios.create({
 })
 
 export const insertMeme = payload => api.post(`/meme`, payload)
-//Pls doublecheck this following link, if it makes any sense - in love, Domi
+//Pls doublecheck this following line, if it makes any sense - in love, Domi
 export const updateStatsById = (payload, id) => api.post(`/stats/${id}`, payload)
 export const getAllMemes = () => api.get(`/meme`)
 export const getMemesWithStats = () => api.get(`/memeswithstats`)

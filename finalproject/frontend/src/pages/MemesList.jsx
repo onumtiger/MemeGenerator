@@ -183,7 +183,7 @@ class MemesList extends Component {
             })
         })*/
 
-        await api.getMemesWithStats().then(memes => {
+        await api.getAllMemes().then(memes => {
             console.log("Memes with stats: ", memes)
             this.setState({
                 memes: memes.data.data,
@@ -283,11 +283,11 @@ class MemesList extends Component {
                                 <ActionButton>↓</ActionButton>
                                 <ActionButton>→</ActionButton>
                             </Right>
-                            <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                            <a href={'/memes/slideshow/' + meme._id}><MemeImg src={meme.url} alt={meme.name}></MemeImg></a> 
                             <StatsTable>
                                 <tr>   
                                     <td><p>{meme.stats.views} views</p></td>
-                                    <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
+                                    <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} ></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
                                     <td><p>{meme.creationDate}</p></td>
                                 </tr>
                             </StatsTable>

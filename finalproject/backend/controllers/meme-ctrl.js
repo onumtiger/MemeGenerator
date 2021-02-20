@@ -89,29 +89,6 @@ const getMemeById = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getMemesWithStats = async (req, res) => {
-    console.log("Trying to get memes!")
-    await Meme.find({}, async (err, memeArray) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-        if (!memeArray.length) {
-            return res
-                .status(404)
-                .json({ success: false, error: `Meme not found` })
-        }
-        let stats = await Stats.find({});
-        let result = memeArray.map(meme => {
-            let linkedStats = stats.filter(s => s._id == meme.stats_id)[0];
-            let newMeme = meme.toObject();
-            newMeme.stats = linkedStats;
-            return newMeme
-        })
-        console.log("result: ", result)
-        return res.status(200).json({ success: true, data: result })
-    }).catch(err => console.log(err))
-}
-
 const getMemes = async (req, res) => {
     console.log("Trying to get memes!")
     await Meme.find({}, (err, memes) => {
@@ -146,7 +123,6 @@ module.exports = {
     createMeme,
     deleteMeme,
     getMemes,
-    getMemesWithStats,
     getStats,
     getMemeById
 }

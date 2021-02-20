@@ -110,7 +110,7 @@ const ButtonTable = styled.table`
 
 const CenterDiv = styled.div`
 margin: auto;
-  width: 45%;
+  width: 48%;
   padding: 10px;
   text-align: center;
 `
@@ -205,7 +205,7 @@ class SlideShow extends Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true })
 
-        await api.getMemesWithStats().then(memes => {
+        await api.getAllMemes().then(memes => {
             console.log("Memes with stats: ", memes)
             this.setState({
                 memes: memes.data.data,
@@ -284,8 +284,11 @@ Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
                         <option value="template">template</option>
                         <option value="video">video</option>
                     </Select>
+                    
 
                     <div className="slideshow">
+                    
+                    <SlideShowTable>
                         <td><SlideButton onClick={this.plusSlides(-1)}>←</SlideButton></td>
                         <td>{memes.filter((meme) => {
                             if (this.state.filter == "all")
@@ -300,12 +303,12 @@ Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
                                 return meme
                             }
                         }).map(meme => (
-                            <CenterDiv className="slides">
+                            <div className="slides">
 
-                                <Right >
+                                <Right>
                                     <label>{meme.name} // </label>
-                                    <ActionButton>↓</ActionButton>
-                                    <ActionButton>→</ActionButton>
+                                    <ActionButton>Shuffle ↔</ActionButton>
+                                    <ActionButton>Diashow ►</ActionButton> 
                                 </Right>
                                 <MemeImg src={meme.url} alt={meme.name}></MemeImg>
                                 <StatsTable>
@@ -318,15 +321,12 @@ Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
                                 <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
 
 
-                            </CenterDiv>
+                            </div>
                         ))}</td>
                         <td><SlideButton onClick={this.plusSlides(1)}>→</SlideButton></td>
+                    </SlideShowTable>
                     </div>
-                    <Right>
-
-                        <ActionButton>Shuffle ↔</ActionButton>
-                        <ActionButton>Diashow ►</ActionButton>
-                    </Right>
+                    
                 </CenterDiv>
 
                 <div></div>
