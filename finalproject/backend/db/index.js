@@ -45,7 +45,7 @@ var defaultMeme3 = {
     url: '/memes/jan_domi_cat.jpg',
     captions: ['Dominik', 'Jan Obernolte'],
     name: 'Jan als Katze',
-    stats_id: 1,
+    stats_id: 2,
     comment_ids: [4, 5],
     user_id: 2,
     visibilty: 2,
@@ -115,7 +115,7 @@ db.collection('stats').deleteMany({}).then(function() {
 
 var defaultStat = {
     _id: 0,
-    upvotes: [0, 1],
+    upvotes: [0, 2, 3],
     downvotes: [1],
     views: 230
 };
@@ -123,13 +123,13 @@ var defaultStat = {
 var defaultStat2 = {
     _id: 1,
     upvotes: [0],
-    downvotes: [1],
+    downvotes: [1, 2, 3],
     views: 160
 };
 
 var defaultStat3 = {
     _id: 2,
-    upvotes: [],
+    upvotes: [0, 3],
     downvotes: [1, 2],
     views: 90
 };
