@@ -285,9 +285,7 @@ class MemesList extends Component {
                             </Right>
                             <MemeImg src={meme.url} alt={meme.name}></MemeImg>
                             <StatsTable>
-                                <tr>
-
-                                   
+                                <tr>   
                                     <td><p>{meme.stats.views} views</p></td>
                                     <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
                                     <td><p>{meme.creationDate}</p></td>
