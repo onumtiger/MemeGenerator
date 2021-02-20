@@ -238,15 +238,26 @@ export default class DrawTemplate extends React.Component {
     handlePublishButtonClick(e){
         e.target.innerText = this.publishButtonTexts.loading;
         
-        const formData = new FormData();
-        //TODO add file & metadata
-
-        api.insertTemplate(formData).then((res)=>{
-            if(res.data.success){
-                this.props.handlePublishing(res.data.id);
-            }
-            e.target.innerText = this.publishButtonTexts.default;
-        });
+        this.cElem.toBlob((blob)=>{
+            //toBlob returns a image/png per default, could change with mimeType param
+            
+            const formData = new FormData();
+            
+            let imageFile = new File([blob], 'dra:w|n/T?!emplate.png', {
+                type: 'image/png'
+            }); //for whatever reason, the File constructor needs the blob as part of an array and cannot deduce the filetype from the input blob, but ok... //TODO let user choose filename via text input, parse and remove bad characters
+            formData.append('image', imageFile);
+            formData.append('name', 'my drawn template'); //TODO let user choose name
+            formData.append('userID', 0); //TODO get current userID
+            formData.append('visibility', 2); //TODO get visibility options from API, display as radiobuttons with numbers as value (public as default), send chosen value here
+            
+            api.insertTemplate(formData).then((res)=>{
+                if(res.data.success){
+                    this.props.handlePublishing(res.data.id);
+                }
+                e.target.innerText = this.publishButtonTexts.default;
+            });
+        }); 
     }
 
     componentDidMount(){

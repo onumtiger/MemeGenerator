@@ -2,7 +2,7 @@ const Meme = require('../db/models/meme-model');
 const Stats = require('../db/models/stats-model');
 const globalHelpers = require('../globalHelpers');
 
-const createMeme = (req, res) => {
+const createMeme = async (req, res) => {
     const body = req.body;
 
     if (!body) {
@@ -14,15 +14,15 @@ const createMeme = (req, res) => {
 
     if(req.files && req.files.image){ //check if we actually received a file
         let img = req.files.image;
-        let id = globalHelpers.getNewEmptyMemeID();
+        let id = await globalHelpers.getNewEmptyMemeID();
         let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
-        img.mv('public/memes/'+filename, function(err){ //this overwrites an existing image at that filepath if there is one!
+        img.mv('public/memes/'+filename, async function(err){ //this overwrites an existing image at that filepath if there is one!
             if(err){
                 res.status(500).send(err);
             }else{
                 let url = 'memes/'+filename;
                 
-                let statsID = globalHelpers.getNewFullStatsID();
+                let statsID = await globalHelpers.getNewFullStatsID();
                 
                 const meme = new Meme({
                     _id: id,

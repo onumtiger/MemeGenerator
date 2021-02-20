@@ -45,7 +45,7 @@ class UploadMeme extends React.Component {
         formData.append('name', name)
 
         // --- the REQUEST which is used for FILE UPLOAD ---
-        fetch(`http://localhost:3000/meme/${id}`, {
+        fetch(`http://localhost:3001/api/templates/`, {
             method: 'POST',
             mode: 'cors',
             body: formData
@@ -76,7 +76,7 @@ class UploadMeme extends React.Component {
                                 <td><input id="name" type="text" /></td>
                             </tr>
                         </table>
-                        <button id="uploadButtonFile" type="submit">Upload File</button>
+                        <button id="uploadButtonFile" type="button" onClick={this.handleSubmit}>Upload File</button>
                     </form>
 
                     <div>

@@ -4,6 +4,8 @@ const cors = require('cors');
 const db = require('./db/index.js');
 const memeRouter = require('./routes/meme-router.js');
 const templateRouter = require('./routes/template-router.js');
+
+const fileUpload = require('express-fileupload');
 const app = express();
 const path = require('path');
 
@@ -21,6 +23,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!!');
 })
 
+app.use('/api', fileUpload({safeFileNames: true, preserveExtension: true})); //populates req.file for file uploads
 app.use('/api', memeRouter);
 app.use('/api', templateRouter);
 

@@ -2,16 +2,17 @@ import React, { createRef } from 'react';
 import '../style/TemplateList.scss';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import api from '../api';
 
 export default class TemplatesList extends React.Component {
     constructor(props){
         super(props);
 
-        this.state = {
-            isLoading: true,
-            templates: []
-        }
+        //this binding for React event handlers
+        [
+            'handleTemplateClick',
+        ].forEach((handler)=>{
+            this[handler] = this[handler].bind(this);
+        });
     }
 
     handleTemplateClick(e){
@@ -19,24 +20,16 @@ export default class TemplatesList extends React.Component {
         this.props.handleTemplateSelection(src);
     }
 
-    componentDidMount = async () => {
-        let templatesArray = await api.getAllTemplates();
-        if (templatesArray.data.success) this.setState({
-            templates: templatesArray.data.data,
-            isLoading: false
-        });
-    }
-
     render(){
         return (
             <div>
                 <div id="template-container">
-                    {this.state.isLoading ? (
+                    {this.props.data.isLoading ? (
                         <div id="loader">
                             <Loader type="ThreeDots" height={200} width={200} color="#7ab2e1" visible={true} />
                         </div>
                     ) : (
-                        this.state.templates.map((t)=>(
+                        this.props.data.templates.map((t)=>(
                             <img src={t.url} alt={t.name} title={t.name} id={'template_'+t._id} onClick={this.handleTemplateClick} />
                         ))
                     )}

@@ -14,7 +14,7 @@ const createTemplate = async (req, res) => {
 
     if(req.files && req.files.image){ //check if we actually received a file
         let img = req.files.image;
-        let id = globalHelpers.getNewEmptyTemplateID();
+        let id = await globalHelpers.getNewEmptyTemplateID();
         let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
         img.mv('public/templates/'+filename, async function(err){ //this overwrites an existing image at that filepath if there is one!
             if(err){
@@ -22,12 +22,12 @@ const createTemplate = async (req, res) => {
             }else{
                 let url = '/templates/'+filename;
 
-                let statsID = globalHelpers.getNewFullStatsID();
+                let statsID = await globalHelpers.getNewFullStatsID();
                 
                 const template = new Template({
                     _id: id,
                     url: url,
-                    name: img.name,
+                    name: body.name,
                     user_id: body.userID,
                     visibility: body.visibility,
                     stats_id: statsID
