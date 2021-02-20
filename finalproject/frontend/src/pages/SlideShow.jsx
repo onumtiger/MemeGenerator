@@ -33,8 +33,6 @@ const MemeTitle = styled.h4.attrs({
 
 `
 
-
-
 const UpVotes = styled.label`
 color: green;
 font-weight: bold
@@ -122,7 +120,48 @@ class SlideShow extends Component {
             memes: [],
             columns: [],
             isLoading: false,
+            search: null,
+            filter: "all"
         }
+    }
+
+    startSearch = (e) => {
+        let keyword = e.target.value;
+        this.setState({ search: keyword });
+    }
+
+    setFilter = () => {
+        var filter = document.getElementById("filter").value;
+        this.setState({ filter: filter });
+    }
+
+    sortMemeList = () => {
+        const { memes } = this.state;
+        var sort = document.getElementById("sort").value;
+        let newMemeList;
+
+        if (sort == "newest") {
+            newMemeList = [...memes].sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+        }
+        else if (sort == "oldest") {
+            newMemeList = [...memes].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
+        }
+        else if (sort == "bestRating") {
+            newMemeList = [...memes].sort((a, b) => b.stats.upvotes.length - a.stats.upvotes.length)
+        }
+        else if (sort == "worstRating") {
+            newMemeList = [...memes].sort((a, b) => b.stats.downvotes.length - a.stats.downvotes.length)
+        }
+        else if (sort == "mostViewed") {
+            newMemeList = [...memes].sort((a, b) => b.stats.views - a.stats.views)
+        }
+        else if (sort == "leastViewed") {
+            newMemeList = [...memes].sort((a, b) => a.stats.views - b.stats.views)
+        }
+
+        this.setState({
+            memes: newMemeList
+        })
     }
 
     /*componentDidMount = async () => {
@@ -140,7 +179,7 @@ class SlideShow extends Component {
         const { memes, isLoading } = this.state
         console.log('TCL: memesList -> render -> memes', memes)
 
-        const columns = [
+        /*const columns = [
             {
                 Header: 'ID',
                 accessor: '_id',
@@ -161,7 +200,7 @@ class SlideShow extends Component {
             //     accessor: 'time',
             //     Cell: props => <span>{props.value.join(' / ')}</span>,
             // },
-        ]
+        ]*/
 
         let showTable = true
         if (!memes.length) {
@@ -172,33 +211,32 @@ class SlideShow extends Component {
 
             //This is for view testing
             <Wrapper>
+                <CenterDiv>
+                    <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-
-                <CenterDiv>  
-                    
-                    <Search type="text" id="search" name="search" placeholder="search"></Search>
-                    
-                     <Select name="sort" id="sort">
-                        <option value="newest" selected disabled>sort</option>
+Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
                         <option value="newest">newest</option>
                         <option value="oldest">oldest</option>
-                        <option value="top rating">rating (best)</option>
-                        <option value="top rating">rating (worst)</option>
-                        <option value="most viewed">views (most)</option> 
-                        <option value="most viewed">views (least)</option> 
-                    </Select> 
-                    <Select name="filter" id="filter">
-                        <option value="newest" selected disabled>filter</option>
+                        <option value="bestRating">rating (best)</option>
+                        <option value="worstRating">rating (worst)</option>
+                        <option value="mostViewed">views (most)</option>
+                        <option value="leastViewed">views (least)</option>
+                    </Select>
+Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
+                        <option value="all">all</option>
+                        <option value="jpg">jpg</option>
+                        <option value="png">png</option>
+                        <option value="katze">katze</option>
                         <option value="gif">gif</option>
                         <option value="image">image</option>
                         <option value="template">template</option>
-                        <option value="template" disabled>video</option>
+                        <option value="video">video</option>
                     </Select>
 
                     <SlideShowTable>
-                    <td><SlideButton>←</SlideButton></td>
-                    <td><MemeImg src="https://adz.ro/fileadmin/_processed_/5/e/csm_meme1_9e3229f399.jpg" alt="Goethe"></MemeImg></td>   
-                    <td><SlideButton>→</SlideButton></td>
+                        <td><SlideButton>←</SlideButton></td>
+                        <td><MemeImg src="https://adz.ro/fileadmin/_processed_/5/e/csm_meme1_9e3229f399.jpg" alt="Goethe"></MemeImg></td>
+                        <td><SlideButton>→</SlideButton></td>
                     </SlideShowTable>
                     <StatsTable>
                         <tr>
@@ -210,16 +248,14 @@ class SlideShow extends Component {
                         </tr>
                     </StatsTable>
                     <Right>
-                
-                    <ActionButton>Shuffle ↔</ActionButton>
-                    <ActionButton>Diashow ►</ActionButton>
-                   </Right>
+
+                        <ActionButton>Shuffle ↔</ActionButton>
+                        <ActionButton>Diashow ►</ActionButton>
+                    </Right>
                 </CenterDiv>
 
-               
-
                 <div></div>
-                {showTable && (
+                {/* {showTable && (
                     <ReactTable
                         data={memes}
                         columns={columns}
@@ -228,7 +264,7 @@ class SlideShow extends Component {
                         showPageSizeOptions={true}
                         minRows={0}
                     />
-                )}
+                )} */}
             </Wrapper>
         )
     }
