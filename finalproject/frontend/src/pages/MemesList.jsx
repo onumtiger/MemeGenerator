@@ -154,6 +154,18 @@ class MemesList extends Component {
         else if (sort == "oldest") {
             newMemeList = [...memes].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
         }
+        else if (sort == "bestRating") {
+            newMemeList = [...memes].sort((a, b) => b.stats.upvotes.length - a.stats.upvotes.length)
+        }
+        else if (sort == "worstRating") {
+            newMemeList = [...memes].sort((a, b) => b.stats.downvotes.length - a.stats.downvotes.length)
+        }
+        else if (sort == "mostViewed") {
+            newMemeList = [...memes].sort((a, b) => b.stats.views - a.stats.views)
+        }
+        else if (sort == "leastViewed") {
+            newMemeList = [...memes].sort((a, b) => a.stats.views - b.stats.views)
+        }
 
         this.setState({
             memes: newMemeList
@@ -232,13 +244,13 @@ class MemesList extends Component {
                     <CenterSearch>
                         <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-                        Sort: <Select name="sort" id="sort" onChange={this.sortMemeList}>
+                        Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
                             <option value="newest">newest</option>
                             <option value="oldest">oldest</option>
-                            <option value="best rating">rating (best)</option>
-                            <option value="worst rating">rating (worst)</option>
-                            <option value="most viewed">views (most)</option>
-                            <option value="least viewed">views (least)</option>
+                            <option value="bestRating">rating (best)</option>
+                            <option value="worstRating">rating (worst)</option>
+                            <option value="mostViewed">views (most)</option>
+                            <option value="leastViewed">views (least)</option>
                         </Select>
                         Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
                             <option value="all">all</option>
@@ -274,8 +286,8 @@ class MemesList extends Component {
                             <MemeImg src={meme.url} alt={meme.name}></MemeImg>
                             <StatsTable>
                                 <tr>
-                                    <td><p>{stats[meme.stats_id].views} views</p></td>
-                                    <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
+                                    <td><p>{meme.stats.views} views</p></td>
+                                    <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length}></Counter></p></td>
                                     <td><p>{meme.creationDate}</p></td>
                                 </tr>
                             </StatsTable>
