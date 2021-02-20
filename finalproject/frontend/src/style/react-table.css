@@ -513,3 +513,11 @@
 #sort {
     margin-right: 15px;
 }
+
+.slideshow {
+    position: relative;
+}
+
+.slides {
+    display: none;
+}

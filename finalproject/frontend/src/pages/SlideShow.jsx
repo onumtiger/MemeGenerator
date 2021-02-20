@@ -5,6 +5,8 @@ import api from '../api'
 
 import styled from 'styled-components'
 import '../style/react-table.css'
+import Counter from '../components/MemeVoteCounter'
+import Comment from '../components/MemeComment'
 
 
 
@@ -121,7 +123,8 @@ class SlideShow extends Component {
             columns: [],
             isLoading: false,
             search: null,
-            filter: "all"
+            filter: "all",
+            slideIndex: 1
         }
     }
 
@@ -164,6 +167,30 @@ class SlideShow extends Component {
         })
     }
 
+    plusSlides(n) {
+        this.showSlides(this.state.slideIndex += n);
+    }
+
+    showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("slides");
+        console.log(slides)
+        if (slides.length) {
+            if (n > slides.length) {
+                this.state.slideIndex = 1
+            }
+            if (n < 1) {
+                this.state.slideIndex = slides.length
+            }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";   //element will not be displayed
+            }
+            slides[this.state.slideIndex - 1].style.display = "block";
+        }
+        // slides[this.state.slideIndex - 1].style.display = "block";
+        console.log(slides[1])
+    }
+
     /*componentDidMount = async () => {
         this.setState({ isLoading: true })
 
@@ -174,6 +201,31 @@ class SlideShow extends Component {
             })
         })
     }*/
+
+    componentDidMount = async () => {
+        this.setState({ isLoading: true })
+
+        await api.getMemesWithStats().then(memes => {
+            console.log("Memes with stats: ", memes)
+            this.setState({
+                memes: memes.data.data,
+                isLoading: false,
+            })
+        })
+
+
+        await api.getAllStats().then(stats => {
+            console.log("test", stats)
+            this.setState({
+                stats: stats.data.data,
+                isLoading: false,
+            })
+        })
+
+        this.sortMemeList();
+
+        this.showSlides(this.state.slideIndex);
+    }
 
     render() {
         const { memes, isLoading } = this.state
@@ -233,20 +285,43 @@ Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
                         <option value="video">video</option>
                     </Select>
 
-                    <SlideShowTable>
-                        <td><SlideButton>←</SlideButton></td>
-                        <td><MemeImg src="https://adz.ro/fileadmin/_processed_/5/e/csm_meme1_9e3229f399.jpg" alt="Goethe"></MemeImg></td>
-                        <td><SlideButton>→</SlideButton></td>
-                    </SlideShowTable>
-                    <StatsTable>
-                        <tr>
-                            <td><UpVotes>↑ 412</UpVotes></td>
-                            <td><DownVotes>↓ 22</DownVotes></td>
-                            <td><label>11 comments</label></td>
-                            <td><label>230 views</label></td>
-                            <td><label>// Goethe</label></td>
-                        </tr>
-                    </StatsTable>
+                    <div className="slideshow">
+                        <td><SlideButton onClick={this.plusSlides(-1)}>←</SlideButton></td>
+                        <td>{memes.filter((meme) => {
+                            if (this.state.filter == "all")
+                                return meme
+                            else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
+                                return meme
+                            }
+                        }).filter((meme) => {
+                            if (this.state.search == null)
+                                return meme
+                            else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                                return meme
+                            }
+                        }).map(meme => (
+                            <CenterDiv className="slides">
+
+                                <Right >
+                                    <label>{meme.name} // </label>
+                                    <ActionButton>↓</ActionButton>
+                                    <ActionButton>→</ActionButton>
+                                </Right>
+                                <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                                <StatsTable>
+                                    <tr>
+                                        <td><p>{meme.stats.views} views</p></td>
+                                        <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
+                                        <td><p>{meme.creationDate}</p></td>
+                                    </tr>
+                                </StatsTable>
+                                <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
+
+
+                            </CenterDiv>
+                        ))}</td>
+                        <td><SlideButton onClick={this.plusSlides(1)}>→</SlideButton></td>
+                    </div>
                     <Right>
 
                         <ActionButton>Shuffle ↔</ActionButton>
