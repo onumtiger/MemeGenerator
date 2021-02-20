@@ -1,6 +1,6 @@
 const Template = require('../db/models/template-model');
 const Stats = require('../db/models/stats-model');
-const globalHelpers = require('../globalHelpers');
+const dbUtils = require('../db/dbUtils');
 
 const createTemplate = async (req, res) => {
     const body = req.body;
@@ -14,7 +14,7 @@ const createTemplate = async (req, res) => {
 
     if(req.files && req.files.image){ //check if we actually received a file
         let img = req.files.image;
-        let id = await globalHelpers.getNewEmptyTemplateID();
+        let id = await dbUtils.getNewEmptyTemplateID();
         let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
         img.mv('public/templates/'+filename, async function(err){ //this overwrites an existing image at that filepath if there is one!
             if(err){
@@ -22,7 +22,7 @@ const createTemplate = async (req, res) => {
             }else{
                 let url = '/templates/'+filename;
 
-                let statsID = await globalHelpers.getNewFullStatsID();
+                let statsID = await dbUtils.getNewFullStatsID();
                 
                 const template = new Template({
                     _id: id,

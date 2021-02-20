@@ -98,4 +98,7 @@ export default class TextBox {
         c.closePath();
         c.stroke();
     }
+    getText(){
+        return this.text;
+    }
 }

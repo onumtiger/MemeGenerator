@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const constants = require('../../constants');
-const globalHelpers = require('../../globalHelpers');
+const constants = require('../../utils/constants');
+const globalHelpers = require('../../utils/globalHelpers');
 const Schema = mongoose.Schema;
 
 const MemeSchema = new Schema(

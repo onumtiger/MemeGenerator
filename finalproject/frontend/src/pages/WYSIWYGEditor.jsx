@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import CanvasDownloadButton from '../components/CanvasDownloadButton';
+import {CanvasDownloadButton, CanvasUploadButton} from '../components';
 import TextBox from '../abstract/TextBox';
 import '../style/WYSIWYG.scss';
 
@@ -38,7 +38,8 @@ export default class WYSIWYGEditor extends React.Component {
       'handleDownloadButtonClick',
       'handleCanvasMouseDown',
       'handleCanvasMouseMove',
-      'handleCanvasMouseUp'
+      'handleCanvasMouseUp',
+      'assembleUploadFormData'
     ].forEach((handler)=>{
       this[handler] = this[handler].bind(this);
     });
@@ -341,6 +342,25 @@ export default class WYSIWYGEditor extends React.Component {
       this.addCaptionAt(e.offsetX, e.offsetY);
     } //else case will be handled once the event bubbles up to the document via handlePageWrapperMouseUp()
   }
+
+  
+  assembleUploadFormData(){
+    const formData = new FormData();
+
+    let enteredTitle = document.getElementById('in-title').value;
+    formData.append('name', enteredTitle);
+    formData.append('userID', 0); //TODO get current userID
+    formData.append('visibility', 2); //TODO get visibility options from API, display as radiobuttons with numbers as value (public as default), send chosen value here
+
+    let captions = [];
+    //get caption texts from active textBoxes
+    this.activeTextBoxes().forEach((box) => {
+      captions.push(box.getText());
+    })
+    formData.append('captions', captions);
+
+    return formData;
+  }
   
   componentDidMount(){
     
@@ -443,6 +463,7 @@ export default class WYSIWYGEditor extends React.Component {
                   </li>
                 </ul>
                 <CanvasDownloadButton placeholderFileName={this.placeholderFileName+".png"} onButtonClick={this.handleDownloadButtonClick} />
+                <CanvasUploadButton canvasRef={this.canvasRef} uploadSuccessCallback={()=>{}} assembleFormData={this.assembleUploadFormData} apiFunctionName="insertMeme" />
               </form>
             </td>
           </tr>

@@ -1,15 +1,8 @@
-const Template = require('./db/models/template-model');
-const Meme = require('./db/models/meme-model');
-const Stats = require('./db/models/stats-model');
+const Template = require('./models/template-model');
+const Meme = require('./models/meme-model');
+const Stats = require('./models/stats-model');
 
 module.exports = {
-    getTodayString: ()=>{
-        let d = new Date();
-        let day = `${d.getDate()}`.padStart(2, '0');
-        let month = `${d.getMonth()+1}`.padStart(2, '0');
-        let year = d.getFullYear();
-        return `${day}/${month}/${year}`; //form: dd/mm/yyyy
-    },
     getNewEmptyTemplateID: async ()=>{
         let prevTemplates = await Template.find({});
         let id = prevTemplates.length;

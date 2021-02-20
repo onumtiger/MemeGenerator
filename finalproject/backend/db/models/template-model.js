@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const constants = require('../../constants');
+const constants = require('../../utils/constants');
 const Schema = mongoose.Schema;
 
 const TemplateSchema = new Schema(
