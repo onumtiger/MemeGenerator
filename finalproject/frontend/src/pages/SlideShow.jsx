@@ -75,7 +75,7 @@ border-radius: 5px;
   text-decoration: none;
   display: inline-block;
   font-size: 30px;
-  color: white
+  color: white;
 `
 
 const MemeImg = styled.img`
@@ -122,6 +122,9 @@ class SlideShow extends Component {
             filter: "all",
             slideIndex: 1
         }
+        this.plusSlides = this.plusSlides.bind(this);
+        this.showSlides = this.showSlides.bind(this);
+        this.playDiashow = this.playDiashow.bind(this);
     }
 
     startSearch = (e) => {
@@ -182,6 +185,23 @@ class SlideShow extends Component {
             }
             slides[this.state.slideIndex - 1].style.display = "block"; //only display the meme at current index
         }
+    }
+
+    playDiashow() {
+        let playDiaButton = document.getElementById("playDia");
+        let stopDiaButton = document.getElementById("stopDia");
+
+        playDiaButton.style.display = "none";
+        stopDiaButton.style.display = "inline-block";
+
+        this.plusSlides(1);
+        const timeout = setTimeout(this.playDiashow, 2000);
+
+        stopDiaButton.addEventListener('click', () => {
+            playDiaButton.style.display = "inline-block";
+            stopDiaButton.style.display = "none";
+            clearTimeout(timeout);
+        })
     }
 
     componentDidMount = async () => {
@@ -246,7 +266,7 @@ class SlideShow extends Component {
                 <CenterDiv>
                     <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
+                    Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
                         <option value="newest">newest</option>
                         <option value="oldest">oldest</option>
                         <option value="bestRating">rating (best)</option>
@@ -254,7 +274,7 @@ Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
                         <option value="mostViewed">views (most)</option>
                         <option value="leastViewed">views (least)</option>
                     </Select>
-Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
+                    Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
                         <option value="all">all</option>
                         <option value="jpg">jpg</option>
                         <option value="png">png</option>
@@ -267,47 +287,49 @@ Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
 
 
                     <div className="slideshow">
+                        <ActionButton>Shuffle ↔</ActionButton>
+                        <ActionButton id="playDia" onClick={this.playDiashow}>Diashow ►</ActionButton>
+                        <ActionButton id="stopDia">Stop diashow &#x23f8;</ActionButton>
 
-                        <SlideShowTable>
-                            <td>
-                                <SlideButton onClick={() => this.plusSlides(-1)}>←</SlideButton>
-                            </td>
-                            <td>
-                                {memes.filter((meme) => {
-                                    if (this.state.filter == "all")
-                                        return meme
-                                    else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
-                                        return meme
-                                    }
-                                }).filter((meme) => {
-                                    if (this.state.search == null)
-                                        return meme
-                                    else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
-                                        return meme
-                                    }
-                                }).map(meme => (
-                                    <div className="slides">
-                                        <Right>
-                                            <label>{meme.name} // </label>
-                                            <ActionButton>Shuffle ↔</ActionButton>
-                                            <ActionButton>Diashow ►</ActionButton>
-                                        </Right>
-                                        <MemeImg src={meme.url} alt={meme.name}></MemeImg>
-                                        <StatsTable>
-                                            <tr>
-                                                <td><p>{meme.stats.views} views</p></td>
-                                                <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
-                                                <td><p>{meme.creationDate}</p></td>
-                                            </tr>
-                                        </StatsTable>
-                                        <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
-                                    </div>
-                                ))}
-                            </td>
-                            <td>
-                                <SlideButton onClick={() => this.plusSlides(1)}>→</SlideButton>
-                            </td>
-                        </SlideShowTable>
+                        {/* <SlideShowTable> */}
+                        <td>
+                            <SlideButton onClick={() => this.plusSlides(-1)}>←</SlideButton>
+                        </td>
+                        <td>
+                            {memes.filter((meme) => {
+                                if (this.state.filter == "all")
+                                    return meme
+                                else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
+                                    return meme
+                                }
+                            }).filter((meme) => {
+                                if (this.state.search == null)
+                                    return meme
+                                else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                                    return meme
+                                }
+                            }).map(meme => (
+                                <div className="slides">
+                                    <Right>
+                                        <label>{meme.name} // </label>
+
+                                    </Right>
+                                    <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                                    <StatsTable>
+                                        <tr>
+                                            <td><p>{meme.stats.views} views</p></td>
+                                            <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
+                                            <td><p>{meme.creationDate}</p></td>
+                                        </tr>
+                                    </StatsTable>
+                                    <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
+                                </div>
+                            ))}
+                        </td>
+                        <td>
+                            <SlideButton onClick={() => this.plusSlides(1)}>→</SlideButton>
+                        </td>
+                        {/* </SlideShowTable> */}
                     </div>
 
                 </CenterDiv>

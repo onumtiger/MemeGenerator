@@ -521,3 +521,7 @@
 .slides {
     display: none;
 }
+
+#stopDia {
+    display: none;
+}
