@@ -125,6 +125,7 @@ class SlideShow extends Component {
         this.plusSlides = this.plusSlides.bind(this);
         this.showSlides = this.showSlides.bind(this);
         this.playDiashow = this.playDiashow.bind(this);
+        this.getRandomMeme = this.getRandomMeme.bind(this);
     }
 
     startSearch = (e) => {
@@ -202,6 +203,19 @@ class SlideShow extends Component {
             stopDiaButton.style.display = "none";
             clearTimeout(timeout);
         })
+    }
+
+    getRandomMeme() {
+        var slides = document.getElementsByClassName("slides");
+        var randomNumber = Math.floor(Math.random() * slides.length) + 1;
+
+        // TODO: if randomNumber equals current slideIndex, shuffle again
+        // if(randomNumber == this.state.slideIndex) {
+        //     randomNumber = Math.floor(Math.random() * slides.length) + 1;
+        // }
+
+        this.state.slideIndex = randomNumber;
+        this.showSlides(randomNumber)
     }
 
     componentDidMount = async () => {
@@ -287,7 +301,7 @@ class SlideShow extends Component {
 
 
                     <div className="slideshow">
-                        <ActionButton>Shuffle ↔</ActionButton>
+                        <ActionButton onClick={this.getRandomMeme}>Shuffle ↔</ActionButton>
                         <ActionButton id="playDia" onClick={this.playDiashow}>Diashow ►</ActionButton>
                         <ActionButton id="stopDia">Stop diashow &#x23f8;</ActionButton>
 
