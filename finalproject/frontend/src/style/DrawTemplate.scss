@@ -1,64 +1,74 @@
-@import "globalMixins.scss";
+@import "_globalMixins.scss";
 
-#page-wrapper {
+#draw-template-wrapper {
     padding: 0 20px;
     box-sizing: border-box;
-}
 
-#main-table {
-    width: 100%;
-    border-collapse: collapse;
+    #main-table {
+        width: 100%;
+        border-collapse: collapse;
 
-    td {
-        box-sizing: border-box;
-        vertical-align: top;
-    }
-}
-
-#canvas-column {
-    width: 80%;
-    padding: 0;
-
-    canvas {
-        border: 1px solid gray;
-    }
-
-    #webcam-input {
-        display: none;
-        border: 1px solid gray;
-        box-sizing: content-box;
-
-        &.active {
-            display: block;
-            position: absolute;
-            z-index: 100;
+        td {
+            box-sizing: border-box;
+            vertical-align: top;
         }
-    }
-}
-#options-column {
-    width: 20%;
-    padding: 10px;
 
-    
-    .option-desc {
-        font-weight: bold;
-    }
+        #canvas-column {
+            width: 80%;
+            padding: 0;
 
-    input[type="range"] {
-        vertical-align: bottom;
-        margin: 0 7px;
-    }
+            #in-title {
+                @include unstyled-input;
+                width: 100%;
+                font-size: 25px;
+                border-bottom: 1px solid lightgray;
+                text-align: center;
+                margin-bottom: 20px;
+            }
 
-    hr {
-        margin: 25px 0;
-        border: 1px solid lightgray;
-    }
+            canvas {
+                border: 1px solid gray;
+                cursor: crosshair;
+            }
 
-    #clear-btn {
-        @include largeButton(#d76079, #bb2f4d);
-    }
+            #webcam-input {
+                display: none;
+                border: 1px solid gray;
+                box-sizing: content-box;
 
-    #camera-btn {
-        @include largeButton(#79d760, #4dbb2f);
+                &.active {
+                    display: block;
+                    position: absolute;
+                    z-index: 100;
+                }
+            }
+        }
+        #options-column {
+            width: 20%;
+            padding: 10px;
+
+            
+            .option-desc {
+                font-weight: bold;
+            }
+
+            input[type="range"] {
+                vertical-align: bottom;
+                margin: 0 7px;
+            }
+
+            hr {
+                margin: 25px 0;
+                border: 1px solid lightgray;
+            }
+
+            #clear-btn {
+                @include largeButton(#d76079, #bb2f4d);
+            }
+
+            #camera-btn {
+                @include largeButton(#79d760, #4dbb2f);
+            }
+        }
     }
 }

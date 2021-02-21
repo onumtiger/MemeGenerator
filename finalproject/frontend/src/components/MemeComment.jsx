@@ -33,19 +33,19 @@ export default function Comment(props) {
 
     return (
         <div>
-            <p class="commentNumber">{props.commentCount} comments</p>
+            <p className="commentNumber">{props.commentCount} comments</p>
             <div>
                 {comments.map((comment, index) => (
                     <div key={index}>
-                        <div class="userInfo"><label class="username">DerMemeKritiker</label> said:</div>
-                        <label class="commentText">{comment}</label>
-                        <div class="deleteIcon" onClick={() => removeComment(index)}>&times;</div>
+                        <div className="userInfo"><label className="username">DerMemeKritiker</label> said:</div>
+                        <label className="commentText">{comment}</label>
+                        <div className="deleteIcon" onClick={() => removeComment(index)}>&times;</div>
                     </div>
                 ))}
             </div>
-            <div class="commentContainer">
-                <input class="commentInput" placeholder="add a comment..." onKeyPress={handleKeypress}></input>
-                <button class="postButton" onClick={handlePost}>Post</button>
+            <div className="commentContainer">
+                <input className="commentInput" placeholder="add a comment..." onKeyPress={handleKeypress}></input>
+                <button className="postButton" onClick={handlePost}>Post</button>
             </div>
         </div >
     );

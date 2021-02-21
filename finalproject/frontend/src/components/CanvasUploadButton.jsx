@@ -43,7 +43,7 @@ export default class CanvasUploadButton extends React.Component {
 
     render(){
         return (
-            <button type="button" id="publish-btn" onClick={this.handlePublishButtonClick}>{this.buttonTexts.default}</button>
+            <button type="button" className="canvas-publish-btn" onClick={this.handlePublishButtonClick}>{this.buttonTexts.default}</button>
         );
     }
 }

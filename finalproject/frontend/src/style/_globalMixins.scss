@@ -29,3 +29,8 @@
         }
     }
 }
+
+@mixin unstyled-input {
+    background-color: transparent;
+    border: 0;
+}

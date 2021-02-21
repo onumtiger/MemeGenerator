@@ -29,7 +29,7 @@ export default class TemplatesList extends React.Component {
 
     render(){
         return (
-            <div>
+            <>
                 <div id="template-container">
                     {this.props.data.isLoading ? (
                         <div id="loader">
@@ -42,7 +42,7 @@ export default class TemplatesList extends React.Component {
                     )}
                     <img id="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />
                 </div>
-            </div>
+            </>
         );
     }
 }

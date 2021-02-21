@@ -89,7 +89,9 @@ export default class WYSIWYGEditor extends React.Component {
   }
 
   drawImage(){
-    this.cContext().drawImage(this.state.image, 0, 0, this.state.canvasWidth, this.state.canvasHeight);
+    if(this.state.image){
+      this.cContext().drawImage(this.state.image, 0, 0, this.state.canvasWidth, this.state.canvasHeight);
+    }
   }
 
   drawText(){
@@ -142,7 +144,7 @@ export default class WYSIWYGEditor extends React.Component {
 
     //add new caption input elements
     let li = this.createCaptionInputLi();
-    document.getElementById('in-captions-list').appendChild(li);
+    document.querySelector('#wysiwyg-wrapper #in-captions-list').appendChild(li);
 
     //get caption input sub-elements for easy access
     let captionInput = li.querySelector('.in-caption');
@@ -222,7 +224,7 @@ export default class WYSIWYGEditor extends React.Component {
 
   createCaptionInputLi(){
     let li = document.createElement('li');
-    let child = document.getElementById('in-captions-template-li').firstChild.cloneNode(true);
+    let child = document.querySelector('#wysiwyg-wrapper #in-captions-template-li').firstChild.cloneNode(true);
     li.appendChild(child);
     return li;
   }
@@ -275,9 +277,9 @@ export default class WYSIWYGEditor extends React.Component {
     let url = this.cElem().toDataURL('image/png');
     
     //download it
-    let a = document.getElementById('download-anchor');
+    let a = document.querySelector('#wysiwyg-wrapper .canvas-download-anchor');
     //use the entered Meme title as filename if there is one
-    let enteredTitle = document.getElementById('in-title').value;
+    let enteredTitle = document.querySelector('#wysiwyg-wrapper #in-title').value;
     a.download = (enteredTitle || 'Your Meme')+'.png';
     a.href = url;
     //we don't have to do the deselection again, so let's prevent the event from bubbling up to #page-right
@@ -347,7 +349,7 @@ export default class WYSIWYGEditor extends React.Component {
   assembleUploadFormData(){
     const formData = new FormData();
 
-    let enteredTitle = document.getElementById('in-title').value;
+    let enteredTitle = document.querySelector('#wysiwyg-wrapper #in-title').value;
     formData.append('name', enteredTitle);
     formData.append('userID', 0); //TODO get current userID
     formData.append('visibility', 2); //TODO get visibility options from API, display as radiobuttons with numbers as value (public as default), send chosen value here
@@ -377,7 +379,7 @@ export default class WYSIWYGEditor extends React.Component {
   
   render(){
     return (
-      <table id="page-wrapper" onMouseUp={this.handlePageWrapperMouseUp}>
+      <table id="wysiwyg-wrapper" className="fullsizetable" onMouseUp={this.handlePageWrapperMouseUp}>
         <tbody>
           <tr>
             <td id="page-left">
@@ -393,8 +395,8 @@ export default class WYSIWYGEditor extends React.Component {
             </td>
             <td id="page-right" onClick={this.handlePageRightClick}>
               <form>
-                <h2>Add some Captions to your Meme</h2>
-                <p>Click somewhere in the image to add a caption at that point.<span id="force-font-preload"></span></p>
+                <h3>Now, add some Captions to your Meme!</h3>
+                <p>Click somewhere in the image to add a caption at that point.</p>
                 <ul id="in-captions-list">
                   <li id="in-captions-template-li">
                     <details>
@@ -403,7 +405,7 @@ export default class WYSIWYGEditor extends React.Component {
                         <button type="button" className="in-caption-delete" title="Remove this caption">&#10006;</button>
                       </summary>
                       <div className="in-caption-formatting-wrapper">
-                        <table className="in-caption-formatting-table">
+                        <table className="in-caption-formatting-table fullsizetable">
                           <tbody>
                             <tr>
                               <th>Font Size:</th>

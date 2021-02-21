@@ -49,7 +49,7 @@ export default class DrawTemplate extends React.Component {
     }
 
     setCanvasDimensions() {
-        let availSpace = document.getElementById('canvas-column').offsetWidth;
+        let availSpace = document.querySelector('#draw-template-wrapper #canvas-column').offsetWidth;
         //account for canvas border
         availSpace -= 2;
         this.cElem.width = availSpace;
@@ -78,7 +78,7 @@ export default class DrawTemplate extends React.Component {
 
         //if we have previously snapped a webcam image and cleared the drawing, the clear button would now clear the entire canvas onClick. Since we now start drawing again, revert the button back to clearing only the drawing first.
         if(this.snappedImage){
-            let clearBtn = document.getElementById('clear-btn');
+            let clearBtn = document.querySelector('#draw-template-wrapper #clear-btn');
             if(clearBtn.innerText == this.clearButtonTexts.bgToClear){
                 clearBtn.innerText = this.clearButtonTexts.default;
             }
@@ -132,25 +132,25 @@ export default class DrawTemplate extends React.Component {
     handleStrokeWidthInput(e){
         let input = e.target.value;
         this.strokeWidth = input;
-        document.getElementById('label-strokeWidth').textContent = input;
+        document.querySelector('#draw-template-wrapper #label-strokeWidth').textContent = input;
     }
 
     handleStrokeColorRInput(e){
         let input = e.target.value;
         this.strokeColor.R = input;
-        document.getElementById('label-strokeColorR').textContent = input;
+        document.querySelector('#draw-template-wrapper #label-strokeColorR').textContent = input;
     }
 
     handleStrokeColorGInput(e){
         let input = e.target.value;
         this.strokeColor.G = input;
-        document.getElementById('label-strokeColorG').textContent = input;
+        document.querySelector('#draw-template-wrapper #label-strokeColorG').textContent = input;
     }
 
     handleStrokeColorBInput(e){
         let input = e.target.value;
         this.strokeColor.B = input;
-        document.getElementById('label-strokeColorB').textContent = input;
+        document.querySelector('#draw-template-wrapper #label-strokeColorB').textContent = input;
     }
 
     handleDownloadButtonClick(e){
@@ -158,7 +158,7 @@ export default class DrawTemplate extends React.Component {
         let url = this.cElem.toDataURL('image/png');
         
         //download it
-        let a = document.getElementById('download-anchor');
+        let a = document.querySelector('.canvas-download-anchor');
         a.href = url;
     }
 
@@ -177,7 +177,7 @@ export default class DrawTemplate extends React.Component {
 
     handleCamButtonClick(e){
         let button = e.target;
-        let vid = document.getElementById('webcam-input');
+        let vid = document.querySelector('#draw-template-wrapper #webcam-input');
 
         if(vid.classList.contains('active')){ //snap a picture on click
             //draw the current image on the canvas
@@ -233,7 +233,8 @@ export default class DrawTemplate extends React.Component {
     assembleUploadFormData(){
         const formData = new FormData();
 
-        formData.append('name', 'my drawn template'); //TODO let user choose name via text input
+        let enteredTitle = document.querySelector('#draw-template-wrapper #in-title').value;
+        formData.append('name', enteredTitle || 'drawn image');
         formData.append('userID', 0); //TODO get current userID
         formData.append('visibility', 2); //TODO get visibility options from API, display as radiobuttons with numbers as value (public as default), send chosen value here
 
@@ -254,12 +255,13 @@ export default class DrawTemplate extends React.Component {
 
     render(){
         return (
-            <div id="page-wrapper" onMouseMove={this.handlePageMouseMove} onMouseUp={this.handlePageMouseUp}>
-                <h2>Draw Your Own Template!</h2>
+            <div id="draw-template-wrapper" onMouseMove={this.handlePageMouseMove} onMouseUp={this.handlePageMouseUp}>
+                <h3>Draw Your Own Template!</h3>
                 <table id="main-table">
                     <tbody>
                         <tr>
                             <td id="canvas-column">
+                                <input id="in-title" type="text" placeholder="Enter a name for your template..." />
                                 <video id="webcam-input" width="1" autoPlay muted />
                                 <canvas
                                     width="1"

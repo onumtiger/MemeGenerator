@@ -1,9 +1,10 @@
 #template-container {
     height: 250px;
     padding: 5px 0;
+    margin: 5px 0 30px;
     box-sizing: border-box;
     white-space: nowrap;
-    overflow: auto;
+    overflow: auto hidden;
     background-color: #eee;
     
     img {

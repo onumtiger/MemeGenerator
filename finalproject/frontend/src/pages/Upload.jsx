@@ -56,7 +56,7 @@ class UploadMeme extends React.Component {
     render() {
         return (
             <div className="wrapper" >
-                <div class="center">
+                <div className="center">
                     <h2>Upload a meme and add it to your templates</h2>
                     <form id="uploadContainer" onSubmit={this.handleSubmit} encType='multipart/form-data'>
                         <label>Upload your own meme: </label>

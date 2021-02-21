@@ -1,5 +1,5 @@
-@import "globalMixins.scss";
+@import "_globalMixins.scss";
 
-#download-btn {
+.canvas-download-btn {
     @include largeButton(#6079d7, #2f4dbb);
 }

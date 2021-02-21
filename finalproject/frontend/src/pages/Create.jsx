@@ -9,7 +9,7 @@ export default class Create extends React.Component {
 
     render(){
         return (
-            <div id="page-wrapper">
+            <div id="create-page-wrapper">
                 <h2>How Do You Want To Create Your Meme?</h2>
                 <table id="main-table">
                     <tbody>

@@ -1,7 +1,8 @@
 import React, { createRef } from 'react';
 import {DrawTemplate, WYSIWYGEditor} from './index'; //TODO move to components
-import {TemplatesList} from '../components/index';
+import {TemplatesList, CreateTemplateSelection, UploadTemplate} from '../components';
 import api from '../api';
+import '../style/CreateCustom.scss';
 
 export default class CreateCustom extends React.Component {
     constructor(props){
@@ -11,6 +12,8 @@ export default class CreateCustom extends React.Component {
         this.initialTemplate = "/templates/_dummy.png";
 
         this.state = {
+            showTemplateSelection: false,
+            showUploadTemplate: false,
             showDrawTemplate: false,
             showEditor: false,
             templateListData: {
@@ -21,25 +24,51 @@ export default class CreateCustom extends React.Component {
         
         //this binding for React event handlers
         [
-            'letCreateTemplate',
+            'letAddTemplate',
             'selectTemplate',
+            'selectTemplateUpload',
+            'selectTemplateCreation',
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
     }
 
-    letCreateTemplate(e){
-        this.setState({showDrawTemplate: true, showEditor: false});
+    letAddTemplate(e){
+        this.setState({
+            showTemplateSelection: true,
+            showUploadTemplate: false,
+            showDrawTemplate: false
+        });
+    }
+
+    selectTemplateUpload(){
+        this.setState({
+            showTemplateSelection: false,
+            showUploadTemplate: true,
+        });
+    }
+
+    selectTemplateCreation(){
+        this.setState({
+            showTemplateSelection: false,
+            showDrawTemplate: true
+        });
     }
 
     selectTemplate(src){
-        if (this.state.showEditor){
+        if (this.state.showEditor){ //don't rerender the editor, or we will lose the input!
             this.editorRef.current.setTemplateImage(src);
         }else{
             this.initialTemplate = src;
-            this.setState({showEditor: true});
+            this.setState({
+                showEditor: true
+            });
         }
-        this.setState({showDrawTemplate: false});
+        this.setState({
+            showTemplateSelection: false,
+            showUploadTemplate: false,
+            showDrawTemplate: false
+        });
     }
 
     loadTemplatesIntoList = async ()=>{
@@ -70,7 +99,7 @@ export default class CreateCustom extends React.Component {
 
     handlePublishedTemplate = async (templateID)=>{
         await this.loadTemplatesIntoList();
-        let selectedElem = document.getElementById('template_'+templateID);
+        let selectedElem = document.querySelector('#create-custom-page-wrapper #template_'+templateID);
         this.changeSelection(selectedElem);
         this.selectTemplate(selectedElem.src);
     }
@@ -81,12 +110,22 @@ export default class CreateCustom extends React.Component {
 
     render(){
         return (
-            <div id="page-wrapper">
+            <div id="create-custom-page-wrapper">
                 <h2>Custom Meme Creation</h2>
                 <h3>First, choose a template:</h3>
-                <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letCreateTemplate} handleSelectionChange={this.changeSelection} />
-                {this.state.showDrawTemplate && <DrawTemplate handlePublishing={this.handlePublishedTemplate} />}
-                {this.state.showEditor && <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} />}
+                <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letAddTemplate} handleSelectionChange={this.changeSelection} />
+                {this.state.showTemplateSelection &&
+                    <CreateTemplateSelection handleUploadButtonClick={this.selectTemplateUpload} handleCreateButtonClick={this.selectTemplateCreation} />
+                }
+                {this.state.showUploadTemplate &&
+                    <UploadTemplate handlePublishing={this.handlePublishedTemplate} />
+                }
+                {this.state.showDrawTemplate &&
+                    <DrawTemplate handlePublishing={this.handlePublishedTemplate} />
+                }
+                {this.state.showEditor &&
+                    <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} />
+                }
             </div>
         );
     }

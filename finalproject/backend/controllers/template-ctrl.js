@@ -46,8 +46,7 @@ const createTemplate = async (req, res) => {
                     .then(() => {
                         return res.status(201).json({
                             success: true,
-                            id: template._id,
-                            error: 'Template successfully stored!'
+                            id: template._id
                         })
                     })
                     .catch(dbError => {
@@ -103,11 +102,11 @@ const getTemplates = async (req, res) => { //TODO filter by visibility to curren
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        if (!templateArray.length) {
-            return res
-                .status(204)
-                .json({ success: false, error: `No templates found` })
-        }
+        // if (!templateArray.length) {
+        //     return res
+        //         .status(204)
+        //         .json({ success: false, error: `No templates found` })
+        // }
         return res.status(200).json({ success: true, data: templateArray })
     }).catch(err => console.log(err))
 }

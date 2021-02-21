@@ -17,6 +17,9 @@ export const getAllTemplates = () => api.get(`/templates`);
 export const getTemplateById = id => api.get(`/templates/${id}`);
 export const deleteTemplateById = id => api.delete(`/templates/${id}`);
 
+export const fetchWebImage = payload => api.get(`/webcontent/image`, payload);
+export const fetchWebSnapshot = payload => api.get(`/webcontent/snapshot`, payload);
+
 const apis = {
     insertMeme,
     getAllMemes,
@@ -28,6 +31,8 @@ const apis = {
     getAllTemplates,
     getTemplateById,
     deleteTemplateById,
+    fetchWebImage,
+    fetchWebSnapshot
 }
 
 export default apis

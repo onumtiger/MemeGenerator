@@ -1,0 +1,26 @@
+@import "_globalMixins.scss";
+
+#create-template-selection-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    td {
+        width: 50%;
+        padding: 20px;
+        box-sizing: border-box;
+        vertical-align: top;
+
+        #btn-upload {
+            @include largeButton(#0068b0, #004a7d);
+        }
+
+        #btn-create {
+            @include largeButton(#009688, #00635a);
+        }
+
+        #btn-upload, #btn-create {
+            margin: 0;
+            padding: 20px 15px;
+        }
+    }
+}

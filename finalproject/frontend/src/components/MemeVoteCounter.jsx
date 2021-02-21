@@ -13,8 +13,8 @@ export default function Counter(props) {
 
     return (
         <div>
-            <button class="upVotes" onClick={incrementUpVotes}>↑ {props.upVotes}</button>
-            <button class="downVotes" onClick={incrementDownVotes}>↓ {props.downVotes}</button>
+            <button className="upVotes" onClick={incrementUpVotes}>↑ {props.upVotes}</button>
+            <button className="downVotes" onClick={incrementDownVotes}>↓ {props.downVotes}</button>
         </div>
     );
 }
