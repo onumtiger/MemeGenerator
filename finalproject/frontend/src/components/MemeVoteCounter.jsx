@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../api';
+import imageManipulation from '../api/imageManipulation'
 import '../style/globalStyle.css';
 
 
@@ -16,20 +17,14 @@ export default function Counter(props) {
 
     function updateCounterIntoDB(){
         console.log("1. Trying hard to update")
-        api.patchMeme((
-            {
-            _id: 0, 
-            toUpdate: {stats: {upvotes: [300]}},
-        }), 
-        (0)
-        )
+        api.postUpvotesMeme(({toUpdate: 11}),(0))
     }
 
 
     return (
         <div>
             <button className="upVotes" onClick={incrementUpVotes, updateCounterIntoDB}>↑ {upVote}</button>
-            <button className="downVotes" onClick={incrementDownVotes}>↓ {downVote}</button>
+            <button className="downVotes" onClick={incrementDownVotes/*, imageManipulation.execute()*/}>↓ {downVote}</button>
         </div>
     );
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table'
 import api from '../api'
+import {Link} from 'react-router-dom'
 
 import styled from 'styled-components'
 import '../style/react-table.css'
@@ -283,7 +284,7 @@ class MemesList extends Component {
                                 <ActionButton>↓</ActionButton>
                                 <ActionButton>→</ActionButton>
                             </Right>
-                            <a href={'/memes/slideshow/' + meme._id}><MemeImg src={meme.url} alt={meme.name}></MemeImg></a> 
+                            <Link to ={'/memes/slideshow/' + meme._id}><MemeImg src={meme.url} alt={meme.name}></MemeImg></Link>
                             <StatsTable>
                                 <tr>   
                                     <td><p>{meme.stats.views} views</p></td>
