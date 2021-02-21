@@ -4,6 +4,7 @@ const cors = require('cors')
 const db = require('./db/index.js')
 const memeRouter = require('./routes/meme-router.js')
 const app = express()
+
 const path = require('path');
 
 const PORT = 3001
@@ -11,6 +12,8 @@ const PORT = 3001
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 app.use(bodyParser.json())
+//Maybe not necessary:
+//app.use(bodyParser.json({ type: 'application/json' }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
