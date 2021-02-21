@@ -9,9 +9,10 @@ export const getAllMemes = () => api.get(`/meme`);
 export const getMemeById = id => api.get(`/meme/${id}`);
 export const deleteMemeById = id => api.delete(`/meme/${id}`);
 export const patchMeme = (payload, id) => api.patch(`/meme/${id}`, payload);
-export const postViewsMeme = id => api.post(`/meme/view/${id}`);
+
+export const postViewsMeme = (update, id) => api.post(`/meme/view/${id}`, update);
 export const postUpvotesMeme = (update, id) => api.post(`/meme/upvote/${id}`, update);
-export const postDownvotesMeme = id => api.post(`/meme/downvote/${id}`);
+export const postDownvotesMeme = (update, id) => api.post(`/meme/downvote/${id}`, update);
 
 export const getAllStats = () => api.get(`/stats`);
 
