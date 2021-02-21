@@ -25,17 +25,12 @@ class Links extends Component {
                     <List>
                         <Item>
                             <Link to="/memes/slideshow" className="nav-link">
-                                Slide Show
+                                Slideshow
                             </Link>
                         </Item>
                         <Item>
                             <Link to="/memes/create" className="nav-link">
                                 Create Meme
-                            </Link>
-                        </Item>
-                        <Item>
-                            <Link to="/memes/uploadMeme" className="nav-link">
-                                Upload a Meme
                             </Link>
                         </Item>
 

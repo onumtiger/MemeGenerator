@@ -131,11 +131,11 @@ const getMemes = async (req, res) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        if (!memes.length) {
-            return res
-                .status(204)
-                .json({ success: false, error: `No memes found` })
-        }
+        // if (!memes.length) {
+        //     return res
+        //         .status(204)
+        //         .json({ success: false, error: `No memes found` })
+        // }
         return res.status(200).json({ success: true, data: memes })
     }).catch(err => console.log(err))
 }

@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import {CanvasDownloadButton, CanvasUploadButton} from '../components';
+import {CanvasDownloadButton, CanvasUploadButton} from '.';
 import TextBox from '../abstract/TextBox';
 import '../style/WYSIWYG.scss';
 

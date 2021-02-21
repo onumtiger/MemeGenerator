@@ -1,6 +1,5 @@
 import React, { createRef } from 'react';
-import {DrawTemplate, WYSIWYGEditor} from './index'; //TODO move to components
-import {TemplatesList, CreateTemplateSelection, UploadTemplate} from '../components';
+import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, UploadTemplate} from '../components';
 import api from '../api';
 import '../style/CreateCustom.scss';
 
