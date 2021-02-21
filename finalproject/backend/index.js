@@ -15,6 +15,8 @@ const PORT = 3001;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(bodyParser.json());
+//Maybe not necessary:
+//app.use(bodyParser.json({ type: 'application/json' }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 

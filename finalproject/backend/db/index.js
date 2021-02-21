@@ -25,7 +25,12 @@ var defaultMeme = {
     comment_ids: [0, 1],
     user_id: 0,
     visibilty: 2,
-    creationDate: "2021-02-12"
+    creationDate: "2021-02-12",
+    stats: {
+        upvotes: [0, 2, 3],
+        downvotes: [1],
+        views: 230
+    }
 };
 
 var defaultMeme2 = {
@@ -37,7 +42,12 @@ var defaultMeme2 = {
     comment_ids: [2, 3],
     user_id: 1,
     visibilty: 2,
-    creationDate: "2021-02-13"
+    creationDate: "2021-02-13",
+    stats: {
+        upvotes: [0],
+        downvotes: [1, 2, 3],
+        views: 160
+    }
 };
 
 var defaultMeme3 = {
@@ -45,11 +55,16 @@ var defaultMeme3 = {
     url: '/memes/jan_domi_cat.jpg',
     captions: ['Dominik', 'Jan Obernolte'],
     name: 'Jan als Katze',
-    stats_id: 1,
+    stats_id: 2,
     comment_ids: [4, 5],
     user_id: 2,
     visibilty: 2,
-    creationDate: "2021-02-14"
+    creationDate: "2021-02-14",
+    stats: {
+        upvotes: [0, 3],
+        downvotes: [1, 2],
+        views: 90
+    }
 };
 
 db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]).then(function() {
@@ -109,13 +124,14 @@ db.collection('comments').insertMany([defaultComment, defaultComment2]).then(fun
 
 // mongoose lokal db Stats insert/reset, without SCHMEMA
 
+/*
 db.collection('stats').deleteMany({}).then(function() {
     console.log("Old stats deleted")
 });
 
 var defaultStat = {
     _id: 0,
-    upvotes: [0, 1],
+    upvotes: [0, 2, 3],
     downvotes: [1],
     views: 230
 };
@@ -123,13 +139,13 @@ var defaultStat = {
 var defaultStat2 = {
     _id: 1,
     upvotes: [0],
-    downvotes: [1],
+    downvotes: [1, 2, 3],
     views: 160
 };
 
 var defaultStat3 = {
     _id: 2,
-    upvotes: [],
+    upvotes: [0, 3],
     downvotes: [1, 2],
     views: 90
 };
@@ -137,7 +153,7 @@ var defaultStat3 = {
 db.collection('stats').insertMany([defaultStat, defaultStat2, defaultStat3]).then(function() {
     console.log("Default stats inserted")
 });
-
+*/
 
 // mongoose lokal db Chart insert/reset, without SCHMEMA
 

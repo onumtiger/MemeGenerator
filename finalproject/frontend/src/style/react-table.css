@@ -507,9 +507,17 @@
 
 #search {
     width: 200px;
-    margin-right: 7px;
+    margin-right: 15px;
 }
 
 #sort {
-    margin-right: 7px;
+    margin-right: 15px;
+}
+
+.slideshow {
+    position: relative;
+}
+
+.slides {
+    display: none;
 }

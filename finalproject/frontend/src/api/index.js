@@ -8,6 +8,7 @@ export const insertMeme = payload => api.post(`/meme`, payload);
 export const getAllMemes = () => api.get(`/meme`);
 export const getMemeById = id => api.get(`/meme/${id}`);
 export const deleteMemeById = id => api.delete(`/meme/${id}`);
+export const patchMeme = (payload, id) => api.patch(`/meme/${id}`, payload);
 
 export const getMemesWithStats = () => api.get(`/memeswithstats`);
 export const getAllStats = () => api.get(`/stats`);
@@ -22,6 +23,7 @@ export const fetchWebSnapshot = payload => api.get(`/webcontent/snapshot`, paylo
 
 const apis = {
     insertMeme,
+    patchMeme,
     getAllMemes,
     getMemeById,
     deleteMemeById,
