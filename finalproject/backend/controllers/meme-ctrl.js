@@ -122,25 +122,26 @@ const getStats = async (req, res) => {
 function referredMeme(req, res, next) {}
 
 const patchMeme = async function(req, res) {
-    
-    console.log("2. Entered CTRL")
-    var updateMeme = req.body; // {last_name : "smith", age: 44}
+    console.log("Patch Meme generic")
+    var updateMeme = req.body;
     var id = req.params.id;
     var updatedProperty = updateMeme.toUpdate
-    //db.users.update({_id  : ObjectId(id)}, {$set: updateObject});
-    //Meme.updateOne({_id: 0}, {name: "Thorben"})
-    console.log(id)
-    console.log(updateMeme)
     const result = await Meme.updateOne({_id: 0}, updatedProperty)
     console.log(result);
-    //Meme.collection('memes').update({_id  : id}, {$set: updateMeme});
- }
+}
+
+function patchViewsMeme(){}
+function patchUpvotesMeme(){}
+function patchDownVotesMeme(){}
 
 module.exports = {
     createMeme,
     deleteMeme,
     referredMeme,
     patchMeme,
+    patchViewsMeme,
+    patchUpvotesMeme,
+    patchDownVotesMeme,
     getMemes,
     getStats,
     getMemeById
