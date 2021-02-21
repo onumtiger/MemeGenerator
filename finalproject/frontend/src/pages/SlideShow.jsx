@@ -8,8 +8,6 @@ import '../style/react-table.css'
 import Counter from '../components/MemeVoteCounter'
 import Comment from '../components/MemeComment'
 
-
-
 // ---- DOMI ---- // 
 // slide show //
 
@@ -32,7 +30,6 @@ const Title = styled.h2.attrs({
 const MemeTitle = styled.h4.attrs({
     className: 'h4',
 })`
-
 `
 
 const UpVotes = styled.label`
@@ -78,7 +75,7 @@ border-radius: 5px;
   text-decoration: none;
   display: inline-block;
   font-size: 30px;
-  color: white
+  color: white;
 `
 
 const MemeImg = styled.img`
@@ -87,7 +84,6 @@ display: block;
   margin-right: auto;
   width: 90%;
   max-width: 500px;
-  
 `
 
 const StatsTable = styled.table`
@@ -126,6 +122,10 @@ class SlideShow extends Component {
             filter: "all",
             slideIndex: 1
         }
+        this.plusSlides = this.plusSlides.bind(this);
+        this.showSlides = this.showSlides.bind(this);
+        this.playDiashow = this.playDiashow.bind(this);
+        this.getRandomMeme = this.getRandomMeme.bind(this);
     }
 
     startSearch = (e) => {
@@ -168,39 +168,55 @@ class SlideShow extends Component {
     }
 
     plusSlides(n) {
-        this.showSlides(this.state.slideIndex += n);
+        this.showSlides(this.state.slideIndex += n); //slideIndex: count up when clicked forward, count down when clicked backwards
     }
 
     showSlides(n) {
-        var i;
         var slides = document.getElementsByClassName("slides");
-        console.log(slides)
-        if (slides.length) {
+
+        if (slides.length) { //enter only when slides exist/ is rendered
             if (n > slides.length) {
-                this.state.slideIndex = 1
+                this.state.slideIndex = 1   //if the index exceeds the max-index, set it back to 1 to show the first meme
             }
             if (n < 1) {
-                this.state.slideIndex = slides.length
+                this.state.slideIndex = slides.length   //if the sliderIndex is smaller than the first meme-index, set the index to the max-index to show the last meme
             }
-            for (i = 0; i < slides.length; i++) {
+            for (var i = 0; i < slides.length; i++) {
                 slides[i].style.display = "none";   //element will not be displayed
             }
-            slides[this.state.slideIndex - 1].style.display = "block";
+            slides[this.state.slideIndex - 1].style.display = "block"; //only display the meme at current index
         }
-        // slides[this.state.slideIndex - 1].style.display = "block";
-        console.log(slides[1])
     }
 
-    /*componentDidMount = async () => {
-        this.setState({ isLoading: true })
+    playDiashow() {
+        let playDiaButton = document.getElementById("playDia");
+        let stopDiaButton = document.getElementById("stopDia");
 
-        await api.getAllMemes().then(memes => {
-            this.setState({
-                memes: memes.data.data,
-                isLoading: false,
-            })
+        playDiaButton.style.display = "none";
+        stopDiaButton.style.display = "inline-block";
+
+        this.plusSlides(1);
+        const timeout = setTimeout(this.playDiashow, 2000);
+
+        stopDiaButton.addEventListener('click', () => {
+            playDiaButton.style.display = "inline-block";
+            stopDiaButton.style.display = "none";
+            clearTimeout(timeout);
         })
-    }*/
+    }
+
+    getRandomMeme() {
+        var slides = document.getElementsByClassName("slides");
+        var randomNumber = Math.floor(Math.random() * slides.length) + 1;
+
+        // TODO: if randomNumber equals current slideIndex, shuffle again
+        // if(randomNumber == this.state.slideIndex) {
+        //     randomNumber = Math.floor(Math.random() * slides.length) + 1;
+        // }
+
+        this.state.slideIndex = randomNumber;
+        this.showSlides(randomNumber)
+    }
 
     componentDidMount = async () => {
         this.setState({ isLoading: true })
@@ -213,7 +229,6 @@ class SlideShow extends Component {
             })
         })
 
-
         await api.getAllStats().then(stats => {
             console.log("test", stats)
             this.setState({
@@ -223,7 +238,6 @@ class SlideShow extends Component {
         })
 
         this.sortMemeList();
-
         this.showSlides(this.state.slideIndex);
     }
 
@@ -266,7 +280,7 @@ class SlideShow extends Component {
                 <CenterDiv>
                     <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
 
-Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
+                    Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
                         <option value="newest">newest</option>
                         <option value="oldest">oldest</option>
                         <option value="bestRating">rating (best)</option>
@@ -274,7 +288,7 @@ Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
                         <option value="mostViewed">views (most)</option>
                         <option value="leastViewed">views (least)</option>
                     </Select>
-Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
+                    Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
                         <option value="all">all</option>
                         <option value="jpg">jpg</option>
                         <option value="png">png</option>
@@ -284,49 +298,54 @@ Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
                         <option value="template">template</option>
                         <option value="video">video</option>
                     </Select>
-                    
+
 
                     <div className="slideshow">
-                    
-                    <SlideShowTable>
-                        <td><SlideButton onClick={this.plusSlides(-1)}>←</SlideButton></td>
-                        <td>{memes.filter((meme) => {
-                            if (this.state.filter == "all")
-                                return meme
-                            else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
-                                return meme
-                            }
-                        }).filter((meme) => {
-                            if (this.state.search == null)
-                                return meme
-                            else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
-                                return meme
-                            }
-                        }).map(meme => (
-                            <div className="slides">
+                        <ActionButton onClick={this.getRandomMeme}>Shuffle ↔</ActionButton>
+                        <ActionButton id="playDia" onClick={this.playDiashow}>Diashow ►</ActionButton>
+                        <ActionButton id="stopDia">Stop diashow &#x23f8;</ActionButton>
 
-                                <Right>
-                                    <label>{meme.name} // </label>
-                                    <ActionButton>Shuffle ↔</ActionButton>
-                                    <ActionButton>Diashow ►</ActionButton> 
-                                </Right>
-                                <MemeImg src={meme.url} alt={meme.name}></MemeImg>
-                                <StatsTable>
-                                    <tr>
-                                        <td><p>{meme.stats.views} views</p></td>
-                                        <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
-                                        <td><p>{meme.creationDate}</p></td>
-                                    </tr>
-                                </StatsTable>
-                                <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
+                        {/* <SlideShowTable> */}
+                        <td>
+                            <SlideButton onClick={() => this.plusSlides(-1)}>←</SlideButton>
+                        </td>
+                        <td>
+                            {memes.filter((meme) => {
+                                if (this.state.filter == "all")
+                                    return meme
+                                else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
+                                    return meme
+                                }
+                            }).filter((meme) => {
+                                if (this.state.search == null)
+                                    return meme
+                                else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                                    return meme
+                                }
+                            }).map(meme => (
+                                <div className="slides">
+                                    <Right>
+                                        <label>{meme.name} // </label>
 
-
-                            </div>
-                        ))}</td>
-                        <td><SlideButton onClick={this.plusSlides(1)}>→</SlideButton></td>
-                    </SlideShowTable>
+                                    </Right>
+                                    <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                                    <StatsTable>
+                                        <tr>
+                                            <td><p>{meme.stats.views} views</p></td>
+                                            <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
+                                            <td><p>{meme.creationDate}</p></td>
+                                        </tr>
+                                    </StatsTable>
+                                    <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
+                                </div>
+                            ))}
+                        </td>
+                        <td>
+                            <SlideButton onClick={() => this.plusSlides(1)}>→</SlideButton>
+                        </td>
+                        {/* </SlideShowTable> */}
                     </div>
-                    
+
                 </CenterDiv>
 
                 <div></div>
