@@ -2,7 +2,7 @@
 
 ## Development / Testing environment
 
-We developed with Node versions 14.15.1, 15.4 and TODO and current versions of the web browsers Firefox, Opera and Safari (TODO). With other software or other versions of it we cannot guarantee for all features to work properly. Please feel especially discouraged from testing with Internet Explorer or mobile browsers.
+We developed with Node versions 14.15.1, 15.4 and TODO and current versions of the web browsers Firefox, Opera and Safari (TODO). With other software or other versions of it we cannot guarantee for all features to work properly. Please feel especially discouraged from testing with Internet Explorer or mobile browsers, some features will most likely not work on these browsers.
 
 ## How to install the project
 

@@ -8,7 +8,7 @@ mongoose
 
 const db = mongoose.connection
 
-
+//TODO wait for deletions before insertions
 // -- Comment out everything (l.13 - l.59) if you dont want the database to reset --
 
 // mongoose lokal db MEMES reset, without SCHMEMA

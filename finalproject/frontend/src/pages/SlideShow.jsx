@@ -1,59 +1,8 @@
-import React, { Component } from 'react'
-import ReactTable from 'react-table'
-import 'react-table'
-import api from '../api'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-import styled from 'styled-components'
-import '../style/react-table.css'
-import Counter from '../components/MemeVoteCounter'
-import Comment from '../components/MemeComment'
-
-// ---- DOMI ---- // 
-// slide show //
-
-const Wrapper = styled.div`
-padding: 0 40px 40px 40px;
-`
-
-const Right = styled.div`
-width: auto;
-    margin-right: 0px;
-    margin-left: auto;
-    text-align: right;
-`
-
-const Title = styled.h2.attrs({
-    className: 'h2',
-})`
-`
-
-const MemeTitle = styled.h4.attrs({
-    className: 'h4',
-})`
-`
-
-const UpVotes = styled.label`
-color: green;
-font-weight: bold
-`
-
-const Select = styled.select`
-width:20%;
-margin-left: 10px;
-height:10%;
-  box-sizing:border-box;
-
-`
-const Search = styled.input`
-width:20%;
-height:10%;
-  box-sizing:border-box;
-`
-
-const DownVotes = styled.label`
-color: red;
-font-weight: bold
-`
+import styled from 'styled-components';
+import {SingleView} from '../components';
 
 const ActionButton = styled.button`
 background-color: white; 
@@ -78,32 +27,9 @@ border-radius: 5px;
   color: white;
 `
 
-const MemeImg = styled.img`
-display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 90%;
-  max-width: 500px;
-`
-
-const StatsTable = styled.table`
-  margin: auto;
-  width: 75%;
-  padding: 10px;
-  text-align: center;
-`
-
 const SlideShowTable = styled.table`
     vertical-align: middle;
 `
-
-const ButtonTable = styled.table`
-    width: auto;
-    margin-right: 0px;
-    margin-left: auto;
-    text-align: right;
-`
-
 const CenterDiv = styled.div`
 margin: auto;
   width: 48%;
@@ -113,79 +39,44 @@ margin: auto;
 
 class SlideShow extends Component {
     constructor(props) {
-        super(props)
-        this.state = {
-            memes: [],
-            columns: [],
-            isLoading: false,
-            search: null,
-            filter: "all",
-            slideIndex: 1
-        }
-        this.plusSlides = this.plusSlides.bind(this);
-        this.showSlides = this.showSlides.bind(this);
-        this.playDiashow = this.playDiashow.bind(this);
-        this.getRandomMeme = this.getRandomMeme.bind(this);
+        super(props);
+
+        //this binding for React event handlers
+        [
+            'getPrevMemeId',
+            'getNextMemeId',
+            'getRandomMemeId',
+            'playDiashow',
+
+        ].forEach((handler)=>{
+            this[handler] = this[handler].bind(this);
+        });
     }
 
-    startSearch = (e) => {
-        let keyword = e.target.value;
-        this.setState({ search: keyword });
+    getPrevMemeId() {
+        //slideIndex: count up when clicked forward, count down when clicked backwards
+        let newIndex = this.currentMemeIndex -1;
+        let numberOfMemes = this.props.memes.length;
+
+        if (newIndex < 0) {
+            newIndex = numberOfMemes - 1;   //if the sliderIndex is smaller than the first meme-index, set the index to the max-index to show the last meme
+        }
+
+        let newMemeId = this.props.memes[newIndex]._id;
+        return newMemeId;
     }
 
-    setFilter = () => {
-        var filter = document.getElementById("filter").value;
-        this.setState({ filter: filter });
-    }
+    getNextMemeId() {
+        //slideIndex: count up when clicked forward, count down when clicked backwards
+        let newIndex = this.currentMemeIndex + 1;
+        let numberOfMemes = this.props.memes.length;
 
-    sortMemeList = () => {
-        const { memes } = this.state;
-        var sort = document.getElementById("sort").value;
-        let newMemeList;
-
-        if (sort == "newest") {
-            newMemeList = [...memes].sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
-        }
-        else if (sort == "oldest") {
-            newMemeList = [...memes].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
-        }
-        else if (sort == "bestRating") {
-            newMemeList = [...memes].sort((a, b) => b.stats.upvotes.length - a.stats.upvotes.length)
-        }
-        else if (sort == "worstRating") {
-            newMemeList = [...memes].sort((a, b) => b.stats.downvotes.length - a.stats.downvotes.length)
-        }
-        else if (sort == "mostViewed") {
-            newMemeList = [...memes].sort((a, b) => b.stats.views - a.stats.views)
-        }
-        else if (sort == "leastViewed") {
-            newMemeList = [...memes].sort((a, b) => a.stats.views - b.stats.views)
+        if (newIndex >= numberOfMemes) {
+            newIndex = 0;   //if the index exceeds the max-index, set it back to 0 to show the first meme
         }
 
-        this.setState({
-            memes: newMemeList
-        })
-    }
-
-    plusSlides(n) {
-        this.showSlides(this.state.slideIndex += n); //slideIndex: count up when clicked forward, count down when clicked backwards
-    }
-
-    showSlides(n) {
-        var slides = document.getElementsByClassName("slides");
-
-        if (slides.length) { //enter only when slides exist/ is rendered
-            if (n > slides.length) {
-                this.state.slideIndex = 1   //if the index exceeds the max-index, set it back to 1 to show the first meme
-            }
-            if (n < 1) {
-                this.state.slideIndex = slides.length   //if the sliderIndex is smaller than the first meme-index, set the index to the max-index to show the last meme
-            }
-            for (var i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";   //element will not be displayed
-            }
-            slides[this.state.slideIndex - 1].style.display = "block"; //only display the meme at current index
-        }
+        let newMemeId = this.props.memes[newIndex]._id;
+        return newMemeId;
     }
 
     playDiashow() {
@@ -195,7 +86,8 @@ class SlideShow extends Component {
         playDiaButton.style.display = "none";
         stopDiaButton.style.display = "inline-block";
 
-        this.plusSlides(1);
+        this.props.history.push(this.props.urlPath+'/'+this.getNextMemeId());
+
         const timeout = setTimeout(this.playDiashow, 2000);
 
         stopDiaButton.addEventListener('click', () => {
@@ -205,161 +97,72 @@ class SlideShow extends Component {
         })
     }
 
-    getRandomMeme() {
-        var slides = document.getElementsByClassName("slides");
-        var randomNumber = Math.floor(Math.random() * slides.length) + 1;
+    getRandomMemeId() {
+        let {memes} = this.props;
+        let randomIndex = Math.floor(Math.random() * memes.length);
+        if(memes.length && randomIndex == this.currentMemeIndex){
+            //if there are multiple memes in the array and we just randomly landed on the current one, get the next one
+            randomIndex++;
+            if(randomIndex >= memes.length) randomIndex = 0;
+        }
 
-        // TODO: if randomNumber equals current slideIndex, shuffle again
-        // if(randomNumber == this.state.slideIndex) {
-        //     randomNumber = Math.floor(Math.random() * slides.length) + 1;
-        // }
-
-        this.state.slideIndex = randomNumber;
-        this.showSlides(randomNumber)
-    }
-
-    componentDidMount = async () => {
-        this.setState({ isLoading: true })
-
-        await api.getAllMemes().then(memes => {
-            console.log("Memes with stats: ", memes)
-            this.setState({
-                memes: memes.data.data,
-                isLoading: false,
-            })
-        })
-
-        await api.getAllStats().then(stats => {
-            console.log("test", stats)
-            this.setState({
-                stats: stats.data.data,
-                isLoading: false,
-            })
-        })
-
-        this.sortMemeList();
-        this.showSlides(this.state.slideIndex);
+        let newMemeId = this.props.memes[randomIndex]._id;
+        return newMemeId;
     }
 
     render() {
-        const { memes, isLoading } = this.state
-        console.log('TCL: memesList -> render -> memes', memes)
+        //every change to the meme list via filtering etc. will call render(), so we need to figure out what we can do with that list here
 
-        /*const columns = [
-            {
-                Header: 'ID',
-                accessor: '_id',
-                filterable: true,
-            },
-            {
-                Header: 'Url',
-                accessor: 'url',
-                filterable: true,
-            },
-            // {
-            //     Header: 'Rating',
-            //     accessor: 'rating',
-            //     filterable: true,
-            // },
-            // {
-            //     Header: 'Time',
-            //     accessor: 'time',
-            //     Cell: props => <span>{props.value.join(' / ')}</span>,
-            // },
-        ]*/
-
-        let showTable = true
-        if (!memes.length) {
-            showTable = false
+        if(!(this.props.memes.length)){
+            //if the meme list is empty (because of filtering etc.), display "nothing found" image - TODO
+            return <></>;
         }
 
+        let { memeId } = this.props.match.params;
+        this.currentMemeIndex = this.props.memes.findIndex(meme => meme._id == memeId);
+
+        if(this.props.wasMemeListJustUpdated()){
+            //if we just updated the meme list via filter etc (as opposed to the initial rendering after clicking on a meme in MemesList), check if the currently viewed meme is still among the filtered meme list. If not, go to the beginning of the filtered memelist.
+            if(this.currentMemeIndex == -1){
+                let firstMemeId = this.props.memes[0]._id;
+                this.props.history.push(this.props.urlPath+'/'+firstMemeId);
+                return <></>;
+            }
+        }
+
+        //at this point, we have a valid meme to display, matching the requested ID from the URL
+        const meme = this.props.memes[this.currentMemeIndex];
+
         return (
+            <CenterDiv>
+                <div className="slideshow">
+                    <Link to={this.props.urlPath+'/'+this.getRandomMemeId()}>
+                        <ActionButton>Shuffle ↔</ActionButton>
+                    </Link>
+                    <ActionButton id="playDia" onClick={this.playDiashow}>Diashow ►</ActionButton>
+                    <ActionButton id="stopDia">Stop diashow &#x23f8;</ActionButton>
 
-            //This is for view testing
-            <Wrapper>
-                <CenterDiv>
-                    <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={(e) => this.startSearch(e)}></Search>
-
-                    Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
-                        <option value="newest">newest</option>
-                        <option value="oldest">oldest</option>
-                        <option value="bestRating">rating (best)</option>
-                        <option value="worstRating">rating (worst)</option>
-                        <option value="mostViewed">views (most)</option>
-                        <option value="leastViewed">views (least)</option>
-                    </Select>
-                    Filter: <Select name="filter" id="filter" onChange={this.setFilter}>
-                        <option value="all">all</option>
-                        <option value="jpg">jpg</option>
-                        <option value="png">png</option>
-                        <option value="katze">katze</option>
-                        <option value="gif">gif</option>
-                        <option value="image">image</option>
-                        <option value="template">template</option>
-                        <option value="video">video</option>
-                    </Select>
-
-
-                    <div className="slideshow">
-                        <ActionButton onClick={this.getRandomMeme}>Shuffle ↔</ActionButton>
-                        <ActionButton id="playDia" onClick={this.playDiashow}>Diashow ►</ActionButton>
-                        <ActionButton id="stopDia">Stop diashow &#x23f8;</ActionButton>
-
-                        {/* <SlideShowTable> */}
+                    <SlideShowTable>
+                        <tbody>
+                        <tr>
                         <td>
-                            <SlideButton onClick={() => this.plusSlides(-1)}>←</SlideButton>
+                            <Link to={this.props.urlPath+'/'+this.getPrevMemeId()}>
+                                <SlideButton>←</SlideButton>
+                            </Link>
                         </td>
                         <td>
-                            {memes.filter((meme) => {
-                                if (this.state.filter == "all")
-                                    return meme
-                                else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
-                                    return meme
-                                }
-                            }).filter((meme) => {
-                                if (this.state.search == null)
-                                    return meme
-                                else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
-                                    return meme
-                                }
-                            }).map(meme => (
-                                <div className="slides">
-                                    <Right>
-                                        <label>{meme.name} // </label>
-
-                                    </Right>
-                                    <MemeImg src={meme.url} alt={meme.name}></MemeImg>
-                                    <StatsTable>
-                                        <tr>
-                                            <td><p>{meme.stats.views} views</p></td>
-                                            <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
-                                            <td><p>{meme.creationDate}</p></td>
-                                        </tr>
-                                    </StatsTable>
-                                    <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
-                                </div>
-                            ))}
+                            <SingleView meme={meme} />
                         </td>
                         <td>
-                            <SlideButton onClick={() => this.plusSlides(1)}>→</SlideButton>
+                            <Link to={this.props.urlPath+'/'+this.getNextMemeId()}>
+                                <SlideButton>→</SlideButton>
+                            </Link>
                         </td>
-                        {/* </SlideShowTable> */}
-                    </div>
-
-                </CenterDiv>
-
-                <div></div>
-                {/* {showTable && (
-                    <ReactTable
-                        data={memes}
-                        columns={columns}
-                        loading={isLoading}
-                        defaultPageSize={10}
-                        showPageSizeOptions={true}
-                        minRows={0}
-                    />
-                )} */}
-            </Wrapper>
+                        </tr>
+                        </tbody>
+                    </SlideShowTable>
+                </div>
+            </CenterDiv>
         )
     }
 }
