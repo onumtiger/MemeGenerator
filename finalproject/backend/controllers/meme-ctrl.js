@@ -143,18 +143,38 @@ const patchMeme = async function(req, res) {
     console.log(result);
 }
 
-function patchViewsMeme(){}
-function patchUpvotesMeme(){}
-function patchDownVotesMeme(){}
+const postViewsMeme = async (req, res) => {
+    console.log("post upvotes")
+    var updateMeme = req.body;
+    var memeId = req.params.id;
+    var updatedViews= updateMeme.toUpdate
+    const result = await Meme.updateOne({_id: memeId}, {updatedViews})
+}
+
+const postUpvotesMeme = async (req, res) => {
+    console.log("post upvotes")
+    var updateMeme = req.body;
+    var memeId = req.params.id;
+    var updatedUserId= updateMeme.toUpdate
+    const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.upvotes': updatedUserId}})  
+}
+
+const postDownvotesMeme = async (req, res) => {
+    console.log("post downvotes")
+    var updateMeme = req.body;
+    var memeId = req.params.id;
+    var updatedUserId= updateMeme.toUpdate
+    const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.downvotes': updatedUserId}})
+}
 
 module.exports = {
     createMeme,
     deleteMeme,
     referredMeme,
     patchMeme,
-    patchViewsMeme,
-    patchUpvotesMeme,
-    patchDownVotesMeme,
+    postViewsMeme,
+    postUpvotesMeme,
+    postDownvotesMeme,
     getMemes,
     getStats,
     getMemeById
