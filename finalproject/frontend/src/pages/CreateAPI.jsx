@@ -35,7 +35,7 @@ const CancelButton = styled.a.attrs({
     margin: 15px 15px 15px 5px;
 `
 
-class MemesInsert extends Component {
+class CreateAPI extends Component {
     constructor(props) {
         super(props)
 
@@ -129,4 +129,4 @@ class MemesInsert extends Component {
     }
 }
 
-export default MemesInsert
+export default CreateAPI

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
-import {SingleView} from '../components';
+import {SingleView} from '.';
 
 const ActionButton = styled.button`
 background-color: white; 

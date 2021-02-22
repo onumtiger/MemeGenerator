@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import {MemeVoteCounter as Counter, MemeComment as Comment} from '../components';
+import {MemeVoteCounter as Counter, MemeComment as Comment} from '.';
 
 // ---- DOMI ---- // 
 // endless scroll, image & title, passive information (views, votes, comments), interaction (up/down vote, download, share) //

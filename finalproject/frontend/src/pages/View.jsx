@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import {MemesList, SlideShow} from '.';
-import {FilterMemes} from '../components';
+import {MemesList, SlideShow, FilterMemes} from '../components';
 import api from '../api';
 
 import Loader from "react-loader-spinner";

@@ -1,8 +1,6 @@
-import MemesList from './MemesList';
-import SlideShow from './SlideShow';
-import MemesInsert from './MemesInsert';
 import Create from './Create';
+import CreateAPI from './CreateAPI';
 import CreateCustom from './CreateCustom';
 import View from './View';
 
-export { MemesList, SlideShow, MemesInsert, Create, CreateCustom, View };
+export { Create, CreateAPI, CreateCustom, View };
