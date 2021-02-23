@@ -3,7 +3,8 @@ const WebContentCtrl = require('../controllers/webcontent-ctrl');
 
 const router = express.Router();
 
-router.get('/image', WebContentCtrl.getWebImage);
-router.get('/snapshot', WebContentCtrl.getWebSnapshot);
+router.get('/', WebContentCtrl.getWebImage);
+router.get('/image/:url', WebContentCtrl.getWebImage);
+router.get('/snapshot/:url', WebContentCtrl.getWebSnapshot);
 
 module.exports = router;

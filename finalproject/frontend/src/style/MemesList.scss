@@ -1,0 +1,48 @@
+@mixin content {
+    margin: 0 auto;
+    width: 75%;
+}
+
+#memes-list-wrapper {
+    padding: 0 40px 40px 40px;
+
+    .meme-wrapper {
+        margin: 0 auto;
+        width: 45%;
+        border-bottom: 2px solid grey;
+        padding: 25px 0;
+        text-align: center;
+
+        .title-row {
+            text-align: right;
+            font-size: 115%;
+    
+            span {
+                padding: 5px 10px;
+                // border-bottom: 1px solid gray;
+            }
+
+            .actionButton {
+                background-color: white; 
+                border: none;
+                padding: 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+            }
+        }
+    
+        .meme-img {
+            @include content;
+            display: block;
+        }
+    
+        .stats-table {
+            @include content;
+            padding: 10px;
+            text-align: center;
+        }
+    }
+
+}

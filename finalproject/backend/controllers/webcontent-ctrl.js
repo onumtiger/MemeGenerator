@@ -1,5 +1,5 @@
 const getWebImage = async (req, res) => {
-    let remoteUrl = req.body.url;
+    let remoteUrl = decodeURI(req.params.url);
     //TODO
     let localUrl="";
     if (!localUrl) {
@@ -9,7 +9,7 @@ const getWebImage = async (req, res) => {
 }
 
 const getWebSnapshot = async (req, res) => {
-    let remoteUrl = req.body.url;
+    let remoteUrl = decodeURI(req.params.url);
     //TODO
     let localUrl="";
     if (!localUrl) {

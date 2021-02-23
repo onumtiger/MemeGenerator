@@ -1,0 +1,27 @@
+@mixin content {
+    margin: 0 auto;
+    width: 75%;
+}
+
+#single-view-wrapper {
+
+    #meme-title {
+        text-align: right;
+        font-size: 125%;
+
+        span {
+            padding: 5px 10px;
+            // border-bottom: 1px solid gray;
+        }
+    }
+
+    #meme-img {
+        @include content;
+    }
+
+    #stats-table {
+        @include content;
+        padding: 10px;
+        text-align: center;
+    }
+}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Collapse = styled.div.attrs({
-    className: 'collpase navbar-collapse',
+    className: 'navbar-collapse',
 })``
 
 const List = styled.div.attrs({
@@ -11,7 +11,7 @@ const List = styled.div.attrs({
 })``
 
 const Item = styled.div.attrs({
-    className: 'collpase navbar-collapse',
+    className: 'navbar-collapse',
 })``
 
 class Links extends Component {
@@ -24,8 +24,8 @@ class Links extends Component {
                 <Collapse>
                     <List>
                         <Item>
-                            <Link to="/memes/slideshow" className="nav-link">
-                                Slideshow
+                            <Link to="/memes/view" className="nav-link">
+                                View Memes
                             </Link>
                         </Item>
                         <Item>

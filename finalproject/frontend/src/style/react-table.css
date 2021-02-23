@@ -504,28 +504,3 @@
     -ms-user-select: none;
     user-select: none
 }
-
-#search {
-    width: 200px;
-    margin-right: 15px;
-}
-
-#sort {
-    margin-right: 15px;
-}
-
-.slideshow {
-    position: relative;
-}
-
-.slides {
-    display: none;
-}
-
-#stopDia {
-    display: none;
-}
-
-.slideShowTab {
-    margin: auto;
-}

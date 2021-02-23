@@ -1,5 +1,5 @@
 const Template = require('../db/models/template-model');
-const Stats = require('../db/models/stats-model');
+const User = require('../db/models/user-model');
 const dbUtils = require('../db/dbUtils');
 
 const createTemplate = async (req, res) => {
@@ -21,8 +21,6 @@ const createTemplate = async (req, res) => {
                 res.status(500).send(err);
             }else{
                 let url = '/templates/'+filename;
-
-                let statsID = await dbUtils.getNewFullStatsID();
                 
                 const template = new Template({
                     _id: id,
@@ -30,7 +28,11 @@ const createTemplate = async (req, res) => {
                     name: body.name,
                     user_id: body.userID,
                     visibility: body.visibility,
-                    stats_id: statsID
+                    stats: {
+                        upvotes: [],
+                        downvotes: [],
+                        uses: 0
+                    }
                 });
 
 
@@ -83,7 +85,7 @@ const deleteTemplate = async (req, res) => {
 }
 
 const getTemplateById = async (req, res) => {
-    await Template.findOne({ id: req.params.id }, (err, template) => {
+    await Template.findOne({ _id: req.params.id }, (err, template) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -115,5 +117,5 @@ module.exports = {
     createTemplate,
     deleteTemplate,
     getTemplates,
-    getTemplateById
+    getTemplateById,
 }

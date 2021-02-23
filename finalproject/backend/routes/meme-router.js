@@ -3,12 +3,14 @@ const MemeCtrl = require('../controllers/meme-ctrl');
 
 const router = express.Router();
 
-router.post('/meme', MemeCtrl.createMeme);
-router.get('/meme/:id', MemeCtrl.getMemeById);
-router.get('/meme', MemeCtrl.getMemes);
-router.delete('/meme/:id', MemeCtrl.deleteMeme);
-router.patch('/meme/:id', MemeCtrl.patchMeme);
-
-router.get('/stats', MemeCtrl.getStats);
+router.get('/', MemeCtrl.getMemes);
+router.post('/', MemeCtrl.createMeme);
+router.get('/:id', MemeCtrl.getMemeById);
+router.delete('/:id', MemeCtrl.deleteMeme);
+router.patch('/:id', MemeCtrl.patchMeme);
+router.post('/upvote/:id', MemeCtrl.postUpvotesMeme);
+router.post('/downvote/:id', MemeCtrl.postDownvotesMeme);
+router.post('/view/:id', MemeCtrl.postViewsMeme);
+router.post('/imageCreation', MemeCtrl.executeImageCreation);
 
 module.exports = router;

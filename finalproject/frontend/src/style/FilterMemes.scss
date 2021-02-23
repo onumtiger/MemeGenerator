@@ -1,0 +1,19 @@
+#filter-wrapper {
+    margin: 0 auto 20px;
+    width: 45%;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+
+    #search, #sort, #filter {
+        margin-right: 20px;
+    }
+    
+    #search {
+        width: 250px;
+    }
+
+    select {
+        margin-left: 5px;
+    }
+}

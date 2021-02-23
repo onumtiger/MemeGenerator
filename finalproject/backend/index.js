@@ -4,7 +4,9 @@ const cors = require('cors');
 const db = require('./db/index.js');
 const memeRouter = require('./routes/meme-router.js');
 const templateRouter = require('./routes/template-router.js');
+const statsRouter = require('./routes/stats-router.js');
 const webContentRouter = require('./routes/webcontent-router.js');
+const guiDataRouter = require('./routes/guidata-router.js');
 
 const fileUpload = require('express-fileupload');
 const app = express();
@@ -27,9 +29,11 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api', fileUpload({safeFileNames: true, preserveExtension: true})); //populates req.file for file uploads
-app.use('/api', memeRouter);
-app.use('/api', templateRouter);
+app.use('/api/meme', memeRouter);
+app.use('/api/templates', templateRouter);
+app.use('/api/stats', statsRouter);
 app.use('/api/webcontent', webContentRouter);
+app.use('/api/guidata', guiDataRouter);
 
 //TODO create an error handler for anything that doesn't match the above routers
 

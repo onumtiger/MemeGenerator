@@ -14,6 +14,10 @@ $sourceButtonColor2: #469746;
         vertical-align: top;
         padding: 10px;
     }
+    
+    .invalid {
+        background-color: #f28f8f!important;
+    }
 
     #col-source {
         .dropzone {
@@ -60,6 +64,8 @@ $sourceButtonColor2: #469746;
     } 
 
     #col-templatedata {
+        border-left: 1px solid lightgray;
+
         #in-title {
             @include unstyled-input;
             width: 100%;
@@ -75,8 +81,32 @@ $sourceButtonColor2: #469746;
             margin: 10px auto;
         }
 
+        .visibilityOption {
+            margin: 0;
+            padding: 0 10px;
+
+            $outer-padding: 5px;
+
+            &:first-of-type{
+                padding-top: $outer-padding;
+            }
+            &:last-of-type{
+                padding-bottom: $outer-padding;
+            }
+
+            input {
+                margin-right: 5px;
+            }
+        }
+
         #template-publish-btn {
             @include largeButton(#6079d7, #2f4dbb);
+
+            &.inactive{
+                background-color: gray;
+                border-color: darkgray;
+                cursor: not-allowed;
+            }
         }
     }  
 }
