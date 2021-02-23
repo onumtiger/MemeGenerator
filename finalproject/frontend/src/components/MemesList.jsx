@@ -19,9 +19,9 @@ export default class MemesList extends Component {
         this.routeURL = url;
     }
 
-    sendInfos = () => {
+    sendInfos = async () => {
         console.log("send");
-        api.executeImageCreation({ 
+        let response = await api.executeImageCreation({ 
             imageURL: 'https://wow.zamimg.com/uploads/blog/images/20516-afterlives-ardenweald-4k-desktop-wallpapers.jpg', //image URL
             xPositions: [10, 80, 200, 300, 400, 50], //each index is a caption xPosition
             yPositions: [10, 80, 200, 300, 400, 50], //each index is a caption yPosition (e.g. xPosition[0] & yPosition [0] is a point)
@@ -31,6 +31,7 @@ export default class MemesList extends Component {
             images: 2, // only used when imageset is true
             textsPerImage: 2 //only used when imageset is true
         });
+       
     }
 
     render() {
