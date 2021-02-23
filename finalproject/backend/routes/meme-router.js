@@ -11,6 +11,6 @@ router.patch('/:id', MemeCtrl.patchMeme);
 router.post('/upvote/:id', MemeCtrl.postUpvotesMeme);
 router.post('/downvote/:id', MemeCtrl.postDownvotesMeme);
 router.post('/view/:id', MemeCtrl.postViewsMeme);
-router.post('/meme/imageCreation', MemeCtrl.executeImageCreation);
+router.post('/imageCreation', MemeCtrl.executeImageCreation);
 
 module.exports = router;
