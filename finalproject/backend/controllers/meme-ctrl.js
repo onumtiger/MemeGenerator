@@ -3,6 +3,8 @@ const User = require('../db/models/user-model');
 const dbUtils = require('../db/dbUtils');
 const globalHelpers = require('../utils/globalHelpers');
 var Jimp = require('jimp');
+var app = require('express')();
+var zip = require('express-zip');
 
 const createMeme = async (req, res) => { //TODO send template ID, increment template uses on creation
     const body = req.body;
@@ -209,6 +211,7 @@ const executeImageCreation  = async (req, res) => {
     const texts = req.body.texts
     const textColor = req.body.textColor
     const textsPerImage = req.body.textsPerImage
+    const imageURL = req.body.imageURL
     
     //Bool
     const imageset = req.body.imageset
@@ -220,11 +223,13 @@ const executeImageCreation  = async (req, res) => {
         var loop = 0;
         var textsToDisplay = textsPerImage
         var savedImage = 0
+        var finalPaths = []
+        var finalNames = []
 
     if(imageset){// a set of images as result
         for(i=0; i<imagesToCreate; i++){    
             console.log("create image", i)
-            let image = await Jimp.read('./public/memes/jan_domi_punch.png')
+            let image = await Jimp.read(imageURL)
                 Jimp.loadFont(Jimp.FONT_SANS_32_BLACK).then(font => { 
                     //print text with color
                     new Jimp(1280, 720, 0x0, function (err, finishedTextImage) {
@@ -232,22 +237,44 @@ const executeImageCreation  = async (req, res) => {
                             finishedTextImage.print(font, xPositions[loop], yPositions[loop], texts[loop])
                         }
                         finishedTextImage.color([{ apply: 'xor', params: [textColor] }]);
-                        savedImage = addOne(savedImage)
+                        
                         textsToDisplay = textsToDisplay+textsPerImage
-                    return image
-                        //merge images
-                        .blit(finishedTextImage, 0, 0) 
-                        //save new image
-                        .write('./public/memes/image_'+savedImage+'.png'); // save
+                        let url = '/memes/image_'+savedImage+'.png'
+                        finalPaths.push(url)
+                        finalNames.push('image_'+savedImage+'.png')
+                        console.log(finalNames)
+                        console.log(finalPaths)
+                        savedImage = addOne(savedImage)
+                        
+                        image
+                            //merge images
+                            .blit(finishedTextImage, 0, 0)
+                            //save new image   
+                            .write('./public' + url, () => {
+                                
+                                if (i==(imagesToCreate-1)){
+                                console.log("send response")
+                                let resArray = []
+                                for(i=0; i<imagesToCreate; i++){
+                                    resArray.push({ path: finalPaths[i], name: finalNames[i]})
+                                }
+                                console.log("Response Array: ", resArray)
+                                res.status(200).zip(resArray);
+                            }    
+                         });// save
+                            
+                        
                     });
-            });    
-                    
+            });              
         }
         
+            
+    
+        
     } else if (!imageset){ // only one image as result
-        console.log("arrived in image creation")
+        console.log("create one image")
         //const resultingImage = await Jimp.read('/images/jan_domi_punch.png') 
-        Jimp.read('./public/memes/jan_domi_punch.png')
+        Jimp.read(imageURL)
         .then(image => {
             Jimp.loadFont(Jimp.FONT_SANS_32_BLACK).then(font => { 
                 //print text with color
@@ -256,17 +283,19 @@ const executeImageCreation  = async (req, res) => {
                         finishedTextImage.print(font, xPositions[loop], yPositions[loop], texts[loop])
                     }
                     finishedTextImage.color([{ apply: 'xor', params: [textColor] }]);
-                
-                return image
-                    //merge images
-                    .blit(finishedTextImage, 0, 0)                
-                    //.print(font, x, y, message, maxWidth) // print a message on an image with text wrapped at maxWidth
-                    .write('./public/memes/image.png'); // save
+                    let url = '/memes/image_'+savedImage+'.png'
+                    image
+                        //merge images
+                        .blit(finishedTextImage, 0, 0)                
+                        //.print(font, x, y, message, maxWidth) // print a message on an image with text wrapped at maxWidth
+                        .write('./public' + url); // save
+                    res.status(200).json({success: true, pathUrl: url})
                 });
             });    
         })
         .catch(err => {
         console.error(err);
+        res.status(400).json({success: false, error: err})
         }); 
     } else {
         console.log("imageset is not valid")

@@ -6,6 +6,7 @@ import {MemeVoteCounter as Counter, MemeComment as Comment} from '.';
 
 import '../style/MemesList.scss';
 
+
 // ---- DOMI ---- // 
 // endless scroll, image & title, passive information (views, votes, comments), interaction (up/down vote, download, share) //
 
@@ -20,13 +21,14 @@ export default class MemesList extends Component {
 
     sendInfos = () => {
         console.log("send");
-        api.executeImageCreation({
+        api.executeImageCreation({ 
+            imageURL: 'https://wow.zamimg.com/uploads/blog/images/20516-afterlives-ardenweald-4k-desktop-wallpapers.jpg', //image URL
             xPositions: [10, 80, 200, 300, 400, 50], //each index is a caption xPosition
             yPositions: [10, 80, 200, 300, 400, 50], //each index is a caption yPosition (e.g. xPosition[0] & yPosition [0] is a point)
-            texts: ["Heftig, das funktioniert ja ...", "text2", "text3", "text4", "text5", "text6"], // texts are mapped to index of position arrays
+            texts: ["text1", "text2", "text3", "text4", "text5", "text6"], // texts are mapped to index of position arrays
             textColor: '#ff0da0', // hex color of text
             imageset: true, // if there should be more then one image
-            images: 3, // only used when imageset is true
+            images: 2, // only used when imageset is true
             textsPerImage: 2 //only used when imageset is true
         });
     }
