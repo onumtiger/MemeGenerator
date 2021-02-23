@@ -1,51 +1,26 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import styled from 'styled-components';
 import {SingleView} from '.';
 
-const ActionButton = styled.button`
-background-color: white; 
-  border: none;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-weight: bold; 
-  font-size: 16px;
-`
+import '../style/SlideShow.scss';
 
-const SlideButton = styled.button`
-background-color: black; 
-border-radius: 5px;
-  border: none;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 30px;
-  color: white;
-`
-
-const SlideShowTable = styled.table`
-    vertical-align: middle;
-`
-const CenterDiv = styled.div`
-margin: auto;
-  width: 48%;
-  padding: 10px;
-  text-align: center;
-`
-
-class SlideShow extends Component {
+export default class SlideShow extends Component {
     constructor(props) {
         super(props);
+
+        this.diashowButtonTexts={
+            default: 'Play Diashow \u25B6',
+            playing: 'Stop diashow \u23F8'
+        };
+        this.diashowButtonTimeout = null;
 
         //this binding for React event handlers
         [
             'getPrevMemeId',
             'getNextMemeId',
             'getRandomMemeId',
+            'handleDiashowButtonClick',
             'playDiashow',
 
         ].forEach((handler)=>{
@@ -79,22 +54,21 @@ class SlideShow extends Component {
         return newMemeId;
     }
 
+    handleDiashowButtonClick(e){
+        let button = e.target;
+        if(this.diashowButtonTimeout){
+            clearTimeout(this.diashowButtonTimeout);
+            this.diashowButtonTimeout = null;
+            button.textContent = this.diashowButtonTexts.default;
+        }else{
+            this.playDiashow();
+            button.textContent = this.diashowButtonTexts.playing;
+        }
+    }
+
     playDiashow() {
-        let playDiaButton = document.getElementById("playDia");
-        let stopDiaButton = document.getElementById("stopDia");
-
-        playDiaButton.style.display = "none";
-        stopDiaButton.style.display = "inline-block";
-
         this.props.history.push(this.props.urlPath+'/'+this.getNextMemeId());
-
-        const timeout = setTimeout(this.playDiashow, 2000);
-
-        stopDiaButton.addEventListener('click', () => {
-            playDiaButton.style.display = "inline-block";
-            stopDiaButton.style.display = "none";
-            clearTimeout(timeout);
-        })
+        this.diashowButtonTimeout = setTimeout(this.playDiashow, 2000);
     }
 
     getRandomMemeId() {
@@ -134,37 +108,35 @@ class SlideShow extends Component {
         const meme = this.props.memes[this.currentMemeIndex];
 
         return (
-            <CenterDiv>
-                <div className="slideshow">
-                    <Link to={this.props.urlPath+'/'+this.getRandomMemeId()}>
-                        <ActionButton>Shuffle ↔</ActionButton>
-                    </Link>
-                    <ActionButton id="playDia" onClick={this.playDiashow}>Diashow ►</ActionButton>
-                    <ActionButton id="stopDia">Stop diashow &#x23f8;</ActionButton>
+            <div id="slideshow-wrapper">
+                <Link to={this.props.urlPath}>
+                    <button type="button" className="actionButton">&#9204; Back to List</button>
+                </Link>
+                <Link to={this.props.urlPath+'/'+this.getRandomMemeId()}>
+                    <button type="button" className="actionButton">Shuffle &harr;</button>
+                </Link>
+                <button type="button" className="actionButton" id="playDia" onClick={this.handleDiashowButtonClick}>{this.diashowButtonTexts.default}</button>
 
-                    <SlideShowTable>
-                        <tbody>
-                        <tr>
-                        <td>
-                            <Link to={this.props.urlPath+'/'+this.getPrevMemeId()}>
-                                <SlideButton>←</SlideButton>
-                            </Link>
-                        </td>
-                        <td>
-                            <SingleView meme={meme} />
-                        </td>
-                        <td>
-                            <Link to={this.props.urlPath+'/'+this.getNextMemeId()}>
-                                <SlideButton>→</SlideButton>
-                            </Link>
-                        </td>
-                        </tr>
-                        </tbody>
-                    </SlideShowTable>
-                </div>
-            </CenterDiv>
+                <table id="slideshow-table">
+                    <tbody>
+                    <tr>
+                    <td>
+                        <Link to={this.props.urlPath+'/'+this.getPrevMemeId()}>
+                            <button type="button" className="slideButton">←</button>
+                        </Link>
+                    </td>
+                    <td>
+                        <SingleView meme={meme} />
+                    </td>
+                    <td>
+                        <Link to={this.props.urlPath+'/'+this.getNextMemeId()}>
+                            <button type="button" className="slideButton">→</button>
+                        </Link>
+                    </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         )
     }
 }
-
-export default SlideShow

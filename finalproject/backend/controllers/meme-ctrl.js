@@ -1,9 +1,9 @@
 const Meme = require('../db/models/meme-model');
-const Stats = require('../db/models/stats-model');
+const User = require('../db/models/user-model');
 const dbUtils = require('../db/dbUtils');
 const globalHelpers = require('../utils/globalHelpers');
 
-const createMeme = async (req, res) => {
+const createMeme = async (req, res) => { //TODO send template ID, increment template uses on creation
     const body = req.body;
 
     if (!body) {
@@ -23,18 +23,21 @@ const createMeme = async (req, res) => {
             }else{
                 let url = 'memes/'+filename;
                 
-                let statsID = await dbUtils.getNewFullStatsID();
-                
                 const meme = new Meme({
                     _id: id,
                     url: url,
                     name: body.name,
                     user_id: body.userID,
                     visibility: body.visibility,
-                    stats_id: statsID,
                     captions: body.captions,
                     comment_ids: [],
-                    creationDate: globalHelpers.getTodayString()
+                    creationDate: globalHelpers.getTodayString(),
+                    stats: {
+                        _id: id,
+                        upvotes: [],
+                        downvotes: [],
+                        views: 0
+                    }
                 });
 
 
@@ -88,7 +91,7 @@ const deleteMeme = async (req, res) => {
 }
 
 const getMemeById = async (req, res) => {
-    await Meme.findOne({ id: req.params.id }, (err, meme) => {
+    await Meme.findOne({ _id: req.params.id }, (err, meme) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -117,65 +120,46 @@ const getMemes = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getStats = async (req, res) => {
-    console.log("Trying to get stats!")
-    await Stats.find({}, (err, stats) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-        if (!stats.length) {
-            return res
-                .status(204)
-                .json({ success: false, error: `No Statistics found` })
-        }
-        return res.status(200).json({ success: true, data: stats })
-    }).catch(err => console.log(err))
-}
-
-function referredMeme(req, res, next) {}
-
 const patchMeme = async function(req, res) {
     console.log("Patch Meme generic")
-    var updateMeme = req.body;
-    var id = req.params.id;
-    var updatedProperty = updateMeme.toUpdate
-    const result = await Meme.updateOne({_id: 0}, updatedProperty)
+    var body = req.body;
+    var memeId = req.params.id;
+    var updatedProperty = body.toUpdate
+    const result = await Meme.updateOne({_id: memeId}, updatedProperty)
     console.log(result);
 }
 
 const postViewsMeme = async (req, res) => {
     console.log("post upvotes")
-    var updateMeme = req.body;
+    var body = req.body;
     var memeId = req.params.id;
-    var updatedViews= updateMeme.toUpdate
+    var updatedViews= body.toUpdate
     const result = await Meme.updateOne({_id: memeId}, {updatedViews})
 }
 
 const postUpvotesMeme = async (req, res) => {
     console.log("post upvotes")
-    var updateMeme = req.body;
+    var body = req.body;
     var memeId = req.params.id;
-    var updatedUserId= updateMeme.toUpdate
+    var updatedUserId= body.toUpdate
     const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.upvotes': updatedUserId}})  
 }
 
 const postDownvotesMeme = async (req, res) => {
     console.log("post downvotes")
-    var updateMeme = req.body;
+    var body = req.body;
     var memeId = req.params.id;
-    var updatedUserId= updateMeme.toUpdate
+    var updatedUserId= body.toUpdate
     const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.downvotes': updatedUserId}})
 }
 
 module.exports = {
     createMeme,
     deleteMeme,
-    referredMeme,
     patchMeme,
     postViewsMeme,
     postUpvotesMeme,
     postDownvotesMeme,
     getMemes,
-    getStats,
-    getMemeById
+    getMemeById,
 }

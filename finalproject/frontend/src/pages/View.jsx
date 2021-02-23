@@ -7,10 +7,9 @@ import api from '../api';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-
 import '../style/View.scss';
 
-class View extends Component {
+export default class View extends Component {
 
     constructor(props) {
         super(props);
@@ -50,10 +49,10 @@ class View extends Component {
     }
 
     componentDidMount = async () => {
-        let memesArray = await api.getAllMemes();
-        this.initialMemes = memesArray.data.data;
+        let response = await api.getAllMemes();
+        this.initialMemes = response.data.data;
         this.setState({
-            memes: memesArray.data.data,
+            memes: response.data.data,
             isLoading: false
         });
     }
@@ -88,5 +87,3 @@ class View extends Component {
         )
     }
 }
-
-export default View

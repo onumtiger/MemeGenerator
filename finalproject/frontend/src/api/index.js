@@ -14,15 +14,19 @@ export const postViewsMeme = (update, id) => api.post(`/meme/view/${id}`, update
 export const postUpvotesMeme = (update, id) => api.post(`/meme/upvote/${id}`, update);
 export const postDownvotesMeme = (update, id) => api.post(`/meme/downvote/${id}`, update);
 
-export const getAllStats = () => api.get(`/stats`);
+export const getStatsForMeme = (id) => api.get(`/stats/meme/${id}`);
+export const getStatsForTemplate = (id) => api.get(`/stats/template/${id}`);
 
 export const insertTemplate = payload => api.post(`/templates`, payload);
 export const getAllTemplates = () => api.get(`/templates`);
 export const getTemplateById = id => api.get(`/templates/${id}`);
 export const deleteTemplateById = id => api.delete(`/templates/${id}`);
 
-export const fetchWebImage = payload => api.get(`/webcontent/image`, payload);
-export const fetchWebSnapshot = payload => api.get(`/webcontent/snapshot`, payload);
+export const getMemeVisibilityOptions = userId => api.get(`/guidata/visibility-options/meme/${userId}`);
+export const getTemplateVisibilityOptions = userId => api.get(`/guidata/visibility-options/template/${userId}`);
+
+export const fetchWebImage = url => api.get(`/webcontent/image/${url}`);
+export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 
 const apis = {
     insertMeme,
@@ -33,7 +37,10 @@ const apis = {
     getAllMemes,
     getMemeById,
     deleteMemeById,
-    getAllStats,
+    getStatsForMeme,
+    getStatsForTemplate,
+    getMemeVisibilityOptions,
+    getTemplateVisibilityOptions,
     insertTemplate,
     getAllTemplates,
     getTemplateById,

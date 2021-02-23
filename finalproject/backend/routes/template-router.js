@@ -3,9 +3,9 @@ const TemplateCtrl = require('../controllers/template-ctrl');
 
 const router = express.Router();
 
-router.post('/templates', TemplateCtrl.createTemplate);
-router.get('/templates/:id', TemplateCtrl.getTemplateById);
-router.get('/templates', TemplateCtrl.getTemplates);
-router.delete('/templates/:id', TemplateCtrl.deleteTemplate);
+router.get('/', TemplateCtrl.getTemplates);
+router.post('/', TemplateCtrl.createTemplate);
+router.get('/:id', TemplateCtrl.getTemplateById);
+router.delete('/:id', TemplateCtrl.deleteTemplate);
 
 module.exports = router;

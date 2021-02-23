@@ -1,31 +1,10 @@
 import React, { Component } from 'react'
 
-import styled from 'styled-components'
 import {MemeVoteCounter as Counter, MemeComment as Comment} from '.';
 
-const Right = styled.div`
-width: auto;
-    margin-right: 0px;
-    margin-left: auto;
-    text-align: right;
-`
+import '../style/SingleView.scss';
 
-const MemeImg = styled.img`
-display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 90%;
-  max-width: 500px;
-`
-
-const StatsTable = styled.table`
-  margin: auto;
-  width: 75%;
-  padding: 10px;
-  text-align: center;
-`
-
-class SingleView extends Component {
+export default class SingleView extends Component {
     constructor(props) {
         super(props);
     }
@@ -34,13 +13,12 @@ class SingleView extends Component {
         const meme = this.props.meme;
 
         return (
-            <div className="slide">
-                <Right>
+            <div id="single-view-wrapper">
+                <div id="meme-title">
                     <label>{meme.name} // </label>
-
-                </Right>
-                <MemeImg src={meme.url} alt={meme.name}></MemeImg>
-                <StatsTable>
+                </div>
+                <img id="meme-img" src={meme.url} alt={meme.name}></img>
+                <table id="stats-table">
                     <tbody>
                     <tr>
                         <td><p>{meme.stats.views} views</p></td>
@@ -48,11 +26,9 @@ class SingleView extends Component {
                         <td><p>{meme.creationDate}</p></td>
                     </tr>
                     </tbody>
-                </StatsTable>
+                </table>
                 <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
             </div>
         )
     }
 }
-
-export default SingleView
