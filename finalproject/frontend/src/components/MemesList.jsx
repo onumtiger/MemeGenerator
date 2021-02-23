@@ -27,7 +27,7 @@ export default class MemesList extends Component {
                 {memes.map(meme => (
                     <div className="meme-wrapper">
                         <div className="title-row">
-                            <label>{meme.name} // </label>
+                            <span>{meme.name} // </span>
                             <button type="button" className="actionButton">↓</button>
                             <button type="button" className="actionButton">→</button>
                         </div>

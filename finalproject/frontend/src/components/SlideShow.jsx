@@ -22,6 +22,7 @@ export default class SlideShow extends Component {
             'getRandomMemeId',
             'handleDiashowButtonClick',
             'playDiashow',
+            'checkForDisabledButton',
 
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
@@ -60,9 +61,15 @@ export default class SlideShow extends Component {
             clearTimeout(this.diashowButtonTimeout);
             this.diashowButtonTimeout = null;
             button.textContent = this.diashowButtonTexts.default;
+            for(const elem of document.querySelectorAll('#slideshow-wrapper .disable-during-diashow')){
+                elem.classList.remove('inactive');
+            }
         }else{
             this.playDiashow();
             button.textContent = this.diashowButtonTexts.playing;
+            for(const elem of document.querySelectorAll('#slideshow-wrapper .disable-during-diashow')){
+                elem.classList.add('inactive');
+            }
         }
     }
 
@@ -82,6 +89,14 @@ export default class SlideShow extends Component {
 
         let newMemeId = this.props.memes[randomIndex]._id;
         return newMemeId;
+    }
+
+    checkForDisabledButton(e){
+        if(e.target.classList.contains('inactive')){
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
     }
 
     render() {
@@ -110,10 +125,10 @@ export default class SlideShow extends Component {
         return (
             <div id="slideshow-wrapper">
                 <Link to={this.props.urlPath}>
-                    <button type="button" className="actionButton">&#9204; Back to List</button>
+                    <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>&#9204; Back to List</button>
                 </Link>
                 <Link to={this.props.urlPath+'/'+this.getRandomMemeId()}>
-                    <button type="button" className="actionButton">Shuffle &harr;</button>
+                    <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>Shuffle &harr;</button>
                 </Link>
                 <button type="button" className="actionButton" id="playDia" onClick={this.handleDiashowButtonClick}>{this.diashowButtonTexts.default}</button>
 
@@ -122,7 +137,7 @@ export default class SlideShow extends Component {
                     <tr>
                     <td>
                         <Link to={this.props.urlPath+'/'+this.getPrevMemeId()}>
-                            <button type="button" className="slideButton">←</button>
+                            <button type="button" className="slideButton disable-during-diashow" onClick={this.checkForDisabledButton}>←</button>
                         </Link>
                     </td>
                     <td>
@@ -130,7 +145,7 @@ export default class SlideShow extends Component {
                     </td>
                     <td>
                         <Link to={this.props.urlPath+'/'+this.getNextMemeId()}>
-                            <button type="button" className="slideButton">→</button>
+                            <button type="button" className="slideButton disable-during-diashow" onClick={this.checkForDisabledButton}>→</button>
                         </Link>
                     </td>
                     </tr>

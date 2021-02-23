@@ -57,10 +57,10 @@ export default class UploadTemplate extends React.Component {
         formData.append('name', enteredTitle || 'Uploaded image');
         formData.append('userID', 0); //TODO get current userID
         if(!this.selectedVisibilityElem){
-            document.querySelector('#visibilityOption-wrapper').classList.add('invalid');
+            document.querySelector('#upload-template-table #visibilityOption-wrapper').classList.add('invalid');
             return;
         }
-        formData.append('visibility', selectedVisibilityElem.value);
+        formData.append('visibility', this.selectedVisibilityElem.value);
         
         if(this.uploadImageAsURL){
             formData.append('imageURL', this.uploadImageURL);
@@ -68,19 +68,19 @@ export default class UploadTemplate extends React.Component {
             formData.append('image', this.uploadImageFile);
         }
         
-        e.target.innerText = this.publishButtonTexts.loading;
+        e.target.textContent = this.publishButtonTexts.loading;
         api.insertTemplate(formData).then((res)=>{
             if(res.data.success){
                 this.props.handlePublishing(res.data.id);
             }
-            e.target.innerText = this.publishButtonTexts.default;
+            e.target.textContent = this.publishButtonTexts.default;
         });
     }
 
     handleVisibilityOptionCheck(e){
         if(e.target.checked){
             this.selectedVisibilityElem = e.target;
-            document.querySelector('#visibilityOption-wrapper').classList.remove('invalid');
+            document.querySelector('#upload-template-table #visibilityOption-wrapper').classList.remove('invalid');
         }
     }
 
@@ -152,7 +152,7 @@ export default class UploadTemplate extends React.Component {
             return;
         }
         //display loading message on button while fetching results
-        e.target.innerText = this.uploadFileURLButtonTexts.loading;
+        e.target.textContent = this.uploadFileURLButtonTexts.loading;
         api.fetchWebImage(encodeURI(urlInput.value)).then((res)=>{
             if(res.data.success){
                 this.uploadImageURL = res.data.url;
@@ -160,7 +160,7 @@ export default class UploadTemplate extends React.Component {
                 document.querySelector('#upload-template-table #template-publish-btn').classList.remove('inactive');
                 this.setState({previewImageSrc: res.data.url});
             }
-            e.target.innerText = this.uploadFileURLButtonTexts.default;
+            e.target.textContent = this.uploadFileURLButtonTexts.default;
         });
     }
 
@@ -174,14 +174,14 @@ export default class UploadTemplate extends React.Component {
             return;
         }
         //display loading message on button while fetching results
-        e.target.innerText = this.uploadSnapshotURLButtonTexts.loading;
+        e.target.textContent = this.uploadSnapshotURLButtonTexts.loading;
         api.fetchWebSnapshot(encodeURI(urlInput.value)).then((res)=>{
             if(res.data.success){
                 this.uploadImageURL = res.data.url;
                 this.uploadImageAsURL = true;
                 this.setState({previewImageSrc: res.data.url});
             }
-            e.target.innerText = this.uploadSnapshotURLButtonTexts.default;
+            e.target.textContent = this.uploadSnapshotURLButtonTexts.default;
         });
     }
 

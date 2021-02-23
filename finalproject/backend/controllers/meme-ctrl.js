@@ -66,6 +66,50 @@ const createMeme = async (req, res) => { //TODO send template ID, increment temp
                     })
             }
         });
+    } else if(body.imageURL){
+        let id = await dbUtils.getNewEmptyMemeID();
+        
+        const meme = new Meme({
+            _id: id,
+            url: body.imageURL,
+            name: body.name,
+            user_id: body.userID,
+            visibility: body.visibility,
+            captions: body.captions,
+            comment_ids: [],
+            creationDate: globalHelpers.getTodayString(),
+            stats: {
+                _id: id,
+                upvotes: [],
+                downvotes: [],
+                views: 0
+            }
+        });
+            
+
+        if (!meme) {
+            return res.status(400).json({
+                success: false,
+                error: "Meme data could not be parsed for storing!"
+            });
+        }
+
+        meme
+            .save()
+            .then(() => {
+                return res.status(201).json({
+                    success: true,
+                    id: meme._id,
+                    error: 'Meme successfully stored!'
+                })
+            })
+            .catch(dbError => {
+                return res.status(500).json({
+                    success: false,
+                    error: 'Meme could not be stored! You should find additional error info in the detailedError property of this JSON.',
+                    detailedError: dbError
+                })
+            })
     } else {
         res.status(400).json({
             success: false,

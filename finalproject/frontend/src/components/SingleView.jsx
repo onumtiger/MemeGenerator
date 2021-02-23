@@ -15,7 +15,7 @@ export default class SingleView extends Component {
         return (
             <div id="single-view-wrapper">
                 <div id="meme-title">
-                    <label>{meme.name} // </label>
+                    <span>{meme.name} // </span>
                 </div>
                 <img id="meme-img" src={meme.url} alt={meme.name}></img>
                 <table id="stats-table">
