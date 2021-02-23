@@ -525,3 +525,7 @@
 #stopDia {
     display: none;
 }
+
+.slideShowTab {
+    margin: auto;
+}

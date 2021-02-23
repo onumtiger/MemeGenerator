@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import '../style/react-table.css'
 import Counter from '../components/MemeVoteCounter'
 import Comment from '../components/MemeComment'
+import MemeStatisticsChart from '../components/MemeStatisticsChart'
 
 // ---- DOMI ---- // 
 // slide show //
@@ -299,53 +300,54 @@ class SlideShow extends Component {
                         <option value="video">video</option>
                     </Select>
 
-
                     <div className="slideshow">
                         <ActionButton onClick={this.getRandomMeme}>Shuffle ↔</ActionButton>
                         <ActionButton id="playDia" onClick={this.playDiashow}>Diashow ►</ActionButton>
                         <ActionButton id="stopDia">Stop diashow &#x23f8;</ActionButton>
 
                         {/* <SlideShowTable> */}
-                        <td>
-                            <SlideButton onClick={() => this.plusSlides(-1)}>←</SlideButton>
-                        </td>
-                        <td>
-                            {memes.filter((meme) => {
-                                if (this.state.filter == "all")
-                                    return meme
-                                else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
-                                    return meme
-                                }
-                            }).filter((meme) => {
-                                if (this.state.search == null)
-                                    return meme
-                                else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
-                                    return meme
-                                }
-                            }).map(meme => (
-                                <div className="slides">
-                                    <Right>
-                                        <label>{meme.name} // </label>
+                        <table className="slideShowTab">
+                            <td>
+                                <SlideButton onClick={() => this.plusSlides(-1)}>←</SlideButton>
+                            </td>
+                            <td>
+                                {memes.filter((meme) => {
+                                    if (this.state.filter == "all")
+                                        return meme
+                                    else if (meme.url.toLowerCase().includes(this.state.filter.toLowerCase())) {
+                                        return meme
+                                    }
+                                }).filter((meme) => {
+                                    if (this.state.search == null)
+                                        return meme
+                                    else if (meme.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                                        return meme
+                                    }
+                                }).map(meme => (
+                                    <div className="slides">
+                                        <Right>
+                                            <label>{meme.name} // </label>
 
-                                    </Right>
-                                    <MemeImg src={meme.url} alt={meme.name}></MemeImg>
-                                    <StatsTable>
-                                        <tr>
-                                            <td><p>{meme.stats.views} views</p></td>
-                                            <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
-                                            <td><p>{meme.creationDate}</p></td>
-                                        </tr>
-                                    </StatsTable>
-                                    <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
-                                </div>
-                            ))}
-                        </td>
-                        <td>
-                            <SlideButton onClick={() => this.plusSlides(1)}>→</SlideButton>
-                        </td>
+                                        </Right>
+                                        <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                                        <StatsTable>
+                                            <tr>
+                                                <td><p>{meme.stats.views} views</p></td>
+                                                <td><p><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></p></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
+                                                <td><p>{meme.creationDate}</p></td>
+                                            </tr>
+                                        </StatsTable>
+                                        <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
+                                    </div>
+                                ))}
+                            </td>
+                            <td>
+                                <SlideButton onClick={() => this.plusSlides(1)}>→</SlideButton>
+                            </td>
+                        </table>
                         {/* </SlideShowTable> */}
                     </div>
-
+                    <MemeStatisticsChart></MemeStatisticsChart>
                 </CenterDiv>
 
                 <div></div>
