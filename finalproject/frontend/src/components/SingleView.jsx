@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import api from '../api';
 
 import {MemeVoteCounter as Counter, MemeComment as Comment} from '.';
 
@@ -7,6 +8,16 @@ import '../style/SingleView.scss';
 export default class SingleView extends Component {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount(){
+        console.log("component did mount")
+        const memeId = this.props.meme._id
+        const memeView = this.props.meme.stats.views
+        console.log('old views: '+memeView)
+        var newViews = memeView + 1
+        console.log('new views: '+newViews)
+        api.postViewsMeme(({toUpdate: newViews}),(memeId))
     }
 
     render() {
