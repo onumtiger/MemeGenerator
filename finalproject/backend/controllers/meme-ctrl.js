@@ -174,11 +174,18 @@ const patchMeme = async function(req, res) {
     console.log(result);
 }
 
+// adds a SINGLE view to database meme.stats by given id when called
 const postViewsMeme = async (req, res) => {
-    console.log("post views")
     var body = req.body;
     var memeId = req.params.id;
-    var updatedViews= body.toUpdate
+    // console.log("post views")
+    // console.log(req.body)
+    let currentMeme = await Meme.findById(memeId);    
+    // console.log(currentMeme)
+    var currentViews = currentMeme.stats.views
+    // console.log("current views: ", currentViews)
+    updatedViews = currentViews+1
+    // console.log("updated views", updatedViews)
     const result = await Meme.updateOne({_id: memeId}, {'stats.views': updatedViews})
 }
 
