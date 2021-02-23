@@ -31,6 +31,14 @@ export default class MemesList extends Component {
         });
     }
 
+    getDateString(inputDateString){
+        let dateArray = inputDateString.split('/');
+        let year = dateArray[0];
+        let month = dateArray[1];
+        let day = dateArray[2];
+        return `${day}.${month}.${year}`
+    }
+
     render() {
         const memes = this.props.memes;
         
@@ -49,13 +57,13 @@ export default class MemesList extends Component {
                         </div>
                         <Link to={this.routePath+'/'+meme._id}>
                             <img className="meme-img" src={meme.url} alt={meme.name}></img>
-                        </Link> 
+                        </Link>
                         <table className="stats-table">
                             <tbody>
                             <tr>   
                                 <td><p>{meme.stats.views} views</p></td>
-                                <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} ></Counter></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
-                                <td><p>{meme.creationDate}</p></td>
+                                <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} ></Counter></td>
+                                <td><p>{this.getDateString(meme.creationDate)}</p></td>
                             </tr>
                             </tbody>
                         </table>

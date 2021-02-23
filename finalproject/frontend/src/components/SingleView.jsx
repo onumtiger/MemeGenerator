@@ -9,6 +9,14 @@ export default class SingleView extends Component {
         super(props);
     }
 
+    getDateString(inputDateString){
+        let dateArray = inputDateString.split('/');
+        let year = dateArray[0];
+        let month = dateArray[1];
+        let day = dateArray[2];
+        return `${day}.${month}.${year}`
+    }
+
     render() {
         const meme = this.props.meme;
 
@@ -22,8 +30,8 @@ export default class SingleView extends Component {
                     <tbody>
                     <tr>
                         <td><p>{meme.stats.views} views</p></td>
-                        <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
-                        <td><p>{meme.creationDate}</p></td>
+                        <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></td>
+                        <td><p>{this.getDateString(meme.creationDate)}</p></td>
                     </tr>
                     </tbody>
                 </table>
