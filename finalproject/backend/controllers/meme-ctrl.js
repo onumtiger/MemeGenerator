@@ -2,6 +2,7 @@ const Meme = require('../db/models/meme-model');
 const User = require('../db/models/user-model');
 const dbUtils = require('../db/dbUtils');
 const globalHelpers = require('../utils/globalHelpers');
+var Jimp = require('jimp');
 
 const createMeme = async (req, res) => { //TODO send template ID, increment template uses on creation
     const body = req.body;
@@ -197,6 +198,11 @@ const postDownvotesMeme = async (req, res) => {
     const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.downvotes': updatedUserId}})
 }
 
+// Api Image Mamipulation/Creation
+async function executeImageCreation () {
+     const resultingImage = await Jimp.read('/images/jan_domi_punch.png')    
+}
+
 module.exports = {
     createMeme,
     deleteMeme,
@@ -206,4 +212,5 @@ module.exports = {
     postDownvotesMeme,
     getMemes,
     getMemeById,
+    executeImageCreation
 }
