@@ -10,14 +10,19 @@ export default class SingleView extends Component {
         super(props);
     }
 
-    componentDidMount(){
-        console.log("component did mount")
-        const memeId = this.props.meme._id
-        const memeView = this.props.meme.stats.views
-        console.log('old views: '+memeView)
-        var newViews = memeView + 1
-        console.log('new views: '+newViews)
-        api.postViewsMeme(({toUpdate: newViews}),(memeId))
+    getDateString(inputDateString){
+        let dateArray = inputDateString.split('/');
+        let year = dateArray[0];
+        let month = dateArray[1];
+        let day = dateArray[2];
+        return `${day}.${month}.${year}`;
+    }
+
+    componentDidUpdate(){
+        const memeId = this.props.meme._id;
+        const memeView = this.props.meme.stats.views;
+        var newViews = memeView + 1;
+        api.postViewsMeme(({toUpdate: newViews}),(memeId));
     }
 
     render() {
@@ -33,8 +38,8 @@ export default class SingleView extends Component {
                     <tbody>
                     <tr>
                         <td><p>{meme.stats.views} views</p></td>
-                        <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
-                        <td><p>{meme.creationDate}</p></td>
+                        <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></td>
+                        <td><p>{this.getDateString(meme.creationDate)}</p></td>
                     </tr>
                     </tbody>
                 </table>

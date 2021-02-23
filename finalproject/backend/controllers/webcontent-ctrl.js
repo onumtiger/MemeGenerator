@@ -1,3 +1,8 @@
+const test = (req, res) => {
+    console.log(req.query);
+    res.status(200).json(req.query);
+}
+
 const getWebImage = async (req, res) => {
     let remoteUrl = decodeURI(req.params.url);
     //TODO
@@ -19,6 +24,7 @@ const getWebSnapshot = async (req, res) => {
 }
 
 module.exports = {
+    test,
     getWebImage,
     getWebSnapshot
 }

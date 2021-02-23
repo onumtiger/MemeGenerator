@@ -90,6 +90,12 @@ export default class FilterMemes extends Component {
                     a.stats.views - b.stats.views
                     ));
                 break;
+            case 'random':
+                newArray.sort((a, b) => (
+                    //the sorting function works by recognizing return values <0, ==0 or >0. So let's give it a random number between -1 and +1 for random sorting:
+                    (Math.random()*2) - 1
+                    ));
+                break;
         }
 
         this.props.handleMemeListUpdate(newArray);
@@ -108,6 +114,7 @@ export default class FilterMemes extends Component {
                     <option value="worstRating">rating (worst)</option>
                     <option value="mostViewed">views (most)</option>
                     <option value="leastViewed">views (least)</option>
+                    <option value="random">random order</option>
                 </select></label>
                 <label>Filter by Format: <select name="filter" id="filter" onChange={this.setFilter}>
                     <option value="all">all</option>
