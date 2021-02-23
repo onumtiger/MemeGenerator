@@ -176,9 +176,7 @@ const patchMeme = async function(req, res) {
 
 const postViewsMeme = async (req, res) => {
     console.log("post views")
-    
     var body = req.body;
-    console.log(body)
     var memeId = req.params.id;
     var updatedViews= body.toUpdate
     const result = await Meme.updateOne({_id: memeId}, {'stats.views': updatedViews})
