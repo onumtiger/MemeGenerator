@@ -24,11 +24,14 @@ export const deleteTemplateById = id => api.delete(`/templates/${id}`);
 export const fetchWebImage = payload => api.get(`/webcontent/image`, payload);
 export const fetchWebSnapshot = payload => api.get(`/webcontent/snapshot`, payload);
 
+export const executeImageCreation = payload => api.post('/meme/imageCreation', payload);
+
 const apis = {
     insertMeme,
     postViewsMeme,
     postUpvotesMeme,
     postDownvotesMeme,
+    executeImageCreation,
     patchMeme,
     getAllMemes,
     getMemeById,

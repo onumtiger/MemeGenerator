@@ -12,6 +12,8 @@ router.post('/meme/upvote/:id', MemeCtrl.postUpvotesMeme);
 router.post('/meme/downvote/:id', MemeCtrl.postDownvotesMeme);
 router.post('/meme/view/:id', MemeCtrl.postViewsMeme);
 
+router.post('/meme/imageCreation', MemeCtrl.executeImageCreation);
+
 router.get('/stats', MemeCtrl.getStats);
 
 module.exports = router;

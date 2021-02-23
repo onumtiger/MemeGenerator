@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../api';
 
 import styled from 'styled-components';
 
@@ -62,6 +63,19 @@ class MemesList extends Component {
         this.routeURL = url;
     }
 
+    sendInfos = () => {
+        console.log("send");
+        api.executeImageCreation({
+            xPositions: [10, 80, 200, 300, 400, 50], //each index is a caption xPosition
+            yPositions: [10, 80, 200, 300, 400, 50], //each index is a caption yPosition (e.g. xPosition[0] & yPosition [0] is a point)
+            texts: ["Heftig, das funktioniert ja ...", "text2", "text3", "text4", "text5", "text6"], // texts are mapped to index of position arrays
+            textColor: '#ff0da0', // hex color of text
+            imageset: true, // if there should be more then one image
+            images: 3, // only used when imageset is true
+            textsPerImage: 2 //only used when imageset is true
+        });
+    }
+
     render() {
         const memes = this.props.memes;
         
@@ -69,6 +83,8 @@ class MemesList extends Component {
 
         return (
             <Wrapper>
+                {/*Ignore this line below, change as you like if it is disturbing here, pls do not delete*/}
+                <button onClick={this.sendInfos}>Domis api test button</button>
                 {memes.map(meme => (
                     <CenterDiv>
                         <Right>

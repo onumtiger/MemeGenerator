@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import api from '../api';
-import imageManipulation from '../api/imageManipulation'
 import '../style/globalStyle.css';
 
 
@@ -27,7 +26,8 @@ export default function Counter(props) {
 
     function sendUpvotes(){
         //updates upvotes with user id (toUpdate) and according meme_id
-        api.postUpvotesMeme(({toUpdate: 9}),(0))
+        //api.postUpvotesMeme(({toUpdate: 9}),(0))
+        api.executeImageCreation({x: 100, y:100, caption: "testcaption"});
     }
 
     function sendDownvotes(){
