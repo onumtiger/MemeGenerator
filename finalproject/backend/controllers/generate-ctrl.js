@@ -1,111 +1,109 @@
 var Jimp = require('jimp');
-var app = require('express')();
-var zip = require('express-zip');
 
 // Api Image Mamipulation/Creation
 const executeImageCreation  = async (req, res) => {
 
-    //Arrays
-    const xPositions = req.query.xPositions
-    console.log(xPositions)
-    const yPositions = req.query.yPositions
-    const texts = req.query.texts
-    const textColor = req.query.textColor
-    const textsPerImage = req.query.textsPerImage
-    const imageURL = decodeURI(req.query.imageURL)
-    
-    //Bool
-    const imageset = req.query.imageset
+    console.log('got query: ',req.query);
 
-    //Numbers
-    const points = xPositions.length
-        // variables
-        var imagesToCreate = req.query.images
-        var loop = 0;
-        var textsToDisplay = textsPerImage
-        var savedImage = 0
-        var runs = -1
-        var finalPaths = []
-        var finalNames = []
+    // URL query parameters - expected form:
+    // http://localhost:3001/api/generate?textColor=%23ff0da0&images[0][name]=name1&images[0][captions][0][x]=10&images[0][captions][0][y]=10&images[0][captions][0][text]=caption1&images[0][captions][1][x]=80&images[0][captions][1][y]=80&images[0][captions][1][text]=caption2&images[1][name]=name2&images[1][captions][0][x]=10&images[1][captions][0][y]=10&images[1][captions][0][text]=caption3&images[1][captions][1][x]=80&images[1][captions][1][y]=80&images[1][captions][1][text]=caption4&templateURL=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg
+    // translates to:
+    // {
+    //     templateURL: 'https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg', //URIEncoded template image URL
+    //     images: [
+    //         {
+    //             name: 'name1', //filename, .png will be appended. if this name already exists or none is given, another name will be chosen
+    //             captions: [
+    //                 {
+    //                     x: '10',
+    //                     y: '10',
+    //                     textColor: '%23603cff', // hex color of text (URIEncoded!)
+    //                     text: 'caption1'
+    //                 },
+    //                 {
+    //                     x: '80',
+    //                     y: '80',
+    //                     textColor: '%23603cff', // hex color of text (URIEncoded!)
+    //                     text: 'caption2'
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             name: 'name2', //filename, .png will be appended. if this name already exists or none is given, another name will be chosen
+    //             captions: [
+    //                 {
+    //                     x: '10',
+    //                     y: '10',
+    //                     textColor: '%23603cff', // hex color of text (URIEncoded!)
+    //                     text: 'caption3'
+    //                 },
+    //                 {
+    //                     x: '80',
+    //                     y: '80',
+    //                     textColor: '%23603cff', // hex color of text (URIEncoded!)
+    //                     text: 'caption4'
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // }
 
-    if(imageset){// a set of images as result
-        for(i=0; i<imagesToCreate; i++){    
-            console.log("create image", i)
-            let image = await Jimp.read(imageURL)
-                Jimp.loadFont(Jimp.FONT_SANS_32_BLACK).then(font => { 
-                    //print text with color
-                    new Jimp(1280, 720, 0x0, function (err, finishedTextImage) {
-                        for (loop; loop < textsToDisplay; loop++) {
-                            finishedTextImage.print(font, xPositions[loop], yPositions[loop], texts[loop])
-                        }
-                        finishedTextImage.color([{ apply: 'xor', params: [textColor] }]);
-                        
-                        textsToDisplay = textsToDisplay+textsPerImage
-                        let url = './public/memes/image_'+savedImage+'.png'
-                        finalPaths.push(url)
-                        finalNames.push('image_'+savedImage+'.png')
-                        console.log(finalNames)
-                        console.log(finalPaths)
-                        savedImage = addOne(savedImage)
-                        runs = addOne(runs)
-                        
-                        image
-                            //merge images
-                            .blit(finishedTextImage, 0, 0)
-                            //save new image   
-                            .write('./public' + url, () => {
-                                
-                                if (runs==(imagesToCreate-1)){
-                                console.log("run : ", runs)
-                                console.log("i : ", i)
-                                console.log("send response")
-                                let resArray = []
-                                for(i=0; i<imagesToCreate; i++){
-                                    resArray.push({ path: finalPaths[i], name: finalNames[i]})
-                                }
-                                console.log("Response Array: ", resArray)
-                                res.status(200).zip(resArray);
-                            }    
-                         });// save          
-                    });
-            });              
-        }
+    const { images, templateURL } = req.query;
+
+    let zipArray = [];
+
+    try{
+        let template = await Jimp.read(decodeURI(templateURL));
         
-    } else if (!imageset){ // only one image as result
-        console.log("create one image")
-        //const resultingImage = await Jimp.read('/images/jan_domi_punch.png') 
-        Jimp.read(imageURL)
-        .then(image => {
-            Jimp.loadFont(Jimp.FONT_SANS_32_BLACK).then(font => { 
-                //print text with color
-                new Jimp(1280, 720, 0x0, function (err, finishedTextImage) {
-                    for (loop = 0; loop < points; loop++) {
-                        finishedTextImage.print(font, xPositions[loop], yPositions[loop], texts[loop])
-                    }
-                    finishedTextImage.color([{ apply: 'xor', params: [textColor] }]);
-                    let url = '/memes/image_'+savedImage+'.png'
-                    image
-                        //merge images
-                        .blit(finishedTextImage, 0, 0)                
-                        //.print(font, x, y, message, maxWidth) // print a message on an image with text wrapped at maxWidth
-                        .write('./public' + url, () => {
-                            res.status(200).zip([{ path: './public'+url, name: 'image_'+savedImage+'.png' }]);
-                        }); // save               
-                });
-            });    
-        })
-        .catch(err => {
-        console.error(err);
-        res.status(400).json({success: false, error: err})
-        }); 
-    } else {
-        console.log("imageset is not valid")
+        for(let i=0; i<images.length; i++){
+            let image = images[i];
+            
+            let captions = image.captions;
+            let name = image.name;
+
+            let font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
+            
+            let fileName = (name && zipArray.findIndex((e)=>e.name==name) == -1) ? name+'.png' : 'image_'+i;
+            
+            await captionImage(template.clone(), font, captions, fileName);
+
+            zipArray.push({path: './public/temp/'+fileName, name: fileName});
+        }
+        template.write('./public/temp/_.png');
+
+        //zip
+        res.status(200).zip(zipArray);
+
+    }catch(err){         
+        console.log(err);
+        res.status(400).json({success: false, error: err});
     }
 }
 
-// helper method for image saving 
-const addOne = (number) => {
-    return number+1
+
+const captionImage = async(template, font, captions, fileName)=>{
+    return new Promise(async (resolve, reject) => {
+        new Jimp(template.getWidth(), template.getHeight(), 0x0, function (err, textCanvas) {
+            if(err) throw err;
+
+            console.log('printing captions: ',captions);
+            captions.forEach((caption)=>{
+                let canvas = textCanvas.clone();
+                canvas.print(font, parseInt(caption.x), parseInt(caption.y), caption.text);
+                canvas.color([{ apply: 'xor', params: [decodeURI(caption.textColor)] }]);
+                //merge images
+                template.blit(canvas, 0, 0);
+            });
+
+            let url = './public/temp/'+fileName;
+            
+            template
+                //save new image   
+                .write(url, () => {
+                    resolve('Success!');
+                });
+        });
+    });
 }
 
 

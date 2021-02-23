@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db/index.js');
+const zip = require('express-zip');
+
 const memeRouter = require('./routes/meme-router.js');
 const templateRouter = require('./routes/template-router.js');
 const statsRouter = require('./routes/stats-router.js');
