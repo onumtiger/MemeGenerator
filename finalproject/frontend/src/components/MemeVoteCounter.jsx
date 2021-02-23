@@ -4,14 +4,17 @@ import '../style/globalStyle.css';
 
 
 
-export default function Counter(props) {
+export default function Counter(props) { 
 
     //counter for upVotes
     const [upVote, setUpVote] = useState(props.upVotes);
     const incrementUpVotes = () => {
         if(upVote <= props.upVotes){
-            setUpVote(prevCount => prevCount + 1);
-            sendUpvotes()
+            
+                //TODO: check if user id already in one of the memes vote list and only apply if not so
+                setUpVote(prevCount => prevCount + 1);
+                sendUpvotes()
+            
         }
     }
 
@@ -19,15 +22,17 @@ export default function Counter(props) {
     const [downVote, setDownVote] = useState(props.downVotes);
     const incrementDownVotes = () => {
         if(downVote <= props.downVotes){
-            setDownVote(prevCount => prevCount + 1);
-            sendDownvotes()
+            
+                //TODO: check if user id already in one of the memes vote list and only apply if not so
+                setDownVote(prevCount => prevCount + 1);
+                sendDownvotes()
+            
         }
     }
 
     function sendUpvotes(){
         //updates upvotes with user id (toUpdate) and according meme_id
-        //api.postUpvotesMeme(({toUpdate: 9}),(0))
-        api.executeImageCreation({x: 100, y:100, caption: "testcaption"});
+        api.postUpvotesMeme(({toUpdate: 9}),(0))
     }
 
     function sendDownvotes(){

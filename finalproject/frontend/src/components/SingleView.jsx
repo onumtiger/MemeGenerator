@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import api from '../api';
 
 import {MemeVoteCounter as Counter, MemeComment as Comment} from '.';
 
@@ -14,7 +15,14 @@ export default class SingleView extends Component {
         let year = dateArray[0];
         let month = dateArray[1];
         let day = dateArray[2];
-        return `${day}.${month}.${year}`
+        return `${day}.${month}.${year}`;
+    }
+
+    componentDidMount(){
+        const memeId = this.props.meme._id;
+        const memeView = this.props.meme.stats.views;
+        var newViews = memeView + 1;
+        api.postViewsMeme(({toUpdate: newViews}),(memeId));
     }
 
     render() {
