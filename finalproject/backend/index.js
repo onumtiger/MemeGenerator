@@ -7,6 +7,7 @@ const templateRouter = require('./routes/template-router.js');
 const statsRouter = require('./routes/stats-router.js');
 const webContentRouter = require('./routes/webcontent-router.js');
 const guiDataRouter = require('./routes/guidata-router.js');
+const generateRouter = require('./routes/generate-router.js');
 
 const fileUpload = require('express-fileupload');
 const app = express();
@@ -34,6 +35,7 @@ app.use('/api/templates', templateRouter);
 app.use('/api/stats', statsRouter);
 app.use('/api/webcontent', webContentRouter);
 app.use('/api/guidata', guiDataRouter);
+app.use('/api/generate', generateRouter);
 
 //TODO create an error handler for anything that doesn't match the above routers
 
