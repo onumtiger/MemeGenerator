@@ -1,0 +1,47 @@
+@mixin buttonStyle {
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    // font-family: initial;
+}
+
+#slideshow-wrapper {
+    position: relative;
+    margin: auto;
+    width: 45%;
+    text-align: center;
+
+    .actionButton {
+        @include buttonStyle;
+        background-color: transparent;
+        border-radius: 2px;
+        font-weight: bold; 
+        font-size: 16px;
+        padding: 10px 20px;
+        margin: 0 15px;
+        box-shadow: gray 0 0 5px;
+    }
+
+    .inactive {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    #slideshow-table {
+        width: 100%;
+        margin-top: 20px;
+        vertical-align: middle;
+        text-decoration: none;
+
+        .slideButton {
+            @include buttonStyle;
+            background-color: black; 
+            color: white;
+            padding: 20px 10px;
+            border-radius: 5px;
+            font-size: 30px;
+        }
+    }
+
+}

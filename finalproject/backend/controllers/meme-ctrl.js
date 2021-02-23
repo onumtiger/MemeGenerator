@@ -1,10 +1,10 @@
 const Meme = require('../db/models/meme-model');
-const Stats = require('../db/models/stats-model');
+const User = require('../db/models/user-model');
 const dbUtils = require('../db/dbUtils');
 const globalHelpers = require('../utils/globalHelpers');
 var Jimp = require('jimp');
 
-const createMeme = async (req, res) => {
+const createMeme = async (req, res) => { //TODO send template ID, increment template uses on creation
     const body = req.body;
 
     if (!body) {
@@ -24,18 +24,21 @@ const createMeme = async (req, res) => {
             }else{
                 let url = 'memes/'+filename;
                 
-                let statsID = await dbUtils.getNewFullStatsID();
-                
                 const meme = new Meme({
                     _id: id,
                     url: url,
                     name: body.name,
                     user_id: body.userID,
                     visibility: body.visibility,
-                    stats_id: statsID,
                     captions: body.captions,
                     comment_ids: [],
-                    creationDate: globalHelpers.getTodayString()
+                    creationDate: globalHelpers.getTodayString(),
+                    stats: {
+                        _id: id,
+                        upvotes: [],
+                        downvotes: [],
+                        views: 0
+                    }
                 });
 
 
@@ -64,6 +67,50 @@ const createMeme = async (req, res) => {
                     })
             }
         });
+    } else if(body.imageURL){
+        let id = await dbUtils.getNewEmptyMemeID();
+        
+        const meme = new Meme({
+            _id: id,
+            url: body.imageURL,
+            name: body.name,
+            user_id: body.userID,
+            visibility: body.visibility,
+            captions: body.captions,
+            comment_ids: [],
+            creationDate: globalHelpers.getTodayString(),
+            stats: {
+                _id: id,
+                upvotes: [],
+                downvotes: [],
+                views: 0
+            }
+        });
+            
+
+        if (!meme) {
+            return res.status(400).json({
+                success: false,
+                error: "Meme data could not be parsed for storing!"
+            });
+        }
+
+        meme
+            .save()
+            .then(() => {
+                return res.status(201).json({
+                    success: true,
+                    id: meme._id,
+                    error: 'Meme successfully stored!'
+                })
+            })
+            .catch(dbError => {
+                return res.status(500).json({
+                    success: false,
+                    error: 'Meme could not be stored! You should find additional error info in the detailedError property of this JSON.',
+                    detailedError: dbError
+                })
+            })
     } else {
         res.status(400).json({
             success: false,
@@ -89,7 +136,7 @@ const deleteMeme = async (req, res) => {
 }
 
 const getMemeById = async (req, res) => {
-    await Meme.findOne({ id: req.params.id }, (err, meme) => {
+    await Meme.findOne({ _id: req.params.id }, (err, meme) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -118,53 +165,36 @@ const getMemes = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getStats = async (req, res) => {
-    console.log("Trying to get stats!")
-    await Stats.find({}, (err, stats) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-        if (!stats.length) {
-            return res
-                .status(204)
-                .json({ success: false, error: `No Statistics found` })
-        }
-        return res.status(200).json({ success: true, data: stats })
-    }).catch(err => console.log(err))
-}
-
-function referredMeme(req, res, next) {}
-
 const patchMeme = async function(req, res) {
     console.log("Patch Meme generic")
-    var updateMeme = req.body;
-    var id = req.params.id;
-    var updatedProperty = updateMeme.toUpdate
-    const result = await Meme.updateOne({_id: 0}, updatedProperty)
+    var body = req.body;
+    var memeId = req.params.id;
+    var updatedProperty = body.toUpdate
+    const result = await Meme.updateOne({_id: memeId}, updatedProperty)
     console.log(result);
 }
 
 const postViewsMeme = async (req, res) => {
     console.log("post upvotes")
-    var updateMeme = req.body;
+    var body = req.body;
     var memeId = req.params.id;
-    var updatedViews= updateMeme.toUpdate
+    var updatedViews= body.toUpdate
     const result = await Meme.updateOne({_id: memeId}, {updatedViews})
 }
 
 const postUpvotesMeme = async (req, res) => {
     console.log("post upvotes")
-    var updateMeme = req.body;
+    var body = req.body;
     var memeId = req.params.id;
-    var updatedUserId= updateMeme.toUpdate
+    var updatedUserId= body.toUpdate
     const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.upvotes': updatedUserId}})  
 }
 
 const postDownvotesMeme = async (req, res) => {
     console.log("post downvotes")
-    var updateMeme = req.body;
+    var body = req.body;
     var memeId = req.params.id;
-    var updatedUserId= updateMeme.toUpdate
+    var updatedUserId= body.toUpdate
     const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.downvotes': updatedUserId}})
 }
 
@@ -251,13 +281,11 @@ const addOne = (number) => {
 module.exports = {
     createMeme,
     deleteMeme,
-    referredMeme,
     patchMeme,
     postViewsMeme,
     postUpvotesMeme,
     postDownvotesMeme,
     getMemes,
-    getStats,
-    getMemeById, 
-    executeImageCreation,
+    getMemeById,
+    executeImageCreation
 }

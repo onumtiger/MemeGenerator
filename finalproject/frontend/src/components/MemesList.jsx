@@ -2,59 +2,14 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
 
-import styled from 'styled-components';
-
 import {MemeVoteCounter as Counter, MemeComment as Comment} from '.';
+
+import '../style/MemesList.scss';
 
 // ---- DOMI ---- // 
 // endless scroll, image & title, passive information (views, votes, comments), interaction (up/down vote, download, share) //
 
-const Wrapper = styled.div`
-padding: 0 40px 40px 40px;
-`
-
-const Right = styled.div`
-width: auto;
-    margin-right: 0px;
-    margin-left: auto;
-    text-align: right;
-`
-
-const ActionButton = styled.button`
-background-color: white; 
-  border: none;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-`
-
-const MemeImg = styled.img`
-display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 70%;
-  max-width: 500px;
-  
-`
-
-const StatsTable = styled.table`
-  margin: auto;
-  width: 65%;
-  padding: 10px;
-  text-align: center;
-`
-
-const CenterDiv = styled.div`
-margin: auto;
-  width: 45%;
-  border-bottom: 2px solid grey;
-  padding: 10px;
-  text-align: center;
-`
-
-class MemesList extends Component {
+export default class MemesList extends Component {
 
     constructor(props) {
         super(props);
@@ -82,20 +37,20 @@ class MemesList extends Component {
         console.log('TCL: memesList -> render -> memes', memes);
 
         return (
-            <Wrapper>
+            <div id="memes-list-wrapper">
                 {/*Ignore this line below, change as you like if it is disturbing here, pls do not delete*/}
                 <button onClick={this.sendInfos}>Domis api test button</button>
                 {memes.map(meme => (
-                    <CenterDiv>
-                        <Right>
-                            <label>{meme.name} // </label>
-                            <ActionButton>↓</ActionButton>
-                            <ActionButton>→</ActionButton>
-                        </Right>
+                    <div className="meme-wrapper">
+                        <div className="title-row">
+                            <span>{meme.name} // </span>
+                            <button type="button" className="actionButton">↓</button>
+                            <button type="button" className="actionButton">→</button>
+                        </div>
                         <Link to={this.routePath+'/'+meme._id}>
-                            <MemeImg src={meme.url} alt={meme.name}></MemeImg>
+                            <img className="meme-img" src={meme.url} alt={meme.name}></img>
                         </Link> 
-                        <StatsTable>
+                        <table className="stats-table">
                             <tbody>
                             <tr>   
                                 <td><p>{meme.stats.views} views</p></td>
@@ -103,13 +58,11 @@ class MemesList extends Component {
                                 <td><p>{meme.creationDate}</p></td>
                             </tr>
                             </tbody>
-                        </StatsTable>
+                        </table>
                         <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
-                    </CenterDiv>
+                    </div>
                 ))}
-            </Wrapper>
+            </div>
         )
     }
 }
-
-export default MemesList

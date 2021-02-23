@@ -1,0 +1,88 @@
+@import "_globalMixins.scss";
+
+#create-api-page-wrapper {
+    padding: 20px;
+
+    #template-container {
+        height: 250px;
+        padding: 5px 0;
+        margin: 5px 0 30px;
+        box-sizing: border-box;
+        white-space: nowrap;
+        overflow: auto hidden;
+        background-color: #eee;
+        
+        img {
+            height: 100%;
+            margin: 0 5px;
+            box-sizing: border-box;
+    
+            &:hover {
+                border: 3px solid #5688b4;
+            }
+            &.selected {
+                border: 3px solid #2c6799;
+            }
+        }
+    
+        #loader, #loader div {
+            display: inline-block;
+            margin: 0 30px;
+        }
+    }
+
+    #template-current {
+        width: 50%;
+        display: block;
+        margin: 20px auto;
+    }
+
+    #caption-inputs-wrapper {
+        label, input {
+            margin: 5px;
+        }
+        input {
+            margin-bottom: 15px;
+        }
+    }
+    
+    #generate-btn {
+        @include largeButton(#79d760, #4dbb2f);
+    }
+
+    
+    #in-title {
+        @include unstyled-input;
+        width: 100%;
+        font-size: 25px;
+        border-bottom: 1px solid lightgray;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .visibilityOption {
+        margin: 0;
+        padding: 0 10px;
+
+        $outer-padding: 5px;
+
+        &:first-of-type{
+            padding-top: $outer-padding;
+        }
+        &:last-of-type{
+            padding-bottom: $outer-padding;
+        }
+
+        input {
+            margin-right: 5px;
+        }
+    }
+    
+    .invalid {
+        background-color: #f28f8f!important;
+    }
+
+    #publish-btn {
+        @include largeButton(#6079d7, #2f4dbb);
+    }
+}

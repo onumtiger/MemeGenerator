@@ -1,25 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-
-const Select = styled.select`
-width:20%;
-margin-left: 10px;
-height:10%;
-  box-sizing:border-box;
-
-`
-const Search = styled.input`
-width:20%;
-height:10%;
-  box-sizing:border-box;
-`
-
-const CenterSearch = styled.div`
-margin: auto;
-  width: 45%;
-  padding: 10px;
-  text-align: center;
-`
+import '../style/FilterMemes.scss';
 
 export default class FilterMemes extends Component {
     constructor(props) {
@@ -70,10 +50,10 @@ export default class FilterMemes extends Component {
             ));
         }
 
-        //filter by format - TODO go through different options for options like "image", maybe with array.some()...
+        //filter by format: checks for strings ending on'.', followed by the string (or strings separated by '|') in this.selection.filter
         if(this.selection.filter){
             newArray = newArray.filter(meme=> (
-                meme.url.toLowerCase().includes(this.selection.filter.toLowerCase())
+                meme.url.match(new RegExp(`.+\\.(${this.selection.filter})$`,'i'))
             ));
         }
 
@@ -117,10 +97,10 @@ export default class FilterMemes extends Component {
 
     render() {
         return (
-            <CenterSearch>
-                <Search type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={this.startSearch}></Search>
+            <div id="filter-wrapper">
+                <input type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={this.startSearch}></input>
 
-                Sort by: <Select name="sort" id="sort" onChange={this.sortMemeList}>
+                <label>Sort by: <select name="sort" id="sort" onChange={this.sortMemeList}>
                     <option value="default">default order</option>
                     <option value="newest">newest</option>
                     <option value="oldest">oldest</option>
@@ -128,17 +108,16 @@ export default class FilterMemes extends Component {
                     <option value="worstRating">rating (worst)</option>
                     <option value="mostViewed">views (most)</option>
                     <option value="leastViewed">views (least)</option>
-                </Select>
-                Filter by Format: <Select name="filter" id="filter" onChange={this.setFilter}>
+                </select></label>
+                <label>Filter by Format: <select name="filter" id="filter" onChange={this.setFilter}>
                     <option value="all">all</option>
                     <option value="jpg">jpg</option>
                     <option value="png">png</option>
                     <option value="gif">gif</option>
-                    <option value="image">image</option>
-                    <option value="template">template</option>
-                    <option value="video">video</option>
-                </Select>
-            </CenterSearch>
+                    <option value="jpg|png|gif">image</option>
+                    <option value="mp4|mov">video</option>
+                </select></label>
+            </div>
         )
     }
 }
