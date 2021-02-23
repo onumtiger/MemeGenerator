@@ -18,7 +18,7 @@ export default class SingleView extends Component {
         return `${day}.${month}.${year}`;
     }
 
-    componentDidMount(){
+    componentDidUpdate(){
         const memeId = this.props.meme._id;
         const memeView = this.props.meme.stats.views;
         var newViews = memeView + 1;
