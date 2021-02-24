@@ -30,6 +30,8 @@ export default class SingleView extends Component {
         api.postViewMeme(memeId).catch(err =>{
             console.log('Failed to post views: ',err)
         });
+        this.props.meme.stats.views++
+        
     }
 
 
