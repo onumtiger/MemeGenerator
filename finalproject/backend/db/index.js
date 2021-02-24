@@ -498,7 +498,96 @@ const resetDB = async() => {
         ]
     }
 
-    await db.collection('templatestats').insertMany([defaultTemplateStats]);
+    var defaultTemplateStats2 = {
+        _id: 1,
+        days: [{
+                date: "2021/02/09",
+                upvotes: 44,
+                downvotes: 2,
+                uses: 53
+            },
+            {
+                date: "2021/02/10",
+                upvotes: 40,
+                downvotes: 4,
+                uses: 50
+            },
+            {
+                date: "2021/02/11",
+                upvotes: 37,
+                downvotes: 3,
+                uses: 48
+            },
+            {
+                date: "2021/02/12",
+                upvotes: 30,
+                downvotes: 7,
+                uses: 32
+            },
+            {
+                date: "2021/02/13",
+                upvotes: 29,
+                downvotes: 4,
+                uses: 30
+            },
+            {
+                date: "2021/02/14",
+                upvotes: 23,
+                downvotes: 4,
+                uses: 27
+            },
+            {
+                date: "2021/02/15",
+                upvotes: 20,
+                downvotes: 5,
+                uses: 25
+            },
+            {
+                date: "2021/02/16",
+                upvotes: 18,
+                downvotes: 3,
+                uses: 21
+            },
+            {
+                date: "2021/02/17",
+                upvotes: 15,
+                downvotes: 4,
+                uses: 19
+            },
+            {
+                date: "2021/02/18",
+                upvotes: 14,
+                downvotes: 3,
+                uses: 15
+            },
+            {
+                date: "2021/02/19",
+                upvotes: 17,
+                downvotes: 3,
+                uses: 14
+            },
+            {
+                date: "2021/02/20",
+                upvotes: 12,
+                downvotes: 1,
+                uses: 12
+            },
+            {
+                date: "2021/02/21",
+                upvotes: 9,
+                downvotes: 3,
+                uses: 10
+            },
+            {
+                date: "2021/02/22",
+                upvotes: 3,
+                downvotes: 5,
+                uses: 6
+            }
+        ]
+    }
+
+    await db.collection('templatestats').insertMany([defaultTemplateStats, defaultTemplateStats2]);
     console.log("Default templatestats inserted");
 }
 
