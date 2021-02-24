@@ -29,7 +29,7 @@ export const fetchWebImage = url => api.get(`/webcontent/image/${url}`);
 export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 
 export const executeImageCreation = payload => api.post('/meme/imageCreation', payload);
-export const getSearchImages = () => api.get('/meme/parameters');
+export const getSearchImages = () => api.get('/webcontent/parameters');
 
 const apis = {
     insertMeme,

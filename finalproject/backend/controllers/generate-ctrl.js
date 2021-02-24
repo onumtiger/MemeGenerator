@@ -1,7 +1,7 @@
 var Jimp = require('jimp');
 
 const getSearchImages = async () => {
-    
+    console.log('got query: ', req.query);
 
     try{
         console.log('got query: ', req.query);
