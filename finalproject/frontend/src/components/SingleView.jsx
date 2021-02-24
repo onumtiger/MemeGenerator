@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import api from '../api';
 
-import {MemeVoteCounter as Counter, MemeComment as Comment} from '.';
+import { MemeVoteCounter as Counter, MemeComment as Comment } from '.';
+import MemeStatisticsChart from './MemeStatisticsChart';
 
 import '../style/SingleView.scss';
 
@@ -11,10 +12,16 @@ export default class SingleView extends Component {
 
     constructor(props) {
         super(props);
-        this.previousMemeId = null
+        this.state = {
+            upvotes: [],
+            downvotes: [],
+            views: [],
+            showStats: false
+        }
+        this.previousMemeId = null;
     }
 
-    getDateString(inputDateString){
+    getDateString(inputDateString) {
         let dateArray = inputDateString.split('/');
         let year = dateArray[0];
         let month = dateArray[1];
@@ -22,7 +29,36 @@ export default class SingleView extends Component {
         return `${day}.${month}.${year}`;
     }
 
-    
+    getMemeStats = async () => {
+        this.setState({
+            showStats: false
+        })
+        let memeStats = [];
+        const meme = this.props.meme;
+        let response = await api.getStatsForMeme(meme._id);
+        memeStats = response.data.data.days;
+
+        var upvotes = [];
+        var downvotes = [];
+        var views = [];
+
+        for (var i = 0; i < memeStats.length; i++) {
+            upvotes.push(memeStats[i].upvotes)
+            downvotes.push(memeStats[i].downvotes)
+            views.push(memeStats[i].views)
+        }
+
+        this.setState({
+            upvotes: upvotes,
+            downvotes: downvotes,
+            views: views,
+            showStats: true
+        })
+
+        console.log(this.state.upvotes)
+        console.log(this.state.downvotes)
+        console.log(this.state.views)
+    }
 
     //triggers a +1 view in db
     sendView(memeId){
@@ -38,6 +74,11 @@ export default class SingleView extends Component {
     render() {
         const meme = this.props.meme;
 
+        if (this.previousMemeId != meme._id) {
+            this.previousMemeId = meme._id;
+            this.getMemeStats();
+        }
+        
         //prevents double counting 
         if(!(this.previousMemeId == meme._id) && (this.previousMemeId != null)){
             console.log("old previousMemeId: ", this.previousMemeId)
@@ -60,14 +101,26 @@ export default class SingleView extends Component {
                 <img id="meme-img" src={meme.url} alt={meme.name}></img>
                 <table id="stats-table">
                     <tbody>
-                    <tr>
-                        <td><p>{meme.stats.views} views</p></td>
-                        <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></td>
-                        <td><p>{this.getDateString(meme.creationDate)}</p></td>
-                    </tr>
+                        <tr>
+                            <td><p>{meme.stats.views} views</p></td>
+                            <td>
+                                <Counter
+                                    upVotes={meme.stats.upvotes.length}
+                                    downVotes={meme.stats.downvotes.length}
+                                    stats_id={meme.stats_id}>
+                                </Counter>
+                            </td>
+                            <td><p>{this.getDateString(meme.creationDate)}</p></td>
+                        </tr>
                     </tbody>
                 </table>
                 <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
+                {this.state.showStats && (<MemeStatisticsChart
+                    upvotes={this.state.upvotes}
+                    downvotes={this.state.downvotes}
+                    views={this.state.views}
+                >
+                </MemeStatisticsChart>)}
             </div>
         )
     }
