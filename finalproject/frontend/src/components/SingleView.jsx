@@ -18,14 +18,20 @@ export default class SingleView extends Component {
         return `${day}.${month}.${year}`;
     }
 
-    // componentDidUpdate(){
-    //     const memeId = this.props.meme._id;
-    //     const memeView = this.props.meme.stats.views;
-    //     var newViews = memeView + 1;
-    //     api.postViewsMeme(({toUpdate: newViews}),(memeId)).catch(err =>{
-    //         console.log('Failed to post views: ',err)
-    //     });
-    // }
+    componentDidMount(){
+        const memeId = this.props.meme._id;
+        api.postViewsMeme(memeId).catch(err =>{
+            console.log('Failed to post views: ',err)
+        });
+    }
+
+
+    componentDidUpdate(){
+        const memeId = this.props.meme._id;
+        api.postViewsMeme(memeId).catch(err =>{
+            console.log('Failed to post views: ',err)
+        });
+    }
 
     render() {
         const meme = this.props.meme;
