@@ -74,6 +74,7 @@ export default class SlideShow extends Component {
     }
 
     playDiashow() {
+        //this will adhere to the current sorting, including a random order. With this approach, you are guaranteed to get no repetitions in the slideshow until you have iterated over every other meme.
         this.props.history.push(this.props.urlPath+'/'+this.getNextMemeId());
         this.diashowButtonTimeout = setTimeout(this.playDiashow, 2000);
     }
@@ -103,8 +104,10 @@ export default class SlideShow extends Component {
         //every change to the meme list via filtering etc. will call render(), so we need to figure out what we can do with that list here
 
         if(!(this.props.memes.length)){
-            //if the meme list is empty (because of filtering etc.), display "nothing found" image - TODO
-            return <></>;
+            //if the meme list is empty (because of filtering etc.), display "nothing found" image
+            return (<div id="slideshow-wrapper">
+                <p id="slideshow-empty">Sorry, no Meme matched your selection :(</p>
+            </div>);
         }
 
         let { memeId } = this.props.match.params;

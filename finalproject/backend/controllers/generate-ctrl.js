@@ -53,7 +53,7 @@ const executeImageCreation  = async (req, res) => {
     let zipArray = [];
 
     try{
-        let template = await Jimp.read(decodeURI(templateURL));
+        let template = await Jimp.read(decodeURIComponent(templateURL));
         
         for(let i=0; i<images.length; i++){
             let image = images[i];
@@ -69,14 +69,13 @@ const executeImageCreation  = async (req, res) => {
 
             zipArray.push({path: './public/temp/'+fileName, name: fileName});
         }
-        template.write('./public/temp/_.png');
 
         //zip
         res.status(200).zip(zipArray);
 
     }catch(err){         
         console.log(err);
-        res.status(400).json({success: false, error: err});
+        res.status(400).json({success: false, error: err.toString()});
     }
 }
 
@@ -90,7 +89,7 @@ const captionImage = async(template, font, captions, fileName)=>{
             captions.forEach((caption)=>{
                 let canvas = textCanvas.clone();
                 canvas.print(font, parseInt(caption.x), parseInt(caption.y), caption.text);
-                canvas.color([{ apply: 'xor', params: [decodeURI(caption.textColor)] }]);
+                canvas.color([{ apply: 'xor', params: [decodeURIComponent(caption.textColor)] }]);
                 //merge images
                 template.blit(canvas, 0, 0);
             });
@@ -100,7 +99,7 @@ const captionImage = async(template, font, captions, fileName)=>{
             template
                 //save new image   
                 .write(url, () => {
-                    resolve('Success!');
+                    resolve();
                 });
         });
     });

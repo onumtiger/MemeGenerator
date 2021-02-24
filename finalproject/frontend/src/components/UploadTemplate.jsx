@@ -74,6 +74,9 @@ export default class UploadTemplate extends React.Component {
                 this.props.handlePublishing(res.data.id);
             }
             e.target.textContent = this.publishButtonTexts.default;
+        }).catch(err =>{
+            console.log('Failed to upload template: ',err);
+            e.target.textContent = this.publishButtonTexts.default;
         });
     }
 
@@ -153,13 +156,20 @@ export default class UploadTemplate extends React.Component {
         }
         //display loading message on button while fetching results
         e.target.textContent = this.uploadFileURLButtonTexts.loading;
-        api.fetchWebImage(encodeURI(urlInput.value)).then((res)=>{
+        api.fetchWebImage(encodeURIComponent(urlInput.value)).then((res)=>{
             if(res.data.success){
                 this.uploadImageURL = res.data.url;
                 this.uploadImageAsURL = true;
                 document.querySelector('#upload-template-table #template-publish-btn').classList.remove('inactive');
-                this.setState({previewImageSrc: res.data.url});
+                this.setState({
+                    showPreviewImage: true,
+                    previewImageSrc: res.data.url
+                });
             }
+            e.target.textContent = this.uploadFileURLButtonTexts.default;
+        }).catch(err =>{
+            console.log('Failed to upload image file by URL: ',err);
+            urlInput.classList.add('invalid');
             e.target.textContent = this.uploadFileURLButtonTexts.default;
         });
     }
@@ -175,22 +185,32 @@ export default class UploadTemplate extends React.Component {
         }
         //display loading message on button while fetching results
         e.target.textContent = this.uploadSnapshotURLButtonTexts.loading;
-        api.fetchWebSnapshot(encodeURI(urlInput.value)).then((res)=>{
+        api.fetchWebSnapshot(encodeURIComponent(urlInput.value)).then((res)=>{
             if(res.data.success){
                 this.uploadImageURL = res.data.url;
                 this.uploadImageAsURL = true;
-                this.setState({previewImageSrc: res.data.url});
+                this.setState({
+                    showPreviewImage: true,
+                    previewImageSrc: res.data.url
+                });
             }
+            e.target.textContent = this.uploadSnapshotURLButtonTexts.default;
+        }).catch(err =>{
+            console.log('Failed to snapshot website: ',err);
+            urlInput.classList.add('invalid');
             e.target.textContent = this.uploadSnapshotURLButtonTexts.default;
         });
     }
 
     componentDidMount = async () => {
         //TODO insert actual userId
-        let response = await api.getTemplateVisibilityOptions(0);
-        this.setState({
-            visibilityOptions: response.data.data,
-            visibilityOptionsLoading: false
+        api.getTemplateVisibilityOptions(0).then((response)=>{
+            this.setState({
+                visibilityOptions: response.data.data,
+                visibilityOptionsLoading: false
+            });
+        }).catch(err =>{
+            console.log('Failed to get visibility options: ',err);
         });
 
     }
@@ -217,7 +237,7 @@ export default class UploadTemplate extends React.Component {
                                 </fieldset>
                                 <hr />
                                 <fieldset>
-                                    <legend>Upload an image from the web</legend>
+                                    <legend>Upload an <abbr title="has to be one of the supported types: JPG / PNG / BMP / TIFF / static GIF">image</abbr> from the web</legend>
                                     <input type="url" id="input-fileURL" placeholder="Enter a valid URL to an image on the web..." />
                                     <button type="button" id="input-fileURL-confirm" onClick={this.handleUploadFileURLButtonClick}>{this.uploadFileURLButtonTexts.default}</button>
                                 </fieldset>
@@ -242,7 +262,7 @@ export default class UploadTemplate extends React.Component {
                                     ) : (
                                         <div id="visibilityOption-wrapper">
                                         {visibilityOptions.map((vo)=>(
-                                            <p className="visibilityOption">
+                                            <p className="visibilityOption" key={'visibilityOption-'+vo.value}>
                                             <input type="radio" name="visibility" id={"visibility-"+vo.value} value={vo.value} onChange={this.handleVisibilityOptionCheck} />
                                             <label htmlFor={"visibility-"+vo.value}>{vo.name}</label>
                                             </p>

@@ -20,18 +20,17 @@ const PORT = 3001;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(bodyParser.json());
-//Maybe not necessary:
-//app.use(bodyParser.json({ type: 'application/json' }));
 
+//use static files middleware for everything in the public folder - used mainly for images
 app.use(express.static(path.join(__dirname, 'public')));
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+//handle mongoDB errors
+db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
-app.get('/', (req, res) => {
-    res.send('Hello World!!');
-})
+//populate req.file for file uploads
+app.use('/api', fileUpload({safeFileNames: true, preserveExtension: true}));
 
-app.use('/api', fileUpload({safeFileNames: true, preserveExtension: true})); //populates req.file for file uploads
+//register our routers
 app.use('/api/meme', memeRouter);
 app.use('/api/templates', templateRouter);
 app.use('/api/stats', statsRouter);
@@ -39,6 +38,9 @@ app.use('/api/webcontent', webContentRouter);
 app.use('/api/guidata', guiDataRouter);
 app.use('/api/generate', generateRouter);
 
-//TODO create an error handler for anything that doesn't match the above routers
+// fallback error message for anything else, using the same JSON response structure as the rest to allow for generic response handling without breaking anything with the default HTML/XML response
+app.use('/', (req, res) => {
+    res.status(404).json({success: false, error: `You sent a ${req.method} request to the URL ${req.originalUrl}, but there is no handler for this kind of request. Please check the URL and HTTP-Method.`});
+})
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

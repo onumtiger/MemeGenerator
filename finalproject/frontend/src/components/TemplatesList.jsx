@@ -36,7 +36,7 @@ export default class TemplatesList extends React.Component {
                     </div>
                 ) : (
                     this.props.data.templates.map((t)=>(
-                        <img src={t.url} alt={t.name} title={t.name} id={'template_'+t._id} onClick={this.handleTemplateClick} />
+                        <img src={t.url} alt={t.name} title={t.name} id={'template_'+t._id} key={'template_'+t._id} onClick={this.handleTemplateClick} />
                     ))
                 )}
                 <img id="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />

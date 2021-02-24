@@ -32,12 +32,16 @@ export default function Counter(props) {
 
     function sendUpvotes(){
         //updates upvotes with user id (toUpdate) and according meme_id
-        api.postUpvotesMeme(({toUpdate: 9}),(0))
+        api.postUpvotesMeme(({toUpdate: 9}),(0)).catch(err =>{
+            console.log('Failed to send upvotes: ',err)
+        });
     }
 
     function sendDownvotes(){
         //updates downvotes with user id (toUpdate) and according meme_id
-        api.postDownvotesMeme(({toUpdate: 9}),(0))
+        api.postDownvotesMeme(({toUpdate: 9}),(0)).catch(err =>{
+            console.log('Failed to send downvotes: ',err)
+        });
     }
 
     return (

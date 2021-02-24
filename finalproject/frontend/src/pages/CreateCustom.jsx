@@ -77,16 +77,20 @@ export default class CreateCustom extends React.Component {
                 isLoading: true
             }
         });
+        try{
         let templatesArray = await api.getAllTemplates();
-        if (templatesArray.data.success){
-            this.setState({
-                templateListData: {
-                    templates: templatesArray.data.data,
-                    isLoading: false
-                }
-            });
-        }else{
-            console.log('Templates could not be loaded!', templatesArray.data);
+            if (templatesArray.data.success){
+                this.setState({
+                    templateListData: {
+                        templates: templatesArray.data.data,
+                        isLoading: false
+                    }
+                });
+            }else{
+                console.log('Templates could not be loaded!', templatesArray.data);
+            }
+        }catch(err){
+            console.log('Failed to load templates: ',err);
         }
     }
 
