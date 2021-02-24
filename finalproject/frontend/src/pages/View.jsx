@@ -49,12 +49,16 @@ export default class View extends Component {
     }
 
     componentDidMount = async () => {
-        let response = await api.getAllMemes();
-        this.initialMemes = response.data.data;
-        this.setState({
-            memes: response.data.data,
-            isLoading: false
-        });
+        try{
+            let response = await api.getAllMemes();
+            this.initialMemes = response.data.data;
+            this.setState({
+                memes: response.data.data,
+                isLoading: false
+            });
+        }catch(err){
+            console.log('Failed to get memes: ',err);
+        }
     }
 
 

@@ -50,7 +50,9 @@ export default class UploadTemplate extends React.Component {
     }
 
     handlePublishButtonClick(e){
-        if(e.target.classList.contains('inactive')) return;
+        let elem = e.target;
+
+        if(elem.classList.contains('inactive')) return;
         const formData = new FormData();
 
         let enteredTitle = document.querySelector('#upload-template-table #in-title').value;
@@ -68,25 +70,34 @@ export default class UploadTemplate extends React.Component {
             formData.append('image', this.uploadImageFile);
         }
         
-        e.target.textContent = this.publishButtonTexts.loading;
+        elem.textContent = this.publishButtonTexts.loading;
+        elem.classList.add('inactive');
         api.insertTemplate(formData).then((res)=>{
             if(res.data.success){
                 this.props.handlePublishing(res.data.id);
             }
-            e.target.textContent = this.publishButtonTexts.default;
+        }).catch(err =>{
+            console.log('Failed to upload template: ',err);
+        }).finally(()=>{
+            elem.textContent = this.publishButtonTexts.default;
+            elem.classList.remove('inactive');
         });
     }
 
     handleVisibilityOptionCheck(e){
-        if(e.target.checked){
-            this.selectedVisibilityElem = e.target;
+        let elem = e.target;
+        
+        if(elem.checked){
+            this.selectedVisibilityElem = elem;
             document.querySelector('#upload-template-table #visibilityOption-wrapper').classList.remove('invalid');
         }
     }
 
     handleLocalFileAddedViaButton(e){
-        if (e.target.files && e.target.files[0]) {
-            let imgFile = e.target.files[0];
+        let elem = e.target;
+        
+        if (elem.files && elem.files[0]) {
+            let imgFile = elem.files[0];
             this.processLocalFileInput(imgFile);
         }
     }
@@ -134,7 +145,6 @@ export default class UploadTemplate extends React.Component {
     processLocalFileInput(imgFile){
         this.uploadImageAsURL = false;
         this.uploadImageFile = imgFile;
-        document.querySelector('#upload-template-table #template-publish-btn').classList.remove('inactive');
 
         this.setState({
             showPreviewImage: true,
@@ -143,6 +153,10 @@ export default class UploadTemplate extends React.Component {
     }
 
     handleUploadFileURLButtonClick(e){
+        let elem = e.target;
+
+        if(elem.classList.contains('inactive')) return;
+
         let urlInput = document.querySelector('#upload-template-table #input-fileURL');
         //if the input doesn't resemble valid http(s) URL syntax, just render the input as invalid. Otherwise, remove the invalid mark
         if(urlInput.value.match(/^https?:\/\/.+\..+/i)){
@@ -152,19 +166,31 @@ export default class UploadTemplate extends React.Component {
             return;
         }
         //display loading message on button while fetching results
-        e.target.textContent = this.uploadFileURLButtonTexts.loading;
-        api.fetchWebImage(encodeURI(urlInput.value)).then((res)=>{
+        elem.textContent = this.uploadFileURLButtonTexts.loading;
+        elem.classList.add('inactive');
+        api.fetchWebImage(encodeURIComponent(urlInput.value)).then((res)=>{
             if(res.data.success){
                 this.uploadImageURL = res.data.url;
                 this.uploadImageAsURL = true;
-                document.querySelector('#upload-template-table #template-publish-btn').classList.remove('inactive');
-                this.setState({previewImageSrc: res.data.url});
+                this.setState({
+                    showPreviewImage: true,
+                    previewImageSrc: res.data.url
+                });
             }
-            e.target.textContent = this.uploadFileURLButtonTexts.default;
+        }).catch(err =>{
+            console.log('Failed to upload image file by URL: ',err);
+            urlInput.classList.add('invalid');
+        }).finally(()=>{
+            elem.classList.remove('inactive');
+            elem.textContent = this.uploadFileURLButtonTexts.default;
         });
     }
 
     handleUploadSnapshotURLButtonClick(e){
+        let elem = e.target;
+        
+        if(elem.classList.contains('inactive')) return;
+        
         let urlInput = document.querySelector('#upload-template-table #input-snapshotURL');
         //if the input doesn't resemble valid http(s) URL syntax, just render the input as invalid. Otherwise, remove the invalid mark
         if(urlInput.value.match(/^https?:\/\/.+\..+/i)){
@@ -174,23 +200,35 @@ export default class UploadTemplate extends React.Component {
             return;
         }
         //display loading message on button while fetching results
-        e.target.textContent = this.uploadSnapshotURLButtonTexts.loading;
-        api.fetchWebSnapshot(encodeURI(urlInput.value)).then((res)=>{
+        elem.textContent = this.uploadSnapshotURLButtonTexts.loading;
+        elem.classList.add('inactive');
+        api.fetchWebSnapshot(encodeURIComponent(urlInput.value)).then((res)=>{
             if(res.data.success){
                 this.uploadImageURL = res.data.url;
                 this.uploadImageAsURL = true;
-                this.setState({previewImageSrc: res.data.url});
+                this.setState({
+                    showPreviewImage: true,
+                    previewImageSrc: res.data.url
+                });
             }
-            e.target.textContent = this.uploadSnapshotURLButtonTexts.default;
+        }).catch(err =>{
+            console.log('Failed to snapshot website: ',err);
+            urlInput.classList.add('invalid');
+        }).finally(()=>{
+            elem.classList.remove('inactive');
+            elem.textContent = this.uploadSnapshotURLButtonTexts.default;
         });
     }
 
     componentDidMount = async () => {
         //TODO insert actual userId
-        let response = await api.getTemplateVisibilityOptions(0);
-        this.setState({
-            visibilityOptions: response.data.data,
-            visibilityOptionsLoading: false
+        api.getTemplateVisibilityOptions(0).then((response)=>{
+            this.setState({
+                visibilityOptions: response.data.data,
+                visibilityOptionsLoading: false
+            });
+        }).catch(err =>{
+            console.log('Failed to get visibility options: ',err);
         });
 
     }
@@ -217,7 +255,7 @@ export default class UploadTemplate extends React.Component {
                                 </fieldset>
                                 <hr />
                                 <fieldset>
-                                    <legend>Upload an image from the web</legend>
+                                    <legend>Upload an <abbr title="has to be one of the supported types: JPG / PNG / BMP / TIFF / static GIF">image</abbr> from the web</legend>
                                     <input type="url" id="input-fileURL" placeholder="Enter a valid URL to an image on the web..." />
                                     <button type="button" id="input-fileURL-confirm" onClick={this.handleUploadFileURLButtonClick}>{this.uploadFileURLButtonTexts.default}</button>
                                 </fieldset>
@@ -242,7 +280,7 @@ export default class UploadTemplate extends React.Component {
                                     ) : (
                                         <div id="visibilityOption-wrapper">
                                         {visibilityOptions.map((vo)=>(
-                                            <p className="visibilityOption">
+                                            <p className="visibilityOption" key={'visibilityOption-'+vo.value}>
                                             <input type="radio" name="visibility" id={"visibility-"+vo.value} value={vo.value} onChange={this.handleVisibilityOptionCheck} />
                                             <label htmlFor={"visibility-"+vo.value}>{vo.name}</label>
                                             </p>
@@ -250,7 +288,7 @@ export default class UploadTemplate extends React.Component {
                                         </div>
                                     )}
                                 </fieldset>
-                                <button type="button" id="template-publish-btn" onClick={this.handlePublishButtonClick} className="inactive">{this.publishButtonTexts.default}</button>
+                                <button type="button" id="template-publish-btn" onClick={this.handlePublishButtonClick} className={showPreviewImage ? "" : "inactive"}>{this.publishButtonTexts.default}</button>
                             </td>
                         </tr>
                     </tbody>

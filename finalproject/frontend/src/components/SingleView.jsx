@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
+import api from '../api';
 
 import { MemeVoteCounter as Counter, MemeComment as Comment } from '.';
 import MemeStatisticsChart from './MemeStatisticsChart';
-import api from '../api';
 
 import '../style/SingleView.scss';
 
@@ -18,51 +18,25 @@ export default class SingleView extends Component {
         }
     }
 
+    getDateString(inputDateString) {
+        let dateArray = inputDateString.split('/');
+        let year = dateArray[0];
+        let month = dateArray[1];
+        let day = dateArray[2];
+        return `${day}.${month}.${year}`;
+    }
+
     componentDidMount = async () => {
+        const memeId = this.props.meme._id;
+        api.postViewsMeme(memeId).catch(err => {
+            console.log('Failed to post views: ', err)
+        });
+
         const meme = this.props.meme;
         const memeStats = this.state;
         let response = await api.getStatsForMeme(meme._id);
         this.state.memeStats = response.data.data;
-        // this.setState({
-        //     memeStats: response.data.data
-        // // });
-        // console.log("memestats: ", response);
-        // console.log("memestats votes: ", this.state.memeStats);
-        // // console.log("memestats votes: ", memeStats);
-
-        // // for(var i; i<memeStats.length; i++) {
-        // //     if(memeStats[i]._id==meme._id) {
-        // //         for(var j; j<memeStats[i].days.length; j++)
-        // //         this.state.upvotes = memeStats[i].days[j].upvotes;
-        // //         // this.setState({
-        // //         //     upvotes: memeStats[i].days[j].upvotes
-        // //         // })
-        // //         console.log("memestats upvotes: ", this.state.upvotes);
-        // //     }
-        // // }
-        // console.log("memestats upvotes i=3: ", this.state.memeStats.days[3].upvotes);
-        // // console.log("memestats upvotes i=3: ", memeStats[0].days[3].upvotes);
-
-        // // for(var i; i<this.state.memeStats.length; i++) {
-        // //     if(this.state.memeStats[i]._id==meme._id) {
-        // for (var j; j < this.state.memeStats.days.length; j++) {
-        //     // this.state.upvotes = this.state.memeStats.days[j].upvotes;
-        //     this.setState({
-        //         upvotes: memeStats.days[j].upvotes
-        //     })
-        // }
-        // //     }
-        // // }
-        // console.log("memestats upvotes: ", this.state.upvotes);
-        // console.log(meme._id)
-        // let upvotesTest =[];
-        // // for(var i=0; i<12; i++){
-        //     upvotesTest = this.state.memeStats.days
-        // // }
-        //     // console.log(Object.values(upvotesTest))
-        //     console.log("upvote array: ", upvotesTest)
-
-        this.state.days = this.state.memeStats.days
+        this.state.days = this.state.memeStats.days;
 
         for (var i = 0; i < memeStats.days.length; i++) {
             this.state.upvotes.push(memeStats.days[i].upvotes)
@@ -75,6 +49,11 @@ export default class SingleView extends Component {
     }
 
     componentDidUpdate() {
+        const memeId = this.props.meme._id;
+        api.postViewsMeme(memeId).catch(err => {
+            console.log('Failed to post views: ', err)
+        });
+
         const memeStats = this.state;
         this.state.upvotes = [];
         this.state.downvotes = [];
@@ -106,8 +85,8 @@ export default class SingleView extends Component {
                                     downVotes={meme.stats.downvotes.length}
                                     stats_id={meme.stats_id}>
                                 </Counter>
-                            </td>{/*upVotes={meme.stats.upVotes} downVotes={meme.stats.upVotes}*/}
-                            <td><p>{meme.creationDate}</p></td>
+                            </td>
+                            <td><p>{this.getDateString(meme.creationDate)}</p></td>
                         </tr>
                     </tbody>
                 </table>

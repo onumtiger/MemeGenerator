@@ -2,7 +2,6 @@ const Meme = require('../db/models/meme-model');
 const User = require('../db/models/user-model');
 const dbUtils = require('../db/dbUtils');
 const globalHelpers = require('../utils/globalHelpers');
-var Jimp = require('jimp');
 
 const createMeme = async (req, res) => { //TODO send template ID, increment template uses on creation
     const body = req.body;
@@ -18,105 +17,72 @@ const createMeme = async (req, res) => { //TODO send template ID, increment temp
         let img = req.files.image;
         let id = await dbUtils.getNewEmptyMemeID();
         let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
-        img.mv('public/memes/'+filename, async function(err){ //this overwrites an existing image at that filepath if there is one!
+        let url = '/memes/'+filename;
+        img.mv('public'+url, async function(err){ //this overwrites an existing image at that filepath if there is one!
             if(err){
-                res.status(500).send(err);
-            }else{
-                let url = 'memes/'+filename;
-                
-                const meme = new Meme({
-                    _id: id,
-                    url: url,
-                    name: body.name,
-                    user_id: body.userID,
-                    visibility: body.visibility,
-                    captions: body.captions,
-                    comment_ids: [],
-                    creationDate: globalHelpers.getTodayString(),
-                    stats: {
-                        _id: id,
-                        upvotes: [],
-                        downvotes: [],
-                        views: 0
-                    }
-                });
-
-
-                if (!meme) {
-                    return res.status(400).json({
-                        success: false,
-                        error: "Meme data could not be parsed for storing!"
-                    });
-                }
-
-                meme
-                    .save()
-                    .then(() => {
-                        return res.status(201).json({
-                            success: true,
-                            id: meme._id,
-                            error: 'Meme successfully stored!'
-                        })
-                    })
-                    .catch(dbError => {
-                        return res.status(500).json({
-                            success: false,
-                            error: 'Meme could not be stored! You should find additional error info in the detailedError property of this JSON.',
-                            detailedError: dbError
-                        })
-                    })
-            }
-        });
-    } else if(body.imageURL){
-        let id = await dbUtils.getNewEmptyMemeID();
-        
-        const meme = new Meme({
-            _id: id,
-            url: body.imageURL,
-            name: body.name,
-            user_id: body.userID,
-            visibility: body.visibility,
-            captions: body.captions,
-            comment_ids: [],
-            creationDate: globalHelpers.getTodayString(),
-            stats: {
-                _id: id,
-                upvotes: [],
-                downvotes: [],
-                views: 0
-            }
-        });
-            
-
-        if (!meme) {
-            return res.status(400).json({
-                success: false,
-                error: "Meme data could not be parsed for storing!"
-            });
-        }
-
-        meme
-            .save()
-            .then(() => {
-                return res.status(201).json({
-                    success: true,
-                    id: meme._id,
-                    error: 'Meme successfully stored!'
-                })
-            })
-            .catch(dbError => {
                 return res.status(500).json({
                     success: false,
-                    error: 'Meme could not be stored! You should find additional error info in the detailedError property of this JSON.',
-                    detailedError: dbError
-                })
-            })
+                    error: err.toString()
+                });
+            }
+            body.id = id;
+            body.url = url;
+            saveMeme(body, res);
+        });
+    } else if(body.imageURL){
+        body.id = await dbUtils.getNewEmptyMemeID();
+        body.url = body.imageURL;
+        saveMeme(body, res);
+        
     } else {
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             error: 'No valid file received!'
         });
     }
+}
+
+const saveMeme = (params, res) => {
+    const meme = new Meme({
+        _id: params.id,
+        url: params.url,
+        name: params.name,
+        user_id: params.userID,
+        visibility: params.visibility,
+        captions: params.captions,
+        comment_ids: [],
+        creationDate: globalHelpers.getTodayString(),
+        stats: {
+            _id: id,
+            upvotes: [],
+            downvotes: [],
+            views: 0
+        }
+    });
+
+    if (!meme) {
+        return res.status(400).json({
+            success: false,
+            error: "Meme data could not be parsed for storing!"
+        });
+    }
+
+    meme
+        .save()
+        .then(() => {
+            return res.status(201).json({
+                success: true,
+                id: meme._id,
+                error: 'Meme successfully stored!'
+            })
+        })
+        .catch(dbError => {
+            return res.status(500).json({
+                success: false,
+                error: 'Meme could not be stored! You should find additional error info in the detailedError property of this JSON.',
+                detailedError: dbError
+            })
+        })
 }
 
 const deleteMeme = async (req, res) => {
@@ -174,12 +140,19 @@ const patchMeme = async function(req, res) {
     console.log(result);
 }
 
+// adds a SINGLE view to database meme.stats by given id when called
 const postViewsMeme = async (req, res) => {
-    console.log("post upvotes")
     var body = req.body;
     var memeId = req.params.id;
-    var updatedViews= body.toUpdate
-    const result = await Meme.updateOne({_id: memeId}, {updatedViews})
+    // console.log("post views")
+    // console.log(req.body)
+    let currentMeme = await Meme.findById(memeId);    
+    // console.log(currentMeme)
+    var currentViews = currentMeme.stats.views
+    // console.log("current views: ", currentViews)
+    updatedViews = currentViews+1
+    // console.log("updated views", updatedViews)
+    const result = await Meme.updateOne({_id: memeId}, {'stats.views': updatedViews})
 }
 
 const postUpvotesMeme = async (req, res) => {
@@ -199,85 +172,6 @@ const postDownvotesMeme = async (req, res) => {
 }
 
 
-
-// Api Image Mamipulation/Creation
-const executeImageCreation  = async (req, res) => {
-
-    //Arrays
-    const xPositions = req.body.xPositions
-    const yPositions = req.body.yPositions
-    const texts = req.body.texts
-    const textColor = req.body.textColor
-    const textsPerImage = req.body.textsPerImage
-    
-    //Bool
-    const imageset = req.body.imageset
-
-    //Numbers
-    const points = xPositions.length
-        // variables
-        var imagesToCreate = req.body.images
-        var loop = 0;
-        var textsToDisplay = textsPerImage
-        var savedImage = 0
-
-    if(imageset){// a set of images as result
-        for(i=0; i<imagesToCreate; i++){    
-            console.log("create image", i)
-            let image = await Jimp.read('./public/memes/jan_domi_punch.png')
-                Jimp.loadFont(Jimp.FONT_SANS_32_BLACK).then(font => { 
-                    //print text with color
-                    new Jimp(1280, 720, 0x0, function (err, finishedTextImage) {
-                        for (loop; loop < textsToDisplay; loop++) {
-                            finishedTextImage.print(font, xPositions[loop], yPositions[loop], texts[loop])
-                        }
-                        finishedTextImage.color([{ apply: 'xor', params: [textColor] }]);
-                        savedImage = addOne(savedImage)
-                        textsToDisplay = textsToDisplay+textsPerImage
-                    return image
-                        //merge images
-                        .blit(finishedTextImage, 0, 0) 
-                        //save new image
-                        .write('./public/memes/image_'+savedImage+'.png'); // save
-                    });
-            });    
-                    
-        }
-        
-    } else if (!imageset){ // only one image as result
-        console.log("arrived in image creation")
-        //const resultingImage = await Jimp.read('/images/jan_domi_punch.png') 
-        Jimp.read('./public/memes/jan_domi_punch.png')
-        .then(image => {
-            Jimp.loadFont(Jimp.FONT_SANS_32_BLACK).then(font => { 
-                //print text with color
-                new Jimp(1280, 720, 0x0, function (err, finishedTextImage) {
-                    for (loop = 0; loop < points; loop++) {
-                        finishedTextImage.print(font, xPositions[loop], yPositions[loop], texts[loop])
-                    }
-                    finishedTextImage.color([{ apply: 'xor', params: [textColor] }]);
-                
-                return image
-                    //merge images
-                    .blit(finishedTextImage, 0, 0)                
-                    //.print(font, x, y, message, maxWidth) // print a message on an image with text wrapped at maxWidth
-                    .write('./public/memes/image.png'); // save
-                });
-            });    
-        })
-        .catch(err => {
-        console.error(err);
-        }); 
-    } else {
-        console.log("imageset is not valid")
-    }
-}
-
-// helper method for image saving 
-const addOne = (number) => {
-    return number+1
-}
-
 module.exports = {
     createMeme,
     deleteMeme,
@@ -286,6 +180,5 @@ module.exports = {
     postUpvotesMeme,
     postDownvotesMeme,
     getMemes,
-    getMemeById,
-    executeImageCreation
+    getMemeById
 }

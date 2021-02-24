@@ -24,7 +24,7 @@ const resetDB = async() => {
         comment_ids: [0, 1],
         user_id: 0,
         visibilty: 2,
-        creationDate: "2021-02-12",
+        creationDate: "2021/02/12",
         stats: {
             upvotes: [0, 2, 3],
             downvotes: [1],
@@ -41,7 +41,7 @@ const resetDB = async() => {
         comment_ids: [2, 3],
         user_id: 1,
         visibilty: 2,
-        creationDate: "2021-02-13",
+        creationDate: "2021/02/13",
         stats: {
             upvotes: [0],
             downvotes: [1, 2, 3],
@@ -58,7 +58,7 @@ const resetDB = async() => {
         comment_ids: [4, 5],
         user_id: 2,
         visibilty: 2,
-        creationDate: "2021-02-14",
+        creationDate: "2021/02/14",
         stats: {
             upvotes: [0, 3],
             downvotes: [1, 2],
@@ -100,14 +100,14 @@ const resetDB = async() => {
         _id: 0,
         user_id: 0,
         message: 'Richtig unlustiges Meme',
-        creationDate: '12.02.2021'
+        creationDate: '2021/02/12'
     };
 
     var defaultComment2 = {
         _id: 1,
         user_id: 1,
         message: 'Wow, gar nicht lustig - wirklich 0 lustig ..',
-        creationDate: '12.02.2021'
+        creationDate: '2021/02/12'
     };
 
     await db.collection('comments').insertMany([defaultComment, defaultComment2]);

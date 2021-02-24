@@ -76,21 +76,27 @@ class CreateAPI extends Component {
             params['boxes['+i+'][text]'] = inputElems[i].value;
             this.captions.push(inputElems[i].value);
         }
-        let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');//boxes[0][text]
+        let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+
         e.target.textContent = this.generateButtonTexts.loading;
-        let response = await fetch('https://api.imgflip.com/caption_image', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: queryString
-        });
-        let resJson = await response.json();
-        e.target.textContent = this.generateButtonTexts.default;
-        if(resJson.success){
-            this.setState({
-                generatedMemeURL: resJson.data.url
+        try{
+            let response = await fetch('https://api.imgflip.com/caption_image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: queryString
             });
+            let resJson = await response.json();
+            e.target.textContent = this.generateButtonTexts.default;
+            if(resJson.success){
+                this.setState({
+                    generatedMemeURL: resJson.data.url
+                });
+            }
+        }catch(err){
+            console.log('Failed to generate meme: ',err);
+            e.target.textContent = this.generateButtonTexts.default;
         }
     }
 
@@ -121,25 +127,36 @@ class CreateAPI extends Component {
                 //new meme ID now at res.data.id
             }
             e.target.textContent = this.publishButtonTexts.default;
+        }).catch(err =>{
+            console.log('Failed to publish meme: ',err);
+            e.target.textContent = this.publishButtonTexts.default;
         });
     }
 
     componentDidMount = async()=>{
-        let response = await fetch('https://api.imgflip.com/get_memes');
-        let resJson = await response.json();
-        if(resJson.success){
-            this.setState({
-                templates: resJson.data.memes,
-                templatesLoading: false
-            });
+        try{
+            let response = await fetch('https://api.imgflip.com/get_memes');
+            let resJson = await response.json();
+            if(resJson.success){
+                this.setState({
+                    templates: resJson.data.memes,
+                    templatesLoading: false
+                });
+            }
+        }catch(err){
+            console.log('Failed to get templates from ImgFlip: ',err);
         }
 
-        //TODO insert actual userId
-        response = await api.getTemplateVisibilityOptions(0);
-        this.setState({
-            visibilityOptions: response.data.data,
-            visibilityOptionsLoading: false
-        });
+        try{
+            //TODO insert actual userId
+            response = await api.getTemplateVisibilityOptions(0);
+            this.setState({
+                visibilityOptions: response.data.data,
+                visibilityOptionsLoading: false
+            });
+        }catch(err){
+            console.log('Failed to get visibility options: ',err);
+        }
     }
 
     render() {
@@ -166,7 +183,7 @@ class CreateAPI extends Component {
                         </div>
                     ) : (
                         templates.map((t)=>(
-                            <img src={t.url} alt={t.name} title={t.name} onClick={this.handleTemplateClick} />
+                            <img src={t.url} alt={t.name} title={t.name} onClick={this.handleTemplateClick} key={'template-'+t.id} />
                         ))
                     )}
                 </div>
@@ -197,7 +214,7 @@ class CreateAPI extends Component {
                         ) : (
                             <div id="visibilityOption-wrapper">
                             {visibilityOptions.map((vo)=>(
-                                <p className="visibilityOption">
+                                <p className="visibilityOption" key={'visibilityOption-'+vo.value}>
                                 <input type="radio" name="visibility" id={"visibility-"+vo.value} value={vo.value} onChange={this.handleVisibilityOptionCheck} />
                                 <label htmlFor={"visibility-"+vo.value}>{vo.name}</label>
                                 </p>

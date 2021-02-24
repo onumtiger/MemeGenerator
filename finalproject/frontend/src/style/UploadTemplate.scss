@@ -1,8 +1,15 @@
 @import "_globalMixins.scss";
+
 $sourceButtonWidth: 17em;
 $sourceButtonMarginRight: 10px;
 $sourceButtonColor1: #6ebc6e;
 $sourceButtonColor2: #469746;
+
+@mixin inactiveBtn {
+    background-color: gray;
+    border-color: darkgray;
+    cursor: not-allowed;
+}
 
 #upload-template-table {
     width: 100%;
@@ -51,6 +58,10 @@ $sourceButtonColor2: #469746;
         #input-fileURL-confirm, #input-snapshotURL-confirm {
             @include largeButton($sourceButtonColor1, $sourceButtonColor2);
             width: $sourceButtonWidth;
+            
+            &.inactive{
+                @include inactiveBtn;
+            }
         }
 
         fieldset {
@@ -103,9 +114,7 @@ $sourceButtonColor2: #469746;
             @include largeButton(#6079d7, #2f4dbb);
 
             &.inactive{
-                background-color: gray;
-                border-color: darkgray;
-                cursor: not-allowed;
+                @include inactiveBtn;
             }
         }
     }  
