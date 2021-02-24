@@ -7,19 +7,34 @@ export default class TemplatesList extends React.Component {
     constructor(props){
         super(props);
 
+        this.state = {
+            showNavButtons: false
+        };
+
+        this.currentlySelectedIndex = 0;
+
         //this binding for React event handlers
         [
             'handleTemplateClick',
-            'handlePlusButtonClick'
+            'handlePlusButtonClick',
+            'handlePrevButtonClick',
+            'handleNextButtonClick'
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
     }
 
     handleTemplateClick(e){
-        let src = e.target.src;
-        this.props.handleSelectionChange(e.target);
+        let elem = e.target;
+        let src = elem.src;
+
+        this.currentlySelectedIndex = this.props.data.templates.findIndex((t)=>(
+            elem.id == 'template_'+t._id
+        ));
+        
+        this.props.handleSelectionChange(elem);
         this.props.handleTemplateSelection(src);
+        this.setState({showNavButtons: true});
     }
 
     handlePlusButtonClick(e){
@@ -27,19 +42,50 @@ export default class TemplatesList extends React.Component {
         this.props.handlePlusButtonClick();
     }
 
+    handlePrevButtonClick(e){
+        this.currentlySelectedIndex--;
+        if(this.currentlySelectedIndex < 0) this.currentlySelectedIndex = this.props.data.templates.length-1;
+
+        let newSelectedElem = document.querySelectorAll('#template-list-wrapper .templateImg')[this.currentlySelectedIndex];
+        this.props.handleSelectionChange(newSelectedElem);
+        this.props.handleTemplateSelection(newSelectedElem.src);
+    }
+
+    handleNextButtonClick(e){
+        this.currentlySelectedIndex++;
+        if(this.currentlySelectedIndex >= this.props.data.templates.length) this.currentlySelectedIndex = 0;
+
+        let newSelectedElem = document.querySelectorAll('#template-list-wrapper .templateImg')[this.currentlySelectedIndex];
+        this.props.handleSelectionChange(newSelectedElem);
+        this.props.handleTemplateSelection(newSelectedElem.src);
+    }
+
     render(){
         return (
-            <div id="template-container">
-                {this.props.data.isLoading ? (
-                    <div id="loader">
-                        <Loader type="ThreeDots" height={200} width={200} color="#7ab2e1" visible={true} />
-                    </div>
-                ) : (
-                    this.props.data.templates.map((t)=>(
-                        <img src={t.url} alt={t.name} title={t.name} id={'template_'+t._id} key={'template_'+t._id} onClick={this.handleTemplateClick} />
-                    ))
-                )}
-                <img id="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />
+            <div id="template-list-wrapper">
+                <h3>First, choose a template
+                {this.state.showNavButtons && (
+                    <span id="navbutton-wrapper">
+                    (
+                    <button type="button" className="navButton" onClick={this.handlePrevButtonClick}>Previous</button>
+                    /
+                    <button type="button" className="navButton" onClick={this.handleNextButtonClick}>Next</button>
+                    )
+                    </span>
+                )}:
+                </h3>
+                <div id="template-container">
+                    {this.props.data.isLoading ? (
+                        <div id="loader">
+                            <Loader type="ThreeDots" height={200} width={200} color="#7ab2e1" visible={true} />
+                        </div>
+                    ) : (
+                        this.props.data.templates.map((t)=>(
+                            <img src={t.url} alt={t.name} title={t.name} id={'template_'+t._id} key={'template_'+t._id} className="templateImg" onClick={this.handleTemplateClick} />
+                        ))
+                    )}
+                    <img id="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />
+                </div>
             </div>
         );
     }

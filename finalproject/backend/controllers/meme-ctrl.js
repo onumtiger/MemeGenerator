@@ -3,7 +3,6 @@ const User = require('../db/models/user-model');
 const dbUtils = require('../db/dbUtils');
 const globalHelpers = require('../utils/globalHelpers');
 
-
 const createMeme = async (req, res) => { //TODO send template ID, increment template uses on creation
     const body = req.body;
 
@@ -18,105 +17,72 @@ const createMeme = async (req, res) => { //TODO send template ID, increment temp
         let img = req.files.image;
         let id = await dbUtils.getNewEmptyMemeID();
         let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
-        img.mv('public/memes/'+filename, async function(err){ //this overwrites an existing image at that filepath if there is one!
+        let url = '/memes/'+filename;
+        img.mv('public'+url, async function(err){ //this overwrites an existing image at that filepath if there is one!
             if(err){
-                res.status(500).send(err);
-            }else{
-                let url = 'memes/'+filename;
-                
-                const meme = new Meme({
-                    _id: id,
-                    url: url,
-                    name: body.name,
-                    user_id: body.userID,
-                    visibility: body.visibility,
-                    captions: body.captions,
-                    comment_ids: [],
-                    creationDate: globalHelpers.getTodayString(),
-                    stats: {
-                        _id: id,
-                        upvotes: [],
-                        downvotes: [],
-                        views: 0
-                    }
-                });
-
-
-                if (!meme) {
-                    return res.status(400).json({
-                        success: false,
-                        error: "Meme data could not be parsed for storing!"
-                    });
-                }
-
-                meme
-                    .save()
-                    .then(() => {
-                        return res.status(201).json({
-                            success: true,
-                            id: meme._id,
-                            error: 'Meme successfully stored!'
-                        })
-                    })
-                    .catch(dbError => {
-                        return res.status(500).json({
-                            success: false,
-                            error: 'Meme could not be stored! You should find additional error info in the detailedError property of this JSON.',
-                            detailedError: dbError
-                        })
-                    })
-            }
-        });
-    } else if(body.imageURL){
-        let id = await dbUtils.getNewEmptyMemeID();
-        
-        const meme = new Meme({
-            _id: id,
-            url: body.imageURL,
-            name: body.name,
-            user_id: body.userID,
-            visibility: body.visibility,
-            captions: body.captions,
-            comment_ids: [],
-            creationDate: globalHelpers.getTodayString(),
-            stats: {
-                _id: id,
-                upvotes: [],
-                downvotes: [],
-                views: 0
-            }
-        });
-            
-
-        if (!meme) {
-            return res.status(400).json({
-                success: false,
-                error: "Meme data could not be parsed for storing!"
-            });
-        }
-
-        meme
-            .save()
-            .then(() => {
-                return res.status(201).json({
-                    success: true,
-                    id: meme._id,
-                    error: 'Meme successfully stored!'
-                })
-            })
-            .catch(dbError => {
                 return res.status(500).json({
                     success: false,
-                    error: 'Meme could not be stored! You should find additional error info in the detailedError property of this JSON.',
-                    detailedError: dbError
-                })
-            })
+                    error: err.toString()
+                });
+            }
+            body.id = id;
+            body.url = url;
+            saveMeme(body, res);
+        });
+    } else if(body.imageURL){
+        body.id = await dbUtils.getNewEmptyMemeID();
+        body.url = body.imageURL;
+        saveMeme(body, res);
+        
     } else {
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             error: 'No valid file received!'
         });
     }
+}
+
+const saveMeme = (params, res) => {
+    const meme = new Meme({
+        _id: params.id,
+        url: params.url,
+        name: params.name,
+        user_id: params.userID,
+        visibility: params.visibility,
+        captions: params.captions,
+        comment_ids: [],
+        creationDate: globalHelpers.getTodayString(),
+        stats: {
+            _id: id,
+            upvotes: [],
+            downvotes: [],
+            views: 0
+        }
+    });
+
+    if (!meme) {
+        return res.status(400).json({
+            success: false,
+            error: "Meme data could not be parsed for storing!"
+        });
+    }
+
+    meme
+        .save()
+        .then(() => {
+            return res.status(201).json({
+                success: true,
+                id: meme._id,
+                error: 'Meme successfully stored!'
+            })
+        })
+        .catch(dbError => {
+            return res.status(500).json({
+                success: false,
+                error: 'Meme could not be stored! You should find additional error info in the detailedError property of this JSON.',
+                detailedError: dbError
+            })
+        })
 }
 
 const deleteMeme = async (req, res) => {

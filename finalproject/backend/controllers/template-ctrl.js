@@ -16,56 +16,68 @@ const createTemplate = async (req, res) => {
         let img = req.files.image;
         let id = await dbUtils.getNewEmptyTemplateID();
         let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
-        img.mv('public/templates/'+filename, async function(err){ //this overwrites an existing image at that filepath if there is one!
+        let url = '/templates/'+filename;
+        img.mv('public'+url, async function(err){ //this overwrites an existing image at that filepath if there is one!
             if(err){
-                res.status(500).send(err);
-            }else{
-                let url = '/templates/'+filename;
-                
-                const template = new Template({
-                    _id: id,
-                    url: url,
-                    name: body.name,
-                    user_id: body.userID,
-                    visibility: body.visibility,
-                    stats: {
-                        upvotes: [],
-                        downvotes: [],
-                        uses: 0
-                    }
+                return res.status(500).json({
+                    success: false,
+                    error: err.toString()
                 });
-
-
-                if (!template) {
-                    return res.status(400).json({
-                        success: false,
-                        error: "Template data could not be parsed for storing!"
-                    });
-                }
-            
-                template
-                    .save()
-                    .then(() => {
-                        return res.status(201).json({
-                            success: true,
-                            id: template._id
-                        })
-                    })
-                    .catch(dbError => {
-                        return res.status(500).json({
-                            success: false,
-                            error: 'Template could not be stored! You should find additional error info in the detailedError property of this JSON.',
-                            detailedError: dbError
-                        })
-                    })
             }
+            body.id = id;
+            body.url = url;
+            saveTemplate(body, res);
+
         });
+    }else if(body.imageURL){
+        body.id = await dbUtils.getNewEmptyTemplateID();
+        body.url = body.imageURL;
+        saveTemplate(body, res);
+
     }else{
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             error: 'No valid file received!'
         });
     }
+}
+
+const saveTemplate = (params, res) => {
+    const template = new Template({
+        _id: params.id,
+        url: params.url,
+        name: params.name,
+        user_id: params.userID,
+        visibility: params.visibility,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    });
+
+    if (!template) {
+        return res.status(400).json({
+            success: false,
+            error: "Template data could not be parsed for storing!"
+        });
+    }
+
+    template
+        .save()
+        .then(() => {
+            return res.status(201).json({
+                success: true,
+                id: template._id
+            })
+        })
+        .catch(dbError => {
+            return res.status(500).json({
+                success: false,
+                error: 'Template could not be stored! You should find additional error info in the detailedError property of this JSON.',
+                detailedError: dbError
+            })
+        })
 }
 
 const deleteTemplate = async (req, res) => {

@@ -115,7 +115,6 @@ export default class CreateCustom extends React.Component {
         return (
             <div id="create-custom-page-wrapper">
                 <h2>Custom Meme Creation</h2>
-                <h3>First, choose a template:</h3>
                 <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letAddTemplate} handleSelectionChange={this.changeSelection} />
                 {this.state.showTemplateSelection &&
                     <CreateTemplateSelection handleUploadButtonClick={this.selectTemplateUpload} handleCreateButtonClick={this.selectTemplateCreation} />
