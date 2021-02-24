@@ -28,7 +28,7 @@ const resetDB = async ()=>{
         stats: {
             upvotes: [0, 2, 3],
             downvotes: [1],
-            views: 230
+            views: 0
         }
     };
 
@@ -45,7 +45,7 @@ const resetDB = async ()=>{
         stats: {
             upvotes: [0],
             downvotes: [1, 2, 3],
-            views: 160
+            views: 0
         }
     };
 
@@ -62,7 +62,7 @@ const resetDB = async ()=>{
         stats: {
             upvotes: [0, 3],
             downvotes: [1, 2],
-            views: 90
+            views: 0
         }
     };
 
