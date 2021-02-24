@@ -1,8 +1,8 @@
 const MemeStats = require('../db/models/memestats-model');
 const TemplateStats = require('../db/models/templatestats-model');
 
-const getStatsForMeme = async (req, res) => {
-    let memeId = req.body.id;
+const getStatsForMeme = async(req, res) => {
+    let memeId = req.params.id;
     await MemeStats.findOne({ _id: memeId }, (err, stats) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -17,8 +17,8 @@ const getStatsForMeme = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getStatsForTemplate = async (req, res) => {
-    let templateId = req.body.id;
+const getStatsForTemplate = async(req, res) => {
+    let templateId = req.params.id;
     await TemplateStats.findOne({ _id: templateId }, (err, stats) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })

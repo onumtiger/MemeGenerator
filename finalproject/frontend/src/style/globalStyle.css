@@ -38,6 +38,10 @@
     color: white;
     border-radius: 7px;
     margin-left: 5px;
+    border: white;
+    padding: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 .userInfo {

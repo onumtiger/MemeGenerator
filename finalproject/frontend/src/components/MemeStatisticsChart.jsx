@@ -9,14 +9,15 @@ class MemeStatisticsChart extends React.Component {
     }
 
     componentDidMount() {
-        // const { upvotes, downvotes, views} = this.props;
-        const upvotes = [20, 45, 33, 67, 54, 24, 25, 35, 64, 35, 23, 14, 53, 45];
-        const downvotes = [2, 4, 3, 7, 4, 4, 5, 3, 4, 3, 3, 1, 3, 5];
-        const views = [30, 51, 45, 83, 64, 76, 34, 42, 70, 39, 28, 19, 56, 54];
+        const { upvotes, downvotes, views } = this.props;
         const w = 630;
         const h = 300;
         const scaleFactor = 3;
         const barWidth = 10;
+
+        console.log("upvotes in chart: ", upvotes)
+        console.log("downvotes in chart: ", downvotes)
+        console.log("views in chart: ", views)
 
         const svg = d3
             .select(".barchart")
