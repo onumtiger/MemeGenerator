@@ -7,6 +7,9 @@ import MemeStatisticsChart from './MemeStatisticsChart';
 import '../style/SingleView.scss';
 
 export default class SingleView extends Component {
+
+    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -57,12 +60,14 @@ export default class SingleView extends Component {
         console.log(this.state.views)
     }
 
-    componentDidMount = async () => {
-        const memeId = this.props.meme._id;
-        api.postViewsMeme(memeId).catch(err => {
-            console.log('Failed to post views: ', err)
+    //triggers a +1 view in db
+    sendView(memeId){
+        console.log("send view for id: ", memeId)
+        api.postViewMeme(memeId).catch(err =>{
+            console.log('Failed to post views: ',err)
         });
     }
+
 
     render() {
         const meme = this.props.meme;
@@ -70,6 +75,20 @@ export default class SingleView extends Component {
         if (this.previousMemeId != meme._id) {
             this.previousMemeId = meme._id;
             this.getMemeStats();
+        }
+        
+        //prevents double counting 
+        if(!(this.previousMemeId == meme._id) && (this.previousMemeId != null)){
+            console.log("old previousMemeId: ", this.previousMemeId)
+            console.log("current meme._id: ", meme._id)
+            this.previousMemeId = meme._id
+            console.log("new previousMemeId: ", this.previousMemeId)
+            this.sendView(meme._id)
+        } else if (this.previousMemeId == null){
+            console.log("first send!")
+            console.log("previousMemeId: ", this.previousMemeId)
+            this.previousMemeId = meme._id
+            this.sendView(meme._id)
         }
 
         return (

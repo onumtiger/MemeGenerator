@@ -149,7 +149,7 @@ class CreateAPI extends Component {
 
         try{
             //TODO insert actual userId
-            response = await api.getTemplateVisibilityOptions(0);
+            let response = await api.getTemplateVisibilityOptions(0);
             this.setState({
                 visibilityOptions: response.data.data,
                 visibilityOptionsLoading: false

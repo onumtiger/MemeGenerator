@@ -141,7 +141,7 @@ const patchMeme = async function(req, res) {
 }
 
 // adds a SINGLE view to database meme.stats by given id when called
-const postViewsMeme = async (req, res) => {
+const postViewMeme = async (req, res) => {
     var body = req.body;
     var memeId = req.params.id;
     // console.log("post views")
@@ -176,7 +176,7 @@ module.exports = {
     createMeme,
     deleteMeme,
     patchMeme,
-    postViewsMeme,
+    postViewMeme,
     postUpvotesMeme,
     postDownvotesMeme,
     getMemes,
