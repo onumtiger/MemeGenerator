@@ -10,12 +10,12 @@ export default class SingleView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            memeStats: [],
             upvotes: [],
             downvotes: [],
             views: [],
-            days: []
+            showStats: false
         }
+        this.previousMemeId = null;
     }
 
     getDateString(inputDateString) {
@@ -26,48 +26,51 @@ export default class SingleView extends Component {
         return `${day}.${month}.${year}`;
     }
 
-    componentDidMount = async () => {
-        const memeId = this.props.meme._id;
-        api.postViewsMeme(memeId).catch(err => {
-            console.log('Failed to post views: ', err)
-        });
-
+    getMemeStats = async () => {
+        this.setState({
+            showStats: false
+        })
+        let memeStats = [];
         const meme = this.props.meme;
-        const memeStats = this.state;
         let response = await api.getStatsForMeme(meme._id);
-        this.state.memeStats = response.data.data;
-        this.state.days = this.state.memeStats.days;
+        memeStats = response.data.data.days;
 
-        for (var i = 0; i < memeStats.days.length; i++) {
-            this.state.upvotes.push(memeStats.days[i].upvotes)
-            this.state.downvotes.push(memeStats.days[i].downvotes)
-            this.state.views.push(memeStats.days[i].views)
+        var upvotes = [];
+        var downvotes = [];
+        var views = [];
+
+        for (var i = 0; i < memeStats.length; i++) {
+            upvotes.push(memeStats[i].upvotes)
+            downvotes.push(memeStats[i].downvotes)
+            views.push(memeStats[i].views)
         }
+
+        this.setState({
+            upvotes: upvotes,
+            downvotes: downvotes,
+            views: views,
+            showStats: true
+        })
+
         console.log(this.state.upvotes)
         console.log(this.state.downvotes)
         console.log(this.state.views)
     }
 
-    componentDidUpdate() {
+    componentDidMount = async () => {
         const memeId = this.props.meme._id;
         api.postViewsMeme(memeId).catch(err => {
             console.log('Failed to post views: ', err)
         });
-
-        const memeStats = this.state;
-        this.state.upvotes = [];
-        this.state.downvotes = [];
-        this.state.views = [];
-
-        for (var i = 0; i < memeStats.days.length; i++) {
-            this.state.upvotes.push(memeStats.days[i].upvotes)
-            this.state.downvotes.push(memeStats.days[i].downvotes)
-            this.state.views.push(memeStats.days[i].views)
-        }
     }
 
     render() {
         const meme = this.props.meme;
+
+        if (this.previousMemeId != meme._id) {
+            this.previousMemeId = meme._id;
+            this.getMemeStats();
+        }
 
         return (
             <div id="single-view-wrapper">
@@ -91,12 +94,12 @@ export default class SingleView extends Component {
                     </tbody>
                 </table>
                 <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
-                <MemeStatisticsChart
+                {this.state.showStats && (<MemeStatisticsChart
                     upvotes={this.state.upvotes}
                     downvotes={this.state.downvotes}
                     views={this.state.views}
                 >
-                </MemeStatisticsChart>
+                </MemeStatisticsChart>)}
             </div>
         )
     }

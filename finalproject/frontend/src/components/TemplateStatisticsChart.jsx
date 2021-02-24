@@ -2,21 +2,22 @@ import React from "react";
 import * as d3 from "d3";
 import '../style/globalStyle.css';
 
-class MemeStatisticsChart extends React.Component {
+class TemplateStatisticsChart extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {};
     }
 
     componentDidMount() {
-        const { upvotes, downvotes, views } = this.props;
+        const { upvotes, downvotes, uses } = this.props;
         const w = 630;
         const h = 300;
         const scaleFactor = 3;
         const barWidth = 10;
 
-        console.log("upvotes in chart: ", upvotes)
-        console.log("downvotes in chart: ", downvotes)
-        console.log("views in chart: ", views)
+        console.log("upvotes in template chart: ", upvotes)
+        console.log("downvotes in template chart: ", downvotes)
+        console.log("views in template chart: ", uses)
 
         const svg = d3
             .select(".barchart")
@@ -42,19 +43,6 @@ class MemeStatisticsChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        // svg
-        //     .selectAll("text").select(".upVotesText")
-        //     .data(upvotes)
-        //     .enter()
-        //     .append("text")
-        //     .attr("class", "upVotesText")
-        //     .style("font-size", 12)
-        //     .attr("fill", "#54cf55")
-        //     .attr("x", (d, i) => i * 43 + 21)
-        //     .attr('y', (d, i) => {
-        //         return h - 18 - d * scaleFactor - 10;
-        //     })
-        //     .text(d => d);
         //downvotes
         svg
             .selectAll("rect").select(".downVotes")
@@ -73,23 +61,10 @@ class MemeStatisticsChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        // svg
-        //     .selectAll("text").select(".downVotesText")
-        //     .data(downvotes)
-        //     .enter()
-        //     .append("text")
-        //     .attr("class", "downVotesText")
-        //     .style("font-size", 12)
-        //     .attr("fill", "#ec5252")
-        //     .attr("x", (d, i) => i * 43 + 35)
-        //     .attr('y', (d, i) => {
-        //         return h - 18 - d * scaleFactor - 10;
-        //     })
-        //     .text(d => d);
         //views
         svg
             .selectAll("rect").select(".viewsBar")
-            .data(views)
+            .data(uses)
             .enter()
             .append("rect")
             .attr("fill", "navy")
@@ -104,19 +79,6 @@ class MemeStatisticsChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        // svg
-        //     .selectAll("text").select(".viewsText")
-        //     .data(views)
-        //     .enter()
-        //     .append("text")
-        //     .attr("class", "viewsText")
-        //     .style("font-size", 12)
-        //     .attr("fill", "navy")
-        //     .attr("x", (d, i) => i * 43 + 41)
-        //     .attr('y', (d, i) => {
-        //         return h - 18 - d * scaleFactor - 10;
-        //     })
-        //     .text(d => d);
 
         // Create scale
         var xScale = d3.scaleLinear()
@@ -147,16 +109,16 @@ class MemeStatisticsChart extends React.Component {
         return (
             <div>
                 <div className="barchart">
-                    <h4>Upvotes, downvotes and views over the last 14 days</h4>
+                    <h4>Upvotes, downvotes and usage over the last 14 days</h4>
                 </div>
                 <div className="legende">
                     <div className="upvoteColor"></div> upvotes
                     <div className="downvoteColor"></div> downvotes
-                    <div className="viewsColor"></div> views
+                    <div className="viewsColor"></div> uses
                 </div>
             </div>
 
         );
     }
 }
-export default MemeStatisticsChart;
+export default TemplateStatisticsChart;

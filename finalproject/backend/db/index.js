@@ -403,6 +403,103 @@ const resetDB = async() => {
 
     await db.collection('memestats').insertMany([defaultMemeStats, defaultMemeStats2, defaultMemeStats3]);
     console.log("Default memestats inserted");
+
+
+    // mongoose lokal db MemeStats insert/reset, without SCHMEMA
+    await db.collection('templatestats').deleteMany({});
+    console.log("Old templatestats deleted");
+
+    var defaultTemplateStats = {
+        _id: 0,
+        days: [{
+                date: "2021/02/09",
+                upvotes: 10,
+                downvotes: 2,
+                uses: 12
+            },
+            {
+                date: "2021/02/10",
+                upvotes: 7,
+                downvotes: 4,
+                uses: 13
+            },
+            {
+                date: "2021/02/11",
+                upvotes: 8,
+                downvotes: 3,
+                uses: 12
+            },
+            {
+                date: "2021/02/12",
+                upvotes: 14,
+                downvotes: 7,
+                uses: 6
+            },
+            {
+                date: "2021/02/13",
+                upvotes: 20,
+                downvotes: 4,
+                uses: 8
+            },
+            {
+                date: "2021/02/14",
+                upvotes: 17,
+                downvotes: 4,
+                uses: 9
+            },
+            {
+                date: "2021/02/15",
+                upvotes: 13,
+                downvotes: 5,
+                uses: 9
+            },
+            {
+                date: "2021/02/16",
+                upvotes: 15,
+                downvotes: 3,
+                uses: 15
+            },
+            {
+                date: "2021/02/17",
+                upvotes: 20,
+                downvotes: 4,
+                uses: 19
+            },
+            {
+                date: "2021/02/18",
+                upvotes: 27,
+                downvotes: 3,
+                uses: 28
+            },
+            {
+                date: "2021/02/19",
+                upvotes: 32,
+                downvotes: 3,
+                uses: 36
+            },
+            {
+                date: "2021/02/20",
+                upvotes: 34,
+                downvotes: 1,
+                uses: 39
+            },
+            {
+                date: "2021/02/21",
+                upvotes: 37,
+                downvotes: 3,
+                uses: 40
+            },
+            {
+                date: "2021/02/22",
+                upvotes: 45,
+                downvotes: 5,
+                uses: 54
+            }
+        ]
+    }
+
+    await db.collection('templatestats').insertMany([defaultTemplateStats]);
+    console.log("Default templatestats inserted");
 }
 
 //comment this line out if you don't want the DB to reset
