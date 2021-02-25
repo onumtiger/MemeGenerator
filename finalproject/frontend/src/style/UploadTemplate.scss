@@ -5,12 +5,6 @@ $sourceButtonMarginRight: 10px;
 $sourceButtonColor1: #6ebc6e;
 $sourceButtonColor2: #469746;
 
-@mixin inactiveBtn {
-    background-color: gray;
-    border-color: darkgray;
-    cursor: not-allowed;
-}
-
 #upload-template-table {
     width: 100%;
     border-collapse: collapse;

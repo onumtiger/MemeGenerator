@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 mongoose
-    .connect('mongodb://127.0.0.1:27017/memeApp', { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect('mongodb://127.0.0.1:27017/memeApp', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .catch(e => {
         console.error('Connection error', e.message)
     });
@@ -197,7 +197,8 @@ const resetDB = async() => {
         _id: 0,
         url: 'username_one',
         password: '123',
-        meme_ids: ['0', '1']
+        meme_ids: ['0', '1'],
+        draft_ids: [0]
     };
 
     var defaultUser2 = {
@@ -708,6 +709,45 @@ const resetDB = async() => {
 
     await db.collection('templatestats').insertMany([defaultTemplateStats, defaultTemplateStats2]);
     console.log("Default templatestats inserted");
+
+    
+    await db.collection('drafts').deleteMany({});
+    console.log("Old drafts deleted");
+    
+    var defaultdraft = {
+        "_id": 0,
+        "template_src": "/templates/Bernie-I-Am-Once-Again-Asking-For-Your-Support.jpg",
+        "title": "Da Truth My Brutha",
+        "captions": [
+            {
+                "fontSize": 41,
+                "colorR": 255,
+                "colorG": 255,
+                "colorB": 255,
+                "bold": true,
+                "italic": false,
+                "fontFace": "Arial",
+                "x": 173,
+                "y": 791,
+                "text": "for clear feature descriptions"
+            },
+            {
+                "fontSize": 60,
+                "colorR": 255,
+                "colorG": 0,
+                "colorB": 0,
+                "bold": false,
+                "italic": false,
+                "fontFace": "Impact",
+                "x": 268,
+                "y": 102,
+                "text": "Holla die Waldfee!"
+            }
+        ]
+    }
+
+    await db.collection('drafts').insertMany([defaultdraft]);
+    console.log("Default drafts inserted");
 }
 
 //comment this line out if you don't want the DB to reset

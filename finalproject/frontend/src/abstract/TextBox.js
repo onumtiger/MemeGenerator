@@ -1,5 +1,5 @@
 export default class TextBox {
-    constructor(canvasRef, x, y, t, fs, c, b=false, ff="Impact"){
+    constructor(canvasRef, x, y, t, fs, cr, cg, cb, b=false, i=false, ff="Impact"){
         this.textBoxPadding = 8; //buffer (in pixels) between textbox border and actual font
 
         this.canvasRef = canvasRef; //React reference to the canvas
@@ -7,15 +7,21 @@ export default class TextBox {
         this.startY = y; //top-left y
         this.text = t; //caption string
         this.fontSize = fs; //font size (px)
-        this.color = c; //text fill color
+        this.colorR = cr; //text fill color, red component
+        this.colorG = cg; //text fill color, green component
+        this.colorB = cb; //text fill color, blue component
         this.bold = b; //boolean for bold text
-        this.fontFamily = ff; //font family
+        this.italic = i; //boolean for italic text
+        this.fontFace = ff; //font face
 
         this.dragOffsetX = 0; //distance between the mousedown x coord and startX for anchored drag & drop
         this.dragOffsetY = 0; //distance between the mousedown y coord and startY for anchored drag & drop
         this.calcDimensions();
         this.disabled = false; //disabled (removed) boxes will be ignored for interaction and rendering
         this.controller = null; //wrapper HTMLDetailsElement (caption box) for the controlling inputs, can be set later via setController()
+    }
+    getColorString(r, g, b){
+        return `rgb(${r},${g},${b})`;
     }
     contains(cx, cy){
         return (cx >= this.startX-this.textBoxPadding && cx <= this.startX+this.width+this.textBoxPadding
@@ -25,12 +31,29 @@ export default class TextBox {
         //get the canvas drawing context
         let c = this.canvasRef.current.getContext('2d');
         //estimate text width given the font params
-        c.font = `${this.bold ? "bold" : "normal"} ${this.fontSize}px ${this.fontFamily}`;
-        let textMeasurement = c.measureText(this.text);
-        
+        let font = `${this.italic ? "italic" : "normal"} ${this.bold ? "bold" : "normal"} ${this.fontSize}px/1 ${this.fontFace}`
+        c.font = font;
+        let text = this.text || '.'; //empty box should still have dimensions
+        if(this.italic) text += '.'; //italic text tends to extend beyond the natural bonds, so let's add a virtual character to emulate the effect
+
         //apply estimate width / height
-        this.width = textMeasurement.width;
-        this.height = this.fontSize*0.9; //determined via testing: this is pretty accurate to give the line height
+
+        //old version: 
+        // let textMeasurement = c.measureText(text);
+        // this.width = textMeasurement.width;
+        // this.height = this.fontSize*0.9; //determined via testing
+
+        //new version: create a new element out of the viewport, write the text in it and measure its size
+        let newElem = document.createElement('span');
+        newElem.innerText = text;
+        newElem.style.font = font;
+        newElem.style.position = 'absolute';
+        newElem.style.whiteSpace = 'nowrap';
+        newElem.style.left = '150%';
+        document.body.appendChild(newElem);
+        this.width = newElem.clientWidth;
+        this.height = newElem.clientHeight;
+        document.body.removeChild(newElem);
     }
     disable(){
         this.disabled = true;
@@ -46,15 +69,21 @@ export default class TextBox {
         this.fontSize = fs;
         this.calcDimensions();
     }
-    updateColor(c){
-        this.color = c;
+    updateColor(cr, cg, cb){
+        this.colorR = cr;
+        this.colorG = cg;
+        this.colorB = cb;
     }
     updateBold(b){
         this.bold = b;
         this.calcDimensions();
     }
+    updateItalic(i){
+        this.italic = i;
+        this.calcDimensions();
+    }
     updateFontFamily(ff){
-        this.fontFamily = ff;
+        this.fontFace = ff;
         this.calcDimensions();
     }
     setDragAnchor(mx, my){
@@ -68,8 +97,8 @@ export default class TextBox {
     drawText(){
         let c = this.canvasRef.current.getContext('2d');
 
-        c.font = `${this.bold ? "bold" : "normal"} ${this.fontSize}px ${this.fontFamily}`;
-        c.fillStyle = this.color;
+        c.font = `${this.italic ? "italic" : "normal"} ${this.bold ? "bold" : "normal"} ${this.fontSize}px/1 ${this.fontFace}`;
+        c.fillStyle = this.getColorString(this.colorR, this.colorG, this.colorB);
         c.strokeStyle = "black";
         c.shadowColor = "black";
         c.shadowBlur = 5;
@@ -100,5 +129,32 @@ export default class TextBox {
     }
     getText(){
         return this.text;
+    }
+    getX(){
+        return this.startX;
+    }
+    getY(){
+        return this.startY;
+    }
+    getFontSize(){
+        return this.fontSize;
+    }
+    getBold(){
+        return this.bold;
+    }
+    getItalic(){
+        return this.italic;
+    }
+    getFontFace(){
+        return this.fontFace;
+    }
+    getColorR(){
+        return this.colorR;
+    }
+    getColorG(){
+        return this.colorG;
+    }
+    getColorB(){
+        return this.colorB;
     }
 }

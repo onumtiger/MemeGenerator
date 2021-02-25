@@ -60,34 +60,38 @@ export default class SingleView extends Component {
     }
 
     getMemeStats = async () => {
-        this.setState({
-            showStats: false
-        });
-        
-        const meme = this.props.meme;
-        let response = await api.getStatsForMeme(meme._id);
-        let memeStats = response.data.data.days;
+        try{
+            this.setState({
+                showStats: false
+            });
+            
+            const meme = this.props.meme;
+            let response = await api.getStatsForMeme(meme._id);
+            let memeStats = response.data.data.days;
 
-        var upvotes = [];
-        var downvotes = [];
-        var views = [];
+            var upvotes = [];
+            var downvotes = [];
+            var views = [];
 
-        for (var i = 0; i < memeStats.length; i++) {
-            upvotes.push(memeStats[i].upvotes);
-            downvotes.push(memeStats[i].downvotes);
-            views.push(memeStats[i].views);
+            for (var i = 0; i < memeStats.length; i++) {
+                upvotes.push(memeStats[i].upvotes);
+                downvotes.push(memeStats[i].downvotes);
+                views.push(memeStats[i].views);
+            }
+
+            this.setState({
+                upvotes: upvotes,
+                downvotes: downvotes,
+                views: views,
+                showStats: true
+            })
+
+            console.log(this.state.upvotes)
+            console.log(this.state.downvotes)
+            console.log(this.state.views)
+        }catch(err){
+            console.log('Failed to get Stats: ',err);
         }
-
-        this.setState({
-            upvotes: upvotes,
-            downvotes: downvotes,
-            views: views,
-            showStats: true
-        })
-
-        console.log(this.state.upvotes)
-        console.log(this.state.downvotes)
-        console.log(this.state.views)
     }
 
     //triggers a +1 view in db

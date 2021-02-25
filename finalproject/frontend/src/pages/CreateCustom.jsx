@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, UploadTemplate, TemplateStatisticsChart} from '../components';
+import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, UploadTemplate, TemplateStatisticsChart, DraftList} from '../components';
 import api from '../api';
 import '../style/CreateCustom.scss';
 
@@ -24,7 +24,8 @@ export default class CreateCustom extends React.Component {
                 upvotes: [],
                 downvotes: [],
                 uses: []
-            }
+            },
+            selectedDraft: null
         };
         
         //this binding for React event handlers
@@ -33,6 +34,7 @@ export default class CreateCustom extends React.Component {
             'selectTemplate',
             'selectTemplateUpload',
             'selectTemplateCreation',
+            'handleDraftSelection',
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
@@ -77,6 +79,14 @@ export default class CreateCustom extends React.Component {
         });
         this.updateTemplateStats(id);
     }
+
+    handleDraftSelection(draft){
+        this.initialTemplate = draft.template_src;
+        this.setState({
+            selectedDraft: draft,
+            showEditor: true
+        });
+    }
     
     updateTemplateStats = async (templateID) => {
         try{
@@ -110,7 +120,7 @@ export default class CreateCustom extends React.Component {
             }
         });
         try{
-        let templatesArray = await api.getAllTemplates();
+            let templatesArray = await api.getAllTemplates();
             if (templatesArray.data.success){
                 this.setState({
                     templateListData: {
@@ -156,6 +166,7 @@ export default class CreateCustom extends React.Component {
                     >
                     </TemplateStatisticsChart>
                 }
+                <DraftList handleDraftSelection={this.handleDraftSelection} />
                 {this.state.showTemplateSelection &&
                     <CreateTemplateSelection handleUploadButtonClick={this.selectTemplateUpload} handleCreateButtonClick={this.selectTemplateCreation} />
                 }
@@ -166,7 +177,7 @@ export default class CreateCustom extends React.Component {
                     <DrawTemplate handlePublishing={this.handlePublishedTemplate} />
                 }
                 {this.state.showEditor &&
-                    <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} history={this.props.history} />
+                    <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} draft={this.state.selectedDraft} history={this.props.history} />
                 }
             </div>
         );

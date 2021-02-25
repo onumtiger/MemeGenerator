@@ -1,0 +1,16 @@
+#drafts-wrapper {
+    #loader, #loader div {
+        display: inline-block;
+        margin: 0 30px;
+    }
+    .draft {
+        text-decoration: underline;
+        padding: 5px;
+        cursor: pointer;
+        transition: background-color .3s;
+
+        &:hover {
+            background-color: lightgray;
+        }
+    }
+}

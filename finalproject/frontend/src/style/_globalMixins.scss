@@ -30,6 +30,13 @@
     }
 }
 
+
+@mixin inactiveBtn {
+    background-color: gray;
+    border-color: darkgray;
+    cursor: not-allowed;
+}
+
 @mixin unstyled-input {
     background-color: transparent;
     border: 0;

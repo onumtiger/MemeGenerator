@@ -10,6 +10,7 @@ const statsRouter = require('./routes/stats-router.js');
 const webContentRouter = require('./routes/webcontent-router.js');
 const guiDataRouter = require('./routes/guidata-router.js');
 const generateRouter = require('./routes/generate-router.js');
+const draftRouter = require('./routes/draft-router.js');
 
 const fileUpload = require('express-fileupload');
 const app = express();
@@ -37,6 +38,7 @@ app.use('/api/stats', statsRouter);
 app.use('/api/webcontent', webContentRouter);
 app.use('/api/guidata', guiDataRouter);
 app.use('/api/external', generateRouter);
+app.use('/api/drafts', draftRouter);
 
 // fallback error message for anything else, using the same JSON response structure as the rest to allow for generic response handling without breaking anything with the default HTML/XML response
 app.use('/', (req, res) => {

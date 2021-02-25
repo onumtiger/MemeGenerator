@@ -25,6 +25,10 @@ export const deleteTemplateById = id => api.delete(`/templates/${id}`);
 export const getMemeVisibilityOptions = userId => api.get(`/guidata/visibility-options/meme/${userId}`);
 export const getTemplateVisibilityOptions = userId => api.get(`/guidata/visibility-options/template/${userId}`);
 
+export const getAllDrafts = userId => api.get(`/drafts/${userId}`);
+export const insertDraft = (payload, userId) => api.post(`/drafts/${userId}`, payload);
+export const deleteDraft = (userId, draftId) => api.delete(`/drafts/${userId}/${draftId}`);
+
 export const fetchWebImage = url => api.get(`/webcontent/image/${url}`);
 export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 
@@ -45,6 +49,9 @@ const apis = {
     getStatsForTemplate,
     getMemeVisibilityOptions,
     getTemplateVisibilityOptions,
+    getAllDrafts,
+    insertDraft,
+    deleteDraft,
     insertTemplate,
     getAllTemplates,
     getTemplateById,
