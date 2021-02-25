@@ -1,6 +1,7 @@
 var Jimp = require('jimp');
+const Meme = require('../db/models/meme-model');
 
-const getSearchImages = async () => {
+const getSearchImages = async (req, res) => {
     console.log('got query: ', req.query);
 
     try{
@@ -9,24 +10,42 @@ const getSearchImages = async () => {
         const { titleContains, fileFormat } = req.query;
         let zipArray = [];
 
-            // GET MEMES
-            console.log("Trying to get memes!")
-            let memes = await Meme.find({}, (err, memes) => {
-                if (err) {
-                    return res.status(400).json({ success: false, error: err })
-                }
-                return memes
-            }).catch(err => console.log(err))
-            console.log('gegetted memes: ', memes)
+        // GET MEMES
+        console.log("Trying to get memes!")
+        let memes = await Meme.find({}, (err, memes) => {
+            if (err) {
+                return res.status(400).json({ success: false, error: err })
+            }
+            return memes
+        }).catch(err => console.log(err))
+        console.log('gegetted memes: ', memes)
+
+        // TODO: FILTER MEMES WITH PARAMETERS
+        let newMemeArray = memes;
+        console.log('newMemeArray: ', newMemeArray)
+        newMemeArray = await newMemeArray.filter(meme => (
+            meme.name.toLowerCase().includes(titleContains.toLowerCase())
+        ));
+        console.log('filtered newMemeArray: ', newMemeArray)
+
+        
 
 
-            res.status(200).json({success: true});
-
-        //push memes into 
+        
+        //PUSH THE MEMES INTO ARRAY
+        for (i = 0; i < newMemeArray.length; i++){
+            let path = newMemeArray[i].url  
                                     //path                  name
-        //zipArray.push({path: './public/temp/'+fileName, name: fileName});
-        //zip
-        //res.status(200).zip(zipArray);
+            zipArray.push({path: './public/temp'+path, name: 'zip'+path});
+            console.log("Zip Array ", zipArray)
+        }
+
+        console.log("Zip Array ", zipArray)
+        //SEND STATUS IF SUCCESS, only temporary -delete
+        //res.status(200).json({success: true, memes: memes});
+        //SEND STATUS WITH ZIP IF SUCCESS
+        res.status(200).zip(zipArray);
+
     }catch(err){         
         console.log(err);
         res.status(400).json({success: false, error: err.toString()});
@@ -82,7 +101,7 @@ const executeImageCreation  = async (req, res) => {
     //     ]
     // }
 
-    const { images, templateURL, searchParameter } = req.query;
+    const { images, templateURL } = req.query;
 
     let zipArray = [];
     
