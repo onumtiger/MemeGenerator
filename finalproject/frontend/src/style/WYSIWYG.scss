@@ -77,6 +77,18 @@
                 box-sizing: border-box;
                 padding: 10px 30px;
             }
+
+            .speech-button {
+                font-size: inherit;
+                position: relative;
+                background-color: transparent;
+                float: right; 
+                margin-right: 35px;
+                       
+                &:hover {
+                    border-radius: 30px;
+                }
+            }
             
             .in-caption-delete {
                 @include unstyled-input;
