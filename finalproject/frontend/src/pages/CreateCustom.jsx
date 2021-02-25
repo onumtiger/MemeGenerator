@@ -126,7 +126,7 @@ export default class CreateCustom extends React.Component {
                     <DrawTemplate handlePublishing={this.handlePublishedTemplate} />
                 }
                 {this.state.showEditor &&
-                    <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} />
+                    <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} history={this.props.history} />
                 }
             </div>
         );

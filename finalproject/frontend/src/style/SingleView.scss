@@ -6,13 +6,8 @@
 #single-view-wrapper {
 
     #meme-title {
-        text-align: right;
-        font-size: 125%;
-
-        span {
-            padding: 5px 10px;
-            // border-bottom: 1px solid gray;
-        }
+        text-align: center;
+        font-size: 170%;
     }
 
     #meme-img {
@@ -23,5 +18,51 @@
         @include content;
         padding: 10px;
         text-align: center;
+    }
+
+    #share-options {
+        $shareImgDims: 30px;
+        $shareImgPadding: 15px;
+        $gap: 20px;
+
+        padding: 10px;
+        text-align: left;
+
+        #download-btn {
+            margin-right: 5px;
+        }
+
+        p {
+            font-size: 110%;
+        }
+
+        input {
+            cursor: pointer;
+            border: 0;
+            padding: 3px;
+            box-sizing: border-box;
+            border-radius: 3px;
+            background-color: #eee;
+            margin-right: 10px;
+            width: calc(100% - 3 * (#{$shareImgDims} + 2 * #{$shareImgPadding}) - #{$gap});
+            vertical-align: bottom;
+        }
+
+        .social-icon-link {
+            padding: 0 $shareImgPadding;
+            text-align: center;
+            box-sizing: border-box;
+            display: inline-block;
+
+            img {
+                width: $shareImgDims;
+                height: $shareImgDims;
+            }
+        }
+
+        #legal {
+            font-size: 50%;
+            margin-top: 15px;
+        }
     }
 }

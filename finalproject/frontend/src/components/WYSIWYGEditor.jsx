@@ -39,6 +39,7 @@ export default class WYSIWYGEditor extends React.Component {
       'handleCanvasMouseDown',
       'handleCanvasMouseMove',
       'handleCanvasMouseUp',
+      'handlePublishedMeme',
       'assembleUploadFormData'
     ].forEach((handler)=>{
       this[handler] = this[handler].bind(this);
@@ -345,12 +346,15 @@ export default class WYSIWYGEditor extends React.Component {
     } //else case will be handled once the event bubbles up to the document via handlePageWrapperMouseUp()
   }
 
+  handlePublishedMeme(memeId){
+    this.props.history.push('/memes/view/'+memeId);
+  }
   
   assembleUploadFormData(){
     const formData = new FormData();
 
     let enteredTitle = document.querySelector('#wysiwyg-wrapper #in-title').value;
-    formData.append('name', enteredTitle);
+    formData.append('name', enteredTitle || 'Created Meme');
     formData.append('userID', 0); //TODO get current userID
     formData.append('visibility', 2); //TODO get visibility options from API, display as radiobuttons with numbers as value (public as default), send chosen value here
 
@@ -465,7 +469,7 @@ export default class WYSIWYGEditor extends React.Component {
                   </li>
                 </ul>
                 <CanvasDownloadButton placeholderFileName={this.placeholderFileName+".png"} onButtonClick={this.handleDownloadButtonClick} />
-                <CanvasUploadButton canvasRef={this.canvasRef} uploadSuccessCallback={()=>{}} assembleFormData={this.assembleUploadFormData} apiFunctionName="insertMeme" />
+                <CanvasUploadButton canvasRef={this.canvasRef} uploadSuccessCallback={this.handlePublishedMeme} assembleFormData={this.assembleUploadFormData} apiFunctionName="insertMeme" />
               </form>
             </td>
           </tr>

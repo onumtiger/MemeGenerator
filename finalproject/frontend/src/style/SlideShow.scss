@@ -12,15 +12,17 @@
     width: 45%;
     text-align: center;
 
-    .actionButton {
-        @include buttonStyle;
-        background-color: transparent;
-        border-radius: 2px;
-        font-weight: bold; 
-        font-size: 16px;
-        padding: 10px 20px;
-        margin: 0 15px;
-        box-shadow: gray 0 0 5px;
+    #slideshow-toprow {
+        .actionButton {
+            @include buttonStyle;
+            background-color: transparent;
+            border-radius: 2px;
+            font-weight: bold; 
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 0 15px;
+            box-shadow: gray 0 0 5px;
+        }
     }
 
     .inactive {

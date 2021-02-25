@@ -36,6 +36,9 @@ export default class CanvasUploadButton extends React.Component {
                 if(res.data.success){
                     this.props.uploadSuccessCallback(res.data.id);
                 }
+            }).catch(err =>{
+                console.log('Failed to send Upload Meme: ',err)
+            }).finally(()=>{
                 e.target.innerText = this.buttonTexts.default;
             });
         });
