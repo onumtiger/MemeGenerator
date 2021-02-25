@@ -61,13 +61,13 @@ class TemplateStatisticsChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        //views
+        //uses
         svg
             .selectAll("rect").select(".viewsBar")
             .data(uses)
             .enter()
             .append("rect")
-            .attr("fill", "navy")
+            .attr("fill", "purple")
             .attr("class", "viewsBar")
             .attr("x", (d, i) => i * 43 + 44)
             .attr('y', (d, i) => {
@@ -114,10 +114,9 @@ class TemplateStatisticsChart extends React.Component {
                 <div className="legende">
                     <div className="upvoteColor"></div> upvotes
                     <div className="downvoteColor"></div> downvotes
-                    <div className="viewsColor"></div> uses
+                    <div className="usesColor"></div> uses
                 </div>
             </div>
-
         );
     }
 }

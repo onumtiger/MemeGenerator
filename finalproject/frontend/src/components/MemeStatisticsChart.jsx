@@ -1,6 +1,7 @@
 import React from "react";
 import * as d3 from "d3";
 import '../style/globalStyle.css';
+import VotesPieChart from './VotesPieChart';
 
 class MemeStatisticsChart extends React.Component {
     constructor(props) {
@@ -8,7 +9,7 @@ class MemeStatisticsChart extends React.Component {
     }
 
     componentDidMount() {
-        const { upvotes, downvotes, views } = this.props;
+        const { upvotes, downvotes, views, sumUpvotes, sumDownvotes } = this.props;
         const w = 630;
         const h = 300;
         const scaleFactor = 3;
@@ -115,6 +116,10 @@ class MemeStatisticsChart extends React.Component {
                     <div className="downvoteColor"></div> downvotes
                     <div className="viewsColor"></div> views
                 </div>
+                <VotesPieChart
+                    upvotes={this.props.sumUpvotes}
+                    downvotes={this.props.sumDownvotes}
+                />
             </div>
         );
     }

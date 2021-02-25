@@ -87,3 +87,12 @@
     display: inline-block;
     margin-left: 10px;
 }
+
+.usesColor {
+    width: 10px;
+    height: 10px;
+    background-color: purple;
+    margin: auto;
+    display: inline-block;
+    margin-left: 10px;
+}
