@@ -1,5 +1,5 @@
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
+var recognition;
 
 //recognition.continuous = true;
 var recordButtonUpdate;
@@ -26,20 +26,29 @@ const speechRecognition = (recordButton, captionInput, updateText, textBox, reco
     updateTextBox = textBox; 
     updateRecordButtonActive = recordButtonActive;
     inputField.innerHTML = " ... recording";
+    
 
     // checks if browser supports voice recognition
     if(SpeechRecognition){
         console.log("Your Browser supports speech recognition");
+        recognition = new SpeechRecognition();
         recognition.start();         
+
+        // event listeners
+        recognition.addEventListener("start", startRecording)
+        recognition.addEventListener("result", result)
+        recognition.addEventListener("end", stopRecording)
     } else {
         console.log("Your Browser does not support speech recognition");
-        recordButton.innerHTML="change browser"
+        recordButton.innerHTML="voice recognition not supported, please change browser"
+        setTimeout(function () {
+            recordButtonUpdate.style.backgroundColor = "transparent"
+            recordButtonUpdate.innerHTML="voice renot supported";  
+            recordButtonUpdate.style.display="none";
+        }, 2300);
     }
 
-    // event listeners
-    recognition.addEventListener("start", startRecording)
-    recognition.addEventListener("result", result)
-    recognition.addEventListener("end", stopRecording)
+    
     
 }
 
