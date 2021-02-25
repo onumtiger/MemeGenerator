@@ -40,7 +40,7 @@ const executeImageCreation  = async (req, res) => {
     console.log('got query: ',req.query);
 
     // URL query parameters - expected form:
-    // http://localhost:3001/api/generate?textColor=%23ff0da0&images[0][name]=name1&images[0][captions][0][x]=10&images[0][captions][0][y]=10&images[0][captions][0][text]=caption1&images[0][captions][1][x]=80&images[0][captions][1][y]=80&images[0][captions][1][text]=caption2&images[1][name]=name2&images[1][captions][0][x]=10&images[1][captions][0][y]=10&images[1][captions][0][text]=caption3&images[1][captions][1][x]=80&images[1][captions][1][y]=80&images[1][captions][1][text]=caption4&templateURL=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg
+    // http://localhost:3001/api/generate?images[0][name]=name1&images[0][captions][0][x]=10&images[0][captions][0][y]=10&images[0][captions][0][text]=caption1&images[0][captions][0][textColor]=%23ff3333&images[0][captions][1][x]=80&images[0][captions][1][y]=80&images[0][captions][1][text]=caption2&images[0][captions][1][textColor]=%2333ffff&images[1][name]=name2&images[1][captions][0][x]=10&images[1][captions][0][y]=10&images[1][captions][0][text]=caption3&images[1][captions][0][textColor]=%23d24dff&images[1][captions][1][x]=80&images[1][captions][1][y]=80&images[1][captions][1][text]=caption4&images[1][captions][1][textColor]=%23d9ff66&templateURL=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg
     // translates to:
     // {
     //     templateURL: 'https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg', //URIEncoded template image URL
@@ -51,13 +51,13 @@ const executeImageCreation  = async (req, res) => {
     //                 {
     //                     x: '10',
     //                     y: '10',
-    //                     textColor: '%23603cff', // hex color of text (URIEncoded!)
+    //                     textColor: '%23ff3333', // hex color of text (URIEncoded!)
     //                     text: 'caption1'
     //                 },
     //                 {
     //                     x: '80',
     //                     y: '80',
-    //                     textColor: '%23603cff', // hex color of text (URIEncoded!)
+    //                     textColor: '%2333ffff', // hex color of text (URIEncoded!)
     //                     text: 'caption2'
     //                 }
     //             ]
@@ -68,13 +68,13 @@ const executeImageCreation  = async (req, res) => {
     //                 {
     //                     x: '10',
     //                     y: '10',
-    //                     textColor: '%23603cff', // hex color of text (URIEncoded!)
+    //                     textColor: '%23d24dff', // hex color of text (URIEncoded!)
     //                     text: 'caption3'
     //                 },
     //                 {
     //                     x: '80',
     //                     y: '80',
-    //                     textColor: '%23603cff', // hex color of text (URIEncoded!)
+    //                     textColor: '%23d9ff66', // hex color of text (URIEncoded!)
     //                     text: 'caption4'
     //                 }
     //             ]

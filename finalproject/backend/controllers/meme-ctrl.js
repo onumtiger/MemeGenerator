@@ -53,7 +53,6 @@ const saveMeme = (params, res) => {
         comment_ids: [],
         creationDate: globalHelpers.getTodayString(),
         stats: {
-            _id: id,
             upvotes: [],
             downvotes: [],
             views: 0

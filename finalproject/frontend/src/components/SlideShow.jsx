@@ -127,28 +127,30 @@ export default class SlideShow extends Component {
 
         return (
             <div id="slideshow-wrapper">
-                <Link to={this.props.urlPath}>
-                    <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>&#9204; Back to List</button>
-                </Link>
-                <Link to={this.props.urlPath+'/'+this.getRandomMemeId()}>
-                    <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>Shuffle &harr;</button>
-                </Link>
-                <button type="button" className="actionButton" id="playDia" onClick={this.handleDiashowButtonClick}>{this.diashowButtonTexts.default}</button>
+                <div id="slideshow-toprow">
+                    <Link to={this.props.urlPath}>
+                        <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>&#9204; Back to List</button>
+                    </Link>
+                    <Link to={this.props.urlPath+'/'+this.getRandomMemeId()}>
+                        <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>Shuffle &harr;</button>
+                    </Link>
+                    <button type="button" className="actionButton" id="playDia" onClick={this.handleDiashowButtonClick}>{this.diashowButtonTexts.default}</button>
+                </div>
 
                 <table id="slideshow-table">
                     <tbody>
                     <tr>
-                    <td>
+                    <td className="button-column">
                         <Link to={this.props.urlPath+'/'+this.getPrevMemeId()}>
-                            <button type="button" className="slideButton disable-during-diashow" onClick={this.checkForDisabledButton}>←</button>
+                            <button type="button" className="slideButton leftBtn disable-during-diashow" onClick={this.checkForDisabledButton}>←</button>
                         </Link>
                     </td>
                     <td>
                         <SingleView meme={meme} />
                     </td>
-                    <td>
+                    <td className="button-column">
                         <Link to={this.props.urlPath+'/'+this.getNextMemeId()}>
-                            <button type="button" className="slideButton disable-during-diashow" onClick={this.checkForDisabledButton}>→</button>
+                            <button type="button" className="slideButton rightBtn disable-during-diashow" onClick={this.checkForDisabledButton}>→</button>
                         </Link>
                     </td>
                     </tr>

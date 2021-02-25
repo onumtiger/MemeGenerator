@@ -11,7 +11,8 @@ import NavBar from './NavBar';
 import SingleView from './SingleView';
 import SlideShow from './SlideShow';
 import TemplatesList from './TemplatesList';
+import TemplateStatisticsChart from './TemplateStatisticsChart';
 import UploadTemplate from './UploadTemplate';
 import WYSIWYGEditor from './WYSIWYGEditor';
 
-export { CanvasDownloadButton, CanvasUploadButton, CreateTemplateSelection, DrawTemplate, FilterMemes, Links, MemeComment, MemesList, MemeVoteCounter, NavBar, SingleView, SlideShow, TemplatesList, UploadTemplate, WYSIWYGEditor };
+export { CanvasDownloadButton, CanvasUploadButton, CreateTemplateSelection, DrawTemplate, FilterMemes, Links, MemeComment, MemesList, MemeVoteCounter, NavBar, SingleView, SlideShow, TemplatesList, TemplateStatisticsChart, UploadTemplate, WYSIWYGEditor };

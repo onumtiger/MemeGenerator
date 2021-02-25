@@ -20,10 +20,9 @@ const resetDB = async() => {
         url: '/memes/jan_domi_zusammentreffen.png',
         captions: ['Domi', 'Jan Jbernolte'],
         name: 'Jan und Domi unterwegs',
-        stats_id: 0,
         comment_ids: [0, 1],
         user_id: 0,
-        visibilty: 2,
+        visibility: 2,
         creationDate: "2021/02/12",
         stats: {
             upvotes: [0, 2, 3],
@@ -37,10 +36,9 @@ const resetDB = async() => {
         url: '/memes/jan_domi_punch.png',
         captions: ['Domi', 'Jan Obernolte'],
         name: 'Jan und Domis Gefühle füreinander <3',
-        stats_id: 1,
         comment_ids: [2, 3],
         user_id: 1,
-        visibilty: 2,
+        visibility: 2,
         creationDate: "2021/02/13",
         stats: {
             upvotes: [0],
@@ -54,10 +52,9 @@ const resetDB = async() => {
         url: '/memes/jan_domi_cat.jpg',
         captions: ['Dominik', 'Jan Obernolte'],
         name: 'Jan als Katze',
-        stats_id: 2,
         comment_ids: [4, 5],
         user_id: 2,
-        visibilty: 2,
+        visibility: 2,
         creationDate: "2021/02/14",
         stats: {
             upvotes: [0, 3],
@@ -69,6 +66,128 @@ const resetDB = async() => {
     await db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]);
     console.log("Default memes inserted");
 
+    await db.collection('templates').deleteMany({});
+    console.log("Old templates deleted");
+    
+    var defaultTemplate = {
+        _id: 0,
+        url: '/templates/Bernie-I-Am-Once-Again-Asking-For-Your-Support.jpg',
+        name: 'Bernie I Am Once Again Asking For Your Support',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [0, 2, 3],
+            downvotes: [1],
+            uses: 0
+        }
+    };
+
+    var defaultTemplate2 = {
+        _id: 1,
+        url: '/templates/button-decision.png',
+        name: 'Two Buttons',
+        user_id: 1,
+        visibility: 2,
+        stats: {
+            upvotes: [0],
+            downvotes: [1, 2, 3],
+            uses: 0
+        }
+    };
+
+    var defaultTemplate3 = {
+        _id: 2,
+        url: '/templates/Change-my-mind.png',
+        name: 'Change My Mind Guy',
+        user_id: 2,
+        visibility: 2,
+        stats: {
+            upvotes: [0, 3],
+            downvotes: [1, 2],
+            uses: 0
+        }
+    };
+
+    var defaultTemplate4 = {
+        _id: 3,
+        url: '/templates/Drake.jpg',
+        name: 'Drake Hotline Bling',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    };
+
+    var defaultTemplate5 = {
+        _id: 4,
+        url: '/templates/Left-Exit-12-Off-Ramp.jpg',
+        name: 'Left Exit 12 Off Ramp',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    };
+
+    var defaultTemplate6 = {
+        _id: 5,
+        url: '/templates/Mittens-Bernie.jpg',
+        name: 'Mittens Bernie',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    };
+
+    var defaultTemplate7 = {
+        _id: 6,
+        url: '/templates/The-Rock-Driving.jpg',
+        name: 'The Rock Driving',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    };
+
+    var defaultTemplate8 = {
+        _id: 7,
+        url: '/templates/Woman-Yelling-at-Cat.png',
+        name: 'Woman Yelling at Cat',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    };
+
+    var defaultTemplate9 = {
+        _id: 8,
+        url: '/templates/nothing-works.png',
+        name: 'Nothing Works',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    };
+
+    await db.collection('templates').insertMany([defaultTemplate, defaultTemplate2, defaultTemplate3, defaultTemplate4, defaultTemplate5, defaultTemplate6, defaultTemplate7, defaultTemplate8, defaultTemplate9]);
+    console.log("Default templates inserted");
 
     // mongoose lokal db USER reset, without SCHMEMA
     await db.collection('users').deleteMany({});

@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, UploadTemplate} from '../components';
+import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, UploadTemplate, TemplateStatisticsChart} from '../components';
 import api from '../api';
 import '../style/CreateCustom.scss';
 
@@ -18,6 +18,12 @@ export default class CreateCustom extends React.Component {
             templateListData: {
                 isLoading: true,
                 templates: []
+            },
+            showStats: false,
+            templateStats: {
+                upvotes: [],
+                downvotes: [],
+                uses: []
             }
         };
         
@@ -54,7 +60,7 @@ export default class CreateCustom extends React.Component {
         });
     }
 
-    selectTemplate(src){
+    selectTemplate(src, id){
         if (this.state.showEditor){ //don't rerender the editor, or we will lose the input!
             this.editorRef.current.setTemplateImage(src);
         }else{
@@ -66,8 +72,34 @@ export default class CreateCustom extends React.Component {
         this.setState({
             showTemplateSelection: false,
             showUploadTemplate: false,
-            showDrawTemplate: false
+            showDrawTemplate: false,
+            showStats: false
         });
+        this.updateTemplateStats(id);
+    }
+    
+    updateTemplateStats = async (templateID) => {
+        try{
+            let response = await api.getStatsForTemplate(templateID);
+            let templateStats = response.data.data;
+            let days = templateStats.days;
+    
+            var upvotes = [];
+            var downvotes = [];
+            var uses = [];
+    
+            for (var i = 0; i < days.length; i++) {
+                upvotes.push(days[i].upvotes)
+                downvotes.push(days[i].downvotes)
+                uses.push(days[i].uses)
+            }
+            this.setState({
+                templateStats: {upvotes, downvotes, uses},
+                showStats: true
+            });
+        }catch(err){         
+            console.log('Failed to get Stats: ',err);
+        }
     }
 
     loadTemplatesIntoList = async ()=>{
@@ -116,6 +148,14 @@ export default class CreateCustom extends React.Component {
             <div id="create-custom-page-wrapper">
                 <h2>Custom Meme Creation</h2>
                 <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letAddTemplate} handleSelectionChange={this.changeSelection} />
+                {this.state.showStats && 
+                    <TemplateStatisticsChart
+                        upvotes={this.state.templateStats.upvotes}
+                        downvotes={this.state.templateStats.downvotes}
+                        uses={this.state.templateStats.uses}
+                    >
+                    </TemplateStatisticsChart>
+                }
                 {this.state.showTemplateSelection &&
                     <CreateTemplateSelection handleUploadButtonClick={this.selectTemplateUpload} handleCreateButtonClick={this.selectTemplateCreation} />
                 }
@@ -126,7 +166,7 @@ export default class CreateCustom extends React.Component {
                     <DrawTemplate handlePublishing={this.handlePublishedTemplate} />
                 }
                 {this.state.showEditor &&
-                    <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} />
+                    <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} history={this.props.history} />
                 }
             </div>
         );
