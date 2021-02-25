@@ -78,7 +78,7 @@ export default class SingleView extends Component {
                     <tbody>
                     <tr>
                         <td><p>{meme.stats.views} views</p></td>
-                        <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length} stats_id={meme.stats_id}></Counter></td>
+                        <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length}></Counter></td>
                         <td><p>{this.getDateString(meme.creationDate)}</p></td>
                     </tr>
                     </tbody>
