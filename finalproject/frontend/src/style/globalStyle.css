@@ -38,10 +38,10 @@
     color: white;
     border-radius: 7px;
     margin-left: 5px;
-}
-
-.commentNumber {
-    /*font-weight: bold;*/
+    border: white;
+    padding: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 .userInfo {
@@ -50,4 +50,40 @@
 
 .username {
     font-weight: bold;
+}
+
+.barchart {
+    display: "grid";
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.legende {
+    margin-bottom: 20px;
+}
+
+.upvoteColor {
+    width: 10px;
+    height: 10px;
+    background-color: #54cf55;
+    margin: auto;
+    display: inline-block;
+}
+
+.downvoteColor {
+    width: 10px;
+    height: 10px;
+    background-color: #ec5252;
+    margin: auto;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.viewsColor {
+    width: 10px;
+    height: 10px;
+    background-color: navy;
+    margin: auto;
+    display: inline-block;
+    margin-left: 10px;
 }

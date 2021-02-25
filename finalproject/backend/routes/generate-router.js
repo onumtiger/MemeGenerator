@@ -4,6 +4,7 @@ const GenerateControl = require('../controllers/generate-ctrl.js');
 
 const router = express.Router();
 
-router.get('/', GenerateControl.executeImageCreation);
+router.get('/generate', GenerateControl.executeImageCreation);
+router.get('/getImages', GenerateControl.getSearchImages);
 
 module.exports = router;

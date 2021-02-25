@@ -140,34 +140,49 @@ const patchMeme = async function(req, res) {
 }
 
 // adds a SINGLE view to database meme.stats by given id when called
-const postViewsMeme = async (req, res) => {
-    var body = req.body;
-    var memeId = req.params.id;
-    // console.log("post views")
-    // console.log(req.body)
-    let currentMeme = await Meme.findById(memeId);    
-    // console.log(currentMeme)
-    var currentViews = currentMeme.stats.views
-    // console.log("current views: ", currentViews)
-    updatedViews = currentViews+1
-    // console.log("updated views", updatedViews)
-    const result = await Meme.updateOne({_id: memeId}, {'stats.views': updatedViews})
+const postViewMeme = async (req, res) => {
+    try {
+        var memeId = req.params.id;
+        // console.log("post views")
+        // console.log(req.body)
+        let currentMeme = await Meme.findById(memeId);    
+        // console.log(currentMeme)
+        var currentViews = currentMeme.stats.views
+        // console.log("current views: ", currentViews)
+        updatedViews = currentViews+1
+        // console.log("updated views", updatedViews)
+        const result = await Meme.updateOne({_id: memeId}, {'stats.views': updatedViews})
+        return res.status(200).json({ success: true })
+    }catch(err){         
+        console.log(err);
+        res.status(500).json({success: false, error: err.toString()});
+    }
 }
 
 const postUpvotesMeme = async (req, res) => {
-    console.log("post upvotes")
-    var body = req.body;
-    var memeId = req.params.id;
-    var updatedUserId= body.toUpdate
-    const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.upvotes': updatedUserId}})  
+    try {
+        console.log("post upvotes")
+        var body = req.body;
+        var memeId = req.params.id;
+        var updatedUserId= body.toUpdate
+        const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.upvotes': updatedUserId}})  
+    }catch(err){         
+        console.log(err);
+        res.status(500).json({success: false, error: err.toString()});
+    }
 }
 
 const postDownvotesMeme = async (req, res) => {
-    console.log("post downvotes")
-    var body = req.body;
-    var memeId = req.params.id;
-    var updatedUserId= body.toUpdate
-    const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.downvotes': updatedUserId}})
+    try {
+        console.log("post downvotes")
+        var body = req.body;
+        var memeId = req.params.id;
+        var updatedUserId= body.toUpdate
+        const result = await Meme.updateOne({_id: memeId}, { $push: {'stats.downvotes': updatedUserId}})
+    }catch(err){         
+        console.log(err);
+        res.status(500).json({success: false, error: err.toString()});
+    }
 }
 
 
@@ -175,7 +190,7 @@ module.exports = {
     createMeme,
     deleteMeme,
     patchMeme,
-    postViewsMeme,
+    postViewMeme,
     postUpvotesMeme,
     postDownvotesMeme,
     getMemes,

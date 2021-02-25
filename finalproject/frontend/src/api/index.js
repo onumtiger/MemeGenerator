@@ -10,7 +10,7 @@ export const getMemeById = id => api.get(`/meme/${id}`);
 export const deleteMemeById = id => api.delete(`/meme/${id}`);
 export const patchMeme = (payload, id) => api.patch(`/meme/${id}`, payload);
 
-export const postViewsMeme = id => api.post(`/meme/view/${id}`);
+export const postViewMeme = id => api.post(`/meme/view/${id}`);
 export const postUpvotesMeme = (update, id) => api.post(`/meme/upvote/${id}`, update);
 export const postDownvotesMeme = (update, id) => api.post(`/meme/downvote/${id}`, update);
 
@@ -29,10 +29,11 @@ export const fetchWebImage = url => api.get(`/webcontent/image/${url}`);
 export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 
 export const executeImageCreation = payload => api.post('/meme/imageCreation', payload);
+export const getSearchImages = () => api.get('/webcontent/parameters');
 
 const apis = {
     insertMeme,
-    postViewsMeme,
+    postViewMeme,
     postUpvotesMeme,
     postDownvotesMeme,
     executeImageCreation,
@@ -49,7 +50,8 @@ const apis = {
     getTemplateById,
     deleteTemplateById,
     fetchWebImage,
-    fetchWebSnapshot
+    fetchWebSnapshot, 
+    getSearchImages
 }
 
 export default apis

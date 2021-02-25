@@ -1,5 +1,39 @@
 var Jimp = require('jimp');
 
+const getSearchImages = async () => {
+    console.log('got query: ', req.query);
+
+    try{
+        console.log('got query: ', req.query);
+
+        const { titleContains, fileFormat } = req.query;
+        let zipArray = [];
+
+            // GET MEMES
+            console.log("Trying to get memes!")
+            let memes = await Meme.find({}, (err, memes) => {
+                if (err) {
+                    return res.status(400).json({ success: false, error: err })
+                }
+                return memes
+            }).catch(err => console.log(err))
+            console.log('gegetted memes: ', memes)
+
+
+            res.status(200).json({success: true});
+
+        //push memes into 
+                                    //path                  name
+        //zipArray.push({path: './public/temp/'+fileName, name: fileName});
+        //zip
+        //res.status(200).zip(zipArray);
+    }catch(err){         
+        console.log(err);
+        res.status(400).json({success: false, error: err.toString()});
+    }
+}
+
+
 // Api Image Mamipulation/Creation
 const executeImageCreation  = async (req, res) => {
 
@@ -48,9 +82,11 @@ const executeImageCreation  = async (req, res) => {
     //     ]
     // }
 
-    const { images, templateURL } = req.query;
+    const { images, templateURL, searchParameter } = req.query;
 
     let zipArray = [];
+    
+    //title contains, file format
 
     try{
         let template = await Jimp.read(decodeURIComponent(templateURL));
@@ -77,6 +113,7 @@ const executeImageCreation  = async (req, res) => {
         console.log(err);
         res.status(400).json({success: false, error: err.toString()});
     }
+    
 }
 
 
@@ -107,5 +144,6 @@ const captionImage = async(template, font, captions, fileName)=>{
 
 
 module.exports = {
-    executeImageCreation
+    executeImageCreation, 
+    getSearchImages
 }

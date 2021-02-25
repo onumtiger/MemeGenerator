@@ -36,7 +36,7 @@ app.use('/api/templates', templateRouter);
 app.use('/api/stats', statsRouter);
 app.use('/api/webcontent', webContentRouter);
 app.use('/api/guidata', guiDataRouter);
-app.use('/api/generate', generateRouter);
+app.use('/api/external', generateRouter);
 
 // fallback error message for anything else, using the same JSON response structure as the rest to allow for generic response handling without breaking anything with the default HTML/XML response
 app.use('/', (req, res) => {
