@@ -62,20 +62,20 @@ export default class SingleView extends Component {
     getMemeStats = async () => {
         this.setState({
             showStats: false
-        })
-        let memeStats = [];
+        });
+        
         const meme = this.props.meme;
         let response = await api.getStatsForMeme(meme._id);
-        memeStats = response.data.data.days;
+        let memeStats = response.data.data.days;
 
         var upvotes = [];
         var downvotes = [];
         var views = [];
 
         for (var i = 0; i < memeStats.length; i++) {
-            upvotes.push(memeStats[i].upvotes)
-            downvotes.push(memeStats[i].downvotes)
-            views.push(memeStats[i].views)
+            upvotes.push(memeStats[i].upvotes);
+            downvotes.push(memeStats[i].downvotes);
+            views.push(memeStats[i].views);
         }
 
         this.setState({
@@ -92,35 +92,22 @@ export default class SingleView extends Component {
 
     //triggers a +1 view in db
     sendView(memeId){
-        console.log("send view for id: ", memeId)
+        console.log("send view for id: ", memeId);
         api.postViewMeme(memeId).catch(err =>{
-            console.log('Failed to post views: ',err)
+            console.log('Failed to post views: ',err);
         });
-        this.props.meme.stats.views++
-        
+        this.props.meme.stats.views++; //update in-memory meme object until we get updated data from the API
     }
 
 
     render() {
         const meme = this.props.meme;
 
+        //check if we're displaying a new meme (as opposed to other re-renders without content changes)
         if (this.previousMemeId != meme._id) {
             this.previousMemeId = meme._id;
-            this.getMemeStats();
-        }
-        
-        //prevents double counting 
-        if(!(this.previousMemeId == meme._id) && (this.previousMemeId != null)){
-            console.log("old previousMemeId: ", this.previousMemeId)
-            console.log("current meme._id: ", meme._id)
-            this.previousMemeId = meme._id
-            console.log("new previousMemeId: ", this.previousMemeId)
-            this.sendView(meme._id)
-        } else if (this.previousMemeId == null){
-            console.log("first send!")
-            console.log("previousMemeId: ", this.previousMemeId)
-            this.previousMemeId = meme._id
-            this.sendView(meme._id)
+            this.getMemeStats(); //get detailed stats data for charts
+            this.sendView(meme._id); // increment views, the check above prevents double counting
         }
 
         return (
@@ -140,8 +127,9 @@ export default class SingleView extends Component {
                 <hr />
                 <div id="share-options">
                     <p>
-                    <a onClick={this.handleDownloadClick} href="#" download={meme.name} id="download-btn">Download this Meme</a>
-                    or share the link to it on social media:</p>
+                        <a onClick={this.handleDownloadClick} href="#" download={meme.name} id="download-btn">Download this Meme</a>
+                        or share the link to it on social media:
+                    </p>
                     <input type="text" id="meme-url-input" title="Click to Copy" value={window.location.toString()} onClick={this.handleShareURLClick} />
                     <a href="https://www.facebook.com/" target="_blank" title="Go to Facebook" className="social-icon-link"><img src="/ui/social-fb.png" alt="Facebook" /></a>
                     <a href="https://twitter.com/" target="_blank" title="Go to Twitter" className="social-icon-link"><img src="/ui/social-tw.png" alt="Twitter" /></a>

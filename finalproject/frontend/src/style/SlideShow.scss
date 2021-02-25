@@ -9,7 +9,7 @@
 #slideshow-wrapper {
     position: relative;
     margin: auto;
-    width: 45%;
+    width: 60%;
     text-align: center;
 
     #slideshow-toprow {
@@ -33,17 +33,46 @@
     #slideshow-table {
         width: 100%;
         margin-top: 20px;
-        vertical-align: middle;
         text-decoration: none;
 
-        .slideButton {
-            @include buttonStyle;
-            background-color: black; 
-            color: white;
-            padding: 20px 10px;
-            border-radius: 5px;
-            font-size: 30px;
+        td.button-column{
+            vertical-align: top;
+            position: relative;
+            width: 60px;
+
+            a{
+                display: block;
+                
+                .slideButton {
+                    @include buttonStyle;
+                    background-color: transparent;
+                    color: black;
+                    padding: 100px 10px;
+                    font-size: 30px;
+                    height: 100%;
+                    width: 100%;
+
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+
+                    $innerColor: transparent;
+                    $outerColor: lightgray;
+
+                    &.leftBtn {
+                        border-radius: 5px 0 0 5px;
+                        background-image: linear-gradient(to left, #{$innerColor} 20%, #{$outerColor})
+                    }
+                    &.rightBtn {
+                        border-radius: 0 5px 5px 0;
+                        background-image: linear-gradient(to right, #{$innerColor} 20%, #{$outerColor})
+                    }
+                }
+            }
         }
+
     }
 
     #slideshow-empty{

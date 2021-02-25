@@ -2,20 +2,13 @@ import React from 'react';
 import '../style/TemplateList.scss';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import api from '../api';
-import TemplateStatisticsChart from './TemplateStatisticsChart';
 
 export default class TemplatesList extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            showNavButtons: false,
-            templateStats: [],
-            upvotes: [],
-            downvotes: [],
-            uses: [],
-            days: []
+            showNavButtons: false
         };
 
         this.currentlySelectedIndex = 0;
@@ -34,13 +27,14 @@ export default class TemplatesList extends React.Component {
     handleTemplateClick(e) {
         let elem = e.target;
         let src = elem.src;
+        let id = elem.dataset.templateid;
 
         this.currentlySelectedIndex = this.props.data.templates.findIndex((t) => (
-            elem.id == 'template_' + t._id
+            id == t._id
         ));
 
         this.props.handleSelectionChange(elem);
-        this.props.handleTemplateSelection(src);
+        this.props.handleTemplateSelection(src, id);
         this.setState({ showNavButtons: true });
     }
 
@@ -55,7 +49,7 @@ export default class TemplatesList extends React.Component {
 
         let newSelectedElem = document.querySelectorAll('#template-list-wrapper .templateImg')[this.currentlySelectedIndex];
         this.props.handleSelectionChange(newSelectedElem);
-        this.props.handleTemplateSelection(newSelectedElem.src);
+        this.props.handleTemplateSelection(newSelectedElem.src, newSelectedElem.dataset.templateid);
     }
 
     handleNextButtonClick(e) {
@@ -64,25 +58,7 @@ export default class TemplatesList extends React.Component {
 
         let newSelectedElem = document.querySelectorAll('#template-list-wrapper .templateImg')[this.currentlySelectedIndex];
         this.props.handleSelectionChange(newSelectedElem);
-        this.props.handleTemplateSelection(newSelectedElem.src);
-    }
-
-    componentDidMount = async () => {
-        const templateStats = this.state;
-        let response = await api.getStatsForTemplate(0);
-        this.state.templateStats = response.data.data;
-        this.state.days = this.state.templateStats.days;
-
-        // console.log(this.props.data.templates[0]._id)
-
-        for (var i = 0; i < templateStats.days.length; i++) {
-            this.state.upvotes.push(templateStats.days[i].upvotes)
-            this.state.downvotes.push(templateStats.days[i].downvotes)
-            this.state.uses.push(templateStats.days[i].uses)
-        }
-        console.log(this.state.upvotes)
-        console.log(this.state.downvotes)
-        console.log(this.state.uses)
+        this.props.handleTemplateSelection(newSelectedElem.src, newSelectedElem.dataset.templateid);
     }
 
     render() {
@@ -106,17 +82,11 @@ export default class TemplatesList extends React.Component {
                         </div>
                     ) : (
                             this.props.data.templates.map((t) => (
-                                <img src={t.url} alt={t.name} title={t.name} id={'template_' + t._id} key={'template_' + t._id} className="templateImg" onClick={this.handleTemplateClick} />
+                                <img src={t.url} alt={t.name} title={t.name} id={'template_' + t._id} key={'template_' + t._id} data-templateid={t._id} className="templateImg" onClick={this.handleTemplateClick} />
                             ))
                         )}
                     <img id="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />
                 </div>
-                <TemplateStatisticsChart
-                    upvotes={this.state.upvotes}
-                    downvotes={this.state.downvotes}
-                    uses={this.state.uses}
-                >
-                </TemplateStatisticsChart>
             </div>
         );
     }

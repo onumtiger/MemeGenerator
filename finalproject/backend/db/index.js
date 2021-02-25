@@ -173,7 +173,20 @@ const resetDB = async() => {
         }
     };
 
-    await db.collection('templates').insertMany([defaultTemplate, defaultTemplate2, defaultTemplate3, defaultTemplate4, defaultTemplate5, defaultTemplate6, defaultTemplate7, defaultTemplate8]);
+    var defaultTemplate9 = {
+        _id: 8,
+        url: '/templates/nothing-works.png',
+        name: 'Nothing Works',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    };
+
+    await db.collection('templates').insertMany([defaultTemplate, defaultTemplate2, defaultTemplate3, defaultTemplate4, defaultTemplate5, defaultTemplate6, defaultTemplate7, defaultTemplate8, defaultTemplate9]);
     console.log("Default templates inserted");
 
     // mongoose lokal db USER reset, without SCHMEMA
