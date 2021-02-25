@@ -16,7 +16,8 @@ export default class View extends Component {
 
         this.state = {
             memes: [],
-            isLoading: true
+            isLoading: true,
+            viewsOverall: 0
         };
         this.initialMemes = [];
         this.wasJustUpdated = false;
@@ -52,9 +53,17 @@ export default class View extends Component {
         try{
             let response = await api.getAllMemes();
             this.initialMemes = response.data.data;
+            //get views of all memes for later in the statistics
+            let viewsOfAllMemes = [];
+            for(var i=0; i<this.initialMemes.length; i++) {
+                viewsOfAllMemes.push(this.initialMemes[i].stats.views);
+            }
+            var sumViewsOfAllMemes = viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
+
             this.setState({
                 memes: response.data.data,
-                isLoading: false
+                isLoading: false,
+                viewsOverall: sumViewsOfAllMemes
             });
         }catch(err){
             console.log('Failed to get memes: ',err);
@@ -81,7 +90,7 @@ export default class View extends Component {
                     } />
                     <Route path={this.routePath+'/:memeId'} exact children={
                         (routeProps)=>(
-                        <SlideShow {...routeProps} urlPath={this.routePath} memes={this.state.memes} wasMemeListJustUpdated={this.wasMemeListJustUpdated} />
+                        <SlideShow {...routeProps} urlPath={this.routePath} memes={this.state.memes} wasMemeListJustUpdated={this.wasMemeListJustUpdated} sumOtherViews={this.state.viewsOverall}/>
                         )
                     } />
                 </Switch>

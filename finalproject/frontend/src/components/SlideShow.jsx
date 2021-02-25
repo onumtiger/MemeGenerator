@@ -146,7 +146,7 @@ export default class SlideShow extends Component {
                         </Link>
                     </td>
                     <td>
-                        <SingleView meme={meme} />
+                        <SingleView meme={meme} sumOtherViews={this.props.sumOtherViews}/>
                     </td>
                     <td className="button-column">
                         <Link to={this.props.urlPath+'/'+this.getNextMemeId()}>

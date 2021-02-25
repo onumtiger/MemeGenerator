@@ -102,6 +102,7 @@ export default class SingleView extends Component {
 
     render() {
         const meme = this.props.meme;
+        var percentageView = (meme.stats.views*100)/this.props.sumOtherViews;
 
         //check if we're displaying a new meme (as opposed to other re-renders without content changes)
         if (this.previousMemeId != meme._id) {
@@ -144,6 +145,9 @@ export default class SingleView extends Component {
                     views={this.state.views}
                     sumUpvotes={meme.stats.upvotes.length}
                     sumDownvotes={meme.stats.downvotes.length}
+                    sumViews={meme.stats.views}
+                    sumOtherViews={this.props.sumOtherViews}
+                    percentageView={percentageView}
                 />)}
             </div>
         )
