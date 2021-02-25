@@ -42,19 +42,6 @@ class MemeStatisticsChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        // svg
-        //     .selectAll("text").select(".upVotesText")
-        //     .data(upvotes)
-        //     .enter()
-        //     .append("text")
-        //     .attr("class", "upVotesText")
-        //     .style("font-size", 12)
-        //     .attr("fill", "#54cf55")
-        //     .attr("x", (d, i) => i * 43 + 21)
-        //     .attr('y', (d, i) => {
-        //         return h - 18 - d * scaleFactor - 10;
-        //     })
-        //     .text(d => d);
         //downvotes
         svg
             .selectAll("rect").select(".downVotes")
@@ -73,19 +60,6 @@ class MemeStatisticsChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        // svg
-        //     .selectAll("text").select(".downVotesText")
-        //     .data(downvotes)
-        //     .enter()
-        //     .append("text")
-        //     .attr("class", "downVotesText")
-        //     .style("font-size", 12)
-        //     .attr("fill", "#ec5252")
-        //     .attr("x", (d, i) => i * 43 + 35)
-        //     .attr('y', (d, i) => {
-        //         return h - 18 - d * scaleFactor - 10;
-        //     })
-        //     .text(d => d);
         //views
         svg
             .selectAll("rect").select(".viewsBar")
@@ -104,19 +78,6 @@ class MemeStatisticsChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        // svg
-        //     .selectAll("text").select(".viewsText")
-        //     .data(views)
-        //     .enter()
-        //     .append("text")
-        //     .attr("class", "viewsText")
-        //     .style("font-size", 12)
-        //     .attr("fill", "navy")
-        //     .attr("x", (d, i) => i * 43 + 41)
-        //     .attr('y', (d, i) => {
-        //         return h - 18 - d * scaleFactor - 10;
-        //     })
-        //     .text(d => d);
 
         // Create scale
         var xScale = d3.scaleLinear()
@@ -155,7 +116,6 @@ class MemeStatisticsChart extends React.Component {
                     <div className="viewsColor"></div> views
                 </div>
             </div>
-
         );
     }
 }

@@ -68,7 +68,7 @@ const resetDB = async() => {
 
     await db.collection('templates').deleteMany({});
     console.log("Old templates deleted");
-    
+
     var defaultTemplate = {
         _id: 0,
         url: '/templates/Bernie-I-Am-Once-Again-Asking-For-Your-Support.jpg',
@@ -435,87 +435,87 @@ const resetDB = async() => {
         _id: 2,
         days: [{
                 date: "2021/02/09",
-                upvotes: 6,
-                downvotes: 1,
-                views: 19
-            },
-            {
-                date: "2021/02/10",
-                upvotes: 10,
-                downvotes: 0,
-                views: 18
-            },
-            {
-                date: "2021/02/11",
                 upvotes: 9,
-                downvotes: 2,
-                views: 17
-            },
-            {
-                date: "2021/02/12",
-                upvotes: 7,
                 downvotes: 6,
-                views: 21
-            },
-            {
-                date: "2021/02/13",
-                upvotes: 2,
-                downvotes: 1,
-                views: 20
-            },
-            {
-                date: "2021/02/14",
-                upvotes: 8,
-                downvotes: 2,
-                views: 27
-            },
-            {
-                date: "2021/02/15",
-                upvotes: 9,
-                downvotes: 3,
-                views: 28
-            },
-            {
-                date: "2021/02/16",
-                upvotes: 14,
-                downvotes: 5,
-                views: 25
-            },
-            {
-                date: "2021/02/17",
-                upvotes: 18,
-                downvotes: 0,
-                views: 24
-            },
-            {
-                date: "2021/02/18",
-                upvotes: 13,
-                downvotes: 1,
-                views: 23
-            },
-            {
-                date: "2021/02/19",
-                upvotes: 19,
-                downvotes: 1,
-                views: 26
-            },
-            {
-                date: "2021/02/20",
-                upvotes: 23,
-                downvotes: 4,
                 views: 29
             },
             {
-                date: "2021/02/21",
+                date: "2021/02/10",
+                upvotes: 13,
+                downvotes: 4,
+                views: 28
+            },
+            {
+                date: "2021/02/11",
+                upvotes: 14,
+                downvotes: 6,
+                views: 27
+            },
+            {
+                date: "2021/02/12",
                 upvotes: 15,
-                downvotes: 2,
-                views: 23
+                downvotes: 7,
+                views: 32
+            },
+            {
+                date: "2021/02/13",
+                upvotes: 14,
+                downvotes: 4,
+                views: 50
+            },
+            {
+                date: "2021/02/14",
+                upvotes: 17,
+                downvotes: 6,
+                views: 68
+            },
+            {
+                date: "2021/02/15",
+                upvotes: 19,
+                downvotes: 7,
+                views: 54
+            },
+            {
+                date: "2021/02/16",
+                upvotes: 28,
+                downvotes: 3,
+                views: 33
+            },
+            {
+                date: "2021/02/17",
+                upvotes: 26,
+                downvotes: 6,
+                views: 28
+            },
+            {
+                date: "2021/02/18",
+                upvotes: 23,
+                downvotes: 7,
+                views: 39
+            },
+            {
+                date: "2021/02/19",
+                upvotes: 20,
+                downvotes: 9,
+                views: 29
+            },
+            {
+                date: "2021/02/20",
+                upvotes: 29,
+                downvotes: 6,
+                views: 40
+            },
+            {
+                date: "2021/02/21",
+                upvotes: 32,
+                downvotes: 4,
+                views: 33
             },
             {
                 date: "2021/02/22",
-                upvotes: 12,
-                downvotes: 3,
-                views: 20
+                upvotes: 34,
+                downvotes: 6,
+                views: 27
             }
         ]
     };
