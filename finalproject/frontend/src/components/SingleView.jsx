@@ -21,6 +21,7 @@ export default class SingleView extends Component {
             upvotes: [],
             downvotes: [],
             views: [],
+            date: [],
             showStats: false
         }
         this.previousMemeId = null;
@@ -71,23 +72,27 @@ export default class SingleView extends Component {
         var upvotes = [];
         var downvotes = [];
         var views = [];
+        var date = [];
 
         for (var i = 0; i < memeStats.length; i++) {
             upvotes.push(memeStats[i].upvotes);
             downvotes.push(memeStats[i].downvotes);
             views.push(memeStats[i].views);
+            date.push(memeStats[i].date)
         }
 
         this.setState({
             upvotes: upvotes,
             downvotes: downvotes,
             views: views,
+            date: date,
             showStats: true
         })
 
         console.log(this.state.upvotes)
         console.log(this.state.downvotes)
         console.log(this.state.views)
+        console.log(this.state.date)
     }
 
     //triggers a +1 view in db
@@ -143,6 +148,7 @@ export default class SingleView extends Component {
                     upvotes={this.state.upvotes}
                     downvotes={this.state.downvotes}
                     views={this.state.views}
+                    date={this.state.date}
                     sumUpvotes={meme.stats.upvotes.length}
                     sumDownvotes={meme.stats.downvotes.length}
                     sumViews={meme.stats.views}

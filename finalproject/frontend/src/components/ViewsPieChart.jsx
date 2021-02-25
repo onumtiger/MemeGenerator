@@ -57,7 +57,7 @@ class ViewsPieChart extends React.Component {
                 </div>
                 <div className="legende">
                     <div className="viewsColor"></div> views: {(Math.round(this.props.percentageView * 100) / 100).toFixed(2)}%
-                    <div className="otherViewsColor"></div> other views
+                    <div className="otherViewsColor"></div> views of other memes
                 </div>
             </div>
         );

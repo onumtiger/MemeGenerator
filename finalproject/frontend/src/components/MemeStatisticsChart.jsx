@@ -10,15 +10,16 @@ class MemeStatisticsChart extends React.Component {
     }
 
     componentDidMount() {
-        const { upvotes, downvotes, views } = this.props;
+        const { upvotes, downvotes, views, date } = this.props;
         const w = 630;
-        const h = 300;
+        const h = 400;
         const scaleFactor = 3;
         const barWidth = 10;
 
         console.log("upvotes in chart: ", upvotes)
         console.log("downvotes in chart: ", downvotes)
         console.log("views in chart: ", views)
+        console.log("dates in chart: ", date)
 
         const svg = d3
             .select(".barchart")
@@ -34,9 +35,9 @@ class MemeStatisticsChart extends React.Component {
             .append("rect")
             .attr("fill", "#54cf55")
             .attr("class", "upVotes")
-            .attr("x", (d, i) => i * 43 + 24)
+            .attr("x", (d, i) => i * 43 + 34)
             .attr('y', (d, i) => {
-                return h - 18 - d * scaleFactor;
+                return h - 82 - d * scaleFactor;
             })
             .attr("width", barWidth)
             .attr('height', (d, i) => {
@@ -52,9 +53,9 @@ class MemeStatisticsChart extends React.Component {
             .append("rect")
             .attr("fill", "#ec5252")
             .attr("class", "downVotes")
-            .attr("x", (d, i) => i * 43 + 34)
+            .attr("x", (d, i) => i * 43 + 44)
             .attr('y', (d, i) => {
-                return h - 18 - d * scaleFactor;
+                return h - 82 - d * scaleFactor;
             })
             .attr("width", barWidth)
             .attr('height', (d, i) => {
@@ -70,9 +71,9 @@ class MemeStatisticsChart extends React.Component {
             .append("rect")
             .attr("fill", "navy")
             .attr("class", "viewsBar")
-            .attr("x", (d, i) => i * 43 + 44)
+            .attr("x", (d, i) => i * 43 + 54)
             .attr('y', (d, i) => {
-                return h - 18 - d * scaleFactor;
+                return h - 82 - d * scaleFactor;
             })
             .attr("width", barWidth)
             .attr('height', (d, i) => {
@@ -80,10 +81,25 @@ class MemeStatisticsChart extends React.Component {
             })
             .append("title")
             .text(d => d);
+        //dates in x-axis as labels
+        svg
+            .selectAll("text").select(".dateText")
+            .data(date)
+            .enter()
+            .append("text")
+            .attr("class", "dateText")
+            .style("font-size", 12)
+            .attr("text-anchor", "end")
+            .attr("y", (d, i) => i * 43 + 54)
+            .attr('x', (d, i) => {
+                return - 326;
+            })
+            .text(d => d)
+            .attr("transform", "rotate(-90)");
 
         // Create scale
         var xScale = d3.scaleLinear()
-            .domain([14, 0])
+            .domain([])
             .range([0, w / 1.41 + 150]);
 
         // Add scales to axis
@@ -92,18 +108,18 @@ class MemeStatisticsChart extends React.Component {
 
         //Append group and insert axis
         svg.append("g")
-            .attr("transform", "translate(20," + (h - 18) + ")")
+            .attr("transform", "translate(30," + (h - 82) + ")")
             .call(x_axis);
 
         var yScale = d3.scaleLinear()
             .domain([0, 100])
-            .range([h, 0]);
+            .range([h - 100, 0]);
 
         var y_axis = d3.axisLeft()
             .scale(yScale);
 
         svg.append("g")
-            .attr("transform", "translate(20, -18)")
+            .attr("transform", "translate(30, 18)")
             .call(y_axis);
     }
 
