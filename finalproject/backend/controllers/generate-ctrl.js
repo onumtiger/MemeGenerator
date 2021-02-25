@@ -1,8 +1,15 @@
 var Jimp = require('jimp');
 const Meme = require('../db/models/meme-model');
 
-// Controller handles all API action from outside 
+/** 
+ * Controller handles all API action from outside 
+ */
 
+/**
+ * User calls api with search parameters 
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getSearchImages = async (req, res) => {
 
     try{
@@ -58,7 +65,11 @@ const getSearchImages = async (req, res) => {
 }
 
 
-// Api Image Mamipulation/Creation
+/**
+ * Api image Mamipulation/Creation method
+ * @param {*} req 
+ * @param {*} res 
+ */
 const executeImageCreation  = async (req, res) => {
 
 //TODO: Delete this array for submission
@@ -136,7 +147,14 @@ const executeImageCreation  = async (req, res) => {
     
 }
 
-// helping method for image creation 
+
+/**
+ * helping method for image creation 
+ * @param {*} template 
+ * @param {*} font 
+ * @param {*} captions 
+ * @param {*} fileName 
+ */
 const captionImage = async(template, font, captions, fileName)=>{
     return new Promise(async (resolve, reject) => {
         new Jimp(template.getWidth(), template.getHeight(), 0x0, function (err, textCanvas) {
