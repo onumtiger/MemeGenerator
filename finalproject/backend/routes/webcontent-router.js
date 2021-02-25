@@ -9,4 +9,6 @@ router.get('/queryTest', WebContentCtrl.testQueryParams);
 router.get('/image/:url', WebContentCtrl.getWebImage);
 router.get('/snapshot/:url', WebContentCtrl.getWebSnapshot);
 
+
+
 module.exports = router;
