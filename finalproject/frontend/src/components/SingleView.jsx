@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import api from '../api';
 
 import {MemeVoteCounter as Counter, MemeComment as Comment} from '.';
 
