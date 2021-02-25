@@ -2,6 +2,7 @@ import React, { createRef } from 'react';
 import {CanvasDownloadButton, CanvasUploadButton} from '.';
 import TextBox from '../abstract/TextBox';
 import '../style/WYSIWYG.scss';
+import Main from '../speech/main'
 
 // not sensible to divide this up further into React components as the canvas and the form have to be highly interconnected and achieving the desired outcome with dedicated components would result in some truly nightmarish code.
 
@@ -24,6 +25,7 @@ export default class WYSIWYGEditor extends React.Component {
       colorG: 255,
       colorB: 255
     };
+    this.recordButtonActive = false;
     
     this.state = {
       image: null,
@@ -40,7 +42,8 @@ export default class WYSIWYGEditor extends React.Component {
       'handleCanvasMouseMove',
       'handleCanvasMouseUp',
       'handlePublishedMeme',
-      'assembleUploadFormData'
+      'assembleUploadFormData', 
+      'updateText'
     ].forEach((handler)=>{
       this[handler] = this[handler].bind(this);
     });
@@ -137,6 +140,18 @@ export default class WYSIWYGEditor extends React.Component {
     return ret;
   }
 
+  /**
+   * called by voice recording methods -> main.js
+   * @param {*} textBox 
+   * @param {*} value 
+   * @param {*} recordButtonActive 
+   */
+  updateText(textBox, value, recordButtonActive){
+    this.recordButtonActive = recordButtonActive
+    textBox.updateText(value);
+    this.repaint(true);
+  }
+
   addCaptionAt(x, y){
     //add new textbox
     let newIndex = this.textBoxes.length;
@@ -184,8 +199,21 @@ export default class WYSIWYGEditor extends React.Component {
       }
     }, true); //just to be sure, let this also fire during capturing for stopPropagation() to affect the click listener on #page-right
 
+
+    // Event listener for the record button
     speechButton.addEventListener('click', (e)=>{
-      console.log("speech button clicked")
+     // do nothing of already recording, if not then ...
+      if(!this.recordButtonActive){
+        this.recordButtonActive = true;
+
+        // Button styling changes when clicked 
+        speechButton.innerHTML="... recording";
+        speechButton.style.backgroundColor = "red"
+        speechButton.style.color = "white"
+        
+        // CALL VOICE INPUT -> "speechRecognition" handles everything from now on 
+        Main.speechRecognition(speechButton, captionInput, this.updateText, newTextBox, this.recordButtonActive)  
+      } 
     });
 
     captionRemove.addEventListener('click', (e)=>{
@@ -196,8 +224,7 @@ export default class WYSIWYGEditor extends React.Component {
       li.style.display = 'none';
     });
     captionInput.addEventListener('input', (e)=>{
-      newTextBox.updateText(e.target.value);
-      this.repaint(true);
+      this.updateText(newTextBox, e.target.value);
     });
     fontSizeInput.addEventListener('input', (e)=>{
       newTextBox.updateFontSize(parseInt(e.target.value));
@@ -219,6 +246,7 @@ export default class WYSIWYGEditor extends React.Component {
       newTextBox.updateFontFamily(e.target.value);
       this.repaint(true);
     });
+    
     
     //select and highlight the new input elements for immediate input
     captionInput.focus();
@@ -411,7 +439,7 @@ export default class WYSIWYGEditor extends React.Component {
                     <details>
                       <summary>
                         <input className="in-caption" type="text" placeholder="Please enter a caption..." />
-                        <button type="button" className="speech-button" id="speech-button" title="Dictate caption">Dictate caption</button>
+                        <button type="button" className="speech-button" id="speech-button" title="dictate caption">dictate caption</button>
                         <button type="button" className="in-caption-delete" title="Remove this caption">&#10006;</button>
                       </summary>
                       <div className="in-caption-formatting-wrapper">
