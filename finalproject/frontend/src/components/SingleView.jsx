@@ -19,13 +19,14 @@ export default class SingleView extends Component {
         [
             'handleShareURLClick',
             'handleDownloadClick',
-        ].forEach((handler)=>{
+        ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
         this.state = {
             upvotes: [],
             downvotes: [],
             views: [],
+            date: [],
             showStats: false
         }
         this.previousMemeId = null;
@@ -53,14 +54,14 @@ export default class SingleView extends Component {
         return `${day}.${month}.${year}`;
     }
 
-    handleShareURLClick(e){
+    handleShareURLClick(e) {
         e.target.select();
         document.execCommand('copy');
     }
 
-    handleDownloadClick(e){
+    handleDownloadClick(e) {
         //normally, we could just download the file with the download attribute. However, the request proxying we use for all links to the static server content at the API URL does not seem to work for these requests and we can't pass the API URL directly because it is not from the same Origin as the frontend and that means the download attribute no longer works. So we take the long way around:
-        
+
         //create virtual canvas element
         let canvas = document.createElement('canvas');
 
@@ -71,58 +72,60 @@ export default class SingleView extends Component {
 
         //draw the image to the canvas
         let c = canvas.getContext('2d');
-        c.drawImage(img, 0,0);
+        c.drawImage(img, 0, 0);
 
         //compute the dataURL and apply it to the anchor element
         let url = canvas.toDataURL();
         e.target.href = url;
     }
 
+    /**
+     * get meme stats to display in the charts
+     */
     getMemeStats = async () => {
-        try{
-            this.setState({
-                showStats: false
-            });
-            
-            const meme = this.props.meme;
-            let response = await api.getStatsForMeme(meme._id);
-            let memeStats = response.data.data.days;
+        this.setState({
+            showStats: false
+        });
 
-            var upvotes = [];
-            var downvotes = [];
-            var views = [];
+        //get the stats of the current meme
+        const meme = this.props.meme;
+        let response = await api.getStatsForMeme(meme._id);
+        let memeStats = response.data.data.days;
 
-            for (var i = 0; i < memeStats.length; i++) {
-                upvotes.push(memeStats[i].upvotes);
-                downvotes.push(memeStats[i].downvotes);
-                views.push(memeStats[i].views);
-            }
+        //create empty arrays to fill in later
+        var upvotes = [];
+        var downvotes = [];
+        var views = [];
+        var date = [];
 
-            this.setState({
-                upvotes: upvotes,
-                downvotes: downvotes,
-                views: views,
-                showStats: true
-            })
-
-            console.log(this.state.upvotes)
-            console.log(this.state.downvotes)
-            console.log(this.state.views)
-        }catch(err){
-            console.log('Failed to get Stats: ',err);
+        var x = memeStats.length - Math.min(memeStats.length, 14);
+        //push all last 14 days values in the respective empty array
+        for (var i = x; i < memeStats.length; i++) {
+            console.log("index: ", i, memeStats.length)
+            upvotes.push(memeStats[i].upvotes);
+            downvotes.push(memeStats[i].downvotes);
+            views.push(memeStats[i].views);
+            date.push(memeStats[i].date)
         }
+
+        //update the states with the new arrays and values
+        this.setState({
+            upvotes: upvotes,
+            downvotes: downvotes,
+            views: views,
+            date: date,
+            showStats: true
+        })
     }
 
     //triggers a +1 view in db
-    sendView(memeId){
+    sendView(memeId) {
         console.log("send view for id: ", memeId);
-        api.postViewMeme(memeId).catch(err =>{
-            console.log('Failed to post views: ',err);
+        api.postViewMeme(memeId).catch(err => {
+            console.log('Failed to post views: ', err);
         });
         this.props.meme.stats.views++; //update in-memory meme object until we get updated data from the API
     }
-
-
 
     render() {
         const meme = this.props.meme;
@@ -168,8 +171,14 @@ export default class SingleView extends Component {
                     upvotes={this.state.upvotes}
                     downvotes={this.state.downvotes}
                     views={this.state.views}
-                >
-                </MemeStatisticsChart>)}
+                    date={this.state.date}
+                    sumUpvotes={meme.stats.upvotes.length}
+                    sumDownvotes={meme.stats.downvotes.length}
+                    sumViews={meme.stats.views}
+                    sumOtherViews={this.props.sumOtherViews}
+                    getAllOtherViews={this.props.getAllOtherViews}
+                    currentMemeView={meme.stats.views}
+                />)}
             </div>
         )
     }
