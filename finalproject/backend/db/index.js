@@ -22,7 +22,7 @@ const resetDB = async() => {
         name: 'Jan und Domi unterwegs',
         comment_ids: [0, 1],
         user_id: 0,
-        visibility: 2,
+        visibility: 0,
         creationDate: "2021/02/12",
         stats: {
             upvotes: [0, 2, 3],
@@ -87,7 +87,7 @@ const resetDB = async() => {
         url: '/templates/button-decision.png',
         name: 'Two Buttons',
         user_id: 1,
-        visibility: 2,
+        visibility: 0,
         stats: {
             upvotes: [0],
             downvotes: [1, 2, 3],
@@ -176,7 +176,7 @@ const resetDB = async() => {
     var defaultTemplate9 = {
         _id: 8,
         url: '/templates/nothing-works.png',
-        name: 'Nothing Works',
+        name: 'Us devs crying when nothing works',
         user_id: 0,
         visibility: 2,
         stats: {

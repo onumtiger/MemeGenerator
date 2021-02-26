@@ -134,7 +134,7 @@ export default class SingleView extends Component {
                         <a onClick={this.handleDownloadClick} href="#" download={meme.name} id="download-btn">Download this Meme</a>
                         or share the link to it on social media:
                     </p>
-                    <input type="text" id="meme-url-input" title="Click to Copy" value={window.location.toString()} onClick={this.handleShareURLClick} />
+                    <input type="text" id="meme-url-input" title="Click to Copy" value={window.location.toString()} onClick={this.handleShareURLClick} readOnly />
                     <a href="https://www.facebook.com/" target="_blank" title="Go to Facebook" className="social-icon-link"><img src="/ui/social-fb.png" alt="Facebook" /></a>
                     <a href="https://twitter.com/" target="_blank" title="Go to Twitter" className="social-icon-link"><img src="/ui/social-tw.png" alt="Twitter" /></a>
                     <a href="https://www.instagram.com/" target="_blank" title="Go to Instagram" className="social-icon-link"><img src="/ui/social-ig.png" alt="Instagram" /></a>

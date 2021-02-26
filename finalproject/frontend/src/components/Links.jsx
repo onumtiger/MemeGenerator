@@ -33,6 +33,11 @@ class Links extends Component {
                                 Create Meme
                             </Link>
                         </Item>
+                        <Item>
+                            <Link to="/memes/own" className="nav-link">
+                                My Memes
+                            </Link>
+                        </Item>
 
                     </List>
                 </Collapse>

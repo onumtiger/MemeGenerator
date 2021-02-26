@@ -13,6 +13,10 @@
             vertical-align: top;
         }
 
+        .invalid {
+            background-color: #f28f8f!important;
+        }
+
         #canvas-column {
             width: 80%;
             padding: 0;
@@ -46,7 +50,6 @@
         #options-column {
             width: 20%;
             padding: 10px;
-
             
             .option-desc {
                 font-weight: bold;
@@ -68,6 +71,24 @@
 
             #camera-btn {
                 @include largeButton(#79d760, #4dbb2f);
+            }
+
+            .visibilityOption {
+                margin: 0;
+                padding: 0 10px;
+    
+                $outer-padding: 5px;
+    
+                &:first-of-type{
+                    padding-top: $outer-padding;
+                }
+                &:last-of-type{
+                    padding-bottom: $outer-padding;
+                }
+    
+                input {
+                    margin-right: 5px;
+                }
             }
         }
     }

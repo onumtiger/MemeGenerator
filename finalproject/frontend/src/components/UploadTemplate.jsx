@@ -55,8 +55,15 @@ export default class UploadTemplate extends React.Component {
         if(elem.classList.contains('inactive')) return;
         const formData = new FormData();
 
-        let enteredTitle = document.querySelector('#upload-template-table #in-title').value;
-        formData.append('name', enteredTitle || 'Uploaded image');
+        let titleInput = document.querySelector('#upload-template-table #in-title');
+        let enteredTitle = titleInput.value;
+        if(!enteredTitle){
+            titleInput.classList.add('invalid');
+            return;
+        }else{
+            titleInput.classList.remove('invalid');
+        }
+        formData.append('name', enteredTitle);
         formData.append('userID', 0); //TODO get current userID
         if(!this.selectedVisibilityElem){
             document.querySelector('#upload-template-table #visibilityOption-wrapper').classList.add('invalid');
@@ -230,7 +237,6 @@ export default class UploadTemplate extends React.Component {
         }).catch(err =>{
             console.log('Failed to get visibility options: ',err);
         });
-
     }
 
     render(){
@@ -267,7 +273,7 @@ export default class UploadTemplate extends React.Component {
                                 </fieldset>
                             </td>
                             <td id="col-templatedata">
-                                <input id="in-title" type="text" placeholder="Enter a name for your template..." />
+                                <input id="in-title" type="text" placeholder="Enter a short description for your template image..." />
                                 {showPreviewImage && 
                                     <img id="input-file-preview" src={previewImageSrc} />
                                 }

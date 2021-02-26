@@ -3,15 +3,15 @@ const Draft = require('../db/models/draft-model');
 const dbUtils = require('../db/dbUtils');
 
 const getDrafts = async (req, res) => {
-    let userID = req.params.userID;
-    await User.findOne({ _id: userID }, (err, user) => {
+    let userId = req.query.userId;
+    await User.findOne({ _id: userId }, (err, user) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
         }
         if (!user) {
             return res
                 .status(404)
-                .json({ success: false, error: `User with ID ${userID} not found!` });
+                .json({ success: false, error: `User with ID ${userId} not found!` });
         }
         Draft.find({ _id: { $in: user.draft_ids } }, (draftErr, draftArray) => {
             if (draftErr) {
@@ -23,12 +23,12 @@ const getDrafts = async (req, res) => {
 }
 
 const insertDraft = async (req, res) => {
-    let userID = req.params.userID;
+    let userId = req.query.userId;
     let body = req.body;
-    let draftID = await dbUtils.getNewEmptyDraftID();
+    let draftId = await dbUtils.getNewEmptyDraftID();
 
     const draft = new Draft({
-        _id: draftID,
+        _id: draftId,
         template_src: body.template_src,
         title: body.title,
         captions: body.captions
@@ -44,7 +44,7 @@ const insertDraft = async (req, res) => {
     draft
         .save()
         .then(() => {
-            User.updateOne({ _id: userID }, { $push: {draft_ids: draft._id}}, (err, user)=>{
+            User.updateOne({ _id: userId }, { $push: {draft_ids: draft._id}}, (err, user)=>{
                 if (err) {
                     return res.status(400).json({ success: false, error: err });
                 }
@@ -65,23 +65,23 @@ const insertDraft = async (req, res) => {
 }
 
 const deleteDraft = async (req, res) => {
-    let userID = req.params.userID;
-    let draftID = req.params.draftID;
+    let userId = req.query.userId;
+    let draftId = req.params.draftId;
 
     User.findOneAndUpdate(
         {
-            _id: userID,
-            draft_ids: draftID
-        }, { $pull: {draft_ids: draftID} }, (err, user)=>{
+            _id: userId,
+            draft_ids: draftId
+        }, { $pull: {draft_ids: draftId} }, (err, user)=>{
         if (err) {
             return res.status(400).json({ success: false, error: err });
         }
         if (!user) {
             return res
                 .status(404)
-                .json({ success: false, error: `No User with userID ${userID} and draftID ${draftID} found!` });
+                .json({ success: false, error: `No User with userID ${userId} and draftID ${draftId} found!` });
         }
-        return res.status(200).json({ success: true, data: draftID });
+        return res.status(200).json({ success: true, data: draftId });
 
         // Draft.findOneAndDelete({ _id: draftID }, (err, draft) => {
         //     if (err) {

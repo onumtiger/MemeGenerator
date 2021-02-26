@@ -120,7 +120,8 @@ export default class CreateCustom extends React.Component {
             }
         });
         try{
-            let templatesArray = await api.getAllTemplates();
+            //TODO actual userid...
+            let templatesArray = await api.getAllTemplates(0);
             if (templatesArray.data.success){
                 this.setState({
                     templateListData: {

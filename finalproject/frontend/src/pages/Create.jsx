@@ -15,7 +15,7 @@ export default class Create extends React.Component {
                     <tbody>
                         <tr>
                             <td>
-                                <Link to="/memes/create-api" className="nav-link">
+                                <Link to="/memes/create/api" className="nav-link">
                                     <button type="button" id="btn-api">
                                         <big>Create Via API</big>
                                         <hr />
@@ -24,7 +24,7 @@ export default class Create extends React.Component {
                                 </Link>
                             </td>
                             <td>
-                                <Link to="/memes/create-custom" className="nav-link">
+                                <Link to="/memes/create/custom" className="nav-link">
                                     <button type="button" id="btn-custom">
                                         <big>Custom Create</big>
                                         <hr />

@@ -3,8 +3,8 @@ const DraftCtrl = require('../controllers/draft-ctrl');
 
 const router = express.Router();
 
-router.get('/:userID', DraftCtrl.getDrafts);
-router.post('/:userID', DraftCtrl.insertDraft);
-router.delete('/:userID/:draftID', DraftCtrl.deleteDraft);
+router.get('/', DraftCtrl.getDrafts);
+router.post('/', DraftCtrl.insertDraft);
+router.delete('/:draftId', DraftCtrl.deleteDraft);
 
 module.exports = router;

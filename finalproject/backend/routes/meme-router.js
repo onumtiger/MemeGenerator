@@ -4,6 +4,7 @@ const MemeCtrl = require('../controllers/meme-ctrl');
 const router = express.Router();
 
 router.get('/', MemeCtrl.getMemes);
+router.get('/own', MemeCtrl.getOwnMemes);
 router.post('/', MemeCtrl.createMeme);
 router.get('/:id', MemeCtrl.getMemeById);
 router.delete('/:id', MemeCtrl.deleteMeme);
