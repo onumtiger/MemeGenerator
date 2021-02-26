@@ -104,10 +104,31 @@ export default class SingleView extends Component {
         this.props.meme.stats.views++; //update in-memory meme object until we get updated data from the API
     }
 
+    componentDidMount() {
+        this.props.getAllOtherViews();
+        console.log("sum of views: ", this.props.sumOtherViews)
+    }
+    // componentDidUpdate() {
+    //     this.props.getAllOtherViews();
+    //     console.log("sum of views: ", this.props.sumOtherViews)
+    // }
+
 
     render() {
         const meme = this.props.meme;
-        var percentageView = (meme.stats.views*100)/this.props.sumOtherViews;
+        var percentageView;
+        var sumViewOfAllMemes;
+
+        // this.props.getAllOtherViews();
+        // this.props.sumOtherViews(sumViewOfAllMemes)
+        // if (this.props.sumOtherViews != 0) {
+            // percentageView = (meme.stats.views * 100) / sumViewOfAllMemes;
+        // } else {
+        //     percentageView = (meme.stats.views * 100) / 1;
+        // }
+        // console.log("sum of other: ", this.props.sumOtherViews)
+        // console.log("sum of views: ", sumViewOfAllMemes)
+        // console.log("sum of views: ", this.props.sumOtherViews)
 
         //check if we're displaying a new meme (as opposed to other re-renders without content changes)
         if (this.previousMemeId != meme._id) {

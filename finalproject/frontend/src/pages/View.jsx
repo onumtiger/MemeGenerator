@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import {MemesList, SlideShow, FilterMemes} from '../components';
+import { MemesList, SlideShow, FilterMemes } from '../components';
 import api from '../api';
 
 import Loader from "react-loader-spinner";
@@ -30,72 +30,92 @@ export default class View extends Component {
         [
             'handleMemeListUpdate',
             'wasMemeListJustUpdated',
-        ].forEach((handler)=>{
+        ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
     }
 
-    handleMemeListUpdate(newArray){
-        this.setState({memes: newArray});
+    handleMemeListUpdate(newArray) {
+        this.setState({ memes: newArray });
         this.wasJustUpdated = true;
     }
 
-    wasMemeListJustUpdated(){
-        if(this.wasJustUpdated){
+    wasMemeListJustUpdated() {
+        if (this.wasJustUpdated) {
             this.wasJustUpdated = false;
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
+    getAllViews = async () => {
+        let response = await api.getAllMemes();
+        this.initialMemes = response.data.data;
+        //get views of all memes for later in the statistics
+        let viewsOfAllMemes = [];
+        for (var i = 0; i < this.initialMemes.length; i++) {
+            viewsOfAllMemes.push(this.initialMemes[i].stats.views);
+        }
+        // var sumViewsOfAllMemes = viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
+        var sum = viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
+        // console.log("sum view: ", sum)
+        this.setState({
+            // viewsOverall: sumViewsOfAllMemes
+            viewsOverall: sum
+        })
+    }
+
     componentDidMount = async () => {
-        try{
+        try {
             let response = await api.getAllMemes();
             this.initialMemes = response.data.data;
             //get views of all memes for later in the statistics
-            let viewsOfAllMemes = [];
-            for(var i=0; i<this.initialMemes.length; i++) {
-                viewsOfAllMemes.push(this.initialMemes[i].stats.views);
-            }
-            var sumViewsOfAllMemes = viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
+            // let viewsOfAllMemes = [];
+            // for (var i = 0; i < this.initialMemes.length; i++) {
+            //     viewsOfAllMemes.push(this.initialMemes[i].stats.views);
+            // }
+            // var sumViewsOfAllMemes = viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
+            
 
             this.setState({
                 memes: response.data.data,
                 isLoading: false,
-                viewsOverall: sumViewsOfAllMemes
+                // viewsOverall: sumViewsOfAllMemes
             });
-        }catch(err){
-            console.log('Failed to get memes: ',err);
+        } catch (err) {
+            console.log('Failed to get memes: ', err);
         }
     }
 
 
     render() {
+        // console.log("sum view: ", sum)
+        // console.log("sum viewsoverall: ", this.state.viewsOverall)
         return (
             <div id="view-page-wrapper">
-            {this.state.isLoading ? (
-                <div id="view-page-loader">
-                    <Loader type="Grid" height={500} width={500} color="#7ab2e1" visible={true} />
-                </div>
-            ) : (
-                <>
-                <FilterMemes memes={this.initialMemes} handleMemeListUpdate={this.handleMemeListUpdate} />
-                <Switch>
-                    <Route path={this.routePath} exact children={
-                        //nasty workaround: it would be nicer to just have the MemesList JSX element as JSX children without resorting to the explicit children prop, but then we'd loose access to the routeprops passed to the children :/
-                        (routeProps)=>(
-                        <MemesList {...routeProps} memes={this.state.memes} />
-                        )
-                    } />
-                    <Route path={this.routePath+'/:memeId'} exact children={
-                        (routeProps)=>(
-                        <SlideShow {...routeProps} urlPath={this.routePath} memes={this.state.memes} wasMemeListJustUpdated={this.wasMemeListJustUpdated} sumOtherViews={this.state.viewsOverall}/>
-                        )
-                    } />
-                </Switch>
-                </>
-            )}
+                {this.state.isLoading ? (
+                    <div id="view-page-loader">
+                        <Loader type="Grid" height={500} width={500} color="#7ab2e1" visible={true} />
+                    </div>
+                ) : (
+                        <>
+                            <FilterMemes memes={this.initialMemes} handleMemeListUpdate={this.handleMemeListUpdate} />
+                            <Switch>
+                                <Route path={this.routePath} exact children={
+                                    //nasty workaround: it would be nicer to just have the MemesList JSX element as JSX children without resorting to the explicit children prop, but then we'd loose access to the routeprops passed to the children :/
+                                    (routeProps) => (
+                                        <MemesList {...routeProps} memes={this.state.memes} />
+                                    )
+                                } />
+                                <Route path={this.routePath + '/:memeId'} exact children={
+                                    (routeProps) => (
+                                        <SlideShow {...routeProps} urlPath={this.routePath} memes={this.state.memes} wasMemeListJustUpdated={this.wasMemeListJustUpdated} sumOtherViews={this.state.viewsOverall} getAllOtherViews={this.getAllViews}/>
+                                    )
+                                } />
+                            </Switch>
+                        </>
+                    )}
             </div>
         )
     }
