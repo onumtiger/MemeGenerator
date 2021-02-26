@@ -8,7 +8,7 @@ export default function CreateTemplateSelection(props) {
                 <tbody>
                     <tr>
                         <td>
-                            <button type="button" id="btn-upload" onClick={props.handleUploadButtonClick}>
+                            <button type="button" id="btn-upload" class="external-image" onClick={props.handleUploadButtonClick}>
                                 <big>Upload External Image</big>
                                 <hr />
                                 <small>Upload a local image from your PC, a public image file from the web, or a screenshot of an external webpage</small>

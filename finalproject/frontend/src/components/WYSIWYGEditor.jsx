@@ -179,7 +179,8 @@ export default class WYSIWYGEditor extends React.Component {
     this.repaint(true);
   }
 
-  addCaption(x, y, text, fontSize, colorR, colorG, colorB, bold, italic, fontFace, fromUserClick){
+  addCaption(x, y, text, fontSize=this.textBoxDefaults.fontSize, colorR=this.textBoxDefaults.colorR, colorG=this.textBoxDefaults.colorG, colorB=this.textBoxDefaults.colorB, bold=false, italic=false, fontFace="Impact", fromUserClick=true){
+    
     //add new textbox
     let newIndex = this.textBoxes.length;
     let newTextBox = new TextBox(this.canvasRef, parseInt(x), parseInt(y), text, fontSize, colorR, colorG, colorB, bold, italic, fontFace);
@@ -305,6 +306,8 @@ export default class WYSIWYGEditor extends React.Component {
       captionDetails.style.transitionDuration = '.3s';
       this.hideAllCaptionBoxesExcept(captionDetails);
     }
+
+    return {newTextBox, captionInput}
   }
 
   createCaptionInputLi(){

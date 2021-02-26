@@ -8,7 +8,8 @@ export default class CreateCustom extends React.Component {
     constructor(props){
         super(props);
         this.voiceControl = false;
-
+        this.captionBoxInput = null;
+        this.textBoxInput = null; 
         this.editorRef = createRef();
         this.initialTemplate = "/templates/_dummy.png";
 
@@ -163,20 +164,20 @@ export default class CreateCustom extends React.Component {
         let plusButton = document.querySelector('.template-plus');
         let prevButton = document.querySelector('.previousButton');
         let nextButton = document.querySelector('.nextButton');
-        //TODO
         let template = document.querySelectorAll('.templateImg');
         let draft = document.querySelector('.draft');
         let titleBox = document.querySelector('.in-title');
-        let captionBox = document.querySelector('.in-caption');
-        //TODO
+        //let captionBox = document.querySelector('.in-caption');
         let privateButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-0');
         let unlistedButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-1');
         let publicButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-2');
         let draftSaveButton = document.querySelector('.draft-save-button');
         let downloadButton = document.querySelector('.canvas-download-btn');
         let publishButton = document.querySelector('.canvas-publish-btn');
-
         let createOwnTemplate = document.querySelector('.create-own-template');
+        let externalImage = document.querySelector('.external-image');
+
+       
 
             console.log("callback arrived")
             switch (status){
@@ -204,11 +205,21 @@ export default class CreateCustom extends React.Component {
                 createOwnTemplate.click()
                 window.scrollTo(0,document.body.scrollHeight);
             break;
+            case "external_image":
+                externalImage.click()  
+            break;
             case "enter_title":
                 titleBox.value = parameter
             break;
+            case "caption_active":
+                let {newTextBox, captionInput} = this.editorRef.current.addCaption(0, 0, "");
+                this.textBoxInput = newTextBox
+                this.captionBoxInput = captionInput
+            break;
             case "enter_caption":
-                captionBox.value = parameter
+                this.captionBoxInput.value = parameter
+                this.textBoxInput.updateText(parameter)
+                this.editorRef.current.repaint(true)
             break;
             case "set_public":
                 publicButton.click()
@@ -255,7 +266,7 @@ export default class CreateCustom extends React.Component {
                 voiceControlButton.innerHTML = "... recording - click to disable "
                 voiceControlButton.style.backgroundColor = "red"
                 console.log("voice control clicked");
-                Main.activateFullVoiceControl(voiceControlButton, this.handleVoiceInput);  
+                Main.activateFullVoiceControl(voiceControlButton, this.handleVoiceInput.bind(this));  
             }else{
                 this.voiceControl = false;
                 console.log("voice control disabled");

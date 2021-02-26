@@ -65,7 +65,7 @@ const result2 = (event) => {
     var res = transcript.toLowerCase();
     console.log(res)
 
-    if(res.includes("new")){
+    if(res.includes("new")&&res.include("template")){
         Read.readEnglish("Alright, how do you want to create your template?")
         handleVoiceInput("create_new_template", "")
     }
@@ -90,7 +90,7 @@ const result2 = (event) => {
         handleVoiceInput("previous_template", "")
     }
     else if(res.includes("draft")&&!(res.includes("save"))){
-        Read.readEnglish("Ok, lets work on your draft")
+        Read.readEnglish("Ok, lets work on your last draft")
         handleVoiceInput("draft", "")
     }
     else if(res.includes("title")){
@@ -99,8 +99,9 @@ const result2 = (event) => {
         handleVoiceInput("enter_title", "")
     }
     else if(res.includes("caption")){
-        Read.readEnglish("Alright, dicate your first caption!")
+        Read.readEnglish("Alright, dictate your first caption!")
         listeningToCaption = true  
+        handleVoiceInput("caption_active", "");
     }
     else if(res.includes("own")){
         Read.readEnglish("Have fun!")
@@ -119,7 +120,8 @@ const result2 = (event) => {
         handleVoiceInput("download", "")
     }
     else if(res.includes("external")){
-        Read.readEnglish("Sorry, from here you have to click yourself!")
+        Read.readEnglish("Here you are! Oh! Sorry I got an important phone call, please go on yourself!")
+        handleVoiceInput("external_image", "")
     }
     else if(res.includes("publish")){
         Read.readEnglish("Yeah boy! It is live!")
