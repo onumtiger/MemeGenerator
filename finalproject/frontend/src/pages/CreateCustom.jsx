@@ -2,10 +2,12 @@ import React, { createRef } from 'react';
 import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, UploadTemplate, TemplateStatisticsChart, DraftList} from '../components';
 import api from '../api';
 import '../style/CreateCustom.scss';
+import Main from '../speech/main';
 
 export default class CreateCustom extends React.Component {
     constructor(props){
         super(props);
+        this.voiceControl = false;
 
         this.editorRef = createRef();
         this.initialTemplate = "/templates/_dummy.png";
@@ -80,6 +82,9 @@ export default class CreateCustom extends React.Component {
         this.updateTemplateStats(id);
     }
 
+    
+    
+
     handleDraftSelection(draft){
         this.initialTemplate = draft.template_src;
         this.setState({
@@ -150,8 +155,104 @@ export default class CreateCustom extends React.Component {
         this.selectTemplate(selectedElem.src);
     }
 
+    handleVoiceInput(status){
+
+        let plusButton = document.querySelector('.template-plus');
+        let prevButton = document.querySelector('.previousButton');
+        let nextButton = document.querySelector('.nextButton');
+        //TODO
+        let template = document.querySelectorAll('.templateImg');
+        let draft = document.querySelector('.draft');
+        let titleBox = document.querySelector('.in-title');
+        //TODO
+        //public, private checkbox
+        let privateButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-0');
+        let unlistedButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-1');
+        let publicButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-2');
+        let draftSaveButton = document.querySelector('.draft-save-button');
+        let downloadButton = document.querySelector('.canvas-download-btn');
+        let publishButton = document.querySelector('.canvas-publish-btn');
+
+            console.log("callback arrived")
+            //let plusButton = document.querySelector('.template-plus');
+            switch (status){
+            case "create_new_template":
+                plusButton.click();
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
+            case "template_one":
+                template[0].click();
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
+            case "next_template":
+                nextButton.click()
+            break;
+            case "previous_template":
+                prevButton.click()
+            break;
+            case "draft":
+                draft.click()
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
+            case "enter_title":
+                //titleBox.click()
+                titleBox.value = "teststring"
+            break;
+            case "enter_caption":
+                //TODO
+            break;
+            case "set_public":
+                publicButton.click()
+            break;
+            case "set_unlisted":
+                unlistedButton.click()
+            break;
+            case "set_private":
+                privateButton.click()
+            break;
+            case "download":
+                downloadButton.click()
+            break;
+            case "publish":
+                publishButton.click()
+            break;
+            case "save_draft":
+                draftSaveButton.click()
+            break;
+            case "set_caption_bold":
+                //TODO
+            break;
+            case "set_caption_italic":
+                //TODO
+            break;
+            default:
+
+            break; 
+            }
+            if(status=="create_new_template"){
+               
+            }
+            
+
+    }
+
     componentDidMount(){
         this.loadTemplatesIntoList();
+        
+        let voiceControlButton = document.querySelector('.voice-control-button');
+        voiceControlButton.addEventListener('click', (e)=>{
+            if(!this.voiceControl){
+                this.voiceControl = true;
+                voiceControlButton.innerHTML = "... recording - click to disable "
+                voiceControlButton.style.backgroundColor = "red"
+                console.log("voice control clicked");
+                Main.activateFullVoiceControl(voiceControlButton, this.handleVoiceInput);  
+            }else{
+                this.voiceControl = false;
+                console.log("voice control disabled");
+                voiceControlButton.innerHTML = "enable voice control"
+                voiceControlButton.style.backgroundColor = "initial"        
+        }});
     }
 
     render(){

@@ -2,12 +2,12 @@ import React from 'react';
 import '../style/TemplateList.scss';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import Main from '../speech/main';
+
 
 export default class TemplatesList extends React.Component {
     constructor(props) {
         super(props);
-        this.voiceControl = false;
+       
         this.state = {
             showNavButtons: false
         };
@@ -70,22 +70,6 @@ export default class TemplatesList extends React.Component {
         this.props.handleTemplateSelection(newSelectedElem.src, newSelectedElem.dataset.templateid);
     }
 
-    componentDidMount(){
-        let voiceControlButton = document.querySelector('.voice-control-button');
-        voiceControlButton.addEventListener('click', (e)=>{
-            if(!this.voiceControl){
-                this.voiceControl = true;
-                voiceControlButton.innerHTML = "... recording - click to disable "
-                voiceControlButton.style.backgroundColor = "red"
-                console.log("voice control clicked");
-                Main.activateFullVoiceControl(voiceControlButton, this.voiceUsesPlusButton, this);  
-            }else{
-                this.voiceControl = false;
-                console.log("voice control disabled");
-                voiceControlButton.innerHTML = "enable voice control"
-                voiceControlButton.style.backgroundColor = "initial"        
-        }});
-    }
 
     render() {
         return (
@@ -95,9 +79,9 @@ export default class TemplatesList extends React.Component {
                 {this.state.showNavButtons && (
                         <span id="navbutton-wrapper">
                             (
-                            <button type="button" className="navButton" onClick={this.handlePrevButtonClick}>Previous</button>
+                            <button type="button" className="navButton previousButton" onClick={this.handlePrevButtonClick}>Previous</button>
                     /
-                            <button type="button" className="navButton" onClick={this.handleNextButtonClick}>Next</button>
+                            <button type="button" className="navButton nextButton" onClick={this.handleNextButtonClick}>Next</button>
                     )
                         </span>
                     )}:
@@ -113,7 +97,7 @@ export default class TemplatesList extends React.Component {
                                 <img src={t.url} alt={t.name} title={t.name} id={'template_' + t._id} key={'template_' + t._id} data-templateid={t._id} className="templateImg" onClick={this.handleTemplateClick} />
                             ))
                         )}
-                    <img id="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />
+                    <img id="template-plus" class="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />
                 </div>
             </div>
         );
