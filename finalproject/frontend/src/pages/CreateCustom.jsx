@@ -2,11 +2,14 @@ import React, { createRef } from 'react';
 import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, UploadTemplate, TemplateStatisticsChart, DraftList} from '../components';
 import api from '../api';
 import '../style/CreateCustom.scss';
+import Main from '../speech/main';
 
 export default class CreateCustom extends React.Component {
     constructor(props){
         super(props);
-
+        this.voiceControl = false;
+        this.captionBoxInput = null;
+        this.textBoxInput = null; 
         this.editorRef = createRef();
         this.initialTemplateSrc = "";
         this.initialTemplateId = -1;
@@ -82,6 +85,9 @@ export default class CreateCustom extends React.Component {
         });
         this.updateTemplateStats(id);
     }
+
+    
+    
 
     handleDraftSelection(draft){
         this.initialTemplateId = draft.template_id;
@@ -159,8 +165,120 @@ export default class CreateCustom extends React.Component {
         this.selectTemplate(selectedElem.src, templateID);
     }
 
+    handleVoiceInput(status, parameter){
+
+        let plusButton = document.querySelector('.template-plus');
+        let prevButton = document.querySelector('.previousButton');
+        let nextButton = document.querySelector('.nextButton');
+        let template = document.querySelectorAll('.templateImg');
+        let draft = document.querySelector('.draft');
+        let titleBox = document.querySelector('.in-title');
+        //let captionBox = document.querySelector('.in-caption');
+        let privateButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-0');
+        let unlistedButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-1');
+        let publicButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-2');
+        let draftSaveButton = document.querySelector('.draft-save-button');
+        let downloadButton = document.querySelector('.canvas-download-btn');
+        let publishButton = document.querySelector('.canvas-publish-btn');
+        let createOwnTemplate = document.querySelector('.create-own-template');
+        let externalImage = document.querySelector('.external-image');
+
+       
+
+            console.log("callback arrived")
+            switch (status){
+            case "create_new_template":
+                plusButton.click();
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
+            case "template_choose":
+                template[parameter].click();
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
+            case "next_template":
+                nextButton.click();
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
+            case "previous_template":
+                prevButton.click()
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
+            case "draft":
+                draft.click()
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
+            case "create_own_template":
+                createOwnTemplate.click()
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
+            case "external_image":
+                externalImage.click()  
+            break;
+            case "enter_title":
+                titleBox.value = parameter
+            break;
+            case "caption_active":
+                let {newTextBox, captionInput} = this.editorRef.current.addCaption(0, 0, "");
+                this.textBoxInput = newTextBox
+                this.captionBoxInput = captionInput
+            break;
+            case "enter_caption":
+                this.captionBoxInput.value = parameter
+                this.textBoxInput.updateText(parameter)
+                this.editorRef.current.repaint(true)
+            break;
+            case "set_public":
+                publicButton.click()
+            break;
+            case "set_unlisted":
+                unlistedButton.click()
+            break;
+            case "set_private":
+                privateButton.click()
+            break;
+            case "download":
+                downloadButton.click()
+            break;
+            case "publish":
+                publishButton.click()
+            break;
+            case "save_draft":
+                draftSaveButton.click()
+            break;
+            case "set_caption_bold":
+                //TODO
+            break;
+            case "set_caption_italic":
+                //TODO
+            break;
+            default:
+
+            break; 
+            }
+            if(status=="create_new_template"){
+               
+            }
+            
+
+    }
+
     componentDidMount(){
         this.loadTemplatesIntoList();
+        
+        let voiceControlButton = document.querySelector('.voice-control-button');
+        voiceControlButton.addEventListener('click', (e)=>{
+            if(!this.voiceControl){
+                this.voiceControl = true;
+                voiceControlButton.innerHTML = "... recording - click to disable "
+                voiceControlButton.style.backgroundColor = "red"
+                console.log("voice control clicked");
+                Main.activateFullVoiceControl(voiceControlButton, this.handleVoiceInput.bind(this));  
+            }else{
+                this.voiceControl = false;
+                console.log("voice control disabled");
+                voiceControlButton.innerHTML = "enable voice control"
+                voiceControlButton.style.backgroundColor = "initial"        
+        }});
     }
 
     render(){

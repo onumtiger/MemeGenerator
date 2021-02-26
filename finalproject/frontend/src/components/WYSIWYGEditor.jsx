@@ -181,7 +181,8 @@ export default class WYSIWYGEditor extends React.Component {
     this.repaint(true);
   }
 
-  addCaption(x, y, text, fontSize, colorR, colorG, colorB, bold, italic, fontFace, fromUserClick){
+  addCaption(x, y, text, fontSize=this.textBoxDefaults.fontSize, colorR=this.textBoxDefaults.colorR, colorG=this.textBoxDefaults.colorG, colorB=this.textBoxDefaults.colorB, bold=false, italic=false, fontFace="Impact", fromUserClick=true){
+    
     //add new textbox
     let newIndex = this.textBoxes.length;
     let newTextBox = new TextBox(this.canvasRef, parseInt(x), parseInt(y), text, fontSize, colorR, colorG, colorB, bold, italic, fontFace);
@@ -307,6 +308,8 @@ export default class WYSIWYGEditor extends React.Component {
       captionDetails.style.transitionDuration = '.3s';
       this.hideAllCaptionBoxesExcept(captionDetails);
     }
+
+    return {newTextBox, captionInput}
   }
 
   createCaptionInputLi(){
@@ -450,6 +453,7 @@ export default class WYSIWYGEditor extends React.Component {
   }
 
   handleDraftButtonClick(e){
+    console.log("draft saved")
     let elem = e.target;
 
     let draftData = {
@@ -556,7 +560,7 @@ export default class WYSIWYGEditor extends React.Component {
         <tbody>
           <tr>
             <td id="page-left">
-              <input id="in-title" type="text" placeholder="Enter a title for your meme post..." />
+              <input id="in-title" class="in-title" type="text" placeholder="Enter a title for your meme post..." />
               <canvas id="canvas-editor"
                 ref={this.canvasRef}
                 width={this.state.canvasWidth}
@@ -589,11 +593,11 @@ export default class WYSIWYGEditor extends React.Component {
                                   <span className="label-fontSize">{this.textBoxDefaults.fontSize+'px'}</span>
                                 </label>
                                 <label>
-                                  <input type="checkbox" name="bold" />
+                                  <input type="checkbox" class="boldBox" name="bold" />
                                   bold
                                 </label>
                                 <label>
-                                  <input type="checkbox" name="italic" />
+                                  <input type="checkbox" class="italicBox" name="italic" />
                                   italic
                                 </label>
                               </td>
@@ -635,7 +639,7 @@ export default class WYSIWYGEditor extends React.Component {
                   </li>
                 </ul>
                 <div id="visibilityOption-wrapper"></div>
-                <button type="button" id="save-draft-btn" onClick={this.handleDraftButtonClick}>{this.draftButtonTexts.default}</button>
+                <button type="button" id="save-draft-btn" class="draft-save-button" onClick={this.handleDraftButtonClick}>{this.draftButtonTexts.default}</button>
                 <CanvasDownloadButton placeholderFileName={this.placeholderFileName+".png"} onButtonClick={this.handleDownloadButtonClick} />
                 <CanvasUploadButton canvasRef={this.canvasRef} uploadSuccessCallback={this.handlePublishedMeme} assembleFormData={this.assembleUploadFormData} apiFunctionName="insertMeme" />
               </form>
