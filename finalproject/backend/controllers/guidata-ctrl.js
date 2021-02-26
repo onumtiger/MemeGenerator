@@ -2,7 +2,7 @@ const User = require('../db/models/user-model');
 const constants = require('../utils/constants');
 
 const getMemeVisibilityOptions = async (req, res) => {
-    let userId = parseInt(req.params.userId);
+    let userId = parseInt(req.query.userId);
     if(isNaN(userId)) userId = -1;
     await User.findOne({_id: userId}, (err, user)=>{
         if(err){
@@ -22,7 +22,7 @@ const getMemeVisibilityOptions = async (req, res) => {
 }
 
 const getTemplateVisibilityOptions = async (req, res) => {
-    let userId = parseInt(req.params.userId);
+    let userId = parseInt(req.query.userId);
     if(isNaN(userId)) userId = -1;
     await User.findOne({_id: userId}, (err, user)=>{
         if(err){

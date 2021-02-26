@@ -1,6 +1,9 @@
 import React, { createRef } from 'react';
 import {CanvasDownloadButton, CanvasUploadButton} from '.';
 import '../style/DrawTemplate.scss';
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import api from '../api';
 
 export default class DrawTemplate extends React.Component {
     constructor(props){
@@ -24,6 +27,13 @@ export default class DrawTemplate extends React.Component {
             bgToClear: 'Clear Canvas'
         };
         this.lastPos = {x: -1, y: -1};
+        this.selectedVisibilityElem = null;
+
+        this.state = {
+            visibilityOptionsLoading: true,
+            visibilityOptions: []
+        };
+
         [
             'handleCanvasMouseDown',
             'handleCanvasMouseUp',
@@ -37,7 +47,8 @@ export default class DrawTemplate extends React.Component {
             'handleDownloadButtonClick',
             'handleClearButtonClick',
             'handleCamButtonClick',
-            'assembleUploadFormData'
+            'assembleUploadFormData',
+            'handleVisibilityOptionCheck'
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
@@ -233,20 +244,50 @@ export default class DrawTemplate extends React.Component {
     assembleUploadFormData(){
         const formData = new FormData();
 
-        let enteredTitle = document.querySelector('#draw-template-wrapper #in-title').value;
-        formData.append('name', enteredTitle || 'drawn image');
+        let titleInput = document.querySelector('#draw-template-wrapper #in-title');
+        let enteredTitle = titleInput.value;
+        if(!enteredTitle){
+            titleInput.classList.add('invalid');
+            return;
+        }else{
+            titleInput.classList.remove('invalid');
+        }
+        formData.append('name', enteredTitle);
         formData.append('userID', 0); //TODO get current userID
-        formData.append('visibility', 2); //TODO get visibility options from API, display as radiobuttons with numbers as value (public as default), send chosen value here
+        if(!this.selectedVisibilityElem){
+            document.querySelector('#draw-template-wrapper #visibilityOption-wrapper').classList.add('invalid');
+            return null;
+        }
+        formData.append('visibility', this.selectedVisibilityElem.value);
 
         return formData;
     }
 
-    componentDidMount(){
+    handleVisibilityOptionCheck(e){
+        let elem = e.target;
+        
+        if(elem.checked){
+            this.selectedVisibilityElem = elem;
+            document.querySelector('#draw-template-wrapper #visibilityOption-wrapper').classList.remove('invalid');
+        }
+    }
+
+    componentDidMount = async () => {
         this.setCanvasReferences();
         this.setCanvasDimensions();
 
         //make the background white instead of transparent (to be removed once we're drawing on top of images)
         this.setCanvasBackgroundColor(this.canvasBackgroundColor);
+
+        //TODO insert actual userId
+        api.getTemplateVisibilityOptions(0).then((response)=>{
+            this.setState({
+                visibilityOptions: response.data.data,
+                visibilityOptionsLoading: false
+            });
+        }).catch(err =>{
+            console.log('Failed to get visibility options: ',err);
+        });
     }
 
     componentDidUpdate(){
@@ -254,6 +295,7 @@ export default class DrawTemplate extends React.Component {
     }
 
     render(){
+        let {visibilityOptionsLoading, visibilityOptions} = this.state;
         return (
             <div id="draw-template-wrapper" onMouseMove={this.handlePageMouseMove} onMouseUp={this.handlePageMouseUp}>
                 <h3>Draw Your Own Template!</h3>
@@ -261,7 +303,7 @@ export default class DrawTemplate extends React.Component {
                     <tbody>
                         <tr>
                             <td id="canvas-column">
-                                <input id="in-title" type="text" placeholder="Enter a name for your template..." />
+                                <input id="in-title" type="text" placeholder="Enter a short description for your template image" />
                                 <video id="webcam-input" width="1" autoPlay muted />
                                 <canvas
                                     width="1"
@@ -302,6 +344,23 @@ export default class DrawTemplate extends React.Component {
                                     <span id="label-strokeColorB">{this.strokeColor.B}</span>
                                 </label>
                                 <hr />
+                                <fieldset>
+                                    <legend>Visibility</legend>
+                                    {visibilityOptionsLoading ? (
+                                        <div id="view-page-loader">
+                                            <Loader type="ThreeDots" height={200} width={200} color="#7ab2e1" visible={true} />
+                                        </div>
+                                    ) : (
+                                        <div id="visibilityOption-wrapper">
+                                        {visibilityOptions.map((vo)=>(
+                                            <p className="visibilityOption" key={'visibilityOption-'+vo.value}>
+                                            <input type="radio" name="visibility" id={"visibility-"+vo.value} value={vo.value} onChange={this.handleVisibilityOptionCheck} />
+                                            <label htmlFor={"visibility-"+vo.value}>{vo.name}</label>
+                                            </p>
+                                        ))}
+                                        </div>
+                                    )}
+                                </fieldset>
                                 <button type="button" id="camera-btn" onClick={this.handleCamButtonClick}>{this.camButtonTexts.default}</button>
                                 <button type="button" id="clear-btn" onClick={this.handleClearButtonClick}>{this.clearButtonTexts.default}</button>
                                 <CanvasDownloadButton placeholderFileName="Your Work of Art.png" onButtonClick={this.handleDownloadButtonClick} />

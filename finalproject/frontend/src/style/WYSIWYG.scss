@@ -77,6 +77,18 @@
                 box-sizing: border-box;
                 padding: 10px 30px;
             }
+
+            .speech-button {
+                font-size: inherit;
+                position: relative;
+                background-color: transparent;
+                float: right; 
+                margin-right: 35px;
+                       
+                &:hover {
+                    border-radius: 30px;
+                }
+            }
             
             .in-caption-delete {
                 @include unstyled-input;
@@ -108,12 +120,15 @@
 
                     input[type="range"] {
                         vertical-align: bottom;
-                        margin: 0;
-                        margin-left: 5px;
+                        margin: 0 5px;
                     }
 
                     label {
                         display: block;
+                    }
+
+                    input {
+                        margin-right: 5px;
                     }
                 }
             }
@@ -121,6 +136,37 @@
             #in-captions-template-li {
                 display: none;
             }
+        }
+        
+
+        .visibilityOption {
+            margin: 0;
+            padding: 0 10px;
+
+            $outer-padding: 5px;
+
+            &:first-of-type{
+                padding-top: $outer-padding;
+            }
+            &:last-of-type{
+                padding-bottom: $outer-padding;
+            }
+
+            input {
+                margin-right: 5px;
+            }
+        }
+
+        #save-draft-btn {
+            @include largeButton(#6079d7, #2f4dbb);
+
+            &.inactive{
+                @include inactiveBtn;
+            }
+        }
+        
+        .invalid {
+            background-color: #f28f8f!important;
         }
     }
 }

@@ -1,6 +1,7 @@
 const Template = require('../db/models/template-model');
 const User = require('../db/models/user-model');
 const dbUtils = require('../db/dbUtils');
+const constants = require('../utils/constants');
 
 const createTemplate = async (req, res) => {
     const body = req.body;
@@ -111,8 +112,10 @@ const getTemplateById = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getTemplates = async (req, res) => { //TODO filter by visibility to current user
-    await Template.find({}, (err, templateArray) => {
+const getTemplates = async (req, res) => {
+    let userId = req.query.userId; //will be undefined if none is sent, and thus match no template user_id
+    //send own and public templates
+    await Template.find({ $or: [ {visibility: constants.VISIBILITY.PUBLIC}, {user_id: userId} ] }, (err, templateArray) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }

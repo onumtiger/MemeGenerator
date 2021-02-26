@@ -29,30 +29,48 @@ export default class SlideShow extends Component {
         });
     }
 
-    getPrevMemeId() {
+    getPrevMemeId(prevFrom = this.currentMemeIndex) {
         //slideIndex: count up when clicked forward, count down when clicked backwards
-        let newIndex = this.currentMemeIndex -1;
+        let newIndex = prevFrom - 1;
         let numberOfMemes = this.props.memes.length;
 
         if (newIndex < 0) {
             newIndex = numberOfMemes - 1;   //if the sliderIndex is smaller than the first meme-index, set the index to the max-index to show the last meme
         }
 
-        let newMemeId = this.props.memes[newIndex]._id;
-        return newMemeId;
+        let newMeme = this.props.memes[newIndex];
+        //don't link to non-public memes. If there is no other public meme, link back to the current image
+        if(newMeme.visibility != 2){
+            if(this.props.memes.some((m)=>(m.visibility==2))){
+                return this.getPrevMemeId(newIndex);
+            }else{
+                return this.currentMemeIndex;
+            }
+        }else{
+            return newMeme._id;
+        }
     }
 
-    getNextMemeId() {
+    getNextMemeId(nextFrom = this.currentMemeIndex) {
         //slideIndex: count up when clicked forward, count down when clicked backwards
-        let newIndex = this.currentMemeIndex + 1;
+        let newIndex = nextFrom + 1;
         let numberOfMemes = this.props.memes.length;
 
         if (newIndex >= numberOfMemes) {
             newIndex = 0;   //if the index exceeds the max-index, set it back to 0 to show the first meme
         }
 
-        let newMemeId = this.props.memes[newIndex]._id;
-        return newMemeId;
+        let newMeme = this.props.memes[newIndex];
+        //don't link to non-public memes. If there is no other public meme, link back to the current image
+        if(newMeme.visibility != 2){
+            if(this.props.memes.some((m)=>(m.visibility==2))){
+                return this.getNextMemeId(newIndex);
+            }else{
+                return this.currentMemeIndex;
+            }
+        }else{
+            return newMeme._id;
+        }
     }
 
     handleDiashowButtonClick(e){
@@ -79,17 +97,26 @@ export default class SlideShow extends Component {
         this.diashowButtonTimeout = setTimeout(this.playDiashow, 2000);
     }
 
-    getRandomMemeId() {
+    getRandomMemeId(otherThan = this.currentMemeIndex) {
         let {memes} = this.props;
         let randomIndex = Math.floor(Math.random() * memes.length);
-        if(memes.length && randomIndex == this.currentMemeIndex){
+        if(memes.length && randomIndex == otherThan){
             //if there are multiple memes in the array and we just randomly landed on the current one, get the next one
             randomIndex++;
             if(randomIndex >= memes.length) randomIndex = 0;
         }
-
-        let newMemeId = this.props.memes[randomIndex]._id;
-        return newMemeId;
+        
+        let newMeme = this.props.memes[randomIndex];
+        //don't link to non-public memes. If there is no other public meme, link back to the current image
+        if(newMeme.visibility != 2){
+            if(this.props.memes.some((m)=>(m.visibility==2))){
+                return this.getRandomMemeId(randomIndex);
+            }else{
+                return this.currentMemeIndex;
+            }
+        }else{
+            return newMeme._id;
+        }
     }
 
     checkForDisabledButton(e){
@@ -104,7 +131,7 @@ export default class SlideShow extends Component {
         //every change to the meme list via filtering etc. will call render(), so we need to figure out what we can do with that list here
 
         if(!(this.props.memes.length)){
-            //if the meme list is empty (because of filtering etc.), display "nothing found" image
+            //if the meme list is empty (because of filtering etc.), display "nothing found" message
             return (<div id="slideshow-wrapper">
                 <p id="slideshow-empty">Sorry, no Meme matched your selection :(</p>
             </div>);
@@ -124,6 +151,14 @@ export default class SlideShow extends Component {
 
         //at this point, we have a valid meme to display, matching the requested ID from the URL
         const meme = this.props.memes[this.currentMemeIndex];
+
+        
+        if(!meme){
+            //if the requested meme is not among the loaded ones ( = we're trying to access an invalid ID or a private meme from another user), display error message:
+            return (<div id="slideshow-wrapper">
+                <p id="slideshow-empty">Sorry, this Meme either does not exist or it is set to private :(</p>
+            </div>);
+        }
 
         return (
             <div id="slideshow-wrapper">

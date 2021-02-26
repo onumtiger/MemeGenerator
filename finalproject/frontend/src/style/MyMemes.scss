@@ -3,8 +3,13 @@
     width: 75%;
 }
 
-#memes-list-wrapper {
+#mymemes-page-wrapper {
     padding: 0 40px 40px 40px;
+
+    #mymemes-page-loader, #mymemes-page-loader div {
+        text-align: center;
+        padding: 20px;
+    }
 
     .meme-wrapper {
         margin: 0 auto;
@@ -13,13 +18,26 @@
         padding: 25px 0;
         text-align: center;
 
+        &.visibility-1 {
+            background-color: #eee;
+        }
+        &.visibility-0 {
+            background-color: #bbb;
+        }
+
         .title-row {
-            text-align: right;
-            font-size: 115%;
+            text-align: center;
+            font-size: 120%;
+            margin-bottom: 10px;
     
-            span {
+            .title {
                 padding: 5px 10px;
-                // border-bottom: 1px solid gray;
+                font-size: 120%;
+                font-weight: bold;
+            }
+
+            .visibility {
+                font-size: smaller;
             }
         }
     

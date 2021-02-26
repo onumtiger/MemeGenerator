@@ -76,7 +76,8 @@ export default class View extends Component {
 
     componentDidMount = async () => {
         try {
-            let response = await api.getAllMemes();
+            //TODO: actual userid...
+            let response = await api.getAllMemes(0);
             this.initialMemes = response.data.data;
             this.setState({
                 memes: response.data.data,
@@ -99,13 +100,11 @@ export default class View extends Component {
                         <>
                             <FilterMemes memes={this.initialMemes} handleMemeListUpdate={this.handleMemeListUpdate} />
                             <Switch>
-                                <Route path={this.routePath} exact children={
-                                    //nasty workaround: it would be nicer to just have the MemesList JSX element as JSX children without resorting to the explicit children prop, but then we'd loose access to the routeprops passed to the children :/
-                                    (routeProps) => (
-                                        <MemesList {...routeProps} memes={this.state.memes} />
-                                    )
-                                } />
+                                <Route path={this.routePath} exact>
+                                    <MemesList memes={this.state.memes} />
+                                </Route>
                                 <Route path={this.routePath + '/:memeId'} exact children={
+                                    //nasty workaround: it would be nicer to just have the MemesList JSX element as JSX children without resorting to the explicit children prop, but then we'd loose access to the routeprops passed to the children :/
                                     (routeProps) => (
                                         <SlideShow {...routeProps}
                                             urlPath={this.routePath}
@@ -119,7 +118,7 @@ export default class View extends Component {
                             </Switch>
                         </>
                     )}
-            </div>
+            </div >
         )
     }
 }

@@ -3,6 +3,7 @@ const User = require('../db/models/user-model');
 const MemeStats = require('../db/models/memestats-model');
 const TemplateStats = require('../db/models/templatestats-model');
 const dbUtils = require('../db/dbUtils');
+const constants = require('../utils/constants');
 const globalHelpers = require('../utils/globalHelpers');
 const { getTodayString } = require('../utils/globalHelpers');
 
@@ -118,9 +119,25 @@ const getMemeById = async(req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getMemes = async(req, res) => {
-    console.log("Trying to get memes!")
-    await Meme.find({}, (err, memes) => {
+const getMemes = async(req, res) => { //TODO get uploader usernames as well
+    let userId = req.query.userId; //will be undefined if none is sent, and thus match no meme user_id
+    //send own, public and unlisted memes (unlisted to enable access via direct links), but non-public memes will be filtered out in the frontend from regular navigation and lists
+    await Meme.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { visibility: constants.VISIBILITY.UNLISTED }, { user_id: userId }] }, (err, memes) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        // if (!memes.length) {
+        //     return res
+        //         .status(204)
+        //         .json({ success: false, error: `No memes found` })
+        // }
+        return res.status(200).json({ success: true, data: memes })
+    }).catch(err => console.log(err))
+}
+
+const getOwnMemes = async(req, res) => {
+    let userId = req.query.userId;
+    await Meme.find({ user_id: userId }, (err, memes) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -226,5 +243,6 @@ module.exports = {
     postUpvotesMeme,
     postDownvotesMeme,
     getMemes,
+    getOwnMemes,
     getMemeById
 }
