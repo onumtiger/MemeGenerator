@@ -3,7 +3,7 @@ const Draft = require('../db/models/draft-model');
 const dbUtils = require('../db/dbUtils');
 
 const getDrafts = async (req, res) => {
-    let userId = req.query.userId;
+    let userId = req.query.userId; //TODO should be independent of users now
     await User.findOne({ _id: userId }, (err, user) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
@@ -29,7 +29,7 @@ const insertDraft = async (req, res) => {
 
     const draft = new Draft({
         _id: draftId,
-        template_src: body.template_src,
+        template_id: body.template_id,
         title: body.title,
         captions: body.captions
     });

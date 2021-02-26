@@ -10,6 +10,7 @@ const MemeSchema = new Schema({
     name: { type: String, required: true }, // name of the meme (for searching later on)
     comment_ids: { type: [Number], required: true, default: [] }, // comment_ids for comments added to the meme (must be public then)
     user_id: { type: Number, required: true }, // user id -> who created meme
+    template_id: { type: Number, required: true}, // id of the template used to create this meme
     visibility: { type: Number, required: true, default: constants.VISIBILITY.PUBLIC }, // visibility of the meme: public / unlisted / private - possible values in constants.js
     creationDate: { type: String, required: false, default: globalHelpers.getTodayString() }, // date of creation
     stats: { //for public memes

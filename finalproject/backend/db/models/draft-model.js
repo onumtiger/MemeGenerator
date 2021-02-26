@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const DraftSchema = new Schema(
   {
     _id: { type: Number, required: true}, // draft id
-    template_src: { type: String, required: true}, // template image src
+    user_id: { type: Number, required: true}, // draft id
+    template_id: { type: Number, required: true}, // template image id
     title: { type: String, required: true}, //meme title
     captions: [{
         x: { type: Number, required: true}, //x coord

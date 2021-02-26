@@ -22,6 +22,7 @@ const resetDB = async() => {
         name: 'Jan und Domi unterwegs',
         comment_ids: [0, 1],
         user_id: 0,
+        template_id: 1,
         visibility: 0,
         creationDate: "2021/02/12",
         stats: {
@@ -38,6 +39,7 @@ const resetDB = async() => {
         name: 'Jan und Domis Gefühle füreinander <3',
         comment_ids: [2, 3],
         user_id: 1,
+        template_id: 0,
         visibility: 2,
         creationDate: "2021/02/13",
         stats: {
@@ -54,6 +56,7 @@ const resetDB = async() => {
         name: 'Jan als Katze',
         comment_ids: [4, 5],
         user_id: 2,
+        template_id: 1,
         visibility: 2,
         creationDate: "2021/02/14",
         stats: {
@@ -195,7 +198,7 @@ const resetDB = async() => {
 
     var defaultUser = {
         _id: 0,
-        url: 'username_one',
+        username: 'username_one',
         password: '123',
         meme_ids: ['0', '1'],
         draft_ids: [0]
@@ -203,12 +206,19 @@ const resetDB = async() => {
 
     var defaultUser2 = {
         _id: 1,
-        url: 'username_two',
+        username: 'username_two',
         password: '123',
         meme_ids: ['2']
     };
 
-    await db.collection('users').insertMany([defaultUser, defaultUser2]);
+    var defaultUser3 = {
+        _id: 2,
+        username: 'username_three',
+        password: '123',
+        meme_ids: ['3']
+    };
+
+    await db.collection('users').insertMany([defaultUser, defaultUser2, defaultUser3]);
     console.log("Default users inserted");
 
 
@@ -716,7 +726,7 @@ const resetDB = async() => {
     
     var defaultdraft = {
         "_id": 0,
-        "template_src": "/templates/Bernie-I-Am-Once-Again-Asking-For-Your-Support.jpg",
+        "template_id": 0,
         "title": "Da Truth My Brutha",
         "captions": [
             {

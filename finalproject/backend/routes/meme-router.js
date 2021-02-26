@@ -9,9 +9,9 @@ router.post('/', MemeCtrl.createMeme);
 router.get('/:id', MemeCtrl.getMemeById);
 router.delete('/:id', MemeCtrl.deleteMeme);
 router.patch('/:id', MemeCtrl.patchMeme);
-router.post('/upvote/:id', MemeCtrl.postUpvotesMeme);
-router.post('/downvote/:id', MemeCtrl.postDownvotesMeme);
-router.post('/view/:id', MemeCtrl.postViewMeme);
+router.post('/upvote/:id', MemeCtrl.upvoteMeme);
+router.post('/downvote/:id', MemeCtrl.downvoteMeme);
+router.post('/view/:id', MemeCtrl.viewMeme);
 
 
 module.exports = router;

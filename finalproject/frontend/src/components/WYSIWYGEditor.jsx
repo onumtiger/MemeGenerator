@@ -39,6 +39,7 @@ export default class WYSIWYGEditor extends React.Component {
     
     this.state = {
       image: null,
+      templateId: -1,
       canvasWidth: 1, //small initial values so that the canvas won't mess with the default layout before it can calculate its appropriate size
       canvasHeight: 1
     };
@@ -67,7 +68,7 @@ export default class WYSIWYGEditor extends React.Component {
     });
   }
 
-  setTemplateImage(src){
+  setTemplateImage(src, id){
     if(src.length){
       let img = new Image();
       img.src = src;
@@ -87,7 +88,8 @@ export default class WYSIWYGEditor extends React.Component {
         this.setState({
           canvasWidth: innerWidth,
           canvasHeight: scaledImageHeight,
-          image: img
+          image: img,
+          templateId: id
         });
         
         if(this.props.draft){
@@ -100,7 +102,7 @@ export default class WYSIWYGEditor extends React.Component {
         }
       });
     }else{
-      this.setState({image: null});
+      this.setState({image: null, templateId: -1});
       this.cContext().clearRect(0, 0, this.state.canvasWidth, this.state.canvasHeight);
     }
   }
@@ -451,7 +453,7 @@ export default class WYSIWYGEditor extends React.Component {
     let elem = e.target;
 
     let draftData = {
-      template_src: this.state.image.src,
+      template_id: this.state.templateId,
       title: document.querySelector('#wysiwyg-wrapper #in-title').value || 'Created Meme',
       captions: []
     };
@@ -499,6 +501,7 @@ export default class WYSIWYGEditor extends React.Component {
     }
     formData.append('name', enteredTitle);
     formData.append('userID', 0); //TODO get current userID
+    formData.append('templateID', this.state.templateId);
     
     if(!this.selectedVisibilityElem){
       document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper').classList.add('invalid');
@@ -517,10 +520,10 @@ export default class WYSIWYGEditor extends React.Component {
   }
   
   componentDidMount(){
-    this.setTemplateImage(this.props.templateImagePath);
+    this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId);
 
     //TODO insert actual userId
-    api.getTemplateVisibilityOptions(0).then((response)=>{
+    api.getMemeVisibilityOptions(0).then((response)=>{
       let voWrapper = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper');
       response.data.data.forEach(vo => {
         let p = document.createElement('p');

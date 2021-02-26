@@ -1,0 +1,34 @@
+.vote-counter-wrapper {
+    .votebutton {
+        cursor: pointer;
+        margin: 3px;
+        padding: 5px;
+        color: white;
+        border-radius: 7px;
+        border: white;
+    }
+
+    .disabled {
+        cursor: not-allowed;
+    }
+
+    .active {
+        font-weight: bold;
+    }
+
+    .upvotes {
+        background-color: #55cf55;
+
+        &.active {
+            background-color: #35bc35;
+        }
+    }
+    
+    .downvotes {
+        background-color: #eb5252;
+
+        &.active {
+            background-color: #e62424;
+        }
+    }
+}

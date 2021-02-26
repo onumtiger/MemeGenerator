@@ -8,7 +8,8 @@ export default class CreateCustom extends React.Component {
         super(props);
 
         this.editorRef = createRef();
-        this.initialTemplate = "/templates/_dummy.png";
+        this.initialTemplateSrc = "";
+        this.initialTemplateId = -1;
 
         this.state = {
             showTemplateSelection: false,
@@ -65,9 +66,10 @@ export default class CreateCustom extends React.Component {
 
     selectTemplate(src, id){
         if (this.state.showEditor){ //don't rerender the editor, or we will lose the input!
-            this.editorRef.current.setTemplateImage(src);
+            this.editorRef.current.setTemplateImage(src, id);
         }else{
-            this.initialTemplate = src;
+            this.initialTemplateSrc = src;
+            this.initialTemplateId = id;
             this.setState({
                 showEditor: true
             });
@@ -82,11 +84,15 @@ export default class CreateCustom extends React.Component {
     }
 
     handleDraftSelection(draft){
-        this.initialTemplate = draft.template_src;
-        this.setState({
-            selectedDraft: draft,
-            showEditor: true
-        });
+        this.initialTemplateId = draft.template_id;
+        let draftTemplate = this.state.templateListData.templates.find((t)=>(t._id == draft.template_id));
+        if(draftTemplate){
+            this.initialTemplateSrc = draftTemplate.url;
+            this.setState({
+                selectedDraft: draft,
+                showEditor: true
+            });
+        }
     }
     
     updateTemplateStats = async (templateID) => {
@@ -182,7 +188,7 @@ export default class CreateCustom extends React.Component {
                     <DrawTemplate handlePublishing={this.handlePublishedTemplate} />
                 }
                 {this.state.showEditor &&
-                    <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplate} draft={this.state.selectedDraft} history={this.props.history} />
+                    <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplateSrc} templateImageId={this.initialTemplateId} draft={this.state.selectedDraft} history={this.props.history} />
                 }
             </div>
         );

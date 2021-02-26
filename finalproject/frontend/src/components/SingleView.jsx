@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import api from '../api';
 import Read from '../speech/read'
 
-import { MemeVoteCounter as Counter, MemeComment as Comment } from '.';
+import { MemeVoteCounter, MemeComment } from '.';
 import MemeStatisticsChart from './MemeStatisticsChart';
 
 import '../style/SingleView.scss';
@@ -22,6 +22,7 @@ export default class SingleView extends Component {
         ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
+
         this.state = {
             upvotes: [],
             downvotes: [],
@@ -121,7 +122,7 @@ export default class SingleView extends Component {
     //triggers a +1 view in db
     sendView(memeId) {
         console.log("send view for id: ", memeId);
-        api.postViewMeme(memeId).catch(err => {
+        api.viewMeme(memeId).catch(err => {
             console.log('Failed to post views: ', err);
         });
         this.props.meme.stats.views++; //update in-memory meme object until we get updated data from the API
@@ -148,7 +149,7 @@ export default class SingleView extends Component {
                     <tbody>
                         <tr>
                             <td><p>{meme.stats.views} views</p></td>
-                            <td><Counter upVotes={meme.stats.upvotes.length} downVotes={meme.stats.downvotes.length}></Counter></td>
+                            <td><MemeVoteCounter meme={meme} /></td>
                             <td><p>{this.getDateString(meme.creationDate)}</p></td>
                         </tr>
                     </tbody>
@@ -166,7 +167,7 @@ export default class SingleView extends Component {
                     <p id="legal">TWITTER, TWEET, RETWEET and the Twitter Bird logo are trademarks of Twitter Inc. or its affiliates. Facebook and Instagram trademark logos owned by Facebook and its affiliate companies.</p>
                 </div>
                 <hr />
-                <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
+                <MemeComment id={meme._id} commentCount={meme.comment_ids.length} />
                 {this.state.showStats && (<MemeStatisticsChart
                     upvotes={this.state.upvotes}
                     downvotes={this.state.downvotes}

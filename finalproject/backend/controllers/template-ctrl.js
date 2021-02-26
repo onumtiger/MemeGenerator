@@ -1,7 +1,8 @@
 const Template = require('../db/models/template-model');
-const User = require('../db/models/user-model');
+const TemplateStats = require('../db/models/templatestats-model');
 const dbUtils = require('../db/dbUtils');
 const constants = require('../utils/constants');
+const globalHelpers = require('../utils/globalHelpers');
 
 const createTemplate = async (req, res) => {
     const body = req.body;
@@ -128,9 +129,59 @@ const getTemplates = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+
+const upvoteTemplate = async(req, res) => {
+    try {
+        let templateId = req.params.id;
+        let userId = req.body.userId;
+
+        await Template.updateOne({ _id: templateId }, { $push: { 'stats.upvotes': userId } });
+
+        let date = globalHelpers.getTodayString();
+        TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.upvotes': 1 } }, async(err, templateStats) => {
+            if (err) {
+                return res.status(400).json({ success: false, error: err });
+            }
+            if (!templateStats) {
+                await TemplateStats.updateOne({ _id: templateId }, { $push: { 'days': { date: date, upvotes: 1 } } });
+            }
+            return res.status(200).json({ success: true });
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, error: err.toString() });
+    }
+}
+
+const downvoteTemplate = async(req, res) => {
+    try {
+        let templateId = req.params.id;
+        let userId = req.body.userId;
+
+        await Template.updateOne({ _id: templateId }, { $push: { 'stats.downvotes': userId } });
+
+        let date = globalHelpers.getTodayString();
+        TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async(err, templateStats) => {
+            if (err) {
+                return res.status(400).json({ success: false, error: err });
+            }
+            if (!templateStats) {
+                await TemplateStats.updateOne({ _id: templateId }, { $push: { 'days': { date: date, downvotes: 1 } } });
+            }
+            return res.status(200).json({ success: true });
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, error: err.toString() });
+    }
+}
+
+
 module.exports = {
     createTemplate,
     deleteTemplate,
     getTemplates,
     getTemplateById,
+    upvoteTemplate,
+    downvoteTemplate,
 }
