@@ -194,7 +194,6 @@ export default class WYSIWYGEditor extends React.Component {
     let captionInput = li.querySelector('.in-caption');
     let captionDetails = li.querySelector('details');
     let captionRemove = li.querySelector('.in-caption-delete');
-    let speechButton = li.querySelector('.speech-button');
     let fontSizeInput = li.querySelector('input[name=fontSize]');
     let fontSizeLabel = li.querySelector('.label-fontSize');
     let boldInput = li.querySelector('input[name=bold]');
@@ -240,28 +239,11 @@ export default class WYSIWYGEditor extends React.Component {
       }
     }, true); //this one should fire during capturing so that when the inner text <input> gets focus, this code is executed before standard focus handling of the input and can't mess with it afterwards
     li.addEventListener('click', (e)=>{
-      if(e.target != captionRemove && e.target != speechButton){
+      if(e.target != captionRemove){
         //stop the de-selection onclick EventListener from reaching the caption <li>s
         e.stopPropagation();
       }
     }, true); //just to be sure, let this also fire during capturing for stopPropagation() to affect the click listener on #page-right
-
-
-    // Event listener for the record button
-    speechButton.addEventListener('click', (e)=>{
-     // do nothing of already recording, if not then ...
-      if(!this.recordButtonActive){
-        this.recordButtonActive = true;
-
-        // Button styling changes when clicked 
-        speechButton.innerHTML="... recording";
-        speechButton.style.backgroundColor = "red"
-        speechButton.style.color = "white"
-        
-        // CALL VOICE INPUT -> "speechRecognition" handles everything from now on 
-        Main.speechRecognition(speechButton, captionInput, this.updateText, newTextBox, this.recordButtonActive)  
-      } 
-    });
 
     captionRemove.addEventListener('click', (e)=>{
       // e.stopPropagation();
@@ -562,7 +544,6 @@ export default class WYSIWYGEditor extends React.Component {
                     <details>
                       <summary>
                         <input className="in-caption" type="text" placeholder="Please enter a caption..." />
-                        <button type="button" className="speech-button" id="speech-button" title="dictate caption">dictate caption</button>
                         <button type="button" className="in-caption-delete" title="Remove this caption">&#10006;</button>
                       </summary>
                       <div className="in-caption-formatting-wrapper">
