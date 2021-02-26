@@ -79,8 +79,8 @@ export default class SingleView extends Component {
         var views = [];
         var date = [];
 
-        //push all values in the respective empty array
-        for (var i = 0; i < memeStats.length; i++) {
+        //push all last 14 days values in the respective empty array
+        for (var i = 14; i > 0; i--) {
             upvotes.push(memeStats[i].upvotes);
             downvotes.push(memeStats[i].downvotes);
             views.push(memeStats[i].views);
