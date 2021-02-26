@@ -88,6 +88,7 @@ export default class View extends Component {
     }
 
     render() {
+        this.getAllViews();
         return (
             <div id="view-page-wrapper">
                 {this.state.isLoading ? (
