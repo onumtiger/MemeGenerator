@@ -23,7 +23,8 @@ export default class CreateCustom extends React.Component {
             templateStats: {
                 upvotes: [],
                 downvotes: [],
-                uses: []
+                uses: [],
+                date: []
             },
             selectedDraft: null
         };
@@ -97,14 +98,16 @@ export default class CreateCustom extends React.Component {
             var upvotes = [];
             var downvotes = [];
             var uses = [];
+            var date = [];
     
             for (var i = 0; i < days.length; i++) {
                 upvotes.push(days[i].upvotes)
                 downvotes.push(days[i].downvotes)
                 uses.push(days[i].uses)
+                date.push(days[i].date)
             }
             this.setState({
-                templateStats: {upvotes, downvotes, uses},
+                templateStats: {upvotes, downvotes, uses, date},
                 showStats: true
             });
         }catch(err){         
@@ -164,6 +167,7 @@ export default class CreateCustom extends React.Component {
                         upvotes={this.state.templateStats.upvotes}
                         downvotes={this.state.templateStats.downvotes}
                         uses={this.state.templateStats.uses}
+                        date={this.state.templateStats.date}
                     >
                     </TemplateStatisticsChart>
                 }

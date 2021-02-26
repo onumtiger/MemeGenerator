@@ -2,16 +2,18 @@ import React from 'react';
 import '../style/TemplateList.scss';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Main from '../speech/main';
 
 export default class TemplatesList extends React.Component {
     constructor(props) {
         super(props);
-
+        this.voiceControl = false;
         this.state = {
             showNavButtons: false
         };
 
         this.currentlySelectedIndex = 0;
+        
 
         //this binding for React event handlers
         [
@@ -38,7 +40,14 @@ export default class TemplatesList extends React.Component {
         this.setState({ showNavButtons: true });
     }
 
+
+    voiceUsesPlusButton() {
+        console.log("plus button voice")
+        this.handlePlusButtonClick();
+    }
+
     handlePlusButtonClick(e) {
+        console.log("plus button clicked")
         this.props.handleSelectionChange(e.target);
         this.props.handlePlusButtonClick();
     }
@@ -61,9 +70,27 @@ export default class TemplatesList extends React.Component {
         this.props.handleTemplateSelection(newSelectedElem.src, newSelectedElem.dataset.templateid);
     }
 
+    componentDidMount(){
+        let voiceControlButton = document.querySelector('.voice-control-button');
+        voiceControlButton.addEventListener('click', (e)=>{
+            if(!this.voiceControl){
+                this.voiceControl = true;
+                voiceControlButton.innerHTML = "... recording - click to disable "
+                voiceControlButton.style.backgroundColor = "red"
+                console.log("voice control clicked");
+                Main.activateFullVoiceControl(voiceControlButton, this.voiceUsesPlusButton, this);  
+            }else{
+                this.voiceControl = false;
+                console.log("voice control disabled");
+                voiceControlButton.innerHTML = "enable voice control"
+                voiceControlButton.style.backgroundColor = "initial"        
+        }});
+    }
+
     render() {
         return (
             <div id="template-list-wrapper">
+                
                 <h3>First, choose a template
                 {this.state.showNavButtons && (
                         <span id="navbutton-wrapper">
@@ -75,6 +102,7 @@ export default class TemplatesList extends React.Component {
                         </span>
                     )}:
                 </h3>
+                <button class="voice-control-button">enable voice control</button>
                 <div id="template-container">
                     {this.props.data.isLoading ? (
                         <div id="loader">

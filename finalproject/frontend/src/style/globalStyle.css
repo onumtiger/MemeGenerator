@@ -87,3 +87,29 @@
     display: inline-block;
     margin-left: 10px;
 }
+
+.usesColor {
+    width: 10px;
+    height: 10px;
+    background-color: purple;
+    margin: auto;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.otherViewsColor {
+    width: 10px;
+    height: 10px;
+    background-color: lightgrey;
+    margin: auto;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.piechart {
+    margin-bottom: 20px;
+}
+
+.piechart2 {
+    margin-bottom: 20px;
+}
