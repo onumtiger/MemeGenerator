@@ -252,7 +252,7 @@ export default class WYSIWYGEditor extends React.Component {
       if(!this.recordButtonActive){
         this.recordButtonActive = true;
 
-        // Button styling changes when clicked 
+        // Button styling changes when clicked
         speechButton.innerHTML="... recording";
         speechButton.style.backgroundColor = "red"
         speechButton.style.color = "white"
@@ -489,8 +489,15 @@ export default class WYSIWYGEditor extends React.Component {
     this.deselectAllCaptions();
     const formData = new FormData();
 
-    let enteredTitle = document.querySelector('#wysiwyg-wrapper #in-title').value;
-    formData.append('name', enteredTitle || 'Created Meme');
+    let titleInput = document.querySelector('#wysiwyg-wrapper #in-title');
+    let enteredTitle = titleInput.value;
+    if(!enteredTitle){
+      titleInput.classList.add('invalid');
+      return null;
+    }else{
+      titleInput.classList.remove('invalid');
+    }
+    formData.append('name', enteredTitle);
     formData.append('userID', 0); //TODO get current userID
     
     if(!this.selectedVisibilityElem){
@@ -516,13 +523,20 @@ export default class WYSIWYGEditor extends React.Component {
     api.getTemplateVisibilityOptions(0).then((response)=>{
       let voWrapper = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper');
       response.data.data.forEach(vo => {
-        voWrapper.innerHTML += `
-        <p class="visibilityOption">
-          <input type="radio" name="visibility" id=${"visibility-"+vo.value} value=${vo.value} />
-          <label for=${"visibility-"+vo.value}>${vo.name}</label>
-        </p>`;
-
-        voWrapper.querySelector(`#${"visibility-"+vo.value}`).addEventListener('change', this.handleVisibilityOptionCheck);
+        let p = document.createElement('p');
+        p.className = 'visibilityOption';
+        let input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'visibility';
+        input.id = "visibility-"+vo.value;
+        input.value = vo.value;
+        let label = document.createElement('label');
+        label.htmlFor = "visibility-"+vo.value;
+        label.textContent = vo.name;
+        p.appendChild(input);
+        p.appendChild(label);
+        voWrapper.appendChild(p);
+        input.addEventListener('change', this.handleVisibilityOptionCheck);
       });
     }).catch(err =>{
         console.log('Failed to get visibility options: ',err);

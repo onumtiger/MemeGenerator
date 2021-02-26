@@ -1,5 +1,12 @@
 @import "_globalMixins.scss";
 
-.canvas-publish-btn {
-    @include largeButton(#6079d7, #2f4dbb);
+.canvas-publish-wrapper {
+    .filesize-input {
+        margin: 0 10px;
+        vertical-align: bottom;
+    }
+
+    .canvas-publish-btn {
+        @include largeButton(#6079d7, #2f4dbb);
+    }
 }

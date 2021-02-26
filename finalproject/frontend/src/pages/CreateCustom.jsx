@@ -147,7 +147,7 @@ export default class CreateCustom extends React.Component {
         await this.loadTemplatesIntoList();
         let selectedElem = document.querySelector('#create-custom-page-wrapper #template_'+templateID);
         this.changeSelection(selectedElem);
-        this.selectTemplate(selectedElem.src);
+        this.selectTemplate(selectedElem.src, templateID);
     }
 
     componentDidMount(){
