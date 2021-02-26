@@ -47,9 +47,6 @@ const speechRecognition = (recordButton, captionInput, updateText, textBox, reco
             recordButtonUpdate.style.display="none";
         }, 2300);
     }
-
-    
-    
 }
 
 // gets called when there is no voice input any more

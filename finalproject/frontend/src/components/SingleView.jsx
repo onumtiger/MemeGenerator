@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import api from '../api';
+import Read from '../speech/read'
 
 import { MemeVoteCounter as Counter, MemeComment as Comment } from '.';
 import MemeStatisticsChart from './MemeStatisticsChart';
@@ -7,6 +8,10 @@ import MemeStatisticsChart from './MemeStatisticsChart';
 import '../style/SingleView.scss';
 
 export default class SingleView extends Component {
+
+    
+    
+
     constructor(props) {
         super(props);
 
@@ -24,6 +29,20 @@ export default class SingleView extends Component {
             showStats: false
         }
         this.previousMemeId = null;
+        //this.readButton = null;
+    }
+
+    componentDidMount(){
+        let readButton = document.querySelector('.read-button');
+        readButton.addEventListener('click', (e)=>{
+            console.log("clicked")
+            let captions = ""
+            for(let i=0; i<this.props.meme.captions.length; i++){
+                captions = captions+". "+this.props.meme.captions[i];
+            }
+            let read = "Titel. "+this.props.meme.name+". Bildtitel: "+captions
+            Read.readCaption(read)
+        });
     }
 
     getDateString(inputDateString) {
@@ -104,8 +123,10 @@ export default class SingleView extends Component {
     }
 
 
+
     render() {
         const meme = this.props.meme;
+
 
         //check if we're displaying a new meme (as opposed to other re-renders without content changes)
         if (this.previousMemeId != meme._id) {
@@ -117,6 +138,7 @@ export default class SingleView extends Component {
         return (
             <div id="single-view-wrapper">
                 <p id="meme-title">{meme.name}</p>
+                <button type="button" className="read-button" title="read caption">read title and captions</button>
                 <hr />
                 <img id="meme-img" src={meme.url} alt={meme.name}></img>
                 <table id="stats-table">
