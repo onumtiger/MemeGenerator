@@ -37,12 +37,13 @@ export default class SingleView extends Component {
         let readButton = document.querySelector('.read-button');
         readButton.addEventListener('click', (e)=>{
             console.log("clicked")
+            let templateDescription = this.props.meme.template_name
             let captions = ""
             for(let i=0; i<this.props.meme.captions.length; i++){
                 captions = captions+". "+this.props.meme.captions[i];
             }
-            let read = "Titel. "+this.props.meme.name+". Bildtitel: "+captions
-            Read.readCaption(read)
+            let read = "Title. "+this.props.meme.name+". Image captions: "+captions+". Template description: "+templateDescription
+            Read.readEnglish(read)
         });
     }
 

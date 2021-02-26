@@ -191,9 +191,6 @@ const stopRecording = () => {
     console.log("INACTIVE")   
 }
 
-
-
-
 const methods = { stopSpeechRecognition, activateFullVoiceControl }
 
 export default methods
