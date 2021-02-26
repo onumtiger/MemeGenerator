@@ -9,8 +9,10 @@ var updateTextFunction;
 var updateTextBox;
 var updateRecordButtonActive;
 var globalVoiceControlButton;
-
+var listeningToTitle; 
+var listeningToCaption;
 var handleVoiceInput;
+var numbers;
 
 
 const activateFullVoiceControl = (globalVoiceControlButtonParameter, voiceInputCallback) => {
@@ -18,7 +20,11 @@ const activateFullVoiceControl = (globalVoiceControlButtonParameter, voiceInputC
     // some variables
     globalVoiceControlButton = globalVoiceControlButtonParameter
     handleVoiceInput = voiceInputCallback
-    
+    listeningToTitle = false
+    listeningToCaption = false
+    numbers = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+    "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
+               
 
     if(SpeechRecognition){
         console.log("Your Browser supports speech recognition");
@@ -38,63 +44,99 @@ const activateFullVoiceControl = (globalVoiceControlButtonParameter, voiceInputC
             globalVoiceControlButton.style.display="none";
         }, 2500);
     }
-
 }
 
 const result2 = (event) => {
     console.log(event.resultIndex)
     const transcript = event.results[event.resultIndex][0].transcript;
-    transcript.toLowerCase();
-    if(transcript.includes("new")){
+    console.log(transcript)
+
+     // listened to title input?
+     if(listeningToTitle){
+        listeningToTitle = false 
+        handleVoiceInput("enter_title", transcript)
+        Read.readEnglish("I hope I got it right?")
+    } else if(listeningToCaption){
+        listeningToCaption = false
+        handleVoiceInput("enter_caption", transcript)
+        Read.readEnglish("Here is your caption!")
+    }else {
+
+    var res = transcript.toLowerCase();
+    console.log(res)
+
+    if(res.includes("new")){
         Read.readEnglish("Alright, how do you want to create your template?")
-        handleVoiceInput("create_new_template")
-        //activeClass.handlePlusButtonClick()
+        handleVoiceInput("create_new_template", "")
     }
-    else if(transcript.includes("one")){
-        Read.readEnglish("Cool, we are using template number one, good choice")
-        handleVoiceInput("template_one")
+    else if(res.includes("template")||res.includes("choose")||res.includes("take")){
+        let parameter = null
+        for(let i=0; i<(numbers.length); i++){
+            if (res.includes(numbers[i])){
+                parameter = i
+                Read.readEnglish("Cool, that is a good choice")
+            }
+        }
+        if(parameter || parameter==0){handleVoiceInput("template_choose", parameter)}
+        else {Read.readEnglish("Oh I think it is besser when you choose, I am not feeling good at the moment. Sorry!")}
+        
     }
-    else if(transcript.includes("next")){
+    else if(res.includes("next")){
         Read.readEnglish("Oh okay, next one!")
-        handleVoiceInput("next_template")
+        handleVoiceInput("next_template", "")
     }
-    else if(transcript.includes("previous")){
+    else if(res.includes("previous")){
         Read.readEnglish("Oh okay, previous one!")
-        handleVoiceInput("previous_template")
+        handleVoiceInput("previous_template", "")
     }
-    else if(transcript.includes("draft")){
+    else if(res.includes("draft")&&!(res.includes("save"))){
         Read.readEnglish("Ok, lets work on your draft")
-        handleVoiceInput("draft")
+        handleVoiceInput("draft", "")
     }
-    else if(transcript.includes("title")){
+    else if(res.includes("title")){
         Read.readEnglish("Dictate your desired title now!")
-        handleVoiceInput("enter_title")
+        listeningToTitle = true
+        handleVoiceInput("enter_title", "")
     }
-    else if(transcript.includes("caption")){
-        Read.readEnglish("Sure lets add a caption!")
-        handleVoiceInput("enter_caption")
+    else if(res.includes("caption")){
+        Read.readEnglish("Alright, dicate your first caption!")
+        listeningToCaption = true  
     }
-    else if(transcript.includes("public")){
+    else if(res.includes("own")){
+        Read.readEnglish("Have fun!")
+        handleVoiceInput("create_own_template", "")
+    }
+    else if(res.includes("public")){
         Read.readEnglish("Alright, its set to public!")
-        handleVoiceInput("set_public")
+        handleVoiceInput("set_public", "")
     }
-    else if(transcript.includes("private")){
+    else if(res.includes("private")){
         Read.readEnglish("Alright, its set to private!")
-        handleVoiceInput("set_private")
+        handleVoiceInput("set_private", "")
     }
-    else if(transcript.includes("load")){
+    else if(res.includes("down")){
         Read.readEnglish("Nice, here it is!")
-        handleVoiceInput("download")
+        handleVoiceInput("download", "")
     }
-    else if(transcript.includes("publish")){
+    else if(res.includes("external")){
+        Read.readEnglish("Sorry, from here you have to click yourself!")
+    }
+    else if(res.includes("publish")){
         Read.readEnglish("Yeah boy! It is live!")
-        handleVoiceInput("publish")
+        handleVoiceInput("publish", "")
     }
-    else if(transcript.includes("draft")&&transcript.includes("save")){
+    else if(res.includes("draft")&&res.includes("save")){
         Read.readEnglish("Saved as draft!")
-        handleVoiceInput("save_draft")
+        handleVoiceInput("save_draft", "")
     }
-    else if(transcript.includes("stop")){
+    else if(res.includes("thank")&&res.includes("you")){
+        Read.readEnglish("Your welcome, I am out!")
+        globalVoiceControlButton.innerHTML = "enable voice control"
+        globalVoiceControlButton.style.backgroundColor = "initial" 
+        stopSpeechRecognition()
+        stopRecording()
+    }
+    else if(res.includes("stop")){
         Read.readEnglish("ok good, I am out!")
         console.log("voice control disabled");
         globalVoiceControlButton.innerHTML = "enable voice control"
@@ -107,10 +149,11 @@ const result2 = (event) => {
     }else if(transcript.includes("italic")){
         Read.readEnglish("lets make it italic!")
         handleVoiceInput("set_caption_italic")
-    }*/else if(transcript.includes("font")){
+    }*/else if(res.includes("font")){
         Read.readEnglish("I am sorry, I can not help on this one. Please do the font styling yourself!")
     }else{
         Read.readEnglish("Sorry! Please say again!")
+    }
     }
 }
 

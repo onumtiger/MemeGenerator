@@ -15,7 +15,7 @@ export default function CreateTemplateSelection(props) {
                             </button>
                         </td>
                         <td>
-                            <button type="button" id="btn-create" onClick={props.handleCreateButtonClick}>
+                            <button type="button" id="btn-create" class="create-own-template" onClick={props.handleCreateButtonClick}>
                                 <big>Create Your Own Image</big>
                                 <hr />
                                 <small>Create your own template as a drawing, with the option to include a live snapshot from your webcam</small>

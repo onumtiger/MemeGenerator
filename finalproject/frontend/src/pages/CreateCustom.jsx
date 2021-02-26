@@ -158,7 +158,7 @@ export default class CreateCustom extends React.Component {
         this.selectTemplate(selectedElem.src);
     }
 
-    handleVoiceInput(status){
+    handleVoiceInput(status, parameter){
 
         let plusButton = document.querySelector('.template-plus');
         let prevButton = document.querySelector('.previousButton');
@@ -167,8 +167,8 @@ export default class CreateCustom extends React.Component {
         let template = document.querySelectorAll('.templateImg');
         let draft = document.querySelector('.draft');
         let titleBox = document.querySelector('.in-title');
+        let captionBox = document.querySelector('.in-caption');
         //TODO
-        //public, private checkbox
         let privateButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-0');
         let unlistedButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-1');
         let publicButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-2');
@@ -176,33 +176,39 @@ export default class CreateCustom extends React.Component {
         let downloadButton = document.querySelector('.canvas-download-btn');
         let publishButton = document.querySelector('.canvas-publish-btn');
 
+        let createOwnTemplate = document.querySelector('.create-own-template');
+
             console.log("callback arrived")
-            //let plusButton = document.querySelector('.template-plus');
             switch (status){
             case "create_new_template":
                 plusButton.click();
                 window.scrollTo(0,document.body.scrollHeight);
             break;
-            case "template_one":
-                template[0].click();
+            case "template_choose":
+                template[parameter].click();
                 window.scrollTo(0,document.body.scrollHeight);
             break;
             case "next_template":
-                nextButton.click()
+                nextButton.click();
+                window.scrollTo(0,document.body.scrollHeight);
             break;
             case "previous_template":
                 prevButton.click()
+                window.scrollTo(0,document.body.scrollHeight);
             break;
             case "draft":
                 draft.click()
                 window.scrollTo(0,document.body.scrollHeight);
             break;
+            case "create_own_template":
+                createOwnTemplate.click()
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
             case "enter_title":
-                //titleBox.click()
-                titleBox.value = "teststring"
+                titleBox.value = parameter
             break;
             case "enter_caption":
-                //TODO
+                captionBox.value = parameter
             break;
             case "set_public":
                 publicButton.click()
