@@ -60,20 +60,26 @@ export default class SingleView extends Component {
         e.target.href = url;
     }
 
+    /**
+     * get meme stats to display in the charts
+     */
     getMemeStats = async () => {
         this.setState({
             showStats: false
         });
 
+        //get the stats of the current meme
         const meme = this.props.meme;
         let response = await api.getStatsForMeme(meme._id);
         let memeStats = response.data.data.days;
 
+        //create empty arrays to fill in later
         var upvotes = [];
         var downvotes = [];
         var views = [];
         var date = [];
 
+        //push all values in the respective empty array
         for (var i = 0; i < memeStats.length; i++) {
             upvotes.push(memeStats[i].upvotes);
             downvotes.push(memeStats[i].downvotes);
@@ -81,6 +87,7 @@ export default class SingleView extends Component {
             date.push(memeStats[i].date)
         }
 
+        //update the states with the new arrays and values
         this.setState({
             upvotes: upvotes,
             downvotes: downvotes,
@@ -88,11 +95,6 @@ export default class SingleView extends Component {
             date: date,
             showStats: true
         })
-
-        console.log(this.state.upvotes)
-        console.log(this.state.downvotes)
-        console.log(this.state.views)
-        console.log(this.state.date)
     }
 
     //triggers a +1 view in db
@@ -104,31 +106,8 @@ export default class SingleView extends Component {
         this.props.meme.stats.views++; //update in-memory meme object until we get updated data from the API
     }
 
-    componentDidMount() {
-        this.props.getAllOtherViews();
-        console.log("sum of views: ", this.props.sumOtherViews)
-    }
-    // componentDidUpdate() {
-    //     this.props.getAllOtherViews();
-    //     console.log("sum of views: ", this.props.sumOtherViews)
-    // }
-
-
     render() {
         const meme = this.props.meme;
-        var percentageView;
-        var sumViewOfAllMemes;
-
-        // this.props.getAllOtherViews();
-        // this.props.sumOtherViews(sumViewOfAllMemes)
-        // if (this.props.sumOtherViews != 0) {
-            // percentageView = (meme.stats.views * 100) / sumViewOfAllMemes;
-        // } else {
-        //     percentageView = (meme.stats.views * 100) / 1;
-        // }
-        // console.log("sum of other: ", this.props.sumOtherViews)
-        // console.log("sum of views: ", sumViewOfAllMemes)
-        // console.log("sum of views: ", this.props.sumOtherViews)
 
         //check if we're displaying a new meme (as opposed to other re-renders without content changes)
         if (this.previousMemeId != meme._id) {
@@ -174,7 +153,8 @@ export default class SingleView extends Component {
                     sumDownvotes={meme.stats.downvotes.length}
                     sumViews={meme.stats.views}
                     sumOtherViews={this.props.sumOtherViews}
-                    percentageView={percentageView}
+                    getAllOtherViews={this.props.getAllOtherViews}
+                    currentMemeView={meme.stats.views}
                 />)}
             </div>
         )

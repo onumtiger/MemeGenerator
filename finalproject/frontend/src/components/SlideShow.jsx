@@ -125,10 +125,6 @@ export default class SlideShow extends Component {
         //at this point, we have a valid meme to display, matching the requested ID from the URL
         const meme = this.props.memes[this.currentMemeIndex];
 
-        // var sumViewOfAllMemes;
-        // this.props.sumOtherViews(sumViewOfAllMemes)
-        // console.log("sum of views in slideshow: ", sumViewOfAllMemes)
-
         return (
             <div id="slideshow-wrapper">
                 <div id="slideshow-toprow">

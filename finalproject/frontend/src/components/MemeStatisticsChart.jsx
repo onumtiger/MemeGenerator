@@ -7,19 +7,27 @@ import ViewsPieChart from './ViewsPieChart';
 class MemeStatisticsChart extends React.Component {
     constructor(props) {
         super(props);
+        this.percentageView = 0;
     }
 
     componentDidMount() {
-        const { upvotes, downvotes, views, date } = this.props;
+        //call the function in 'View.jsx' to get the sum of all views and update the `viewsOverall`state
+        this.props.getAllOtherViews();
+
+        const { upvotes, downvotes, views, date, currentMemeView } = this.props;
         const w = 630;
         const h = 400;
         const scaleFactor = 3;
         const barWidth = 10;
 
-        console.log("upvotes in chart: ", upvotes)
-        console.log("downvotes in chart: ", downvotes)
-        console.log("views in chart: ", views)
-        console.log("dates in chart: ", date)
+        //get the portion value of the current meme
+        //only divide with sum the of other views if it's not 0
+        if (this.props.sumOtherViews != 0) {
+            this.percentageView = (currentMemeView * 100) / this.props.sumOtherViews;
+        } 
+        else {
+            this.percentageView = 100;
+        }
 
         const svg = d3
             .select(".barchart")
@@ -141,7 +149,7 @@ class MemeStatisticsChart extends React.Component {
                 <ViewsPieChart
                     views={this.props.sumViews}
                     otherViews={this.props.sumOtherViews}
-                    percentageView={this.props.percentageView}
+                    percentageView={this.percentageView}
                 />
             </div>
         );

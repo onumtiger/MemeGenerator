@@ -49,19 +49,27 @@ export default class View extends Component {
         }
     }
 
+    /**
+     * get the sum of views of all memes for later in the statistics
+     */
     getAllViews = async () => {
+        //get all initial memes
         let response = await api.getAllMemes();
         this.initialMemes = response.data.data;
-        //get views of all memes for later in the statistics
+
+        //create an empty array to fill in later
         let viewsOfAllMemes = [];
+
+        //push view values of all initial memes in the empty `viewsOfAllMemes`array
         for (var i = 0; i < this.initialMemes.length; i++) {
             viewsOfAllMemes.push(this.initialMemes[i].stats.views);
         }
-        // var sumViewsOfAllMemes = viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
+
+        //add all view values in `viewsOfAllMemes`array together and save it in a variable
         var sum = viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
-        // console.log("sum view: ", sum)
+
+        //update `viewsOverall` with the current amount of all views
         this.setState({
-            // viewsOverall: sumViewsOfAllMemes
             viewsOverall: sum
         })
     }
@@ -70,28 +78,16 @@ export default class View extends Component {
         try {
             let response = await api.getAllMemes();
             this.initialMemes = response.data.data;
-            //get views of all memes for later in the statistics
-            // let viewsOfAllMemes = [];
-            // for (var i = 0; i < this.initialMemes.length; i++) {
-            //     viewsOfAllMemes.push(this.initialMemes[i].stats.views);
-            // }
-            // var sumViewsOfAllMemes = viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
-            
-
             this.setState({
                 memes: response.data.data,
-                isLoading: false,
-                // viewsOverall: sumViewsOfAllMemes
+                isLoading: false
             });
         } catch (err) {
             console.log('Failed to get memes: ', err);
         }
     }
 
-
     render() {
-        // console.log("sum view: ", sum)
-        // console.log("sum viewsoverall: ", this.state.viewsOverall)
         return (
             <div id="view-page-wrapper">
                 {this.state.isLoading ? (
@@ -110,7 +106,13 @@ export default class View extends Component {
                                 } />
                                 <Route path={this.routePath + '/:memeId'} exact children={
                                     (routeProps) => (
-                                        <SlideShow {...routeProps} urlPath={this.routePath} memes={this.state.memes} wasMemeListJustUpdated={this.wasMemeListJustUpdated} sumOtherViews={this.state.viewsOverall} getAllOtherViews={this.getAllViews}/>
+                                        <SlideShow {...routeProps}
+                                            urlPath={this.routePath}
+                                            memes={this.state.memes}
+                                            wasMemeListJustUpdated={this.wasMemeListJustUpdated}
+                                            sumOtherViews={this.state.viewsOverall}
+                                            getAllOtherViews={this.getAllViews}
+                                        />
                                     )
                                 } />
                             </Switch>
