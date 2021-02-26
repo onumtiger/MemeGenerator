@@ -6,11 +6,18 @@ const Meme = require('../db/models/meme-model');
  */
 
 /**
- * User calls api with search parameters 
- * @param {*} req 
- * @param {*} res 
+ * User calls API with search parameters, the HTTP response will be a zip file with the resulting images or a JSON object with an error message if mandatory parameters were omitted. Zip files will never contain more than 20 images.
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getSearchImages = async (req, res) => {
+
+    // expects at least one of these URL query parameters with truthy string values:
+    //  - titleContains: meme title filter, only return memes that (case-insensitively) contain this string in the meme title
+    //  - fileFormat: one or multiple (separated by the '|' character) file extensions, only return memes that are of these file types
+    //  - maxImages: only return the first x matching memes
+    // example:
+    // http://localhost:3001/api/external/getImages?titleContains=Jan&fileFormat=png|jpg&maxImages=10
 
     try{
         const { titleContains, fileFormat, maxImages } = req.query;
@@ -31,28 +38,28 @@ const getSearchImages = async (req, res) => {
                 return res.status(400).json({ success: false, error: err })
             }
             return memes
-        }).catch(err => console.log(err))
+        })
         
         // FILTER MEMES WITH SEARCH PARAMETERS
-        if(!(titleContains==null)){
-        memes =  memes.filter(meme => (
-            meme.name.toLowerCase().includes(titleContains.toLowerCase())
-        ));
+        if(titleContains){
+            memes =  memes.filter(meme => (
+                meme.name.toLowerCase().includes(titleContains.toLowerCase())
+            ));
         }
 
         // FILTER MEMES BY FILE TYPE
-        if(!(fileFormat==null)){
-        memes = memes.filter(meme=> (
-            meme.url.match(new RegExp(`.+\\.(${fileFormat})$`,'i'))
-        ));
+        if(fileFormat){
+            memes = memes.filter(meme=> (
+                meme.url.match(new RegExp(`.+\\.(${fileFormat})$`,'i'))
+            ));
         }
         
         // PUSH THE MEMES INTO ARRAY
         for (i = 0; (i < (memes.length) && i < hardLimit); i++){
             console.log("i", i)
             let path = memes[i].url  
-                                    //path                  name
-            zipArray.push({path: './public'+path, name: 'zip'+path});
+                                    //path              name
+            zipArray.push({path: './public'+path, name: path});
         }
 
         // SEND STATUS WITH ZIP
@@ -66,16 +73,16 @@ const getSearchImages = async (req, res) => {
 
 
 /**
- * Api image Mamipulation/Creation method
- * @param {*} req 
- * @param {*} res 
+ * API image Manipulation/Creation method
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const executeImageCreation  = async (req, res) => {
 
 //TODO: Delete this array for submission
 
     // URL query parameters - expected form:
-    // http://localhost:3001/api/generate?images[0][name]=name1&images[0][captions][0][x]=10&images[0][captions][0][y]=10&images[0][captions][0][text]=caption1&images[0][captions][0][textColor]=%23ff3333&images[0][captions][1][x]=80&images[0][captions][1][y]=80&images[0][captions][1][text]=caption2&images[0][captions][1][textColor]=%2333ffff&images[1][name]=name2&images[1][captions][0][x]=10&images[1][captions][0][y]=10&images[1][captions][0][text]=caption3&images[1][captions][0][textColor]=%23d24dff&images[1][captions][1][x]=80&images[1][captions][1][y]=80&images[1][captions][1][text]=caption4&images[1][captions][1][textColor]=%23d9ff66&templateURL=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg
+    // http://localhost:3001/api/external?images[0][name]=name1&images[0][captions][0][x]=10&images[0][captions][0][y]=10&images[0][captions][0][text]=caption1&images[0][captions][0][textColor]=%23ff3333&images[0][captions][1][x]=80&images[0][captions][1][y]=80&images[0][captions][1][text]=caption2&images[0][captions][1][textColor]=%2333ffff&images[1][name]=name2&images[1][captions][0][x]=10&images[1][captions][0][y]=10&images[1][captions][0][text]=caption3&images[1][captions][0][textColor]=%23d24dff&images[1][captions][1][x]=80&images[1][captions][1][y]=80&images[1][captions][1][text]=caption4&images[1][captions][1][textColor]=%23d9ff66&templateURL=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg
     // translates to:
     // {
     //     templateURL: 'https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg', //URIEncoded template image URL
@@ -150,10 +157,10 @@ const executeImageCreation  = async (req, res) => {
 
 /**
  * helping method for image creation 
- * @param {*} template 
- * @param {*} font 
- * @param {*} captions 
- * @param {*} fileName 
+ * @param {Jimp} template - Jimp template image object
+ * @param {Font} font - Font object to use for captioning
+ * @param {{x: Number, y: Number, text: string, textColor: string}} captions - Object with the caption text, x/y coords and a color code as encodedURIComponent
+ * @param {string} fileName - filename to use for the saved captioned image file
  */
 const captionImage = async(template, font, captions, fileName)=>{
     return new Promise(async (resolve, reject) => {
