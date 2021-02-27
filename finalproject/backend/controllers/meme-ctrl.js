@@ -230,20 +230,25 @@ const toggleUpvoteMeme = async(req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
-        let newValue = req.body.newValue; //TODO if this is false, remove vote instead of add
+        let newValue = req.body.newValue;
 
-        await Meme.updateOne({ _id: memeId }, { $push: { 'stats.upvotes': userId } });
+        if(newValue){ //check if we want to downvote or de-downvote
+            await Meme.updateOne({ _id: memeId }, { $push: { 'stats.upvotes': userId } });
 
-        let date = globalHelpers.getTodayString();
-        MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.upvotes': 1 } }, async(err, memeStats) => {
-            if (err) {
-                return res.status(400).json({ success: false, error: err });
-            }
-            if (!memeStats) {
-                await MemeStats.updateOne({ _id: memeId }, { $push: { 'days': { date: date, upvotes: 1 } } });
-            }
-            return res.status(200).json({ success: true });
-        })
+            //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
+            let date = globalHelpers.getTodayString();
+            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.upvotes': 1 } }, async(err, memeStats) => {
+                if (err) {
+                    return res.status(400).json({ success: false, error: err });
+                }
+                if (!memeStats) {
+                    await MemeStats.updateOne({ _id: memeId }, { $push: { 'days': { date: date, upvotes: 1 } } });
+                }
+                return res.status(200).json({ success: true });
+            })
+        }else{
+            await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.upvotes': userId } });
+        }
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: err.toString() });
@@ -254,20 +259,25 @@ const toggleDownvoteMeme = async(req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
-        let newValue = req.body.newValue; //TODO if this is false, remove vote instead of add
+        let newValue = req.body.newValue;
 
-        await Meme.updateOne({ _id: memeId }, { $push: { 'stats.downvotes': userId } });
-
-        let date = globalHelpers.getTodayString();
-        MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async(err, memeStats) => {
-            if (err) {
-                return res.status(400).json({ success: false, error: err });
-            }
-            if (!memeStats) {
-                await MemeStats.updateOne({ _id: memeId }, { $push: { 'days': { date: date, downvotes: 1 } } });
-            }
-            return res.status(200).json({ success: true });
-        })
+        if(newValue){ //check if we want to downvote or de-downvote
+            await Meme.updateOne({ _id: memeId }, { $push: { 'stats.downvotes': userId } });
+            
+            //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
+            let date = globalHelpers.getTodayString();
+            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async(err, memeStats) => {
+                if (err) {
+                    return res.status(400).json({ success: false, error: err });
+                }
+                if (!memeStats) {
+                    await MemeStats.updateOne({ _id: memeId }, { $push: { 'days': { date: date, downvotes: 1 } } });
+                }
+                return res.status(200).json({ success: true });
+            })
+        }else{
+            await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.downvotes': userId } });
+        }
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: err.toString() });
