@@ -9,15 +9,38 @@ export default class Comment extends Component {
         
 
         this.state = {
+            comments: this.props.comments,
+            dates: this.props.dates,
+            userId: this.props.userId
         }
+    }
+
+    getTodayString= ()=>{
+        let d = new Date();
+        let day = `${d.getDate()}`.padStart(2, '0');
+        let month = `${d.getMonth()+1}`.padStart(2, '0');
+        let year = d.getFullYear();
+        return `${year}/${month}/${day}`; //form: yyyy/mm/dd
     }
 
     handlePost = async () => {
         const input = document.getElementById('commentInput').value;
         
-        let refreshedComments = this.props.comments
-        refreshedComments.push(input)
-        this.state.comments = refreshedComments;
+        var comments = this.state.comments
+        comments.push(input);
+
+        var dates = this.state.dates
+        dates.push(this.getTodayString())
+
+        
+
+        this.setState({
+            comments: comments
+        })
+
+        // let refreshedComments = this.props.comments
+        // refreshedComments.push(input)
+        // this.state.comments = refreshedComments;
 
         // TODO change when login feature merged
         let user_id=0;
@@ -63,7 +86,7 @@ export default class Comment extends Component {
             <div>
                 <p className="commentNumber">{this.props.commentCount} comments</p>
                 <div>
-                    {this.props.comments.map((comment, index) => (
+                    {this.state.comments.map((comment, index) => (
                         <div key={index}>
                             <div className="commentInfo">
                                 <div className="commenDate">
