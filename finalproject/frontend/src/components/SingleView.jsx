@@ -16,19 +16,18 @@ export default class SingleView extends Component {
             'handleShareURLClick',
             'handleDownloadClick',
             'updateSingleView',
+            'postComment',
         ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
 
         this.state = {
-            commentMessages: [],
-            commentIds: [],
-            commentDate: [],
             upvotes: [],
             downvotes: [],
             views: [],
             date: [],
-            showStats: false
+            showStats: false,
+            comments: []
         }
         this.previousMemeId = null;
         //this.readButton = null;
@@ -93,23 +92,24 @@ export default class SingleView extends Component {
 
             let comments = response.data.data;
 
-            var messages = [];
-            var ids = [];
-            var date = [];
-
-            for (var i = 0; i < comments.length; i++) {
-                messages.push(comments[i].message);
-                ids.push(comments[i].user_id);
-                date.push(comments[i].creationDate)
-            }
-
             this.setState({
-                commentMessages: messages,
-                commentIds: ids,
-                commentDate: date
+                comments
             })
         }catch(err){
             console.log("Failed to get Comments: ",err);
+        }
+    }
+
+    postComment = async (message)=>{
+        try{
+            //TODO userID
+            await api.postComment(0, this.props.meme._id, message).then((res)=>{
+                this.props.meme.comment_ids.push(res.data.comment_id);
+                this.props.triggerMemeListUpdate();
+            });
+            await this.getComments();
+        }catch(err){
+            console.log('Failed to send comment: ', err);
         }
     }
 
@@ -141,7 +141,7 @@ export default class SingleView extends Component {
                 upvotes.push(memeStats[i].upvotes);
                 downvotes.push(memeStats[i].downvotes);
                 views.push(memeStats[i].views);
-                date.push(memeStats[i].date)
+                date.push(memeStats[i].date);
             }
 
             //update the states with the new arrays and values
@@ -224,11 +224,9 @@ export default class SingleView extends Component {
                 <hr />
                 <MemeComment
                     id={meme._id}
-                    commentCount={meme.comment_ids.length}
-                    comments={this.state.commentMessages}
-                    dates={this.state.commentDate}
-                    userId={this.state.commentIds}
-                    getComments={this.getComments}
+                    comments={this.state.comments}
+                    postComment={this.postComment}
+                    
                 />
                 {this.state.showStats && (<MemeStatisticsChart
                     upvotes={this.state.upvotes}

@@ -212,18 +212,32 @@ const getOwnMemes = async(req, res) => {
  * @param {*} res 
  */
 const getCommentsByMemeId = async(req, res) => {
-    let memeId = req.params.id;
-    console.log("TRYING HARD TO GET COMMENTS")
-    console.log(memeId)
     try {
         let memeId = req.params.id;
         let meme = await Meme.findOne({ _id: memeId })
-        console.log("MEME: ", meme)
         let commentIdsArray = meme.comment_ids
-        console.log("commentIdsArray", commentIdsArray)
         let comments = await Comment.find().where('_id').in(commentIdsArray).exec();
+
+
+        let resultArray = [];
+
+        //convert the results from Documents to JSON objects, otherwise we can't add properties that are not defined in the model
+        comments.forEach((c) => {
+            resultArray.push(c.toJSON());
+        });
+
+        //add username from other DB model
+        for (let i = 0; i < resultArray.length; i++) {
+            let entry = resultArray[i];
+
+            let userID = entry.user_id;
+
+            let user = await User.findOne({ _id: userID });
+            if (user) entry.user_name = user.username;
+        }
+
         console.log("comments", comments)
-        return res.status(200).json({ success: true, data: comments })
+        return res.status(200).json({ success: true, data: resultArray })
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: err.toString() });
@@ -250,10 +264,10 @@ const postComment = async(req, res) => {
             //SAVE COMMENT
         comment.save(function(err, doc) {
             if (err) return console.error(err);
-            console.log("Document inserted succussfully!");
+            console.log("Document inserted successfully!");
         });
         idManager.registerNewCommentEntry()
-        return res.status(200).json({ success: true });
+        return res.status(200).json({ success: true, comment_id: comment_id });
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: err.toString() });

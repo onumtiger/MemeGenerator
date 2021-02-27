@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../style/globalStyle.css';
-import api from '../api';
 
 export default class Comment extends Component {
 
@@ -11,16 +10,9 @@ export default class Comment extends Component {
     handlePost = async () => {
         const input = document.getElementById('commentInput').value;
 
-        // TODO change when login feature merged
-        let user_id = 0;
-        let meme_id = this.props.id;
         let message = input;
 
-        await api.postComment(user_id, meme_id, message).catch(err => {
-            console.log('Failed to send comment: ', err);
-        });
-
-        this.props.getComments();
+        await this.props.postComment(message);
 
         document.getElementById('commentInput').value = '';
     }
@@ -43,17 +35,17 @@ export default class Comment extends Component {
     render() {
         return (
             <div>
-                <p className="commentNumber">{this.props.commentCount} comments</p>
+                <p className="commentNumber">{this.props.comments.length} comments</p>
                 <div>
                     {this.props.comments.map((comment, index) => (
                         <div key={index}>
                             <div className="commentInfo">
-                                <div className="commenDate">
-                                    {this.getDateString(this.props.dates[index])}
+                                <div className="commentDate">
+                                    {this.getDateString(comment.creationDate)}
                                 </div>
-                                <div className="userInfo"><label className="username">User_{this.props.userId[index]}</label>:</div>
+                                <div className="userInfo"><label className="username">{comment.user_name}</label>:</div>
                             </div>
-                            <label className="commentText">{comment}</label>
+                            <label className="commentText">{comment.message}</label>
                         </div>
                     ))}
                 </div>
