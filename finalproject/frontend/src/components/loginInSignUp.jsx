@@ -68,7 +68,7 @@ class loginInSignUp extends Component {
                     signupEmail: '',
                     signupPassword: '',
                 })
-                window.open("http://localhost:3000/memes","_self");
+                window.open("http://localhost:3000/memes/view","_self");
             }
         })
     }
