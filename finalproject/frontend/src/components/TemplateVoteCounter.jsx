@@ -3,7 +3,7 @@ import api from '../api';
 import {VoteButtons} from '.';
 import '../style/VoteCounter.scss';
 
-export default class MemeVoteCounter extends Component {
+export default class TemplateVoteCounter extends Component {
     constructor(props) {
         super(props);
 
@@ -20,22 +20,24 @@ export default class MemeVoteCounter extends Component {
     }
 
     handleDownvote(newValue){
-        api.toggleDownvoteMeme(this.props.meme._id, this.userId, newValue).catch(err =>{
+        api.toggleDownvoteTemplate(this.props.template._id, this.userId, newValue).then(()=>{
+            this.props.triggerTemplateDetailsUpdate();
+        }).catch(err =>{
             console.log('Failed to send downvotes: ',err);
         });
-        if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
     }
 
     handleUpvote(newValue){
-        api.toggleUpvoteMeme(this.props.meme._id, this.userId, newValue).catch(err =>{
+        api.toggleUpvoteTemplate(this.props.template._id, this.userId, newValue).then(()=>{
+            this.props.triggerTemplateDetailsUpdate();
+        }).catch(err =>{
             console.log('Failed to send upvotes: ',err);
         });
-        if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
     }
 
     render(){
         return (
-            <VoteButtons stats={this.props.meme.stats} handleUpvote={this.handleUpvote} handleDownvote={this.handleDownvote} loggedIn={this.userId!=null} /> //TODO logged in logic
+            <VoteButtons stats={this.props.template.stats} handleUpvote={this.handleUpvote} handleDownvote={this.handleDownvote} loggedIn={this.userId!=null} /> //TODO logged in logic
         );
     }
 }

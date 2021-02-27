@@ -1,0 +1,35 @@
+#template-details-wrapper {
+
+    margin-bottom: 100px;
+    display: flex;
+
+    #template-preview {
+        flex: auto;
+        margin-right: 5%;
+        min-width: 0;
+
+        img {
+            width: auto;
+            height: auto;
+            max-height: 600px;
+            max-width: 100%;
+        }
+    }
+
+    #toprow {
+        display: flex;
+
+        & > * {
+            flex: auto;
+        }
+    }
+
+    .details {
+        flex: auto;
+    }
+    #loader, #loader div {
+        display: inline-block;
+        margin: 0 30px;
+    }
+    
+}

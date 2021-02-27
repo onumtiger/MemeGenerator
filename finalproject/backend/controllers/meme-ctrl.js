@@ -78,6 +78,7 @@ const saveMeme = (params, res) => {
             await addTemplateUse(params.templateID);
         })
         .then(() => {
+            IDManager.registerNewMemeEntry();
             return res.status(201).json({
                 success: true,
                 id: meme._id,
