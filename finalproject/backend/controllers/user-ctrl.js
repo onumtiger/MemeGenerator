@@ -45,9 +45,20 @@ const signup = (req, res) => {
                                         .then( result => {
                                             console.log(result);
                                             IDManager.registerNewUserEntry();
+                                            const token = jwt.sign(
+                                                {
+                                                    email: user.email,
+                                                    username: user.username,
+                                                    userId: user._id
+                                                },
+                                                env.jwtKey, {
+                                                    expiresIn: "5h"
+                                                }
+                                            )
                                             res.status(201).json({
                                                 message: 'user created!',
-                                                id: user._id
+                                                id: user._id,
+                                                token: token
                                             })
                                         })
                                         .catch(err => {
