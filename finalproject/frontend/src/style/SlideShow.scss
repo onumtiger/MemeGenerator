@@ -1,5 +1,5 @@
 @mixin buttonStyle {
-    border: none;
+    //border: none;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -16,12 +16,14 @@
         .actionButton {
             @include buttonStyle;
             background-color: transparent;
-            border-radius: 2px;
+            //border-radius: 2px;
             font-weight: bold; 
             font-size: 16px;
-            padding: 10px 20px;
+            padding: 3px 10px;
             margin: 0 15px;
-            box-shadow: gray 0 0 5px;
+            //box-shadow: gray 0 0 5px;
+            border-radius: 12px;
+            border-color: lightgrey;
         }
     }
 
@@ -32,7 +34,7 @@
 
     #slideshow-table {
         width: 100%;
-        margin-top: 20px;
+        margin-top: 0px;
         text-decoration: none;
 
         td.button-column{
@@ -46,13 +48,14 @@
                 .slideButton {
                     @include buttonStyle;
                     background-color: transparent;
-                    color: black;
-                    padding: 100px 10px;
+                    color: rgb(95, 95, 95);
+                    padding: 35px 10px;
                     font-size: 30px;
                     height: 100%;
                     width: 100%;
+                    border: none;
 
-                    position: absolute;
+                    
                     top: 0;
                     bottom: 0;
                     left: 0;
@@ -63,11 +66,11 @@
 
                     &.leftBtn {
                         border-radius: 5px 0 0 5px;
-                        background-image: linear-gradient(to left, #{$innerColor} 20%, #{$outerColor})
+                        //background-image: linear-gradient(to left, #{$innerColor} 20%, #{$outerColor})
                     }
                     &.rightBtn {
                         border-radius: 0 5px 5px 0;
-                        background-image: linear-gradient(to right, #{$innerColor} 20%, #{$outerColor})
+                        //background-image: linear-gradient(to right, #{$innerColor} 20%, #{$outerColor})
                     }
                 }
             }

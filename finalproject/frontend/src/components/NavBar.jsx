@@ -8,10 +8,12 @@ const Container = styled.div.attrs({
 })``
 
 const Nav = styled.nav.attrs({
-    className: 'navbar navbar-expand-lg navbar-dark bg-dark',
+    //className: 'navbar navbar-expand-lg navbar-dark bg-dark',
+    className: 'navbar navbar-expand-lg',
 })`
-    margin-bottom: 20 px;
     
+    
+    border-radius: 12px;
 `
 
 class NavBar extends Component {
@@ -21,6 +23,7 @@ class NavBar extends Component {
                 <Nav>
                     <Links />
                 </Nav>
+                <hr />
             </Container>
         )
     }

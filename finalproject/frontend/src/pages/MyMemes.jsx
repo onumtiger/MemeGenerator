@@ -30,7 +30,9 @@ export default class MyMemes extends Component {
         let day = dateArray[2];
         return `${day}.${month}.${year}`
     }
-    getComments = async () => {
+
+    //DELETE?
+   /*  getComments = async () => {
         let response = await api.getCommentsByMemeId(0);
 
         let comments = response.data.data;
@@ -50,7 +52,7 @@ export default class MyMemes extends Component {
             commentIds: ids,
             commentDate: date
         })
-    }
+    } */
 
     componentDidMount = async () => {
         try {
@@ -68,7 +70,7 @@ export default class MyMemes extends Component {
 
     render() {
         let { memes, isLoading } = this.state;
-        this.getComments()
+        
         return (
             <div id="mymemes-page-wrapper">
                 {isLoading ? (
@@ -96,18 +98,14 @@ export default class MyMemes extends Component {
                                         <tbody>
                                             <tr>
                                                 <td><p>{meme.stats.views} views</p></td>
-                                                <td><MemeVoteCounter meme={meme} /></td>
+                                                <td><p>{meme.comment_ids.length} comments</p></td>   
+                                                <td><MemeVoteCounter meme={meme} /></td> 
+                                                <td><p>{meme.user_name}</p></td>                                                       
                                                 <td><p>{this.getDateString(meme.creationDate)}</p></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <MemeComment
-                                        id={meme._id}
-                                        commentCount={meme.comment_ids.length}
-                                        comments={this.state.commentMessages}
-                                        dates={this.state.commentDate}
-                                        userId={this.state.commentIds}
-                                    />
+                                    
 
                                 </div>
                             ))}
