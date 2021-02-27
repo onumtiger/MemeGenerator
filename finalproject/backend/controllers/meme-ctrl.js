@@ -7,6 +7,7 @@ const TemplateStats = require('../db/models/templatestats-model');
 const IDManager = require('../db/id-manager');
 const constants = require('../utils/constants');
 const globalHelpers = require('../utils/globalHelpers');
+const idManager = require('../db/id-manager');
 
 const createMeme = async(req, res) => {
     const body = req.body;
@@ -187,26 +188,21 @@ const getCommentsByMemeId = async(req, res) => {
     }
 }
 
+/**
+ * Saves comment under new id into db
+ * @param {*} req 
+ * @param {*} res 
+ */
 const postComment = async(req, res) => {
-    console.log("post comments")
+   
     let received_user_id = req.params.id
     let meme_id = req.body.memeId
     let received_message = req.body.message
-    
-    // TODO: generate comment_id by getting all comments and adding a +1
-    let comment_id = 15
+    let comment_id = idManager.getNewEmptyCommentID()
     let date = globalHelpers.getTodayString();
-
-    console.log("received user id ", received_user_id)
-    console.log("meme_id ", meme_id)
-    console.log("message ", received_message)
-    console.log("comment_id ", comment_id)
-    console.log("date ", date)
-
-
     let comment = new Comment({ _id: comment_id, user_id: received_user_id, message: received_message, creationDate: date});
-    console.log(comment)
-     try {
+
+    try {
         // UPDATE MEME -> COMMENT ID INSERTED
         await Meme.updateOne({ _id: meme_id }, { $push: { 'comment_ids': comment_id } })
         //SAVE COMMENT
@@ -214,8 +210,8 @@ const postComment = async(req, res) => {
             if (err) return console.error(err);
             console.log("Document inserted succussfully!");
           });
-       //await Comment.updateOne({ _id: comment_id }, { $push: { user_id: updatedUserId, message: body.message, creationDate: date } });
-        return res.status(200).json({ success: true });
+        idManager.registerNewCommentEntry()
+       return res.status(200).json({ success: true });
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: err.toString() });
