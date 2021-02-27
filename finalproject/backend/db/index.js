@@ -21,7 +21,7 @@ const resetDB = async() => {
         url: '/memes/jan_domi_zusammentreffen.png',
         captions: ['Domi', 'Jan Jbernolte'],
         name: 'Jan und Domi unterwegs',
-        comment_ids: [0, 1, 2, 3],
+        comment_ids: [6],
         user_id: 0,
         template_id: 1,
         visibility: 0,
@@ -39,7 +39,7 @@ const resetDB = async() => {
         url: '/memes/jan_domi_punch.png',
         captions: ['Domi', 'Jan Obernolte'],
         name: 'Jan und Domis Gefühle füreinander',
-        comment_ids: [2],
+        comment_ids: [0, 1, 2, 3],
         user_id: 1,
         template_id: 0,
         visibility: 2,
@@ -248,7 +248,7 @@ const resetDB = async() => {
 
     var defaultComment2 = {
         _id: 1,
-        user_id: 1,
+        user_id: 2,
         message: 'Wow, gar nicht lustig - wirklich 0 lustig ..',
         creationDate: '2021/02/12'
     };
@@ -264,7 +264,7 @@ const resetDB = async() => {
 
     var defaultComment4 = {
         _id: 3,
-        user_id: 1,
+        user_id: 3,
         message: 'Was willst du damit sagen?',
         creationDate: '2021/02/25'
     };
@@ -767,17 +767,16 @@ const resetDB = async() => {
     await db.collection('templatestats').insertMany([defaultTemplateStats, defaultTemplateStats2]);
     console.log("Default templatestats inserted");
 
-    
+
     await db.collection('drafts').deleteMany({});
     console.log("Old drafts deleted");
-    
+
     var defaultdraft = {
         "_id": 0,
         "template_id": 0,
         "user_id": 0,
         "title": "Da Truth My Brutha",
-        "captions": [
-            {
+        "captions": [{
                 "fontSize": 41,
                 "colorR": 255,
                 "colorG": 255,
