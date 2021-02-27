@@ -228,6 +228,7 @@ export default class SingleView extends Component {
                     comments={this.state.commentMessages}
                     dates={this.state.commentDate}
                     userId={this.state.commentIds}
+                    getComments={this.getComments}
                 />
                 {this.state.showStats && (<MemeStatisticsChart
                     upvotes={this.state.upvotes}
