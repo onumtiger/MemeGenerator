@@ -214,6 +214,12 @@ export default class CreateCustom extends React.Component {
             case "save_draft":
                 draftSaveButton.click()
             break;
+            case "up":
+                window.scrollTo(0,0);
+            break;
+            case "down":
+                window.scrollTo(0,document.body.scrollHeight);
+            break;
             case "set_caption_bold":
                 //TODO
             break;
@@ -232,16 +238,11 @@ export default class CreateCustom extends React.Component {
         let voiceControlButton = document.querySelector('.voice-control-button');
         voiceControlButton.addEventListener('click', (e)=>{
             if(!this.voiceControl){
-                this.voiceControl = true;
-                voiceControlButton.innerHTML = "... recording - click to disable "
-                voiceControlButton.style.backgroundColor = "red"
-                console.log("voice control clicked");
+                this.voiceControl = true;          
                 Main.activateFullVoiceControl(voiceControlButton, this.handleVoiceInput);  
             }else{
                 this.voiceControl = false;
-                console.log("voice control disabled");
-                voiceControlButton.innerHTML = "enable voice control"
-                voiceControlButton.style.backgroundColor = "initial"        
+                Main.stopSpeechRecognition();                    
         }});
     }
 
