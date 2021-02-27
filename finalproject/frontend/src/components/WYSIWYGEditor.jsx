@@ -92,19 +92,21 @@ export default class WYSIWYGEditor extends React.Component {
           templateId: id
         });
         
-        if(this.props.draft){
-          let draft = this.props.draft;
-          document.querySelector('#wysiwyg-wrapper #in-title').value = draft.title;
-          draft.captions.forEach((d)=>{
-            this.addCaption(d.x, d.y, d.text, d.fontSize, d.colorR, d.colorG, d.colorB, d.bold, d.italic, d.fontFace, false);
-          });
-          this.deselectAllCaptions();
-        }
+        if(this.props.draft) this.applyDraft();
       });
     }else{
       this.setState({image: null, templateId: -1});
       this.cContext().clearRect(0, 0, this.state.canvasWidth, this.state.canvasHeight);
     }
+  }
+
+  applyDraft(){ //TODO reset
+    let draft = this.props.draft;
+    document.querySelector('#wysiwyg-wrapper #in-title').value = draft.title;
+    draft.captions.forEach((d)=>{
+      this.addCaption(d.x, d.y, d.text, d.fontSize, d.colorR, d.colorG, d.colorB, d.bold, d.italic, d.fontFace, false);
+    });
+    this.deselectAllCaptions();
   }
 
   repaint(clear){
@@ -440,6 +442,7 @@ export default class WYSIWYGEditor extends React.Component {
 
     let draftData = {
       template_id: this.state.templateId,
+      user_id: 0, //TODO actual user ID...
       title: document.querySelector('#wysiwyg-wrapper #in-title').value || 'Created Meme',
       captions: []
     };
@@ -460,15 +463,15 @@ export default class WYSIWYGEditor extends React.Component {
 
     elem.textContent = this.draftButtonTexts.loading;
     elem.classList.add('inactive');
-    //TODO actual user ID...
-    api.insertDraft(draftData, 0).then((res)=>{
+
+    api.insertDraft(draftData).then((res)=>{
         if(res.data.success){
             elem.textContent = this.draftButtonTexts.done;
         }
     }).catch(err =>{
         console.log('Failed to upload draft: ',err);
-    }).finally(()=>{
         elem.textContent = this.draftButtonTexts.default;
+    }).finally(()=>{
         elem.classList.remove('inactive');
     });
   }

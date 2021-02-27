@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const IDManager = require('./id-manager');
 
 mongoose
     .connect('mongodb://127.0.0.1:27017/memeApp', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
@@ -31,12 +32,13 @@ const resetDB = async() => {
             views: 0
         }
     };
+    IDManager.registerNewMemeEntry();
 
     var defaultMeme2 = {
         _id: 1,
         url: '/memes/jan_domi_punch.png',
         captions: ['Domi', 'Jan Obernolte'],
-        name: 'Jan und Domis Gefühle füreinander <3',
+        name: 'Jan und Domis Gefühle füreinander',
         comment_ids: [2],
         user_id: 1,
         template_id: 0,
@@ -48,6 +50,7 @@ const resetDB = async() => {
             views: 0
         }
     };
+    IDManager.registerNewMemeEntry();
 
     var defaultMeme3 = {
         _id: 2,
@@ -65,6 +68,7 @@ const resetDB = async() => {
             views: 0
         }
     };
+    IDManager.registerNewMemeEntry();
 
     await db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]);
     console.log("Default memes inserted");
@@ -84,6 +88,7 @@ const resetDB = async() => {
             uses: 0
         }
     };
+    IDManager.registerNewTemplateEntry();
 
     var defaultTemplate2 = {
         _id: 1,
@@ -97,6 +102,7 @@ const resetDB = async() => {
             uses: 0
         }
     };
+    IDManager.registerNewTemplateEntry();
 
     var defaultTemplate3 = {
         _id: 2,
@@ -110,6 +116,7 @@ const resetDB = async() => {
             uses: 0
         }
     };
+    IDManager.registerNewTemplateEntry();
 
     var defaultTemplate4 = {
         _id: 3,
@@ -123,6 +130,7 @@ const resetDB = async() => {
             uses: 0
         }
     };
+    IDManager.registerNewTemplateEntry();
 
     var defaultTemplate5 = {
         _id: 4,
@@ -136,6 +144,7 @@ const resetDB = async() => {
             uses: 0
         }
     };
+    IDManager.registerNewTemplateEntry();
 
     var defaultTemplate6 = {
         _id: 5,
@@ -149,6 +158,7 @@ const resetDB = async() => {
             uses: 0
         }
     };
+    IDManager.registerNewTemplateEntry();
 
     var defaultTemplate7 = {
         _id: 6,
@@ -162,6 +172,7 @@ const resetDB = async() => {
             uses: 0
         }
     };
+    IDManager.registerNewTemplateEntry();
 
     var defaultTemplate8 = {
         _id: 7,
@@ -175,6 +186,7 @@ const resetDB = async() => {
             uses: 0
         }
     };
+    IDManager.registerNewTemplateEntry();
 
     var defaultTemplate9 = {
         _id: 8,
@@ -188,6 +200,7 @@ const resetDB = async() => {
             uses: 0
         }
     };
+    IDManager.registerNewTemplateEntry();
 
     await db.collection('templates').insertMany([defaultTemplate, defaultTemplate2, defaultTemplate3, defaultTemplate4, defaultTemplate5, defaultTemplate6, defaultTemplate7, defaultTemplate8, defaultTemplate9]);
     console.log("Default templates inserted");
@@ -199,24 +212,23 @@ const resetDB = async() => {
     var defaultUser = {
         _id: 0,
         username: 'username_one',
-        password: '123',
-        meme_ids: ['0', '1'],
-        draft_ids: [0]
+        password: '123'
     };
+    IDManager.registerNewUserEntry();
 
     var defaultUser2 = {
         _id: 1,
         username: 'username_two',
-        password: '123',
-        meme_ids: ['2']
+        password: '123'
     };
+    IDManager.registerNewUserEntry();
 
     var defaultUser3 = {
         _id: 2,
         username: 'username_three',
-        password: '123',
-        meme_ids: ['3']
+        password: '123'
     };
+    IDManager.registerNewUserEntry();
 
     await db.collection('users').insertMany([defaultUser, defaultUser2, defaultUser3]);
     console.log("Default users inserted");
@@ -232,6 +244,7 @@ const resetDB = async() => {
         message: 'Richtig unlustiges Meme',
         creationDate: '2021/02/12'
     };
+    IDManager.registerNewCommentEntry();
 
     var defaultComment2 = {
         _id: 1,
@@ -239,6 +252,7 @@ const resetDB = async() => {
         message: 'Wow, gar nicht lustig - wirklich 0 lustig ..',
         creationDate: '2021/02/12'
     };
+    IDManager.registerNewCommentEntry();
 
     var defaultComment3 = {
         _id: 2,
@@ -246,6 +260,7 @@ const resetDB = async() => {
         message: 'Den verstehe ich nicht',
         creationDate: '2021/02/24'
     };
+    IDManager.registerNewCommentEntry();
 
     var defaultComment4 = {
         _id: 3,
@@ -253,6 +268,7 @@ const resetDB = async() => {
         message: 'Was willst du damit sagen?',
         creationDate: '2021/02/25'
     };
+    IDManager.registerNewCommentEntry();
 
 
     await db.collection('comments').insertMany([defaultComment, defaultComment2, defaultComment3, defaultComment4]);
@@ -742,6 +758,7 @@ const resetDB = async() => {
     var defaultdraft = {
         "_id": 0,
         "template_id": 0,
+        "user_id": 0,
         "title": "Da Truth My Brutha",
         "captions": [
             {
@@ -770,6 +787,7 @@ const resetDB = async() => {
             }
         ]
     }
+    IDManager.registerNewDraftEntry();
 
     await db.collection('drafts').insertMany([defaultdraft]);
     console.log("Default drafts inserted");

@@ -4,7 +4,7 @@ const Comment = require('../db/models/comments-model');
 const User = require('../db/models/user-model');
 const MemeStats = require('../db/models/memestats-model');
 const TemplateStats = require('../db/models/templatestats-model');
-const dbUtils = require('../db/dbUtils');
+const IDManager = require('../db/id-manager');
 const constants = require('../utils/constants');
 const globalHelpers = require('../utils/globalHelpers');
 
@@ -20,7 +20,7 @@ const createMeme = async(req, res) => {
 
     if (req.files && req.files.image) { //check if we actually received a file
         let img = req.files.image;
-        let id = await dbUtils.getNewEmptyMemeID();
+        let id = IDManager.getNewEmptyMemeID();
         let filename = id + "_" + img.name; //ID in addition to name in order to prevent unwanted overrides
         let url = '/memes/' + filename;
         img.mv('public' + url, async function(err) { //this overwrites an existing image at that filepath if there is one!
@@ -35,7 +35,7 @@ const createMeme = async(req, res) => {
             saveMeme(body, res);
         });
     } else if (body.imageURL) {
-        body.id = await dbUtils.getNewEmptyMemeID();
+        body.id = IDManager.getNewEmptyMemeID();
         body.url = body.imageURL;
         saveMeme(body, res);
 
@@ -153,11 +153,6 @@ const getMemes = async(req, res) => {
             if(template) entry.template_name = template.name;
         }
         
-        // if (!memes.length) {
-        //     return res
-        //         .status(204)
-        //         .json({ success: false, error: `No memes found` })
-        // }
         return res.status(200).json({ success: true, data: resultArray })
     }).catch(err => console.log(err))
 }
@@ -168,11 +163,6 @@ const getOwnMemes = async(req, res) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        // if (!memes.length) {
-        //     return res
-        //         .status(204)
-        //         .json({ success: false, error: `No memes found` })
-        // }
         return res.status(200).json({ success: true, data: memes })
     }).catch(err => console.log(err))
 }

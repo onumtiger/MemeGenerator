@@ -6,6 +6,12 @@
 #mymemes-page-wrapper {
     padding: 0 40px 40px 40px;
 
+    #mymemes-empty {
+        text-align: center;
+        font-style: italic;
+        color: darkred;
+    }
+
     #mymemes-page-loader, #mymemes-page-loader div {
         text-align: center;
         padding: 20px;

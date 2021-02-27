@@ -52,6 +52,7 @@ export default class MyMemes extends Component {
                 </div>
             ) : (
                 <>
+                {!memes.length && <p id="mymemes-empty">Hmm, seems like you haven't created any Memes yet. Once you do, they will show up here! Yes, even your private and unlisted ones.</p>}
                 {memes.map(meme => (
                     <div className={`meme-wrapper visibility-${meme.visibility}`} key={'meme-wrapper-'+meme._id}>
                         <div className="title-row">

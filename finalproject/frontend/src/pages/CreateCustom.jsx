@@ -86,9 +86,6 @@ export default class CreateCustom extends React.Component {
         this.updateTemplateStats(id);
     }
 
-    
-    
-
     handleDraftSelection(draft){
         this.initialTemplateId = draft.template_id;
         let draftTemplate = this.state.templateListData.templates.find((t)=>(t._id == draft.template_id));
