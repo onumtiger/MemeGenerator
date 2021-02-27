@@ -57,10 +57,10 @@ export default class MyMemes extends Component {
                         <div className="title-row">
                             <span className="title">{meme.name}</span>
                             {meme.visibility == 1 && (
-                                <span className="visibility">(unlisted meme)</span>
+                                <img src="/ui/lock-unlisted.png" alt="unlisted meme" title="unlisted meme" />
                             )}
                             {meme.visibility == 0 && (
-                                <span className="visibility">(private meme)</span>
+                                <img src="/ui/lock-private.png" alt="private meme" title="private meme" />
                             )}
                         </div>
                         <Link to={'/memes/view/'+meme._id}>

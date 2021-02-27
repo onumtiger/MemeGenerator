@@ -130,10 +130,11 @@ const getTemplates = async (req, res) => {
 }
 
 
-const upvoteTemplate = async(req, res) => {
+const toggleUpvoteTemplate = async(req, res) => {
     try {
         let templateId = req.params.id;
         let userId = req.body.userId;
+        let newValue = req.body.newValue; //TODO if this is false, remove vote instead of add
 
         await Template.updateOne({ _id: templateId }, { $push: { 'stats.upvotes': userId } });
 
@@ -153,10 +154,11 @@ const upvoteTemplate = async(req, res) => {
     }
 }
 
-const downvoteTemplate = async(req, res) => {
+const toggleDownvoteTemplate = async(req, res) => {
     try {
         let templateId = req.params.id;
         let userId = req.body.userId;
+        let newValue = req.body.newValue; //TODO if this is false, remove vote instead of add
 
         await Template.updateOne({ _id: templateId }, { $push: { 'stats.downvotes': userId } });
 
@@ -182,6 +184,6 @@ module.exports = {
     deleteTemplate,
     getTemplates,
     getTemplateById,
-    upvoteTemplate,
-    downvoteTemplate,
+    toggleUpvoteTemplate,
+    toggleDownvoteTemplate,
 }

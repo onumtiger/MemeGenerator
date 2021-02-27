@@ -226,10 +226,11 @@ const addTemplateUse = async(templateId) => {
     }
 }
 
-const upvoteMeme = async(req, res) => {
+const toggleUpvoteMeme = async(req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
+        let newValue = req.body.newValue; //TODO if this is false, remove vote instead of add
 
         await Meme.updateOne({ _id: memeId }, { $push: { 'stats.upvotes': userId } });
 
@@ -249,10 +250,11 @@ const upvoteMeme = async(req, res) => {
     }
 }
 
-const downvoteMeme = async(req, res) => {
+const toggleDownvoteMeme = async(req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
+        let newValue = req.body.newValue; //TODO if this is false, remove vote instead of add
 
         await Meme.updateOne({ _id: memeId }, { $push: { 'stats.downvotes': userId } });
 
@@ -278,8 +280,8 @@ module.exports = {
     deleteMeme,
     patchMeme,
     viewMeme,
-    upvoteMeme,
-    downvoteMeme,
+    toggleUpvoteMeme,
+    toggleDownvoteMeme,
     getMemes,
     getOwnMemes,
     getMemeById

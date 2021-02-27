@@ -8,6 +8,8 @@ class ViewsPieChart extends React.Component {
     }
 
     componentDidMount() {
+
+
         const { views, otherViews } = this.props;
         const portionOtherViews = otherViews-views;
         var data = [views, portionOtherViews];
@@ -50,13 +52,18 @@ class ViewsPieChart extends React.Component {
     }
 
     render() {
+        let {views, otherViews} = this.props;
+        //get the portion value of the current meme
+        //only divide with sum the of other views if it's not 0
+        let percentageView = (otherViews ? ((views * 100) / otherViews) : 100 );
+
         return (
             <div>
                 <div className="piechart2">
                     <h4>Portion of views</h4>
                 </div>
                 <div className="legende">
-                    <div className="viewsColor"></div> views: {(Math.round(this.props.percentageView * 100) / 100).toFixed(2)}%
+                    <div className="viewsColor"></div> views: {(Math.round(percentageView * 100) / 100).toFixed(2)}%
                     <div className="otherViewsColor"></div> views of other memes
                 </div>
             </div>

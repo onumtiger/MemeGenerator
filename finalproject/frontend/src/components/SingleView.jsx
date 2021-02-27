@@ -176,9 +176,7 @@ export default class SingleView extends Component {
                     sumUpvotes={meme.stats.upvotes.length}
                     sumDownvotes={meme.stats.downvotes.length}
                     sumViews={meme.stats.views}
-                    sumOtherViews={this.props.sumOtherViews}
                     getAllOtherViews={this.props.getAllOtherViews}
-                    currentMemeView={meme.stats.views}
                 />)}
             </div>
         )

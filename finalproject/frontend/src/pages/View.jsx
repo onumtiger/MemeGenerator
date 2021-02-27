@@ -16,8 +16,7 @@ export default class View extends Component {
 
         this.state = {
             memes: [],
-            isLoading: true,
-            viewsOverall: 0
+            isLoading: true
         };
         this.initialMemes = [];
         this.wasJustUpdated = false;
@@ -30,6 +29,7 @@ export default class View extends Component {
         [
             'handleMemeListUpdate',
             'wasMemeListJustUpdated',
+            'getAllViews',
         ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
@@ -52,26 +52,17 @@ export default class View extends Component {
     /**
      * get the sum of views of all memes for later in the statistics
      */
-    getAllViews = async () => {
-        //get all initial memes
-        let response = await api.getAllMemes();
-        this.initialMemes = response.data.data;
-
+    getAllViews() {
         //create an empty array to fill in later
         let viewsOfAllMemes = [];
 
         //push view values of all initial memes in the empty `viewsOfAllMemes`array
-        for (var i = 0; i < this.initialMemes.length; i++) {
-            viewsOfAllMemes.push(this.initialMemes[i].stats.views);
+        for (var i = 0; i < this.state.memes.length; i++) {
+            viewsOfAllMemes.push(this.state.memes[i].stats.views);
         }
 
-        //add all view values in `viewsOfAllMemes`array together and save it in a variable
-        var sum = viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
-
-        //update `viewsOverall` with the current amount of all views
-        this.setState({
-            viewsOverall: sum
-        })
+        //add all view values in `viewsOfAllMemes`array together and return the result
+        return viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
     }
 
     componentDidMount = async () => {
@@ -89,7 +80,6 @@ export default class View extends Component {
     }
 
     render() {
-        this.getAllViews();
         return (
             <div id="view-page-wrapper">
                 {this.state.isLoading ? (
@@ -110,7 +100,6 @@ export default class View extends Component {
                                             urlPath={this.routePath}
                                             memes={this.state.memes}
                                             wasMemeListJustUpdated={this.wasMemeListJustUpdated}
-                                            sumOtherViews={this.state.viewsOverall}
                                             getAllOtherViews={this.getAllViews}
                                         />
                                     )

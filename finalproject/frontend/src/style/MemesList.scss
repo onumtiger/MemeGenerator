@@ -14,12 +14,15 @@
         text-align: center;
 
         .title-row {
-            text-align: right;
-            font-size: 115%;
+            text-align: center;
+            font-size: 120%;
+            margin-bottom: 10px;
     
             span {
                 padding: 5px 10px;
-                // border-bottom: 1px solid gray;
+                font-size: 120%;
+                font-weight: bold;
+                border-bottom: 1px solid lightgray;
             }
         }
     

@@ -12,11 +12,11 @@ export const deleteMemeById = id => api.delete(`/meme/${id}`);
 export const patchMeme = (memeData, id) => api.patch(`/meme/${id}`, memeData);
 
 export const viewMeme = id => api.post(`/meme/view/${id}`);
-export const upvoteMeme = (memeId, userId) => api.post(`/meme/upvote/${memeId}`, {userId});
-export const downvoteMeme = (memeId, userId) => api.post(`/meme/downvote/${memeId}`, {userId});
+export const toggleUpvoteMeme = (memeId, userId, newValue) => api.post(`/meme/upvote/${memeId}`, {userId, newValue});
+export const toggleDownvoteMeme = (memeId, userId, newValue) => api.post(`/meme/downvote/${memeId}`, {userId, newValue});
 
-export const upvoteTemplate = (id) => api.post(`/template/upvote/${id}`);
-export const downvoteTemplate = (id) => api.post(`/template/downvote/${id}`);
+export const toggleUpvoteTemplate = (templateId, userId, newValue) => api.post(`/template/upvote/${templateId}`, {userId, newValue});
+export const toggleDownvoteTemplate = (templateId, userId, newValue) => api.post(`/template/downvote/${templateId}`, {userId, newValue});
 
 export const getStatsForMeme = (id) => api.get(`/stats/meme/${id}`);
 export const getStatsForTemplate = (id) => api.get(`/stats/template/${id}`);
@@ -40,10 +40,10 @@ export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 const apis = {
     insertMeme,
     viewMeme,
-    upvoteMeme,
-    downvoteMeme,
-    upvoteTemplate,
-    downvoteTemplate,
+    toggleUpvoteMeme,
+    toggleDownvoteMeme,
+    toggleUpvoteTemplate,
+    toggleDownvoteTemplate,
     patchMeme,
     getAllMemes,
     getOwnMemes,
