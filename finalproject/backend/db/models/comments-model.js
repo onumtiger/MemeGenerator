@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const globalHelpers = require('../../globalHelpers');
+const globalHelpers = require('../../utils/globalHelpers');
 const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema(

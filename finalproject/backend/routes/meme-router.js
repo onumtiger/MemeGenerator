@@ -12,6 +12,7 @@ router.patch('/:id', MemeCtrl.patchMeme);
 router.post('/upvote/:id', MemeCtrl.toggleUpvoteMeme);
 router.post('/downvote/:id', MemeCtrl.toggleDownvoteMeme);
 router.post('/view/:id', MemeCtrl.viewMeme);
+router.get('/comments/:id', MemeCtrl.getCommentsByMemeId);
 
 
 module.exports = router;

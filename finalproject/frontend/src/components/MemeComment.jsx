@@ -34,6 +34,7 @@ export default function Comment(props) {
     return (
         <div>
             <p className="commentNumber">{props.commentCount} comments</p>
+            <p>COMMENTS ARRAY: {props.comments}</p>
             <div>
                 {comments.map((comment, index) => (
                     <div key={index}>

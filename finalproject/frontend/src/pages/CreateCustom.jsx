@@ -167,13 +167,13 @@ export default class CreateCustom extends React.Component {
 
     handleVoiceInput(status, parameter){
 
+        // get needed objects
         let plusButton = document.querySelector('.template-plus');
         let prevButton = document.querySelector('.previousButton');
         let nextButton = document.querySelector('.nextButton');
         let template = document.querySelectorAll('.templateImg');
         let draft = document.querySelector('.draft');
         let titleBox = document.querySelector('.in-title');
-        //let captionBox = document.querySelector('.in-caption');
         let privateButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-0');
         let unlistedButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-1');
         let publicButton = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper #visibility-2');
@@ -184,8 +184,7 @@ export default class CreateCustom extends React.Component {
         let externalImage = document.querySelector('.external-image');
 
        
-
-            console.log("callback arrived")
+        // REACT ACCORDING TO STATUS
             switch (status){
             case "create_new_template":
                 plusButton.click();
@@ -252,13 +251,8 @@ export default class CreateCustom extends React.Component {
                 //TODO
             break;
             default:
-
             break; 
-            }
-            if(status=="create_new_template"){
-               
-            }
-            
+            }         
 
     }
 
