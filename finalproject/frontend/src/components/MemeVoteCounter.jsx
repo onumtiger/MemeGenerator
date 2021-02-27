@@ -7,9 +7,6 @@ export default class MemeVoteCounter extends Component {
     constructor(props) {
         super(props);
 
-        //TODO actual userid...
-        this.userId = 0;
-
         //this binding for React event handlers
         [
             'handleDownvote',
@@ -20,22 +17,24 @@ export default class MemeVoteCounter extends Component {
     }
 
     handleDownvote(newValue){
-        api.toggleDownvoteMeme(this.props.meme._id, this.userId, newValue).catch(err =>{
+        api.toggleDownvoteMeme(this.props.meme._id, this.userId, newValue).then(()=>{
+            if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
+        }).catch(err =>{
             console.log('Failed to send downvotes: ',err);
         });
-        if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
     }
 
     handleUpvote(newValue){
-        api.toggleUpvoteMeme(this.props.meme._id, this.userId, newValue).catch(err =>{
+        api.toggleUpvoteMeme(this.props.meme._id, this.userId, newValue).then(()=>{
+            if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
+        }).catch(err =>{
             console.log('Failed to send upvotes: ',err);
         });
-        if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
     }
 
     render(){
         return (
-            <VoteButtons stats={this.props.meme.stats} handleUpvote={this.handleUpvote} handleDownvote={this.handleDownvote} loggedIn={this.userId!=null} /> //TODO logged in logic
+            <VoteButtons stats={this.props.meme.stats} handleUpvote={this.handleUpvote} handleDownvote={this.handleDownvote} />
         );
     }
 }

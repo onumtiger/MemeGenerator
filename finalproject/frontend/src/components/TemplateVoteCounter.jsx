@@ -7,9 +7,6 @@ export default class TemplateVoteCounter extends Component {
     constructor(props) {
         super(props);
 
-        //TODO actual userid...
-        this.userId = 0;
-
         //this binding for React event handlers
         [
             'handleDownvote',
@@ -37,7 +34,7 @@ export default class TemplateVoteCounter extends Component {
 
     render(){
         return (
-            <VoteButtons stats={this.props.template.stats} handleUpvote={this.handleUpvote} handleDownvote={this.handleDownvote} loggedIn={this.userId!=null} /> //TODO logged in logic
+            <VoteButtons stats={this.props.template.stats} handleUpvote={this.handleUpvote} handleDownvote={this.handleDownvote} />
         );
     }
 }

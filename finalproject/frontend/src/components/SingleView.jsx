@@ -15,6 +15,7 @@ export default class SingleView extends Component {
         [
             'handleShareURLClick',
             'handleDownloadClick',
+            'updateSingleView',
         ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
@@ -147,10 +148,15 @@ export default class SingleView extends Component {
     //triggers a +1 view in db
     sendView(memeId) {
         console.log("send view for id: ", memeId);
-        api.viewMeme(memeId).catch(err => {
+        this.props.meme.stats.views++; //update in-memory meme object until we get updated data from the API
+        return api.viewMeme(memeId).catch(err => {
             console.log('Failed to post views: ', err);
         });
-        this.props.meme.stats.views++; //update in-memory meme object until we get updated data from the API
+    }
+
+    updateSingleView(){
+        this.getMemeStats();
+        this.props.triggerMemeListUpdate();
     }
 
     render() {
@@ -160,9 +166,10 @@ export default class SingleView extends Component {
         //check if we're displaying a new meme (as opposed to other re-renders without content changes)
         if (this.previousMemeId != meme._id) {
             this.previousMemeId = meme._id;
-            this.getMemeStats(); //get detailed stats data for charts
+            this.sendView(meme._id).then(()=>{ // increment views, the check above prevents double counting
+                this.getMemeStats(); //get detailed stats data for charts
+            });
             this.getComments(); // get comments
-            this.sendView(meme._id); // increment views, the check above prevents double counting
             this.props.triggerMemeListUpdate(); //take updated views into account for sorting and slideshow order
         }
 
@@ -176,7 +183,7 @@ export default class SingleView extends Component {
                     <tbody>
                         <tr>
                             <td><p>{meme.stats.views} views</p></td>
-                            <td><MemeVoteCounter meme={meme} triggerMemeListUpdate={this.props.triggerMemeListUpdate} /></td>
+                            <td><MemeVoteCounter meme={meme} triggerMemeListUpdate={this.updateSingleView} /></td>
                             <td><p>{this.getDateString(meme.creationDate)}</p></td>
                         </tr>
                     </tbody>
