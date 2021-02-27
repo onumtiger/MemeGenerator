@@ -10,10 +10,10 @@ function App() {
         <Router>
             <NavBar />
             <Switch>
-                {/* <Route path="/" exact>
-                    <Redirect to="/memes/view" />
-                </Route> */}
-                <Route path="/" exact component={loginInSignUp}/>
+                <Route path="/" exact>
+                    <Redirect to="/login" />
+                </Route>
+                <Route path="/login" exact component={loginInSignUp}/>
                 <Route path="/memes/view" component={View} />
                 <Route path="/memes/own" component={MyMemes} />
                 <Route path="/memes/create" exact component={Create} />

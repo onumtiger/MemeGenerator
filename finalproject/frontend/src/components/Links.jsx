@@ -25,6 +25,11 @@ class Links extends Component {
                                 My Memes
                             </Link>
                         </div>
+                        <div className="navbar-collapse">
+                            <Link to="/login" className="nav-link">
+                                Login
+                            </Link>
+                        </div>
 
                     </div>
                 </div>
