@@ -168,15 +168,24 @@ export default class SingleView extends Component {
 
         return (
             <div id="single-view-wrapper">
-                <p id="meme-title">{meme.name}</p>
-                <button type="button" className="read-button" title="read caption">read title and captions</button>
+                <hr />
+                <table id="title-table">
+                    <tbody>
+                        <tr>
+                        <td><p id="meme-title">{meme.name}</p></td>
+                        <td><button type="button" className="read-button" id="read-button" title="read caption">read aloud</button></td>
+                        </tr>
+                    </tbody>
+                </table>
                 <hr />
                 <img id="meme-img" src={meme.url} alt={meme.name}></img>
                 <table id="stats-table">
                     <tbody>
                         <tr>
                             <td><p>{meme.stats.views} views</p></td>
+                            <td><p>{meme.user_name}</p></td>
                             <td><MemeVoteCounter meme={meme} triggerMemeListUpdate={this.props.triggerMemeListUpdate} /></td>
+                            <td><p>{meme.comment_ids.length} comments</p></td>
                             <td><p>{this.getDateString(meme.creationDate)}</p></td>
                         </tr>
                     </tbody>

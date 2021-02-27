@@ -74,7 +74,7 @@ export default class TemplatesList extends React.Component {
     render() {
         return (
             <div id="template-list-wrapper">
-                
+                <button class="voice-control-button">enable voice control</button>
                 <h3>First, choose a template
                 {this.state.showNavButtons && (
                         <span id="navbutton-wrapper">
@@ -86,7 +86,7 @@ export default class TemplatesList extends React.Component {
                         </span>
                     )}:
                 </h3>
-                <button class="voice-control-button">enable voice control</button>
+                
                 <div id="template-container">
                     {this.props.data.isLoading ? (
                         <div id="loader">

@@ -8,33 +8,43 @@
 
     .meme-wrapper {
         margin: 0 auto;
-        width: 50%;
-        border-bottom: 2px solid grey;
+        width: 60%;
+        border-bottom: 1px solid lightgray;
         padding: 25px 0;
         text-align: center;
 
         .title-row {
+            //font-family: Verdana;
             text-align: center;
-            font-size: 120%;
-            margin-bottom: 10px;
+            font-size: 110%;
+            margin-bottom: 20px;
+            
     
             span {
                 padding: 5px 10px;
                 font-size: 120%;
-                font-weight: bold;
+                //font-weight: bold;
                 border-bottom: 1px solid lightgray;
+                
             }
         }
     
         .meme-img {
             @include content;
             display: block;
+            border-radius: 14px;
         }
     
         .stats-table {
-            @include content;
-            padding: 10px;
-            text-align: center;
+            //@include content;
+            padding: 40px;
+            text-align: center;      
+            margin: 0 auto;
+            margin-top: 6px;
+            td {
+                margin: 12px 12px 12px 12px;
+                padding: 12px 12px 12px 12px;
+              }
         }
     }
 

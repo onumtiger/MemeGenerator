@@ -1,19 +1,29 @@
 #filter-wrapper {
-    margin: 0 auto 20px;
+    margin: 5px auto 20px;
     width: 60%;
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid lightgray;
+    
 
     #search, #sort, #filter {
         margin-right: 20px;
+        border-radius: 12px;
+        height: 30px;
+        border-color: lightgrey;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
     }
     
     #search {
-        width: 250px;
+        width: 150px;
     }
 
     select {
         margin-left: 5px;
+        border:1px solid #ccc;
+        //vertical-align:top;
+        height:30px
     }
 }
