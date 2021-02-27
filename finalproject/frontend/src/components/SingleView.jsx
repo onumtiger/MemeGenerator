@@ -124,7 +124,6 @@ export default class SingleView extends Component {
         var x = memeStats.length - Math.min(memeStats.length, 14);
         //push all last 14 days values in the respective empty array
         for (var i = x; i < memeStats.length; i++) {
-            console.log("index: ", i, memeStats.length)
             upvotes.push(memeStats[i].upvotes);
             downvotes.push(memeStats[i].downvotes);
             views.push(memeStats[i].views);
@@ -160,6 +159,7 @@ export default class SingleView extends Component {
             this.getMemeStats(); //get detailed stats data for charts
             this.getComments(); // get comments
             this.sendView(meme._id); // increment views, the check above prevents double counting
+            this.props.triggerMemeListUpdate(); //take updated views into account for sorting and slideshow order
         }
 
         return (
@@ -172,7 +172,7 @@ export default class SingleView extends Component {
                     <tbody>
                         <tr>
                             <td><p>{meme.stats.views} views</p></td>
-                            <td><MemeVoteCounter meme={meme} /></td>
+                            <td><MemeVoteCounter meme={meme} triggerMemeListUpdate={this.props.triggerMemeListUpdate} /></td>
                             <td><p>{this.getDateString(meme.creationDate)}</p></td>
                         </tr>
                     </tbody>

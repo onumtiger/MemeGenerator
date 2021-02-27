@@ -270,8 +270,24 @@ const resetDB = async() => {
     };
     IDManager.registerNewCommentEntry();
 
+    var defaultComment5 = {
+        _id: 4,
+        user_id: 0,
+        message: '...',
+        creationDate: '2021/02/25'
+    };
+    IDManager.registerNewCommentEntry();
 
-    await db.collection('comments').insertMany([defaultComment, defaultComment2, defaultComment3, defaultComment4]);
+    var defaultComment6 = {
+        _id: 5,
+        user_id: 1,
+        message: '---',
+        creationDate: '2021/02/25'
+    };
+    IDManager.registerNewCommentEntry();
+
+
+    await db.collection('comments').insertMany([defaultComment, defaultComment2, defaultComment3, defaultComment4, defaultComment5, defaultComment6]);
     console.log("Default comments inserted");
 
 

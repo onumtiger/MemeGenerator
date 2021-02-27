@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, UploadTemplate, TemplateStatisticsChart, DraftList} from '../components';
+import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, UploadTemplate, TemplateBarChart, DraftList} from '../components';
 import api from '../api';
 import '../style/CreateCustom.scss';
 import Main from '../speech/main';
@@ -40,6 +40,7 @@ export default class CreateCustom extends React.Component {
             'selectTemplateUpload',
             'selectTemplateCreation',
             'handleDraftSelection',
+            'handleVoiceInput',
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
@@ -263,7 +264,7 @@ export default class CreateCustom extends React.Component {
                 voiceControlButton.innerHTML = "... recording - click to disable "
                 voiceControlButton.style.backgroundColor = "red"
                 console.log("voice control clicked");
-                Main.activateFullVoiceControl(voiceControlButton, this.handleVoiceInput.bind(this));  
+                Main.activateFullVoiceControl(voiceControlButton, this.handleVoiceInput);  
             }else{
                 this.voiceControl = false;
                 console.log("voice control disabled");
@@ -278,13 +279,12 @@ export default class CreateCustom extends React.Component {
                 <h2>Custom Meme Creation</h2>
                 <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letAddTemplate} handleSelectionChange={this.changeSelection} />
                 {this.state.showStats && 
-                    <TemplateStatisticsChart
+                    <TemplateBarChart
                         upvotes={this.state.templateStats.upvotes}
                         downvotes={this.state.templateStats.downvotes}
                         uses={this.state.templateStats.uses}
                         date={this.state.templateStats.date}
-                    >
-                    </TemplateStatisticsChart>
+                    />
                 }
                 <DraftList handleDraftSelection={this.handleDraftSelection} />
                 {this.state.showTemplateSelection &&

@@ -40,65 +40,7 @@ export default class FilterMemes extends Component {
     }
 
     processSelection(){
-        let initialList = this.props.memes;
-        let newArray = [...initialList];
-
-        //search by keyword
-        if(this.selection.searchTerm){
-            newArray = newArray.filter(meme => (
-                meme.name.toLowerCase().includes(this.selection.searchTerm.toLowerCase())
-            ));
-        }
-
-        //filter by format: checks for strings ending on'.', followed by the string (or strings separated by '|') in this.selection.filter
-        if(this.selection.filter){
-            newArray = newArray.filter(meme=> (
-                meme.url.match(new RegExp(`.+\\.(${this.selection.filter})$`,'i'))
-            ));
-        }
-
-        switch(this.selection.sorting){
-            default:
-                break;
-            case 'newest':
-                newArray.sort((a, b) => (
-                    new Date(b.creationDate) - new Date(a.creationDate)
-                    ));
-                break;
-            case 'oldest':
-                newArray.sort((a, b) => (
-                    new Date(a.creationDate) - new Date(b.creationDate)
-                    ));
-                break;
-            case 'bestRating':
-                newArray.sort((a, b) => (
-                    b.stats.upvotes.length - a.stats.upvotes.length
-                    ));
-                break;
-            case 'worstRating':
-                newArray.sort((a, b) => (
-                    b.stats.downvotes.length - a.stats.downvotes.length
-                    ));
-                break;
-            case 'mostViewed':
-                newArray.sort((a, b) => (
-                    b.stats.views - a.stats.views
-                    ));
-                break;
-            case 'leastViewed':
-                newArray.sort((a, b) => (
-                    a.stats.views - b.stats.views
-                    ));
-                break;
-            case 'random':
-                newArray.sort((a, b) => (
-                    //the sorting function works by recognizing return values <0, ==0 or >0. So let's give it a random number between -1 and +1 for random sorting:
-                    (Math.random()*2) - 1
-                    ));
-                break;
-        }
-
-        this.props.handleMemeListUpdate(newArray);
+        this.props.setFilters(this.selection.searchTerm, this.selection.filter, this.selection.sorting);
     }
 
     render() {

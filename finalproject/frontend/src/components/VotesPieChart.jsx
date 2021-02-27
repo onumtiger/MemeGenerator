@@ -1,21 +1,24 @@
 import React from "react";
 import * as d3 from "d3";
-import '../style/globalStyle.css';
+import '../style/Charts.scss';
 
-class VotesPieChart extends React.Component {
+export default class VotesPieChart extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    componentDidMount() {
+    drawChart() {
         const { upvotes, downvotes } = this.props;
         var data = [upvotes, downvotes];
         const w = 300;
         const h = 200;
         var radius = Math.min(w, h) / 2     // ensure that the generated pie will fit into the bounds of the SVG
 
+        let previousChart = document.querySelector(".votespiechart .piechart svg")
+        if(previousChart) previousChart.remove();
+
         const svg = d3
-            .select(".piechart")
+            .select(".votespiechart .piechart")
             .append("svg")
             .attr("width", w)
             .attr("height", h)
@@ -48,9 +51,17 @@ class VotesPieChart extends React.Component {
             .attr("d", arc);
     }
 
+    componentDidMount(){
+        this.drawChart();
+    }
+
+    componentDidUpdate(){
+        this.drawChart();
+    }
+
     render() {
         return (
-            <div>
+            <div className="piechart-wrapper votespiechart">
                 <div className="piechart">
                     <h4>Up- and downvotes overall</h4>
                 </div>
@@ -62,4 +73,3 @@ class VotesPieChart extends React.Component {
         );
     }
 }
-export default VotesPieChart;

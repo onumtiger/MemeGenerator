@@ -1,15 +1,13 @@
 import React from "react";
 import * as d3 from "d3";
-import '../style/globalStyle.css';
+import '../style/Charts.scss';
 
-class ViewsPieChart extends React.Component {
+export default class ViewsPieChart extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    componentDidMount() {
-
-
+    drawChart() {
         const { views, otherViews } = this.props;
         const portionOtherViews = otherViews-views;
         var data = [views, portionOtherViews];
@@ -17,8 +15,11 @@ class ViewsPieChart extends React.Component {
         const h = 200;
         var radius = Math.min(w, h) / 2     // ensure that the generated pie will fit into the bounds of the SVG
 
+        let previousChart = document.querySelector(".viewpiechart .piechart svg")
+        if(previousChart) previousChart.remove();
+
         const svg = d3
-            .select(".piechart2")
+            .select(".viewpiechart .piechart")
             .append("svg")
             .attr("width", w)
             .attr("height", h)
@@ -51,6 +52,14 @@ class ViewsPieChart extends React.Component {
             .attr("d", arc);
     }
 
+    componentDidMount(){
+        this.drawChart();
+    }
+
+    componentDidUpdate(){
+        this.drawChart();
+    }
+
     render() {
         let {views, otherViews} = this.props;
         //get the portion value of the current meme
@@ -58,8 +67,8 @@ class ViewsPieChart extends React.Component {
         let percentageView = (otherViews ? ((views * 100) / otherViews) : 100 );
 
         return (
-            <div>
-                <div className="piechart2">
+            <div className="piechart-wrapper viewpiechart">
+                <div className="piechart">
                     <h4>Portion of views</h4>
                 </div>
                 <div className="legende">
@@ -70,4 +79,3 @@ class ViewsPieChart extends React.Component {
         );
     }
 }
-export default ViewsPieChart;

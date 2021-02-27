@@ -18,6 +18,11 @@ export default class View extends Component {
             memes: [],
             isLoading: true
         };
+        this.filters = {
+            searchTerm: null,
+            filter: null,
+            sorting: "default"
+        };
         this.initialMemes = [];
         this.wasJustUpdated = false;
 
@@ -27,17 +32,88 @@ export default class View extends Component {
 
         //this binding for React event handlers
         [
-            'handleMemeListUpdate',
+            'triggerMemeListUpdate',
             'wasMemeListJustUpdated',
             'getAllViews',
+            'setFilters',
         ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
     }
 
-    handleMemeListUpdate(newArray) {
+    triggerMemeListUpdate() {
+        this.applyFilters();
+    }
+
+    updateMemeList(newArray = this.state.memes) {
         this.setState({ memes: newArray });
         this.wasJustUpdated = true;
+    }
+
+    setFilters(searchTerm, filter, sorting){
+        this.filters = {searchTerm, filter, sorting};
+        this.applyFilters();
+    }
+
+    applyFilters(){
+        let newArray = [...this.initialMemes];
+
+        //search by keyword
+        if(this.filters.searchTerm){
+            newArray = newArray.filter(meme => (
+                meme.name.toLowerCase().includes(this.filters.searchTerm.toLowerCase())
+            ));
+        }
+
+        //filter by format: checks for strings ending on'.', followed by the string (or strings separated by '|') in filter
+        if(this.filters.filter){
+            newArray = newArray.filter(meme=> (
+                meme.url.match(new RegExp(`.+\\.(${this.filters.filter})$`,'i'))
+            ));
+        }
+
+        switch(this.filters.sorting){
+            default:
+                break;
+            case 'newest':
+                newArray.sort((a, b) => (
+                    new Date(b.creationDate) - new Date(a.creationDate)
+                    ));
+                break;
+            case 'oldest':
+                newArray.sort((a, b) => (
+                    new Date(a.creationDate) - new Date(b.creationDate)
+                    ));
+                break;
+            case 'bestRating':
+                newArray.sort((a, b) => (
+                    ((b.stats.upvotes.length || 1) / (b.stats.downvotes.length || 1)) - ((a.stats.upvotes.length || 1) / (a.stats.downvotes.length || 1))
+                    ));
+                break;
+            case 'worstRating':
+                newArray.sort((a, b) => (
+                    ((a.stats.upvotes.length || 1) / (a.stats.downvotes.length || 1)) - ((b.stats.upvotes.length || 1) / (b.stats.downvotes.length || 1))
+                    ));
+                break;
+            case 'mostViewed':
+                newArray.sort((a, b) => (
+                    b.stats.views - a.stats.views
+                    ));
+                break;
+            case 'leastViewed':
+                newArray.sort((a, b) => (
+                    a.stats.views - b.stats.views
+                    ));
+                break;
+            case 'random':
+                newArray.sort((a, b) => (
+                    //the sorting function works by recognizing return values <0, ==0 or >0. So let's give it a random number between -1 and +1 for random sorting:
+                    (Math.random()*2) - 1
+                    ));
+                break;
+        }
+
+        this.updateMemeList(newArray);
     }
 
     wasMemeListJustUpdated() {
@@ -88,10 +164,10 @@ export default class View extends Component {
                     </div>
                 ) : (
                         <>
-                            <FilterMemes memes={this.initialMemes} handleMemeListUpdate={this.handleMemeListUpdate} />
+                            <FilterMemes setFilters={this.setFilters} />
                             <Switch>
                                 <Route path={this.routePath} exact>
-                                    <MemesList memes={this.state.memes} />
+                                    <MemesList memes={this.state.memes} triggerMemeListUpdate={this.triggerMemeListUpdate} />
                                 </Route>
                                 <Route path={this.routePath + '/:memeId'} exact children={
                                     //nasty workaround: it would be nicer to just have the MemesList JSX element as JSX children without resorting to the explicit children prop, but then we'd loose access to the routeprops passed to the children :/
@@ -100,6 +176,7 @@ export default class View extends Component {
                                             urlPath={this.routePath}
                                             memes={this.state.memes}
                                             wasMemeListJustUpdated={this.wasMemeListJustUpdated}
+                                            triggerMemeListUpdate={this.triggerMemeListUpdate}
                                             getAllOtherViews={this.getAllViews}
                                         />
                                     )

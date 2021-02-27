@@ -1,14 +1,13 @@
 import React from "react";
 import * as d3 from "d3";
-import '../style/globalStyle.css';
+import '../style/Charts.scss';
 
-class TemplateStatisticsChart extends React.Component {
+export default class TemplateBarChart extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
     }
 
-    componentDidMount() {
+    drawChart() {
         const { upvotes, downvotes, uses, date } = this.props;
         const w = 630;
         const h = 400;
@@ -19,8 +18,11 @@ class TemplateStatisticsChart extends React.Component {
         console.log("downvotes in template chart: ", downvotes)
         console.log("views in template chart: ", uses)
 
+        let previousChart = document.querySelector(".template-barchart-wrapper .barchart svg")
+        if(previousChart) previousChart.remove();
+
         const svg = d3
-            .select(".barchart")
+            .select(".template-barchart-wrapper .barchart")
             .append("svg")
             .attr("width", w)
             .attr("height", h)
@@ -120,9 +122,18 @@ class TemplateStatisticsChart extends React.Component {
             .attr("transform", "translate(30, 18)")
             .call(y_axis);
     }
+
+    componentDidMount(){
+        this.drawChart();
+    }
+
+    componentDidUpdate(){
+        this.drawChart();
+    }
+
     render() {
         return (
-            <div>
+            <div className="template-barchart-wrapper">
                 <div className="barchart">
                     <h4>Upvotes, downvotes and usage over the last 14 days</h4>
                 </div>
@@ -135,4 +146,3 @@ class TemplateStatisticsChart extends React.Component {
         );
     }
 }
-export default TemplateStatisticsChart;

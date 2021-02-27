@@ -52,6 +52,7 @@ export default class MemeVoteCounter extends Component {
                 isUpvoted: true
             }))
         }
+        if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
     }
 
     downvote(){
@@ -78,6 +79,7 @@ export default class MemeVoteCounter extends Component {
                 isDownvoted: true
             }))
         }
+        if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
     }
 
     updateValues(){

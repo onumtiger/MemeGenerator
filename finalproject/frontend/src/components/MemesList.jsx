@@ -43,7 +43,7 @@ export default class MemesList extends Component {
                             <tbody>
                             <tr>   
                                 <td><p>{meme.stats.views} views</p></td>
-                                <td><MemeVoteCounter meme={meme} /></td>
+                                <td><MemeVoteCounter meme={meme} triggerMemeListUpdate={this.props.triggerMemeListUpdate} /></td>
                                 <td><p>{this.getDateString(meme.creationDate)}</p></td>
                             </tr>
                             </tbody>
