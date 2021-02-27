@@ -242,6 +242,14 @@ export default class CreateCustom extends React.Component {
             case "save_draft":
                 draftSaveButton.click()
             break;
+            case "up":
+                window.scrollTo(0,0);
+                //TODO
+            break;
+            case "down":
+                window.scrollTo(0,document.body.scrollHeight);
+                //TODO
+            break;
             case "set_caption_bold":
                 //TODO
             break;

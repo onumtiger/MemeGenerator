@@ -56,6 +56,7 @@ const result2 = (event) => {
     
     // get voice input
     const transcript = event.results[event.resultIndex][0].transcript;
+    console.log(transcript)
 
      // listening to title input
      if(listeningToTitle){
@@ -113,7 +114,7 @@ const result2 = (event) => {
         listeningToCaption = true  
         handleVoiceInput("caption_active", "");
     } // CREATE OWN TEMPLATE
-    else if(res.includes("own")){
+    else if(res.includes("own")&&!res.includes("down")){
         Read.readEnglish("Have fun!")
         handleVoiceInput("create_own_template", "")
     } // CHOOSE PUBLIC
@@ -121,7 +122,7 @@ const result2 = (event) => {
         Read.readEnglish("Alright, its set to public!")
         handleVoiceInput("set_public", "")
     } // CHOOSE PRIVATE
-    else if(res.includes("private")){
+    else if(res.includes("privat")){
         Read.readEnglish("Alright, its set to private!")
         handleVoiceInput("set_private", "")
     } // CHOOSE NOT LISTED
@@ -144,7 +145,16 @@ const result2 = (event) => {
     else if(res.includes("draft")&&res.includes("save")){
         Read.readEnglish("Saved as draft!")
         handleVoiceInput("save_draft", "")
-    } // THANK YOU -> stops
+    } // SCROLL UP
+    else if (res.includes("up")&&res.includes("scroll")){
+        Read.readEnglish("All the way up!")
+        handleVoiceInput("up", "")
+    } //SCROLL DOWN
+    else if (res.includes("down")&&res.includes("scroll")){
+        Read.readEnglish("Down!")
+        handleVoiceInput("down", "")
+    }
+    // THANK YOU -> stops
     else if(res.includes("thank")&&res.includes("you")){
         Read.readEnglish("Your welcome, I am out!")
         globalVoiceControlButton.innerHTML = "enable voice control"
