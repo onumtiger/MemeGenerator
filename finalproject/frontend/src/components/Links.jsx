@@ -1,18 +1,5 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
-
-const Collapse = styled.div.attrs({
-    className: 'navbar-collapse',
-})``
-
-const List = styled.div.attrs({
-    className: 'navbar-nav mr-auto',
-})``
-
-const Item = styled.div.attrs({
-    className: 'navbar-collapse',
-})``
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Links extends Component {
     render() {
@@ -21,26 +8,26 @@ class Links extends Component {
                 <Link to="/" className="navbar-brand">
                     <span style={{fontFamily: 'Impact'}}>OMM Meme App</span>
                 </Link>
-                <Collapse>
-                    <List>
-                        <Item>
+                <div className="navbar-collapse">
+                    <div className="navbar-nav mr-auto">
+                        <div className="navbar-collapse">
                             <Link to="/memes/view" className="nav-link">
                                 View Memes
                             </Link>
-                        </Item>
-                        <Item>
+                        </div>
+                        <div className="navbar-collapse">
                             <Link to="/memes/create" className="nav-link">
                                 Create Meme
                             </Link>
-                        </Item>
-                        <Item>
+                        </div>
+                        <div className="navbar-collapse">
                             <Link to="/memes/own" className="nav-link">
                                 My Memes
                             </Link>
-                        </Item>
+                        </div>
 
-                    </List>
-                </Collapse>
+                    </div>
+                </div>
             </React.Fragment>
         )
     }
