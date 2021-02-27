@@ -52,7 +52,7 @@ export default function Comment(props) {
                             <div className="userInfo"><label className="username">User_{props.userId[index]}</label> said:</div>
                         </div>
                         <label className="commentText">{comment}</label>
-                        <div className="deleteIcon" onClick={() => removeComment(index)}>&times;</div>
+                        {/* <div className="deleteIcon" onClick={() => removeComment(index)}>&times;</div> */}
                     </div>
                 ))}
             </div>

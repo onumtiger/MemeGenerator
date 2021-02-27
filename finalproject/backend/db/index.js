@@ -286,8 +286,16 @@ const resetDB = async() => {
     };
     IDManager.registerNewCommentEntry();
 
+    var defaultComment7 = {
+        _id: 6,
+        user_id: 1,
+        message: 'This is the funniest meme I have ever seen!!!',
+        creationDate: '2021/02/26'
+    };
+    IDManager.registerNewCommentEntry();
 
-    await db.collection('comments').insertMany([defaultComment, defaultComment2, defaultComment3, defaultComment4, defaultComment5, defaultComment6]);
+
+    await db.collection('comments').insertMany([defaultComment, defaultComment2, defaultComment3, defaultComment4, defaultComment5, defaultComment6, defaultComment7]);
     console.log("Default comments inserted");
 
 
