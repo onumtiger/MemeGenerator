@@ -86,6 +86,12 @@ const saveMeme = (params, res) => {
 
     meme
         .save()
+        .then(()=>{
+            const statEntry = new MemeStats({
+                _id: params.id
+            });
+            return statEntry.save();
+        })
         .then(async() => {
             await addTemplateUse(params.templateID);
         })

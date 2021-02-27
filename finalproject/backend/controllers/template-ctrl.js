@@ -67,6 +67,13 @@ const saveTemplate = (params, res) => {
 
     template
         .save()
+        .then(()=>{
+            const statEntry = new TemplateStats({
+                _id: params.id
+            });
+        
+            return statEntry.save();
+        })
         .then(() => {
             IDManager.registerNewTemplateEntry();
             return res.status(201).json({

@@ -85,64 +85,76 @@ export default class SingleView extends Component {
      * get comments for meme
      */
     getComments = async () => {
-        const meme = this.props.meme;
-        let response = await api.getCommentsByMemeId(meme._id);
+        try{
+            const meme = this.props.meme;
+            let response = await api.getCommentsByMemeId(meme._id).catch((err)=>{
+                throw new Error(err);
+            });
 
-        let comments = response.data.data;
+            let comments = response.data.data;
 
-        var messages = [];
-        var ids = [];
-        var date = [];
+            var messages = [];
+            var ids = [];
+            var date = [];
 
-        for (var i = 0; i < comments.length; i++) {
-            messages.push(comments[i].message);
-            ids.push(comments[i].user_id);
-            date.push(comments[i].creationDate)
+            for (var i = 0; i < comments.length; i++) {
+                messages.push(comments[i].message);
+                ids.push(comments[i].user_id);
+                date.push(comments[i].creationDate)
+            }
+
+            this.setState({
+                commentMessages: messages,
+                commentIds: ids,
+                commentDate: date
+            })
+        }catch(err){
+            console.log("Failed to get Comments: ",err);
         }
-
-        this.setState({
-            commentMessages: messages,
-            commentIds: ids,
-            commentDate: date
-        })
     }
 
     /**
      * get meme stats to display in the charts
      */
     getMemeStats = async () => {
-        this.setState({
-            showStats: false
-        });
+        try{
+            this.setState({
+                showStats: false
+            });
 
-        //get the stats of the current meme
-        const meme = this.props.meme;
-        let response = await api.getStatsForMeme(meme._id);
-        let memeStats = response.data.data.days;
+            //get the stats of the current meme
+            const meme = this.props.meme;
+            let response = await api.getStatsForMeme(meme._id).catch((err)=>{
+                throw new Error(err);
+            });
+            let memeStats = response.data.data.days;
 
-        //create empty arrays to fill in later
-        var upvotes = [];
-        var downvotes = [];
-        var views = [];
-        var date = [];
+            //create empty arrays to fill in later
+            var upvotes = [];
+            var downvotes = [];
+            var views = [];
+            var date = [];
 
-        var x = memeStats.length - Math.min(memeStats.length, 14);
-        //push all last 14 days values in the respective empty array
-        for (var i = x; i < memeStats.length; i++) {
-            upvotes.push(memeStats[i].upvotes);
-            downvotes.push(memeStats[i].downvotes);
-            views.push(memeStats[i].views);
-            date.push(memeStats[i].date)
+            var x = memeStats.length - Math.min(memeStats.length, 14);
+            //push all last 14 days values in the respective empty array
+            for (var i = x; i < memeStats.length; i++) {
+                upvotes.push(memeStats[i].upvotes);
+                downvotes.push(memeStats[i].downvotes);
+                views.push(memeStats[i].views);
+                date.push(memeStats[i].date)
+            }
+
+            //update the states with the new arrays and values
+            this.setState({
+                upvotes: upvotes,
+                downvotes: downvotes,
+                views: views,
+                date: date,
+                showStats: true
+            })
+        }catch(err){
+            console.log("Failed to get Meme Stats: ",err);
         }
-
-        //update the states with the new arrays and values
-        this.setState({
-            upvotes: upvotes,
-            downvotes: downvotes,
-            views: views,
-            date: date,
-            showStats: true
-        })
     }
 
     //triggers a +1 view in db

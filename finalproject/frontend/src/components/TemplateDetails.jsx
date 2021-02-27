@@ -35,7 +35,9 @@ export default class TemplateDetails extends React.Component {
         try{
             let templateID = this.props.template._id;
             this.setState({isLoading: true});
-            let response = await api.getStatsForTemplate(templateID);
+            let response = await api.getStatsForTemplate(templateID).catch((err)=>{
+                throw new Error(err);
+            });
             let templateStats = response.data.data;
             let days = templateStats.days;
     
