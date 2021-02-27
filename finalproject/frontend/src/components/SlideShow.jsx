@@ -10,8 +10,8 @@ export default class SlideShow extends Component {
         super(props);
 
         this.diashowButtonTexts={
-            default: 'Play Diashow \u25B6',
-            playing: 'Stop diashow \u23F8'
+            default: 'play Diashow \u25B6',
+            playing: 'stop diashow \u23F8'
         };
         this.diashowButtonTimeout = null;
 
@@ -164,10 +164,10 @@ export default class SlideShow extends Component {
             <div id="slideshow-wrapper">
                 <div id="slideshow-toprow">
                     <Link to={this.props.urlPath}>
-                        <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>&#9204; Back to List</button>
+                        <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>&#9204; back to List</button>
                     </Link>
                     <Link to={this.props.urlPath+'/'+this.getRandomMemeId()}>
-                        <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>Shuffle &harr;</button>
+                        <button type="button" className="actionButton disable-during-diashow" onClick={this.checkForDisabledButton}>shuffle &harr;</button>
                     </Link>
                     <button type="button" className="actionButton" id="playDia" onClick={this.handleDiashowButtonClick}>{this.diashowButtonTexts.default}</button>
                 </div>
