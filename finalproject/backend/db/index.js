@@ -273,7 +273,7 @@ const resetDB = async() => {
     var defaultComment5 = {
         _id: 4,
         user_id: 0,
-        message: '...',
+        message: 'Die Katze ist aber hübsch',
         creationDate: '2021/02/25'
     };
     IDManager.registerNewCommentEntry();
@@ -281,7 +281,7 @@ const resetDB = async() => {
     var defaultComment6 = {
         _id: 5,
         user_id: 1,
-        message: '---',
+        message: 'Witzig',
         creationDate: '2021/02/25'
     };
     IDManager.registerNewCommentEntry();
