@@ -147,6 +147,7 @@ const toggleUpvoteTemplate = async(req, res) => {
             })
         }else{
             await Template.updateOne({ _id: templateId }, { $pull: { 'stats.upvotes': userId } });
+            return res.status(200).json({ success: true });
         }
     } catch (err) {
         console.log(err);
@@ -175,6 +176,7 @@ const toggleDownvoteTemplate = async(req, res) => {
             })
         }else{
             await Template.updateOne({ _id: templateId }, { $pull: { 'stats.downvotes': userId } });
+            return res.status(200).json({ success: true });
         }
     } catch (err) {
         console.log(err);

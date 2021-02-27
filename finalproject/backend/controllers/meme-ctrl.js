@@ -259,6 +259,7 @@ const toggleUpvoteMeme = async(req, res) => {
             })
         }else{
             await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.upvotes': userId } });
+            return res.status(200).json({ success: true });
         }
     } catch (err) {
         console.log(err);
@@ -288,6 +289,7 @@ const toggleDownvoteMeme = async(req, res) => {
             })
         }else{
             await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.downvotes': userId } });
+            return res.status(200).json({ success: true });
         }
     } catch (err) {
         console.log(err);
