@@ -12,6 +12,9 @@ const db = mongoose.connection;
 const resetDB = async() => {
     //reset the DB, for every collection making sure the old entries are gone before we save new ones with possibly colliding IDs
 
+    //reset our ID manager
+    IDManager.reset();
+
     // mongoose lokal db MEMES reset, without SCHMEMA
     await db.collection('memes').deleteMany({});
     console.log("Old memes deleted");
