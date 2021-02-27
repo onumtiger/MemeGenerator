@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const env = require('../env.json')
+const IDManager = require('../db/id-manager');
 
 const User = require('../db/models/user-model')
 
@@ -34,7 +35,7 @@ const signup = (req, res) => {
                                     })
                                 } else {
                                     const user = new User({
-                                        _id: new mongoose.Types.ObjectId(),
+                                        _id: IDManager.getNewEmptyUserID(),
                                         email: req.body.signupEmail,
                                         username: req.body.signupUsername,
                                         password: hash
@@ -42,7 +43,8 @@ const signup = (req, res) => {
                                     user
                                         .save()
                                         .then( result => {
-                                            console.log(result)
+                                            console.log(result);
+                                            IDManager.registerNewUserEntry();
                                             res.status(201).json({
                                                 message: 'user created!',
                                                 id: user._id

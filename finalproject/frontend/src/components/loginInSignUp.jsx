@@ -22,7 +22,7 @@ class loginInSignUp extends Component {
 
         await api.login(creds).then(res => {
             console.log(res)
-            if (res.stauts == 401) {
+            if (res.status == 401) {
                 window.alert(`You entered wrong credentials`)
                 this.setState({
                     loginCred: '',
