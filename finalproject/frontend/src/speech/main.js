@@ -28,7 +28,10 @@ const activateFullVoiceControl = (globalVoiceControlButtonParameter, voiceInputC
     if(SpeechRecognition){
         recognition = new SpeechRecognition();
         recognition.continuous = true;
-        recognition.start();         
+        recognition.start();
+        
+        globalVoiceControlButton.innerHTML = "... recording - click to disable "
+        globalVoiceControlButton.style.backgroundColor = "red"
 
         // event listeners
         recognition.addEventListener("start", startRecording)
@@ -190,14 +193,15 @@ const stopSpeechRecognition = () => {
  * called when recording starts
  */
 const startRecording = () => {
-    console.log("ACTIVE")
+    //console.log("ACTIVE")
 }
 
 /**
  * called when recording ends
  */
 const stopRecording = () => {
-    console.log("INACTIVE")   
+    globalVoiceControlButton.innerHTML = "enable voice control"
+    globalVoiceControlButton.style.backgroundColor = "initial" 
 }
 
 const methods = { stopSpeechRecognition, activateFullVoiceControl }
