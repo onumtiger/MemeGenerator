@@ -1,4 +1,5 @@
 const Meme = require('../db/models/meme-model');
+const Comment = require('../db/models/comments-model');
 const User = require('../db/models/user-model');
 const MemeStats = require('../db/models/memestats-model');
 const TemplateStats = require('../db/models/templatestats-model');
@@ -150,6 +151,26 @@ const getOwnMemes = async(req, res) => {
     }).catch(err => console.log(err))
 }
 
+
+const getCommentsByMemeId = async (req, res) => {
+    let memeId = req.params.id;
+    console.log("TRYING HARD TO GET COMMENTS")
+    console.log(memeId)
+    try {
+    let memeId = req.params.id;
+    let meme = await Meme.findOne({ _id: memeId })  
+    console.log("MEME: ", meme)
+    let commentIdsArray = meme.comment_ids
+    console.log("commentIdsArray", commentIdsArray)
+    let comments = await Comment.find().where('_id').in(commentIdsArray).exec();
+    console.log("comments", comments)
+    return res.status(200).json({ success: true, data: comments})
+    }catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, error: err.toString() });
+    }
+}
+
 const patchMeme = async function(req, res) {
     console.log("Patch Meme generic")
     var body = req.body;
@@ -243,6 +264,7 @@ module.exports = {
     postUpvotesMeme,
     postDownvotesMeme,
     getMemes,
+    getCommentsByMemeId,
     getOwnMemes,
     getMemeById
 }

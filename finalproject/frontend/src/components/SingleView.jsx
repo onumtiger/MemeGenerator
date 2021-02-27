@@ -23,6 +23,8 @@ export default class SingleView extends Component {
             this[handler] = this[handler].bind(this);
         });
         this.state = {
+            commentMessages: null,
+            commentIds: null, 
             upvotes: [],
             downvotes: [],
             views: [],
@@ -81,6 +83,25 @@ export default class SingleView extends Component {
     }
 
     /**
+     * get comments for meme
+     */
+    getComments = async () => {
+        const meme = this.props.meme;
+        console.log("SEND MEME ID: ", meme._id)
+        let response = await api.getCommentsByMemeId(meme._id);
+        console.log("RESPONSE", response)
+        
+        let messages = response.data.data[0].message;
+        let ids = response.data.data[0].user_id;
+        console.log(messages)
+        console.log(ids)
+        this.setState({
+            commentMessages: messages,
+            commentIds: ids
+        })
+    }
+
+    /**
      * get meme stats to display in the charts
      */
     getMemeStats = async () => {
@@ -136,6 +157,7 @@ export default class SingleView extends Component {
         if (this.previousMemeId != meme._id) {
             this.previousMemeId = meme._id;
             this.getMemeStats(); //get detailed stats data for charts
+            this.getComments(); // get comments
             this.sendView(meme._id); // increment views, the check above prevents double counting
         }
 
@@ -167,7 +189,7 @@ export default class SingleView extends Component {
                     <p id="legal">TWITTER, TWEET, RETWEET and the Twitter Bird logo are trademarks of Twitter Inc. or its affiliates. Facebook and Instagram trademark logos owned by Facebook and its affiliate companies.</p>
                 </div>
                 <hr />
-                <Comment id={meme._id} commentCount={meme.comment_ids.length}></Comment>
+                <Comment id={meme._id} commentCount={meme.comment_ids.length} comments={this.state.commentMessages}></Comment>
                 {this.state.showStats && (<MemeStatisticsChart
                     upvotes={this.state.upvotes}
                     downvotes={this.state.downvotes}

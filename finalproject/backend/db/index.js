@@ -20,7 +20,7 @@ const resetDB = async() => {
         url: '/memes/jan_domi_zusammentreffen.png',
         captions: ['Domi', 'Jan Jbernolte'],
         name: 'Jan und Domi unterwegs',
-        comment_ids: [0, 1],
+        comment_ids: [0, 1, 2, 3],
         user_id: 0,
         visibility: 0,
         creationDate: "2021/02/12",
@@ -36,7 +36,7 @@ const resetDB = async() => {
         url: '/memes/jan_domi_punch.png',
         captions: ['Domi', 'Jan Obernolte'],
         name: 'Jan und Domis Gefühle füreinander <3',
-        comment_ids: [2, 3],
+        comment_ids: [2],
         user_id: 1,
         visibility: 2,
         creationDate: "2021/02/13",
@@ -230,7 +230,22 @@ const resetDB = async() => {
         creationDate: '2021/02/12'
     };
 
-    await db.collection('comments').insertMany([defaultComment, defaultComment2]);
+    var defaultComment3 = {
+        _id: 2,
+        user_id: 1,
+        message: 'Den verstehe ich nicht',
+        creationDate: '2021/02/24'
+    };
+
+    var defaultComment4 = {
+        _id: 3,
+        user_id: 1,
+        message: 'Was willst du damit sagen?',
+        creationDate: '2021/02/25'
+    };
+
+
+    await db.collection('comments').insertMany([defaultComment, defaultComment2, defaultComment3, defaultComment4]);
     console.log("Default comments inserted");
 
 
