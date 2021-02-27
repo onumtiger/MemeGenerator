@@ -8,10 +8,6 @@ import MemeStatisticsChart from './MemeStatisticsChart';
 import '../style/SingleView.scss';
 
 export default class SingleView extends Component {
-
-
-
-
     constructor(props) {
         super(props);
 

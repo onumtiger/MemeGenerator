@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import {MemeVoteCounter, MemeComment} from '.';
+import { MemeVoteCounter, MemeComment } from '.';
 
 import '../style/MemesList.scss';
 
@@ -15,7 +15,7 @@ export default class MemesList extends Component {
         super(props);
     }
 
-    getDateString(inputDateString){
+    getDateString(inputDateString) {
         let dateArray = inputDateString.split('/');
         let year = dateArray[0];
         let month = dateArray[1];
@@ -25,30 +25,32 @@ export default class MemesList extends Component {
 
     render() {
         const memes = this.props.memes;
-        
+
         console.log('TCL: memesList -> render -> memes', memes);
 
         return (
             <div id="memes-list-wrapper">
                 {/* filtering the view for public memes */}
-                {memes.filter((meme)=>(meme.visibility == 2)).map(meme => (
-                    <div className="meme-wrapper" key={'meme-wrapper-'+meme._id}>
+                {memes.filter((meme) => (meme.visibility == 2)).map(meme => (
+                    <div className="meme-wrapper" key={'meme-wrapper-' + meme._id}>
                         <div className="title-row">
                             <span>{meme.name}</span>
                         </div>
-                        <Link to={'/memes/view/'+meme._id}>
+                        <Link to={'/memes/view/' + meme._id}>
                             <img className="meme-img" src={meme.url} alt={meme.name}></img>
                         </Link>
                         <table className="stats-table">
                             <tbody>
-                            <tr>   
-                                <td><p>{meme.stats.views} views</p></td>
-                                <td><MemeVoteCounter meme={meme} triggerMemeListUpdate={this.props.triggerMemeListUpdate} /></td>
-                                <td><p>{this.getDateString(meme.creationDate)}</p></td>
-                            </tr>
+                                <tr>
+                                    <td><p>{meme.stats.views} views</p></td>
+                                    <td><MemeVoteCounter meme={meme} triggerMemeListUpdate={this.props.triggerMemeListUpdate} /></td>
+                                    <td><p>{this.getDateString(meme.creationDate)}</p></td>
+                                </tr>
                             </tbody>
                         </table>
-                        <MemeComment id={meme._id} commentCount={meme.comment_ids.length}></MemeComment>
+                        <div>
+                            {meme.comment_ids.length} comments
+                        </div>
                     </div>
                 ))}
             </div>
