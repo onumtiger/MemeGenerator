@@ -1,27 +1,18 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
 
 import Links from './Links'
 
-const Container = styled.div.attrs({
-    className: 'container',
-})``
-
-const Nav = styled.nav.attrs({
-    className: 'navbar navbar-expand-lg navbar-dark bg-dark',
-})`
-    margin-bottom: 20 px;
-    
-`
+import '../style/NavBar.scss';
 
 class NavBar extends Component {
     render() {
         return (
-            <Container>
-                <Nav>
+            <div id="navbar-wrapper" className="container">
+                <div id="navlinks" className="navbar navbar-expand-lg">
                     <Links />
-                </Nav>
-            </Container>
+                </div>
+                <hr />
+            </div>
         )
     }
 }

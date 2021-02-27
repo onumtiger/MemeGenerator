@@ -20,15 +20,16 @@
     .meme-wrapper {
         margin: 0 auto;
         width: 50%;
-        border-bottom: 2px solid grey;
+        border-bottom: px solid blue;
         padding: 25px 0;
         text-align: center;
+        border-radius: 12px;
 
         &.visibility-1 {
             background-color: #eee;
         }
         &.visibility-0 {
-            background-color: #bbb;
+            background-color: rgb(206, 206, 206);
         }
 
         .title-row {
@@ -38,8 +39,8 @@
     
             .title {
                 padding: 5px 10px;
-                font-size: 120%;
-                font-weight: bold;
+                font-size: 110%;
+                //font-weight: bold;
                 border-bottom: 1px solid gray;
             }
 
@@ -52,6 +53,7 @@
         .meme-img {
             @include content;
             display: block;
+            border-radius: 12px;
         }
     
         .stats-table {

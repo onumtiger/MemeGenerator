@@ -26,8 +26,18 @@
     padding-right: 7px;
 }
 
-.userInfo {
+.commentInfo {
     float: left;
+}
+
+.userInfo {
+    display: inline;
+}
+
+.commenDate {
+    display: inline;
+    font-size: 12px;
+    margin-right: 5px;
 }
 
 .username {

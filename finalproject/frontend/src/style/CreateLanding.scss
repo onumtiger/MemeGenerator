@@ -4,6 +4,10 @@
     padding: 20px;
     box-sizing: border-box;
 
+    h2 {
+        text-align:center;
+    }
+
     #main-table {
         width: 100%;
         border-collapse: collapse;
@@ -13,6 +17,7 @@
             padding: 20px;
             box-sizing: border-box;
             vertical-align: top;
+            
 
             #btn-api {
                 @include largeButton(#0068b0, #004a7d);
@@ -25,6 +30,7 @@
             #btn-api, #btn-custom {
                 margin: 0;
                 padding: 20px 15px;
+                border-radius: 12px;
             }
         }
     }

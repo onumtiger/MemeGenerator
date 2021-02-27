@@ -13,6 +13,7 @@ export default class TemplatesList extends React.Component {
         };
 
         this.currentlySelectedIndex = 0;
+        this.currentlySelectedTemplate = null;
         
 
         //this binding for React event handlers
@@ -28,15 +29,17 @@ export default class TemplatesList extends React.Component {
 
     handleTemplateClick(e) {
         let elem = e.target;
-        let src = elem.src;
         let id = elem.dataset.templateid;
 
         this.currentlySelectedIndex = this.props.data.templates.findIndex((t) => (
             id == t._id
         ));
+        this.currentlySelectedTemplate = this.props.data.templates.find((t) => (
+            id == t._id
+        ));
 
         this.props.handleSelectionChange(elem);
-        this.props.handleTemplateSelection(src, id);
+        this.props.handleTemplateSelection(this.currentlySelectedTemplate);
         this.setState({ showNavButtons: true });
     }
 
@@ -57,8 +60,12 @@ export default class TemplatesList extends React.Component {
         if (this.currentlySelectedIndex < 0) this.currentlySelectedIndex = this.props.data.templates.length - 1;
 
         let newSelectedElem = document.querySelectorAll('#template-list-wrapper .templateImg')[this.currentlySelectedIndex];
+
+        
+        this.currentlySelectedTemplate = this.props.data.templates[this.currentlySelectedIndex];
+
         this.props.handleSelectionChange(newSelectedElem);
-        this.props.handleTemplateSelection(newSelectedElem.src, newSelectedElem.dataset.templateid);
+        this.props.handleTemplateSelection(this.currentlySelectedTemplate);
     }
 
     handleNextButtonClick(e) {
@@ -66,15 +73,18 @@ export default class TemplatesList extends React.Component {
         if (this.currentlySelectedIndex >= this.props.data.templates.length) this.currentlySelectedIndex = 0;
 
         let newSelectedElem = document.querySelectorAll('#template-list-wrapper .templateImg')[this.currentlySelectedIndex];
+
+        this.currentlySelectedTemplate = this.props.data.templates[this.currentlySelectedIndex];
+
         this.props.handleSelectionChange(newSelectedElem);
-        this.props.handleTemplateSelection(newSelectedElem.src, newSelectedElem.dataset.templateid);
+        this.props.handleTemplateSelection(this.currentlySelectedTemplate);
     }
 
 
     render() {
         return (
             <div id="template-list-wrapper">
-                
+                <button class="voice-control-button">enable voice control</button>
                 <h3>First, choose a template
                 {this.state.showNavButtons && (
                         <span id="navbutton-wrapper">
@@ -86,7 +96,7 @@ export default class TemplatesList extends React.Component {
                         </span>
                     )}:
                 </h3>
-                <button class="voice-control-button">enable voice control</button>
+                
                 <div id="template-container">
                     {this.props.data.isLoading ? (
                         <div id="loader">

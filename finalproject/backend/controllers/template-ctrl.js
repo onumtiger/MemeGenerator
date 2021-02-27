@@ -67,7 +67,15 @@ const saveTemplate = (params, res) => {
 
     template
         .save()
+        .then(()=>{
+            const statEntry = new TemplateStats({
+                _id: params.id
+            });
+        
+            return statEntry.save();
+        })
         .then(() => {
+            IDManager.registerNewTemplateEntry();
             return res.status(201).json({
                 success: true,
                 id: template._id
@@ -147,6 +155,7 @@ const toggleUpvoteTemplate = async(req, res) => {
             })
         }else{
             await Template.updateOne({ _id: templateId }, { $pull: { 'stats.upvotes': userId } });
+            return res.status(200).json({ success: true });
         }
     } catch (err) {
         console.log(err);
@@ -175,6 +184,7 @@ const toggleDownvoteTemplate = async(req, res) => {
             })
         }else{
             await Template.updateOne({ _id: templateId }, { $pull: { 'stats.downvotes': userId } });
+            return res.status(200).json({ success: true });
         }
     } catch (err) {
         console.log(err);

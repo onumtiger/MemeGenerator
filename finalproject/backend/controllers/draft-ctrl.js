@@ -34,6 +34,7 @@ const insertDraft = async (req, res) => {
     draft
         .save()
         .then(() => {
+            IDManager.registerNewDraftEntry();
             return res.status(201).json({
                 success: true,
                 id: draft._id

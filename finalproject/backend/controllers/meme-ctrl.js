@@ -7,7 +7,14 @@ const TemplateStats = require('../db/models/templatestats-model');
 const IDManager = require('../db/id-manager');
 const constants = require('../utils/constants');
 const globalHelpers = require('../utils/globalHelpers');
+const idManager = require('../db/id-manager');
 
+
+/**
+ * create new meme
+ * @param {*} req 
+ * @param {*} res 
+ */
 const createMeme = async(req, res) => {
     const body = req.body;
 
@@ -47,6 +54,11 @@ const createMeme = async(req, res) => {
     }
 }
 
+/**
+ * Save a meme to the database
+ * @param {*} params 
+ * @param {*} res 
+ */
 const saveMeme = (params, res) => {
     const meme = new Meme({
         _id: params.id,
@@ -74,10 +86,17 @@ const saveMeme = (params, res) => {
 
     meme
         .save()
-        .then(async () => {
+        .then(()=>{
+            const statEntry = new MemeStats({
+                _id: params.id
+            });
+            return statEntry.save();
+        })
+        .then(async() => {
             await addTemplateUse(params.templateID);
         })
         .then(() => {
+            IDManager.registerNewMemeEntry();
             return res.status(201).json({
                 success: true,
                 id: meme._id,
@@ -93,6 +112,11 @@ const saveMeme = (params, res) => {
         })
 }
 
+/**
+ * Delete a meme from the database
+ * @param {*} req 
+ * @param {*} res 
+ */
 const deleteMeme = async(req, res) => {
     await Meme.findOneAndDelete({ _id: req.params.id }, (err, meme) => {
         if (err) {
@@ -109,6 +133,11 @@ const deleteMeme = async(req, res) => {
     }).catch(err => console.log(err))
 }
 
+/**
+ * Get a meme by given id
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getMemeById = async(req, res) => {
     await Meme.findOne({ _id: req.params.id }, (err, meme) => {
         if (err) {
@@ -124,10 +153,15 @@ const getMemeById = async(req, res) => {
     }).catch(err => console.log(err))
 }
 
+/**
+ * Get all memes in the database
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getMemes = async(req, res) => {
     let userId = req.query.userId; //will be undefined if none is sent, and thus match no meme user_id
     //send own, public and unlisted memes (unlisted to enable access via direct links), but non-public memes will be filtered out in the frontend from regular navigation and lists
-    await Meme.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { visibility: constants.VISIBILITY.UNLISTED }, { user_id: userId }] }, async (err, memes) => {
+    await Meme.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { visibility: constants.VISIBILITY.UNLISTED }, { user_id: userId }] }, async(err, memes) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -135,28 +169,33 @@ const getMemes = async(req, res) => {
         let resultArray = [];
 
         //convert the results from Documents to JSON objects, otherwise we can't add properties that are not defined in the model
-        memes.forEach((m)=>{
+        memes.forEach((m) => {
             resultArray.push(m.toJSON());
         });
 
         //add username and templatename from other DB models
-        for(let i=0; i<resultArray.length; i++){
+        for (let i = 0; i < resultArray.length; i++) {
             let entry = resultArray[i];
 
             let userID = entry.user_id;
             let templateID = entry.template_id;
 
             let user = await User.findOne({ _id: userID });
-            if(user) entry.user_name = user.username;
+            if (user) entry.user_name = user.username;
 
             let template = await Template.findOne({ _id: templateID });
-            if(template) entry.template_name = template.name;
+            if (template) entry.template_name = template.name;
         }
-        
+
         return res.status(200).json({ success: true, data: resultArray })
     }).catch(err => console.log(err))
 }
 
+/**
+ * Get all created memes by user id
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getOwnMemes = async(req, res) => {
     let userId = req.query.userId;
     await Meme.find({ user_id: userId }, (err, memes) => {
@@ -167,26 +206,61 @@ const getOwnMemes = async(req, res) => {
     }).catch(err => console.log(err))
 }
 
-
-const getCommentsByMemeId = async (req, res) => {
+/**
+ * Get all comments by given meme id
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getCommentsByMemeId = async(req, res) => {
     let memeId = req.params.id;
     console.log("TRYING HARD TO GET COMMENTS")
     console.log(memeId)
     try {
-    let memeId = req.params.id;
-    let meme = await Meme.findOne({ _id: memeId })  
-    console.log("MEME: ", meme)
-    let commentIdsArray = meme.comment_ids
-    console.log("commentIdsArray", commentIdsArray)
-    let comments = await Comment.find().where('_id').in(commentIdsArray).exec();
-    console.log("comments", comments)
-    return res.status(200).json({ success: true, data: comments})
-    }catch (err) {
+        let memeId = req.params.id;
+        let meme = await Meme.findOne({ _id: memeId })
+        console.log("MEME: ", meme)
+        let commentIdsArray = meme.comment_ids
+        console.log("commentIdsArray", commentIdsArray)
+        let comments = await Comment.find().where('_id').in(commentIdsArray).exec();
+        console.log("comments", comments)
+        return res.status(200).json({ success: true, data: comments })
+    } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: err.toString() });
     }
 }
 
+/**
+ * Saves comment under new id into db
+ * @param {*} req 
+ * @param {*} res 
+ */
+const postComment = async(req, res) => {
+
+    let received_user_id = req.params.id
+    let meme_id = req.body.memeId
+    let received_message = req.body.message
+    let comment_id = idManager.getNewEmptyCommentID()
+    let date = globalHelpers.getTodayString();
+    let comment = new Comment({ _id: comment_id, user_id: received_user_id, message: received_message, creationDate: date });
+
+    try {
+        // UPDATE MEME -> COMMENT ID INSERTED
+        await Meme.updateOne({ _id: meme_id }, { $push: { 'comment_ids': comment_id } })
+            //SAVE COMMENT
+        comment.save(function(err, doc) {
+            if (err) return console.error(err);
+            console.log("Document inserted succussfully!");
+        });
+        idManager.registerNewCommentEntry()
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, error: err.toString() });
+    }
+}
+
+// TODO: CHECK IF USED?!
 const patchMeme = async function(req, res) {
     console.log("Patch Meme generic")
     var body = req.body;
@@ -196,7 +270,11 @@ const patchMeme = async function(req, res) {
     console.log(result);
 }
 
-// adds a SINGLE view to database meme.stats by given id when called
+/**
+ * Adds a SINGLE view to database meme.stats by given id when called
+ * @param {*} req 
+ * @param {*} res 
+ */
 const viewMeme = async(req, res) => {
     try {
         let memeId = req.params.id;
@@ -218,6 +296,10 @@ const viewMeme = async(req, res) => {
     }
 }
 
+/**
+ * Template used
+ * @param {*} templateId 
+ */
 const addTemplateUse = async(templateId) => {
     try {
         await Template.updateOne({ _id: templateId }, { $inc: { 'stats.uses': 1 } });
@@ -237,13 +319,18 @@ const addTemplateUse = async(templateId) => {
     }
 }
 
+/**
+ * updates upvotes per meme
+ * @param {*} req 
+ * @param {*} res 
+ */
 const toggleUpvoteMeme = async(req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
         let newValue = req.body.newValue;
 
-        if(newValue){ //check if we want to downvote or de-downvote
+        if (newValue) { //check if we want to downvote or de-downvote
             await Meme.updateOne({ _id: memeId }, { $push: { 'stats.upvotes': userId } });
 
             //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
@@ -257,8 +344,9 @@ const toggleUpvoteMeme = async(req, res) => {
                 }
                 return res.status(200).json({ success: true });
             })
-        }else{
+        } else {
             await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.upvotes': userId } });
+            return res.status(200).json({ success: true });
         }
     } catch (err) {
         console.log(err);
@@ -266,15 +354,20 @@ const toggleUpvoteMeme = async(req, res) => {
     }
 }
 
+/**
+ * Updates downvotes per meme
+ * @param {*} req 
+ * @param {*} res 
+ */
 const toggleDownvoteMeme = async(req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
         let newValue = req.body.newValue;
 
-        if(newValue){ //check if we want to downvote or de-downvote
+        if (newValue) { //check if we want to downvote or de-downvote
             await Meme.updateOne({ _id: memeId }, { $push: { 'stats.downvotes': userId } });
-            
+
             //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
             let date = globalHelpers.getTodayString();
             MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async(err, memeStats) => {
@@ -286,8 +379,9 @@ const toggleDownvoteMeme = async(req, res) => {
                 }
                 return res.status(200).json({ success: true });
             })
-        }else{
+        } else {
             await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.downvotes': userId } });
+            return res.status(200).json({ success: true });
         }
     } catch (err) {
         console.log(err);
@@ -305,6 +399,7 @@ module.exports = {
     toggleDownvoteMeme,
     getMemes,
     getCommentsByMemeId,
+    postComment,
     getOwnMemes,
     getMemeById
 }

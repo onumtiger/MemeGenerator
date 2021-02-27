@@ -28,7 +28,10 @@ const activateFullVoiceControl = (globalVoiceControlButtonParameter, voiceInputC
     if(SpeechRecognition){
         recognition = new SpeechRecognition();
         recognition.continuous = true;
-        recognition.start();         
+        recognition.start();
+        
+        globalVoiceControlButton.innerHTML = "... recording - click to disable "
+        globalVoiceControlButton.style.backgroundColor = "red"
 
         // event listeners
         recognition.addEventListener("start", startRecording)
@@ -78,7 +81,7 @@ const result2 = (event) => {
         Read.readEnglish("Alright, how do you want to create your template?")
         handleVoiceInput("create_new_template", "")
     }
-    else if(res.includes("template")||res.includes("choose")||res.includes("take")){
+    else if(res.includes("template")||res.includes("choose")||res.includes("take")&&(!res.includes("next")||!res.includes("previous"))){
         let parameter = null
 
         // check template number
@@ -104,13 +107,13 @@ const result2 = (event) => {
         Read.readEnglish("Ok, lets work on your last draft")
         handleVoiceInput("draft", "")
     } // ENTER TITLE
-    else if(res.includes("title")){
+    else if(res.includes("title")||res.includes("titel")){
         Read.readEnglish("Dictate your desired title now!")
         listeningToTitle = true
         handleVoiceInput("enter_title", "")
     } // ADD CAPTION
-    else if(res.includes("caption")){
-        Read.readEnglish("Alright, dictate your first caption!")
+    else if(res.includes("caption")||res.includes("action")){
+        Read.readEnglish("Alright, dictate your caption!")
         listeningToCaption = true  
         handleVoiceInput("caption_active", "");
     } // CREATE OWN TEMPLATE
@@ -153,8 +156,7 @@ const result2 = (event) => {
     else if (res.includes("down")&&res.includes("scroll")){
         Read.readEnglish("Down!")
         handleVoiceInput("down", "")
-    }
-    // THANK YOU -> stops
+    } // THANK YOU -> stops
     else if(res.includes("thank")&&res.includes("you")){
         Read.readEnglish("Your welcome, I am out!")
         globalVoiceControlButton.innerHTML = "enable voice control"
@@ -191,14 +193,15 @@ const stopSpeechRecognition = () => {
  * called when recording starts
  */
 const startRecording = () => {
-    console.log("ACTIVE")
+    //console.log("ACTIVE")
 }
 
 /**
  * called when recording ends
  */
 const stopRecording = () => {
-    console.log("INACTIVE")   
+    globalVoiceControlButton.innerHTML = "enable voice control"
+    globalVoiceControlButton.style.backgroundColor = "initial" 
 }
 
 const methods = { stopSpeechRecognition, activateFullVoiceControl }

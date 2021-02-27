@@ -46,8 +46,7 @@ export default class FilterMemes extends Component {
     render() {
         return (
             <div id="filter-wrapper">
-                <input type="text" id="search" name="search" placeholder="Search for a meme title..." onChange={this.startSearch}></input>
-
+                <input type="text" id="search" name="search" placeholder=" search ..." onChange={this.startSearch}></input>
                 <label>Sort by: <select name="sort" id="sort" onChange={this.sortMemeList}>
                     <option value="default">default order</option>
                     <option value="newest">newest</option>
@@ -66,6 +65,9 @@ export default class FilterMemes extends Component {
                     <option value="jpg|png|gif">image</option>
                     <option value="mp4|mov">video</option>
                 </select></label>
+                
+               
+
             </div>
         )
     }
