@@ -153,8 +153,7 @@ const result2 = (event) => {
     else if (res.includes("down")&&res.includes("scroll")){
         Read.readEnglish("Down!")
         handleVoiceInput("down", "")
-    }
-    // THANK YOU -> stops
+    } // THANK YOU -> stops
     else if(res.includes("thank")&&res.includes("you")){
         Read.readEnglish("Your welcome, I am out!")
         globalVoiceControlButton.innerHTML = "enable voice control"

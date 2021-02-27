@@ -8,7 +8,13 @@ const IDManager = require('../db/id-manager');
 const constants = require('../utils/constants');
 const globalHelpers = require('../utils/globalHelpers');
 
-const createMeme = async(req, res) => {
+
+/**
+ * create new meme
+ * @param {*} req 
+ * @param {*} res 
+ */
+const createMeme = async (req, res) => {
     const body = req.body;
 
     if (!body) {
@@ -23,7 +29,7 @@ const createMeme = async(req, res) => {
         let id = IDManager.getNewEmptyMemeID();
         let filename = id + "_" + img.name; //ID in addition to name in order to prevent unwanted overrides
         let url = '/memes/' + filename;
-        img.mv('public' + url, async function(err) { //this overwrites an existing image at that filepath if there is one!
+        img.mv('public' + url, async function (err) { //this overwrites an existing image at that filepath if there is one!
             if (err) {
                 return res.status(500).json({
                     success: false,
@@ -47,6 +53,11 @@ const createMeme = async(req, res) => {
     }
 }
 
+/**
+ * Save a meme to the database
+ * @param {*} params 
+ * @param {*} res 
+ */
 const saveMeme = (params, res) => {
     const meme = new Meme({
         _id: params.id,
@@ -93,7 +104,12 @@ const saveMeme = (params, res) => {
         })
 }
 
-const deleteMeme = async(req, res) => {
+/**
+ * Delete a meme from the database
+ * @param {*} req 
+ * @param {*} res 
+ */
+const deleteMeme = async (req, res) => {
     await Meme.findOneAndDelete({ _id: req.params.id }, (err, meme) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -109,7 +125,12 @@ const deleteMeme = async(req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getMemeById = async(req, res) => {
+/**
+ * Get a meme by given id
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getMemeById = async (req, res) => {
     await Meme.findOne({ _id: req.params.id }, (err, meme) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -124,7 +145,12 @@ const getMemeById = async(req, res) => {
     }).catch(err => console.log(err))
 }
 
-const getMemes = async(req, res) => {
+/**
+ * Get all memes in the database
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getMemes = async (req, res) => {
     let userId = req.query.userId; //will be undefined if none is sent, and thus match no meme user_id
     //send own, public and unlisted memes (unlisted to enable access via direct links), but non-public memes will be filtered out in the frontend from regular navigation and lists
     await Meme.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { visibility: constants.VISIBILITY.UNLISTED }, { user_id: userId }] }, async (err, memes) => {
@@ -135,29 +161,34 @@ const getMemes = async(req, res) => {
         let resultArray = [];
 
         //convert the results from Documents to JSON objects, otherwise we can't add properties that are not defined in the model
-        memes.forEach((m)=>{
+        memes.forEach((m) => {
             resultArray.push(m.toJSON());
         });
 
         //add username and templatename from other DB models
-        for(let i=0; i<resultArray.length; i++){
+        for (let i = 0; i < resultArray.length; i++) {
             let entry = resultArray[i];
 
             let userID = entry.user_id;
             let templateID = entry.template_id;
 
             let user = await User.findOne({ _id: userID });
-            if(user) entry.user_name = user.username;
+            if (user) entry.user_name = user.username;
 
             let template = await Template.findOne({ _id: templateID });
-            if(template) entry.template_name = template.name;
+            if (template) entry.template_name = template.name;
         }
-        
+
         return res.status(200).json({ success: true, data: resultArray })
     }).catch(err => console.log(err))
 }
 
-const getOwnMemes = async(req, res) => {
+/**
+ * Get all created memes by user id
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getOwnMemes = async (req, res) => {
     let userId = req.query.userId;
     await Meme.find({ user_id: userId }, (err, memes) => {
         if (err) {
@@ -167,27 +198,32 @@ const getOwnMemes = async(req, res) => {
     }).catch(err => console.log(err))
 }
 
-
+/**
+ * Get all comments by given meme id
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getCommentsByMemeId = async (req, res) => {
     let memeId = req.params.id;
     console.log("TRYING HARD TO GET COMMENTS")
     console.log(memeId)
     try {
-    let memeId = req.params.id;
-    let meme = await Meme.findOne({ _id: memeId })  
-    console.log("MEME: ", meme)
-    let commentIdsArray = meme.comment_ids
-    console.log("commentIdsArray", commentIdsArray)
-    let comments = await Comment.find().where('_id').in(commentIdsArray).exec();
-    console.log("comments", comments)
-    return res.status(200).json({ success: true, data: comments})
-    }catch (err) {
+        let memeId = req.params.id;
+        let meme = await Meme.findOne({ _id: memeId })
+        console.log("MEME: ", meme)
+        let commentIdsArray = meme.comment_ids
+        console.log("commentIdsArray", commentIdsArray)
+        let comments = await Comment.find().where('_id').in(commentIdsArray).exec();
+        console.log("comments", comments)
+        return res.status(200).json({ success: true, data: comments })
+    } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: err.toString() });
     }
 }
 
-const patchMeme = async function(req, res) {
+// TODO: CHECK IF USED?!
+const patchMeme = async function (req, res) {
     console.log("Patch Meme generic")
     var body = req.body;
     var memeId = req.params.id;
@@ -196,14 +232,18 @@ const patchMeme = async function(req, res) {
     console.log(result);
 }
 
-// adds a SINGLE view to database meme.stats by given id when called
-const viewMeme = async(req, res) => {
+/**
+ * Adds a SINGLE view to database meme.stats by given id when called
+ * @param {*} req 
+ * @param {*} res 
+ */
+const viewMeme = async (req, res) => {
     try {
         let memeId = req.params.id;
         await Meme.updateOne({ _id: memeId }, { $inc: { 'stats.views': 1 } });
 
         let date = globalHelpers.getTodayString();
-        MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.views': 1 } }, async(err, memeStats) => {
+        MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.views': 1 } }, async (err, memeStats) => {
             if (err) {
                 return res.status(400).json({ success: false, error: err })
             }
@@ -218,12 +258,16 @@ const viewMeme = async(req, res) => {
     }
 }
 
-const addTemplateUse = async(templateId) => {
+/**
+ * Template used
+ * @param {*} templateId 
+ */
+const addTemplateUse = async (templateId) => {
     try {
         await Template.updateOne({ _id: templateId }, { $inc: { 'stats.uses': 1 } });
 
         let date = globalHelpers.getTodayString();
-        TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.uses': 1 } }, async(err, templateStats) => {
+        TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.uses': 1 } }, async (err, templateStats) => {
             if (err) {
                 throw new Error("Could not update template used counter!");
             }
@@ -237,18 +281,23 @@ const addTemplateUse = async(templateId) => {
     }
 }
 
-const toggleUpvoteMeme = async(req, res) => {
+/**
+ * updates upvotes per meme
+ * @param {*} req 
+ * @param {*} res 
+ */
+const toggleUpvoteMeme = async (req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
         let newValue = req.body.newValue;
 
-        if(newValue){ //check if we want to downvote or de-downvote
+        if (newValue) { //check if we want to downvote or de-downvote
             await Meme.updateOne({ _id: memeId }, { $push: { 'stats.upvotes': userId } });
 
             //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
             let date = globalHelpers.getTodayString();
-            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.upvotes': 1 } }, async(err, memeStats) => {
+            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.upvotes': 1 } }, async (err, memeStats) => {
                 if (err) {
                     return res.status(400).json({ success: false, error: err });
                 }
@@ -257,7 +306,7 @@ const toggleUpvoteMeme = async(req, res) => {
                 }
                 return res.status(200).json({ success: true });
             })
-        }else{
+        } else {
             await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.upvotes': userId } });
         }
     } catch (err) {
@@ -266,18 +315,23 @@ const toggleUpvoteMeme = async(req, res) => {
     }
 }
 
-const toggleDownvoteMeme = async(req, res) => {
+/**
+ * Updates downvotes per meme
+ * @param {*} req 
+ * @param {*} res 
+ */
+const toggleDownvoteMeme = async (req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
         let newValue = req.body.newValue;
 
-        if(newValue){ //check if we want to downvote or de-downvote
+        if (newValue) { //check if we want to downvote or de-downvote
             await Meme.updateOne({ _id: memeId }, { $push: { 'stats.downvotes': userId } });
-            
+
             //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
             let date = globalHelpers.getTodayString();
-            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async(err, memeStats) => {
+            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async (err, memeStats) => {
                 if (err) {
                     return res.status(400).json({ success: false, error: err });
                 }
@@ -286,7 +340,7 @@ const toggleDownvoteMeme = async(req, res) => {
                 }
                 return res.status(200).json({ success: true });
             })
-        }else{
+        } else {
             await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.downvotes': userId } });
         }
     } catch (err) {

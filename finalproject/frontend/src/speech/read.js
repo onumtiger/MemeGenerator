@@ -1,5 +1,9 @@
 var synth = window.speechSynthesis;
 
+/**
+ * Read englisch content 
+ * @param {*} text 
+ */
 const readEnglish = (text) => {
     var utterThis = new SpeechSynthesisUtterance(text);
     utterThis.lang = 'en-US';
@@ -7,16 +11,11 @@ const readEnglish = (text) => {
     console.log("tries to speak english");
 }
 
-const readGerman = (text) => {
-    var utterThis = new SpeechSynthesisUtterance(text);
-    utterThis.lang = 'de-DE';
-    synth.speak(utterThis);
-    console.log("tries to speak german");
-}
-
-// READS given information
+/**
+ * Read captions
+ * @param {*} captionContent 
+ */
 const readCaption = (captionContent) => {
-    console.log("tries to read out captions");
     var utterThis = new SpeechSynthesisUtterance(captionContent);
     synth.speak(utterThis);
 }
