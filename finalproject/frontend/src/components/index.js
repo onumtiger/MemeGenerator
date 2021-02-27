@@ -4,6 +4,7 @@ import CreateTemplateSelection from './CreateTemplateSelection';
 import DraftList from './DraftList';
 import DrawTemplate from './DrawTemplate';
 import FilterMemes from './FilterMemes';
+import loginInSignUp from './loginInSignUp'
 import Links from './Links';
 import MemeBarChart from './MemeBarChart';
 import MemeComment from './MemeComment';
@@ -19,4 +20,4 @@ import ViewsPieChart from './ViewsPieChart';
 import VotesPieChart from './VotesPieChart';
 import WYSIWYGEditor from './WYSIWYGEditor';
 
-export { CanvasDownloadButton, CanvasUploadButton, CreateTemplateSelection, DraftList, DrawTemplate, FilterMemes, Links, MemeBarChart, MemeComment, MemesList, MemeVoteCounter, NavBar, SingleView, SlideShow, TemplatesList, TemplateBarChart, UploadTemplate, ViewsPieChart, VotesPieChart, WYSIWYGEditor };
+export { CanvasDownloadButton, CanvasUploadButton, CreateTemplateSelection, DraftList, DrawTemplate, FilterMemes, loginInSignUp, Links, MemeBarChart, MemeComment, MemesList, MemeVoteCounter, NavBar, SingleView, SlideShow, TemplatesList, TemplateBarChart, UploadTemplate, ViewsPieChart, VotesPieChart, WYSIWYGEditor };
