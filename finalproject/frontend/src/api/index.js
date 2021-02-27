@@ -37,7 +37,7 @@ export const fetchWebImage = url => api.get(`/webcontent/image/${url}`);
 export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 
 export const getCommentsByMemeId = id => api.get(`/meme/comments/${id}`);
-export const postComment = (commentId, userId, message) => api.post(`/meme/comments/${commentId}`, { userId, message });
+export const postComment = (userId, memeId, message) => api.post(`/meme/comments/${userId}`, { memeId, message });
 
 
 const apis = {

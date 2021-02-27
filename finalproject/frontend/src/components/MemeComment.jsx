@@ -6,19 +6,33 @@ export default class Comment extends Component {
 
     constructor(props) {
         super(props);
+        
 
         this.state = {
         }
     }
 
-    handlePost = () => {
+    handlePost = async () => {
         const input = document.getElementById('commentInput').value;
+        
+        let refreshedComments = this.props.comments
+        refreshedComments.push(input)
+        this.state.comments = refreshedComments;
 
-        api.postComment().catch(err =>{
+        // TODO change when login feature merged
+        let user_id=0;
+        let comment=input
+        let meme_id = this.props.id
+
+        console.log("user id", user_id);
+        console.log("comment", comment)
+        console.log("meme_id", meme_id)
+
+        await api.postComment(user_id, meme_id, comment).catch(err =>{
             console.log('Failed to send comment: ',err);
         });
 
-        document.getElementsByClassName('commentInput')[this.props.id].value = '';
+        document.getElementById('commentInput').value = '';
     }
 
     removeComment = (targetIndex) => {
