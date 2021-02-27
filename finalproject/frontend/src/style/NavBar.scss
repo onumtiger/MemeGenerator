@@ -1,8 +1,20 @@
 #navbar-wrapper {
-    
+    margin-bottom: 10px;
 
+    
+    
     #navlinks {
         border-radius: 12px;
-        color: black;
+        font-size: 17px;
+
+        span{
+            font-size: 24px;
+            color: rgb(102, 194, 255);
+            font-family: 'Impact' !important
+        }
+
+        a {
+            color: black;
+        }
     }
 }

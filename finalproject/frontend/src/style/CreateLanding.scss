@@ -24,7 +24,8 @@
             }
 
             #btn-custom {
-                @include largeButton(#009688, #00635a);
+                @include largeButton(#65c1ff, #3e7abe);
+                border-color: #65c1ff;
             }
 
             #btn-api, #btn-custom {

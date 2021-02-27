@@ -3,7 +3,7 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    // font-family: initial;
+    //font-family: initial;
 }
 
 #slideshow-wrapper {
@@ -17,13 +17,14 @@
             @include buttonStyle;
             background-color: transparent;
             //border-radius: 2px;
-            font-weight: bold; 
-            font-size: 16px;
+            //font-weight: bold; 
+            font-size: 13px;
             padding: 3px 10px;
             margin: 0 15px;
             //box-shadow: gray 0 0 5px;
             border-radius: 12px;
             border-color: lightgrey;
+            
         }
     }
 
@@ -49,7 +50,7 @@
                     @include buttonStyle;
                     background-color: transparent;
                     color: rgb(95, 95, 95);
-                    padding: 35px 10px;
+                    padding: 15px 10px;
                     font-size: 30px;
                     height: 100%;
                     width: 100%;

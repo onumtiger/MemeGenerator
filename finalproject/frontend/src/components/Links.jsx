@@ -5,8 +5,8 @@ class Links extends Component {
     render() {
         return (
             <React.Fragment>
-                <Link to="/" className="navbar-brand">
-                    <span style={{fontFamily: 'Impact'}}>OMM Meme App</span>
+                <Link to="/memes/view" /* className="navbar-brand" */ className="nav-link">
+                    <span id="logo" /* style={{fontFamily: 'Impact'} */>memify</span>
                 </Link>
                 <div className="navbar-collapse">
                     <div className="navbar-nav mr-auto">
