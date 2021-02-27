@@ -5,6 +5,7 @@ const db = require('./db/index.js');
 const zip = require('express-zip');
 
 const memeRouter = require('./routes/meme-router.js');
+const userRouter = require('./routes/user-router.js');
 const templateRouter = require('./routes/template-router.js');
 const statsRouter = require('./routes/stats-router.js');
 const webContentRouter = require('./routes/webcontent-router.js');
@@ -33,6 +34,7 @@ app.use('/api', fileUpload({safeFileNames: true, preserveExtension: true}));
 
 //register our routers
 app.use('/api/meme', memeRouter);
+app.use('/api/user/', userRouter)
 app.use('/api/templates', templateRouter);
 app.use('/api/stats', statsRouter);
 app.use('/api/webcontent', webContentRouter);
