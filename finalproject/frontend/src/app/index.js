@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
-import { NavBar } from '../components'
+import { NavBar, loginInSignUp } from '../components'
 import { CreateAPI, Create, CreateCustom, View, MyMemes } from '../pages'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -10,9 +10,10 @@ function App() {
         <Router>
             <NavBar />
             <Switch>
-                <Route path="/" exact>
+                {/* <Route path="/" exact>
                     <Redirect to="/memes/view" />
-                </Route>
+                </Route> */}
+                <Route path="/" exact component={loginInSignUp}/>
                 <Route path="/memes/view" component={View} />
                 <Route path="/memes/own" component={MyMemes} />
                 <Route path="/memes/create" exact component={Create} />
