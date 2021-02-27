@@ -74,7 +74,7 @@ const saveMeme = (params, res) => {
 
     meme
         .save()
-        .then(async () => {
+        .then(async() => {
             await addTemplateUse(params.templateID);
         })
         .then(() => {
@@ -127,7 +127,7 @@ const getMemeById = async(req, res) => {
 const getMemes = async(req, res) => {
     let userId = req.query.userId; //will be undefined if none is sent, and thus match no meme user_id
     //send own, public and unlisted memes (unlisted to enable access via direct links), but non-public memes will be filtered out in the frontend from regular navigation and lists
-    await Meme.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { visibility: constants.VISIBILITY.UNLISTED }, { user_id: userId }] }, async (err, memes) => {
+    await Meme.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { visibility: constants.VISIBILITY.UNLISTED }, { user_id: userId }] }, async(err, memes) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -135,24 +135,24 @@ const getMemes = async(req, res) => {
         let resultArray = [];
 
         //convert the results from Documents to JSON objects, otherwise we can't add properties that are not defined in the model
-        memes.forEach((m)=>{
+        memes.forEach((m) => {
             resultArray.push(m.toJSON());
         });
 
         //add username and templatename from other DB models
-        for(let i=0; i<resultArray.length; i++){
+        for (let i = 0; i < resultArray.length; i++) {
             let entry = resultArray[i];
 
             let userID = entry.user_id;
             let templateID = entry.template_id;
 
             let user = await User.findOne({ _id: userID });
-            if(user) entry.user_name = user.username;
+            if (user) entry.user_name = user.username;
 
             let template = await Template.findOne({ _id: templateID });
-            if(template) entry.template_name = template.name;
+            if (template) entry.template_name = template.name;
         }
-        
+
         return res.status(200).json({ success: true, data: resultArray })
     }).catch(err => console.log(err))
 }
@@ -168,20 +168,36 @@ const getOwnMemes = async(req, res) => {
 }
 
 
-const getCommentsByMemeId = async (req, res) => {
+const getCommentsByMemeId = async(req, res) => {
     let memeId = req.params.id;
     console.log("TRYING HARD TO GET COMMENTS")
     console.log(memeId)
     try {
-    let memeId = req.params.id;
-    let meme = await Meme.findOne({ _id: memeId })  
-    console.log("MEME: ", meme)
-    let commentIdsArray = meme.comment_ids
-    console.log("commentIdsArray", commentIdsArray)
-    let comments = await Comment.find().where('_id').in(commentIdsArray).exec();
-    console.log("comments", comments)
-    return res.status(200).json({ success: true, data: comments})
-    }catch (err) {
+        let memeId = req.params.id;
+        let meme = await Meme.findOne({ _id: memeId })
+        console.log("MEME: ", meme)
+        let commentIdsArray = meme.comment_ids
+        console.log("commentIdsArray", commentIdsArray)
+        let comments = await Comment.find().where('_id').in(commentIdsArray).exec();
+        console.log("comments", comments)
+        return res.status(200).json({ success: true, data: comments })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, error: err.toString() });
+    }
+}
+
+const postComment = async(req, res) => {
+    try {
+        console.log("post comments")
+        var body = req.body;
+        var commentId = req.params.id;
+        var updatedUserId = body.toUpdate
+        var date = getTodayString();
+        await Meme.updateOne({ _id: memeId }, { $push: { 'comment_ids': commentId } })
+        await Comment.updateOne({ _id: commentId }, { $push: { user_id: updatedUserId, message: body.message, creationDate: date } });
+        return res.status(200).json({ success: true });
+    } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: err.toString() });
     }
@@ -243,7 +259,7 @@ const toggleUpvoteMeme = async(req, res) => {
         let userId = req.body.userId;
         let newValue = req.body.newValue;
 
-        if(newValue){ //check if we want to downvote or de-downvote
+        if (newValue) { //check if we want to downvote or de-downvote
             await Meme.updateOne({ _id: memeId }, { $push: { 'stats.upvotes': userId } });
 
             //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
@@ -257,7 +273,7 @@ const toggleUpvoteMeme = async(req, res) => {
                 }
                 return res.status(200).json({ success: true });
             })
-        }else{
+        } else {
             await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.upvotes': userId } });
         }
     } catch (err) {
@@ -272,9 +288,9 @@ const toggleDownvoteMeme = async(req, res) => {
         let userId = req.body.userId;
         let newValue = req.body.newValue;
 
-        if(newValue){ //check if we want to downvote or de-downvote
+        if (newValue) { //check if we want to downvote or de-downvote
             await Meme.updateOne({ _id: memeId }, { $push: { 'stats.downvotes': userId } });
-            
+
             //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
             let date = globalHelpers.getTodayString();
             MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async(err, memeStats) => {
@@ -286,7 +302,7 @@ const toggleDownvoteMeme = async(req, res) => {
                 }
                 return res.status(200).json({ success: true });
             })
-        }else{
+        } else {
             await Meme.updateOne({ _id: memeId }, { $pull: { 'stats.downvotes': userId } });
         }
     } catch (err) {
@@ -305,6 +321,7 @@ module.exports = {
     toggleDownvoteMeme,
     getMemes,
     getCommentsByMemeId,
+    postComment,
     getOwnMemes,
     getMemeById
 }

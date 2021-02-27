@@ -36,7 +36,8 @@ export const deleteDraft = (draftId) => api.delete(`/drafts/${draftId}`);
 export const fetchWebImage = url => api.get(`/webcontent/image/${url}`);
 export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 
-export const getCommentsByMemeId = id => api.get(`/meme/comments/${id}`)
+export const getCommentsByMemeId = id => api.get(`/meme/comments/${id}`);
+export const postComment = (commentId, userId, message) => api.post(`/meme/comments/${commentId}`, { userId, message });
 
 
 const apis = {
@@ -64,7 +65,8 @@ const apis = {
     deleteTemplateById,
     fetchWebImage,
     fetchWebSnapshot,
-    getCommentsByMemeId
+    getCommentsByMemeId,
+    postComment
 }
 
 export default apis

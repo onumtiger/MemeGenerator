@@ -1,37 +1,42 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import '../style/globalStyle.css';
+import api from '../api';
 
-export default function Comment(props) {
+export default class Comment extends Component {
 
-    const [comments, setComments] = useState([]);
-    const [commentCounter, setCommentCounter] = useState(0);
+    constructor(props) {
+        super(props);
 
-    const handlePost = () => {
-        const input = document.getElementsByClassName('commentInput')[props.id].value
-        setComments((prev) => {
-            return [...prev, input];
-        });
-
-        setCommentCounter(prevCount => prevCount + 1);
-        document.getElementsByClassName('commentInput')[props.id].value = '';
+        this.state = {
+        }
     }
 
-    const removeComment = (targetIndex) => {
-        setComments((prev) => {
-            return prev.filter((comment, index) => index !== targetIndex);
+    handlePost = () => {
+        const input = document.getElementById('commentInput').value;
+
+        api.postComment().catch(err =>{
+            console.log('Failed to send comment: ',err);
         });
 
-        setCommentCounter(prevCount => prevCount - 1);
+        document.getElementsByClassName('commentInput')[this.props.id].value = '';
     }
 
-    const handleKeypress = e => {
+    removeComment = (targetIndex) => {
+        // setComments((prev) => {
+        //     return prev.filter((comment, index) => index !== targetIndex);
+        // });
+
+        // setCommentCounter(prevCount => prevCount - 1);
+    }
+
+    handleKeypress = e => {
         //triggers by pressing the enter key
         if (e.which == 13 || e.keyCode == 13) {
-            handlePost();
+            this.handlePost();
         }
     };
 
-    const getDateString = (inputDateString) => {
+    getDateString = (inputDateString) => {
         let dateArray = inputDateString.split('/');
         let year = dateArray[0];
         let month = dateArray[1];
@@ -39,27 +44,29 @@ export default function Comment(props) {
         return `${day}.${month}.${year}`
     }
 
-    return (
-        <div>
-            <p className="commentNumber">{props.commentCount} comments</p>
+    render() {
+        return (
             <div>
-                {props.comments.map((comment, index) => (
-                    <div key={index}>
-                        <div className="commentInfo">
-                            <div className="commenDate">
-                                {getDateString(props.dates[index])}
+                <p className="commentNumber">{this.props.commentCount} comments</p>
+                <div>
+                    {this.props.comments.map((comment, index) => (
+                        <div key={index}>
+                            <div className="commentInfo">
+                                <div className="commenDate">
+                                    {this.getDateString(this.props.dates[index])}
+                                </div>
+                                <div className="userInfo"><label className="username">User_{this.props.userId[index]}</label>:</div>
                             </div>
-                            <div className="userInfo"><label className="username">User_{props.userId[index]}</label> said:</div>
+                            <label className="commentText">{comment}</label>
+                            {/* <div className="deleteIcon" onClick={() => removeComment(index)}>&times;</div> */}
                         </div>
-                        <label className="commentText">{comment}</label>
-                        {/* <div className="deleteIcon" onClick={() => removeComment(index)}>&times;</div> */}
-                    </div>
-                ))}
-            </div>
-            <div className="commentContainer">
-                <input className="commentInput" placeholder="add a comment..." onKeyPress={handleKeypress}></input>
-                <button className="postButton" onClick={handlePost}>Post</button>
-            </div>
-        </div >
-    );
+                    ))}
+                </div>
+                <div className="commentContainer">
+                    <input id="commentInput" placeholder="add a comment..." onKeyPress={this.handleKeypress}></input>
+                    <button className="postButton" onClick={this.handlePost}>Post</button>
+                </div>
+            </div >
+        );
+    }
 }
