@@ -15,6 +15,8 @@ Our backend relies on MongoDB (with mongoose), so make sure it is installed on y
 
 If you are installing on MacOS Catalina, you might encounter a problem with the install of node-sass in our frontend project. This is because of a dependency on node-gyp. You can find more info on that [here](https://github.com/nodejs/node-gyp#installation) and [here](https://github.com/nodejs/node-gyp/blob/master/macOS_Catalina.md).
 
+We also encountered some problems with macOS Catalina and some npm configurations. You may have to use the --force flag to install, depending on what your OS and node configuration is.
+
 ## How to start the project
 
 After installation you have to start the project in three main steps:
@@ -155,3 +157,5 @@ The React app will open in development mode on localhost:3000, while the Express
 ## Other Notes
 
 - The sorting / filtering feature within the Slide Show / Single View will rearrange the memes list around the current one. In other words, you will stay on the current meme but the links to the next and previous one will change. Only if the current meme is not in the new filtered selection, another meme will be displayed immediately. So no immediately visible change in the Slide Show after sorting is not an indicator that something went wrong.
+- We loaded some default data into the database, which will always be inserted when the backend restarts. This will give you some data to test with. If you want to remove the reset, just comment out / remove the call to resetDB() in `.\backend\db\index.js`.
+- Our Login Tokens last for 5 hours. Within that time, especially if you change anything in the database, you may encounter behaviour where the browser will still have you logged in until you explicitly log out. So, just remember to logout. :)
