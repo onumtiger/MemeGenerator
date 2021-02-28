@@ -56,7 +56,7 @@ The React app will open in development mode on localhost:3000, while the Express
 - The voice control is answering after every voice input, so if there is no answer then there is something broken
 - The voice recognition is capable of understanding 90% of the page input possibilities, thus 90% of the pages functionality
 
-    (FUNCTION), (VOICE INPUT EXAMPLE)
+    (FUNCTION) (Y/N), (VOICE INPUT EXAMPLE)
     -> Choose template (Y), example: "Choose template number one"
     -> Create new template (Y), example: "Create a new template"
     -> Use draft (Y), example: "Use draft"
