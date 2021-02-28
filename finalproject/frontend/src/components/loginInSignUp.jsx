@@ -17,6 +17,12 @@ class loginInSignUp extends Component {
         }
     }
 
+    /**
+     * use credentials provided in form to log in
+     * in any case clear input fields as well as state
+     * login success: redirect to memes overview
+     * login fail: user notification
+     */
     logIn = async () => {
         const { loginCred, loginPassword } = this.state
         const creds = { loginCred, loginPassword }
@@ -29,11 +35,17 @@ class loginInSignUp extends Component {
             else {
                 this.clearInput()
                 createTokenProvider.setToken(res.data.token)
-                window.open("http://localhost:3000/memes","_self");
+                window.open("http://localhost:3000/memes/view","_self");
             }
         })
     }
 
+    /**
+     * use credentials provided in form to sign uü
+     * in any case clear input fields as well as state
+     * success: redirect to memes overview
+     * fail: user notification
+     */
     signUp = async () => {
         const { signupEmail, signupUsername, signupPassword } = this.state
         const creds = { signupEmail, signupUsername, signupPassword }
@@ -53,46 +65,79 @@ class loginInSignUp extends Component {
             })
     }
     
+    /**
+     * reveal sign up screen
+     */
     activateRightPanel = () => {
         const container = document.getElementById('login-page-wrapper');
         container.classList.add("right-panel-active");
     }
 
+    /**
+     * hide sign up screen
+     */
     deactivateRightPanel = () => {
         const container = document.getElementById('login-page-wrapper');
         container.classList.remove("right-panel-active");
     }
 
+    /**
+     * update state with provided information
+     * @param {*} event 
+     */
     handleChangeInputLoginCred= async event => {
         const loginCred = event.target.value
         this.setState({ loginCred })
     }
 
+    /**
+     * update state with provided information
+     * @param {*} event 
+     */
     handleChangeInputLoginPassword= async event => {
         const loginPassword = event.target.value
         this.setState({ loginPassword })
     }
 
+    /**
+     * update state with provided information
+     * @param {*} event 
+     */
     handleChangeInputSignupUsername= async event => {
         const signupUsername = event.target.value
         this.setState({ signupUsername })
     }
 
+    /**
+     * update state with provided information
+     * @param {*} event 
+     */
     handleChangeInputSignupEmail= async event => {
         const signupEmail = event.target.value
         this.setState({ signupEmail })
     }
 
+    /**
+     * update state with provided information
+     * @param {*} event 
+     */
     handleChangeInputSignupPassword= async event => {
         const signupPassword = event.target.value
         this.setState({ signupPassword })
     }
 
+    /**
+     * update state with provided information
+     * @param {*} event 
+     */
     clearUsernamePlaceholder=  () => {
         const Usernameplaceholder = ''
         this.setState({ Usernameplaceholder })
     }
 
+    /**
+     * clear inputs fields as well as state
+     */
     clearInput = () => {
         const inputField = document.getElementsByTagName("input")
         for (let i = 0; i < inputField.length; i ++){ 

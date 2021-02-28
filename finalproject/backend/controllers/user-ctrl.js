@@ -1,4 +1,3 @@
-const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const env = require('../env.json')
@@ -6,6 +5,12 @@ const IDManager = require('../db/id-manager');
 
 const User = require('../db/models/user-model')
 
+/**
+ * Create a new user in database with the information received in request
+ * return success or error message in case of unsusscessful registration
+ * @param {*} req 
+ * @param {*} res 
+ */
 const signup = (req, res) => {
     User.find({email: req.body.signupEmail})
         .exec()
@@ -73,6 +78,13 @@ const signup = (req, res) => {
             }
         })
 }
+
+/**
+ * returns jwt token if login credentials are correct
+ * otherwise error message is returned
+ * @param {*} req 
+ * @param {*} res 
+ */
 const login = (req, res) => {
     if (req.body.loginCred.indexOf('@') == -1 ){
         User.find({username: req.body.loginCred})
@@ -165,6 +177,12 @@ const login = (req, res) => {
         })
     }
 }
+
+/**
+ * deletes user in db
+ * @param {*} req 
+ * @param {*} res 
+ */
 const deleteUser = (req, res) => {
     User.remove({_id: req.params.userId})
     .exec()
