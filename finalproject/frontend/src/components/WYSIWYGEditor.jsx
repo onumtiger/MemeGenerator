@@ -679,12 +679,12 @@ handlePublishedMeme(memeId) {
   componentDidUpdate() {
     let newDraft = this.props.draft && (this.props.draft != this.prevDraft);
     if (newDraft) {
-      this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId), ()=>{
+      this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId, ()=>{
         if(this.props.draft){
           this.reset();
           this.applyDraft();
         }
-      };
+      });
     }else{
       if(this.props.draft){
         this.reset();
