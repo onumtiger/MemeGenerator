@@ -1,9 +1,13 @@
 #navbar-wrapper {
     margin-bottom: 10px;
-	border: 1px solid lightgray;
+	//border: 1px solid lightgray;
+    border: 3px solid  rgb(102, 194, 255);
 	background-color: #fff;
 	border-radius: 0 0 12px 12px;
     border-top: none;
+    border-right: none;
+    border-left: none;
+    
     
     #navlinks {
         border-radius: 12px;
