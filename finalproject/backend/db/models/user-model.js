@@ -18,7 +18,7 @@ const UserSchema = new Schema(
       type: String, 
       required: true, 
       unique: true,
-      // match: /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
+      match: /^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/
     }, // displayed username 
     password: { type: [String], required: true }, // password for login
     meme_ids: { type: [Number], required: false} // user created memes (Array)
