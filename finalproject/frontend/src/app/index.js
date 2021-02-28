@@ -2,9 +2,9 @@ import React from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import { NavBar, loginInSignUp } from '../components'
 import { CreateAPI, Create, CreateCustom, View, MyMemes } from '../pages'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+// ROUTES 
 function App() {
     return (
         <Router>
