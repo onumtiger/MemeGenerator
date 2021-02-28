@@ -27,7 +27,7 @@ const resetDB = async() => {
         url: '/memes/4_Andreas.png',
         captions: ['Andreas'],
         name: 'Andreas',
-        comment_ids: [6],
+        comment_ids: [6, 7],
         user_id: 0,
         template_id: 6,
         visibility: 2,
@@ -45,7 +45,7 @@ const resetDB = async() => {
         url: '/memes/kunstwerk.png',
         captions: ['abstrakte', 'Kunst'],
         name: 'Kann das Weg?',
-        comment_ids: [0, 1, 2, 3],
+        comment_ids: [1, 2, 3],
         user_id: 1,
         template_id: 9,
         visibility: 2,
@@ -63,7 +63,7 @@ const resetDB = async() => {
         url: '/memes/OMM2.png',
         captions: ['OMM'],
         name: 'OMM',
-        comment_ids: [4, 5],
+        comment_ids: [0, 4, 5],
         user_id: 2,
         template_id: 2,
         visibility: 2,
@@ -81,7 +81,7 @@ const resetDB = async() => {
         url: '/memes/crying.png',
         captions: ['nothing works'],
         name: 'Crying because nothing works',
-        comment_ids: [],
+        comment_ids: [9],
         user_id: 1,
         template_id: 8,
         visibility: 2,
@@ -319,7 +319,7 @@ const resetDB = async() => {
     var defaultComment = {
         _id: 0,
         user_id: 0,
-        message: 'Richtig unlustiges Meme',
+        message: 'There are funnier ones',
         creationDate: '2021/02/12'
     };
     IDManager.registerNewCommentEntry();
@@ -327,7 +327,7 @@ const resetDB = async() => {
     var defaultComment2 = {
         _id: 1,
         user_id: 2,
-        message: 'Wow, gar nicht lustig - wirklich 0 lustig ..',
+        message: 'Thanks for this funny meme',
         creationDate: '2021/02/12'
     };
     IDManager.registerNewCommentEntry();
@@ -335,7 +335,7 @@ const resetDB = async() => {
     var defaultComment3 = {
         _id: 2,
         user_id: 1,
-        message: 'Den verstehe ich nicht',
+        message: 'Hahahahahaha',
         creationDate: '2021/02/24'
     };
     IDManager.registerNewCommentEntry();
@@ -343,7 +343,7 @@ const resetDB = async() => {
     var defaultComment4 = {
         _id: 3,
         user_id: 2,
-        message: 'Was willst du damit sagen?',
+        message: 'Nice one!',
         creationDate: '2021/02/25'
     };
     IDManager.registerNewCommentEntry();
@@ -351,7 +351,7 @@ const resetDB = async() => {
     var defaultComment5 = {
         _id: 4,
         user_id: 0,
-        message: 'Die Katze ist aber hübsch',
+        message: 'What',
         creationDate: '2021/02/25'
     };
     IDManager.registerNewCommentEntry();
@@ -359,7 +359,7 @@ const resetDB = async() => {
     var defaultComment6 = {
         _id: 5,
         user_id: 1,
-        message: 'Witzig',
+        message: 'Not so funny',
         creationDate: '2021/02/25'
     };
     IDManager.registerNewCommentEntry();
@@ -372,8 +372,32 @@ const resetDB = async() => {
     };
     IDManager.registerNewCommentEntry();
 
+    var defaultComment8 = {
+        _id: 7,
+        user_id: 2,
+        message: 'Haha relateable!!',
+        creationDate: '2021/02/27'
+    };
+    IDManager.registerNewCommentEntry();
 
-    await db.collection('comments').insertMany([defaultComment, defaultComment2, defaultComment3, defaultComment4, defaultComment5, defaultComment6, defaultComment7]);
+    var defaultComment9 = {
+        _id: 8,
+        user_id: 2,
+        message: 'I would buy this one!',
+        creationDate: '2021/02/27'
+    };
+    IDManager.registerNewCommentEntry();
+
+    var defaultComment10 = {
+        _id: 9,
+        user_id: 2,
+        message: 'I feel you!',
+        creationDate: '2021/02/28'
+    };
+    IDManager.registerNewCommentEntry();
+
+
+    await db.collection('comments').insertMany([defaultComment, defaultComment2, defaultComment3, defaultComment4, defaultComment5, defaultComment6, defaultComment7, defaultComment8, defaultComment9, defaultComment10]);
     console.log("Default comments inserted");
 
     // mongoose lokal db MemeStats insert/reset, without SCHMEMA
