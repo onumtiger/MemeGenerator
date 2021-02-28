@@ -56,7 +56,8 @@ export default class CreateCustom extends React.Component {
         this.setState({
             showTemplateSelection: true,
             showUploadTemplate: false,
-            showDrawTemplate: false
+            showDrawTemplate: false,
+            showTemplateDetails: false
         });
     }
 
@@ -67,6 +68,7 @@ export default class CreateCustom extends React.Component {
         this.setState({
             showTemplateSelection: false,
             showUploadTemplate: true,
+            showTemplateDetails: false
         });
     }
 
@@ -76,7 +78,8 @@ export default class CreateCustom extends React.Component {
     selectTemplateCreation(){
         this.setState({
             showTemplateSelection: false,
-            showDrawTemplate: true
+            showDrawTemplate: true,
+            showTemplateDetails: false
         });
     }
 
@@ -84,7 +87,7 @@ export default class CreateCustom extends React.Component {
      * selecte a specific template
      * @param {TemplateDBEntry} template - template (database)
      */
-    selectTemplate(template){ //src, id
+    selectTemplate(template){
         this.setState({
             showTemplateSelection: false,
             showUploadTemplate: false,
@@ -122,13 +125,17 @@ export default class CreateCustom extends React.Component {
      */
     handleDraftSelection(draft){
         this.changeSelection(null);
-        this.setState({showEditor: false});
+        this.setState({
+            showEditor: false, 
+            selectedDraft: null
+        });
         let draftTemplate = this.state.templateListData.templates.find((t)=>(t._id == draft.template_id));
         if(draftTemplate){
             this.initialTemplateSrc = draftTemplate.url;
             this.initialTemplateId = draft.template_id;
             this.setState({
                 selectedDraft: draft,
+                showTemplateDetails: false,
                 showEditor: true
             });
         }
@@ -179,8 +186,9 @@ export default class CreateCustom extends React.Component {
     handlePublishedTemplate = async (templateID)=>{
         await this.loadTemplatesIntoList();
         let selectedElem = document.querySelector('#create-custom-page-wrapper #template_'+templateID);
+        let selectedTemplate = this.state.templateListData.templates.find((t)=>(t._id == templateID));
         this.changeSelection(selectedElem);
-        this.selectTemplate(selectedElem.src, templateID);
+        this.selectTemplate(selectedTemplate);
     }
 
     /**
@@ -308,10 +316,10 @@ export default class CreateCustom extends React.Component {
             <div id="create-custom-page-wrapper">
                 <h2>Custom Meme Creation</h2>
                 <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letAddTemplate} handleSelectionChange={this.changeSelection} />
+                <DraftList handleDraftSelection={this.handleDraftSelection} />
                 {this.state.showTemplateDetails && 
                     <TemplateDetails template={this.state.selectedTemplate} confirmTemplate={this.confirmTemplate} />
                 }
-                <DraftList handleDraftSelection={this.handleDraftSelection} />
                 {this.state.showTemplateSelection &&
                     <CreateTemplateSelection handleUploadButtonClick={this.selectTemplateUpload} handleCreateButtonClick={this.selectTemplateCreation} />
                 }

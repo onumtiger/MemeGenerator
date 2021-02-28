@@ -63,6 +63,7 @@ export default class TemplatesList extends React.Component {
     handlePlusButtonClick(e) {
         this.props.handleSelectionChange(e.target);
         this.props.handlePlusButtonClick();
+        this.setState({ showNavButtons: false });
     }
 
     /**

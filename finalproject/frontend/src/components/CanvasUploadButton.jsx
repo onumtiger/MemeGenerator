@@ -33,11 +33,11 @@ export default class CanvasUploadButton extends React.Component {
      * @param {event} e 
      */
     handlePublishButtonClick(e) {
+        const formData = this.props.assembleFormData();
+        if (!formData) return;
+
         this.props.canvasRef.current.toBlob((blob) => {
             //toBlob returns a image/png per default, could change with mimeType param but especially with drawn images PNG seems just fine.
-
-            const formData = this.props.assembleFormData();
-            if (!formData) return;
 
             let imageFile = new File([blob], formData.get('name').toString() + '.png', {
                 type: 'image/png'

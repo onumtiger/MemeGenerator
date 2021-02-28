@@ -111,8 +111,8 @@ export default class TemplateDetails extends React.Component {
                                     uses={this.state.templateStats.uses}
                                     date={this.state.templateStats.date}
                                 />
-                                )}
-                            <button type="button" id="confirm-button" class="use-template" onClick={this.props.confirmTemplate}>Use this Template</button>
+                            )}
+                            <button type="button" id="confirm-button" className="use-template" onClick={this.props.confirmTemplate}>Use this Template</button>
                         </div>
                     </div>
                 </div>

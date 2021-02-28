@@ -19,8 +19,6 @@ export default class WYSIWYGEditor extends React.Component {
     this.cElem = () => this.canvasRef.current; //returns the current canvas element
     this.cContext = () => this.canvasRef.current.getContext('2d'); //returns the current drawing object
 
-    this.textBoxes = []; //array containing all captions, each as an instance of class TextBox
-    this.activeTextBoxes = () => this.textBoxes.filter((box) => !box.disabled); //get all non-disabled entries of textBoxes
     this.reset();
 
     this.fontSizeMin = 10;
@@ -80,7 +78,8 @@ export default class WYSIWYGEditor extends React.Component {
    */
   reset() {
     //reset variables
-    this.textBoxes = [];
+    this.textBoxes = []; //array containing all captions, each as an instance of class TextBox
+    this.activeTextBoxes = () => this.textBoxes.filter((box) => !box.disabled); //get all non-disabled entries of textBoxes
     this.selectedTextBoxIndex = -1;
     this.hoveringTextBoxIndex = -1;
     this.draggingTextBox = false;
@@ -88,7 +87,6 @@ export default class WYSIWYGEditor extends React.Component {
     //remove leftover Caption input elements
     let captionContainer = document.querySelector('#wysiwyg-wrapper #in-captions-list');
     if(captionContainer){
-      console.log('!!!',captionContainer.children);
       for(let i=captionContainer.children.length-1; i>0; i--){
         captionContainer.children[i].remove();
       }
@@ -99,9 +97,9 @@ export default class WYSIWYGEditor extends React.Component {
    * Set the template image
    * @param {String} src - path
    * @param {Number} id - id
-   * @param {Boolean} newDraft - if a draft exists, is it a new one?
+   * @param {Function} callback - if one is given, this function will be called once the image is loaded
    */
-  setTemplateImage(src, id, newDraft) {
+  setTemplateImage(src, id, callback) {
     if (src.length) {
       let img = new Image();
       img.src = src;
@@ -124,8 +122,7 @@ export default class WYSIWYGEditor extends React.Component {
           image: img,
           templateId: id
         });
-
-        if (this.props.draft && newDraft) this.applyDraft();
+        if(callback) callback();
       });
     } else {
       this.setState({ image: null, templateId: -1 });
@@ -648,7 +645,9 @@ handlePublishedMeme(memeId) {
    * everything that has to be set when component did mount
    */
   componentDidMount() {
-    this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId, true);
+    this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId, ()=>{
+      if (this.props.draft) this.applyDraft();
+    });
 
     let userId = createTokenProvider.userIdFromToken();
     api.getMemeVisibilityOptions(userId).then((response) => {
@@ -678,12 +677,21 @@ handlePublishedMeme(memeId) {
    * on update
    */
   componentDidUpdate() {
-    let newDraft = this.props.draft != this.prevDraft;
+    let newDraft = this.props.draft && (this.props.draft != this.prevDraft);
     if (newDraft) {
-      this.reset();
-      this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId, newDraft);
-      this.prevDraft = this.props.draft;
+      this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId), ()=>{
+        if(this.props.draft){
+          this.reset();
+          this.applyDraft();
+        }
+      };
+    }else{
+      if(this.props.draft){
+        this.reset();
+        this.applyDraft();
+      }
     }
+    this.prevDraft = this.props.draft;
     this.repaint(false); //no clearing needed as the entire element is replaced
   }
 
