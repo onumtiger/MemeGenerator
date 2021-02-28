@@ -11,7 +11,7 @@ import createTokenProvider from '../api/createTokenProvider';
 class NavBar extends Component {
     logout = () => {
         createTokenProvider.setToken(null);
-        location.reload();
+        window.location.reload();
     }
 
     render() {

@@ -27,6 +27,7 @@ const activateFullVoiceControl = (globalVoiceControlButtonParameter, voiceInputC
     // checks if browser is supporting speech recognition
     if(SpeechRecognition){
         recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
         recognition.continuous = true;
         recognition.start();
         
@@ -103,7 +104,7 @@ const result2 = (event) => {
         Read.readEnglish("Oh okay, previous one!")
         handleVoiceInput("previous_template", "")
     } // USE DRAFT
-    else if(res.includes("draft")&&!(res.includes("save"))){
+    else if((res.includes("draught")||res.includes("draft"))&&!(res.includes("save"))){
         Read.readEnglish("Ok, lets work on your last draft")
         handleVoiceInput("draft", "")
     } // USE THIS TEMPLATE
@@ -116,7 +117,7 @@ const result2 = (event) => {
         listeningToTitle = true
         handleVoiceInput("enter_title", "")
     } // ADD CAPTION
-    else if(res.includes("caption")||res.includes("action")){
+    else if(res.includes("caption")||res.includes("action")||res.includes("captain")){
         Read.readEnglish("Alright, dictate your caption!")
         listeningToCaption = true  
         handleVoiceInput("caption_active", "");
@@ -149,7 +150,7 @@ const result2 = (event) => {
         Read.readEnglish("Yeah nice! It is life!")
         handleVoiceInput("publish", "")
     } // SAVE AS DRAFT
-    else if((res.includes("draft")&&res.includes("save"))||(res.includes("again")&&res.includes("save"))){
+    else if((res.includes("draught")||res.includes("draft")&&res.includes("save"))||(res.includes("again")&&res.includes("save"))){
         Read.readEnglish("Saved as draft!")
         handleVoiceInput("save_draft", "")
     } // SCROLL UP
