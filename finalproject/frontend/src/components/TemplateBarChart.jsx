@@ -2,11 +2,30 @@ import React from "react";
 import * as d3 from "d3";
 import '../style/Charts.scss';
 
+/**
+ * barchart for templates
+ */
 export default class TemplateBarChart extends React.Component {
     constructor(props) {
         super(props);
     }
 
+    /**
+     * displays the date (yyyy/mm/dd) as another notation
+     * @param {String} inputDateString - date String
+     * @returns {String} - date in the format: dd.mm.yyy
+     */
+    getDateString(inputDateString) {
+        let dateArray = inputDateString.split('/');
+        let year = dateArray[0];
+        let month = dateArray[1];
+        let day = dateArray[2];
+        return `${day}.${month}.${year}`
+    }
+
+    /**
+     * create bar chart with D3js
+     */
     drawChart() {
         const { upvotes, downvotes, uses, date } = this.props;
         const w = 630;
@@ -14,20 +33,18 @@ export default class TemplateBarChart extends React.Component {
         const scaleFactor = 3;
         const barWidth = 10;
 
-        console.log("upvotes in template chart: ", upvotes)
-        console.log("downvotes in template chart: ", downvotes)
-        console.log("views in template chart: ", uses)
-
+        //remove previous chart
         let previousChart = document.querySelector(".template-barchart-wrapper .barchart svg")
-        if(previousChart) previousChart.remove();
+        if (previousChart) previousChart.remove();
 
+        //select the tag where the chart will be inserted
         const svg = d3
             .select(".template-barchart-wrapper .barchart")
             .append("svg")
             .attr("width", w)
             .attr("height", h)
             .attr("class", "bar");
-        //upvotes
+        //create upvote bars
         svg
             .selectAll("rect").select(".upVotes")
             .data(upvotes)
@@ -45,7 +62,7 @@ export default class TemplateBarChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        //downvotes
+        //create downvote bars
         svg
             .selectAll("rect").select(".downVotes")
             .data(downvotes)
@@ -63,7 +80,7 @@ export default class TemplateBarChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        //uses
+        //create uses bars
         svg
             .selectAll("rect").select(".viewsBar")
             .data(uses)
@@ -81,7 +98,7 @@ export default class TemplateBarChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        //dates in x-axis as labels
+        //create date labels in x-axis
         svg
             .selectAll("text").select(".dateText")
             .data(date)
@@ -94,26 +111,33 @@ export default class TemplateBarChart extends React.Component {
             .attr('x', (d, i) => {
                 return - 326;
             })
-            .text(d => d)
+            .text(d => this.getDateString(d))
             .attr("transform", "rotate(-90)");
 
-        // Create scale
+        //create scale
+        /**
+         * scaleLinear creates a scale with a linear relationship between input and output
+         */
         var xScale = d3.scaleLinear()
             .domain([])
             .range([0, w / 1.41 + 150]);
 
-        // Add scales to axis
+        //add scales to axis
+        /**
+         * axisBottom constructs a new bottom-oriented axis generator for the given scale
+         */
         var x_axis = d3.axisBottom()
             .scale(xScale);
 
-        //Append group and insert axis
+        //append group and insert axis
         svg.append("g")
             .attr("transform", "translate(30," + (h - 82) + ")")
             .call(x_axis);
 
+        //create y-axis
         var yScale = d3.scaleLinear()
             .domain([0, 100])
-            .range([h-100, 0]);
+            .range([h - 100, 0]);
 
         var y_axis = d3.axisLeft()
             .scale(yScale);
@@ -123,11 +147,17 @@ export default class TemplateBarChart extends React.Component {
             .call(y_axis);
     }
 
-    componentDidMount(){
+    /**
+     * creates chart when component did mount
+     */
+    componentDidMount() {
         this.drawChart();
     }
 
-    componentDidUpdate(){
+    /**
+     * creates chart when component did update
+     */
+    componentDidUpdate() {
         this.drawChart();
     }
 

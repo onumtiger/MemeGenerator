@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import '../style/Charts.scss';
 
 /**
- * creating the barchart for memes
+ * barchart for memes
  */
 export default class MemeBarChart extends React.Component {
     constructor(props) {
@@ -33,9 +33,11 @@ export default class MemeBarChart extends React.Component {
         const scaleFactor = 3;
         const barWidth = 10;
 
+        //remove previous chart
         let previousChart = document.querySelector(".meme-barchart-wrapper .barchart svg")
         if(previousChart) previousChart.remove();
 
+        //select the tag where the chart will be inserted
         const svg = d3
             .select(".meme-barchart-wrapper .barchart")
             .append("svg")

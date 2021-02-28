@@ -5,6 +5,9 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import api from '../api';
 import createTokenProvider from '../api/createTokenProvider';
 
+/**
+ * list of drafts
+ */
 export default class DraftList extends React.Component {
     constructor(props) {
         super(props);
@@ -22,6 +25,10 @@ export default class DraftList extends React.Component {
         });
     }
 
+    /**
+     * handles click on draft
+     * @param {Event} e 
+     */
     handleDraftClick(e) {
         let elem = e.target;
         let id = elem.dataset.draftid;
@@ -31,6 +38,9 @@ export default class DraftList extends React.Component {
         this.props.handleDraftSelection(draft);
     }
 
+    /**
+     * get all drafts when component did mount
+     */
     componentDidMount = async ()=>{
         try{
             let userId = createTokenProvider.userIdFromToken();

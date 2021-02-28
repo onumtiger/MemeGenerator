@@ -1,13 +1,17 @@
 import React, { createRef } from 'react';
-import {CanvasDownloadButton, CanvasUploadButton} from '.';
+import { CanvasDownloadButton, CanvasUploadButton } from '.';
 import '../style/DrawTemplate.scss';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import api from '../api';
 import createTokenProvider from '../api/createTokenProvider';
 
+/**
+ * draw template component
+ */
 export default class DrawTemplate extends React.Component {
-    constructor(props){
+
+    constructor(props) {
         super(props);
         this.canvasRef = createRef();
         this.drawing = false;
@@ -27,7 +31,7 @@ export default class DrawTemplate extends React.Component {
             default: 'Clear Drawing',
             bgToClear: 'Clear Canvas'
         };
-        this.lastPos = {x: -1, y: -1};
+        this.lastPos = { x: -1, y: -1 };
         this.selectedVisibilityElem = null;
 
         this.state = {
@@ -50,71 +54,103 @@ export default class DrawTemplate extends React.Component {
             'handleCamButtonClick',
             'assembleUploadFormData',
             'handleVisibilityOptionCheck'
-        ].forEach((handler)=>{
+        ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
     }
 
-    setCanvasReferences(){
+    /**
+     * set the canvas references
+     */
+    setCanvasReferences() {
         this.cElem = this.canvasRef.current;
         this.cContext = this.canvasRef.current.getContext('2d');
     }
 
+    /**
+     * set the canvas dimensions
+     */
     setCanvasDimensions() {
         let availSpace = document.querySelector('#draw-template-wrapper #canvas-column').offsetWidth;
         //account for canvas border
         availSpace -= 2;
         this.cElem.width = availSpace;
-        this.cElem.height = parseInt(availSpace * (9/16)); //set a 16:9 aspect ratio to accommodate most webcams
+        this.cElem.height = parseInt(availSpace * (9 / 16)); //set a 16:9 aspect ratio to accommodate most webcams
     }
 
+    /**
+     * set the background color of the canvas
+     * @param {String} color 
+     */
     setCanvasBackgroundColor(color) {
         this.cContext.fillStyle = color;
         this.cContext.fillRect(0, 0, this.cElem.width, this.cElem.height);
     }
 
-    setCanvasBackgroundImage(img){
+    /**
+     * set the background image of the canvas
+     * @param {Element} img 
+     */
+    setCanvasBackgroundImage(img) {
         this.clearCanvas();
         this.cContext.drawImage(img, 0, 0, this.cElem.width, this.cElem.height);
     }
 
-    clearCanvas(){
+    /**
+     * clear the canvas
+     */
+    clearCanvas() {
         this.cContext.clearRect(0, 0, this.cElem.width, this.cElem.height);
     }
 
-    handleCanvasMouseDown(e){
+    /**
+     * handle canva on mouse down
+     * @param {Event} e 
+     */
+    handleCanvasMouseDown(e) {
         e = e.nativeEvent; //React events don't have offsetX/Y
 
         this.drawing = true;
-        this.lastPos = {x: e.offsetX, y: e.offsetY};
+        this.lastPos = { x: e.offsetX, y: e.offsetY };
 
         //if we have previously snapped a webcam image and cleared the drawing, the clear button would now clear the entire canvas onClick. Since we now start drawing again, revert the button back to clearing only the drawing first.
-        if(this.snappedImage){
+        if (this.snappedImage) {
             let clearBtn = document.querySelector('#draw-template-wrapper #clear-btn');
-            if(clearBtn.innerText == this.clearButtonTexts.bgToClear){
+            if (clearBtn.innerText == this.clearButtonTexts.bgToClear) {
                 clearBtn.innerText = this.clearButtonTexts.default;
             }
         }
     }
 
-    handleCanvasMouseUp(e){
+    /**
+     * handle canvas on mouse up
+     * @param {Event} e 
+     */
+    handleCanvasMouseUp(e) {
         e = e.nativeEvent; //React events don't have offsetX/Y
-
         this.drawing = false;
     }
 
-    handlePageMouseUp(e){
-        if(this.drawing) this.drawing = false;
+    /**
+     * handle page on mous up
+     * @param {Event} e 
+     */
+    handlePageMouseUp(e) {
+        if (this.drawing) this.drawing = false;
     }
 
-    handleCanvasMouseMove(e){
+    /**
+     * handle mouse move (canvas)
+     * @param {EVent} e 
+     */
+    handleCanvasMouseMove(e) {
         e.stopPropagation(); //don't let the event bubble up to #page-wrapper, that one should only get non-canvas events.
         e = e.nativeEvent; //React events don't have offsetX/Y
 
-        if(this.drawing){
-            if(this.leftCanvas){
+        if (this.drawing) {
+            if (this.leftCanvas) {
                 this.leftCanvas = false;
-            }else{
+            } else {
                 this.cContext.lineWidth = this.strokeWidth;
                 this.cContext.strokeStyle = `rgb(${this.strokeColor.R},${this.strokeColor.G},${this.strokeColor.B}`;
                 this.cContext.beginPath();
@@ -126,75 +162,107 @@ export default class DrawTemplate extends React.Component {
                 //Sometimes, if you're drawing too slow, the canvas doesn't recognize the direction and draws the line in the wrong orientation, which gets more noticeable with increasing line thickness. So let's be safe and add a more paint-like circle on top.
                 this.cContext.fillStyle = `rgb(${this.strokeColor.R},${this.strokeColor.G},${this.strokeColor.B}`;
                 this.cContext.beginPath();
-                this.cContext.arc(e.offsetX, e.offsetY, parseInt(this.strokeWidth/2), 0, 2*Math.PI)
+                this.cContext.arc(e.offsetX, e.offsetY, parseInt(this.strokeWidth / 2), 0, 2 * Math.PI)
                 this.cContext.fill();
             }
-            this.lastPos = {x: e.offsetX, y: e.offsetY};
+            this.lastPos = { x: e.offsetX, y: e.offsetY };
         }
     }
 
-    handlePageMouseMove(e){
+    /**
+     * handle mouse move (page)
+     * @param {Event} e 
+     */
+    handlePageMouseMove(e) {
         e = e.nativeEvent; //React events don't have offsetX/Y
-        
-        if(this.drawing){
+
+        if (this.drawing) {
             this.leftCanvas = true; // triggers that on the next mouseMove inside canvas, lastPos will be updated first thing before any new line will be drawn. This means that the canvas won't try to connect the last in-canvas point with the first in-canvas point after re-entry. Instead, the stroke will just end wherever the mouse left the canvas and start again wherever it re-enters.
         }
     }
 
-    handleStrokeWidthInput(e){
+    /**
+     * hanlde stroke width input
+     * @param {Event} e 
+     */
+    handleStrokeWidthInput(e) {
         let input = e.target.value;
         this.strokeWidth = input;
         document.querySelector('#draw-template-wrapper #label-strokeWidth').textContent = input;
     }
 
-    handleStrokeColorRInput(e){
+    /**
+     * handle stroke color input -> red
+     * @param {Event} e 
+     */
+    handleStrokeColorRInput(e) {
         let input = e.target.value;
         this.strokeColor.R = input;
         document.querySelector('#draw-template-wrapper #label-strokeColorR').textContent = input;
     }
 
-    handleStrokeColorGInput(e){
+    /**
+     * handle stroke color input -> green
+     * @param {Event} e 
+     */
+    handleStrokeColorGInput(e) {
         let input = e.target.value;
         this.strokeColor.G = input;
         document.querySelector('#draw-template-wrapper #label-strokeColorG').textContent = input;
     }
 
-    handleStrokeColorBInput(e){
+    /**
+     * handle stroke color input -> blue
+     * @param {Event} e 
+     */
+    handleStrokeColorBInput(e) {
         let input = e.target.value;
         this.strokeColor.B = input;
         document.querySelector('#draw-template-wrapper #label-strokeColorB').textContent = input;
     }
 
-    handleDownloadButtonClick(e){
+    /**
+     * handle click on download button
+     * @param {Event} e 
+     */
+    handleDownloadButtonClick(e) {
         //get the current canvas image
         let url = this.cElem.toDataURL('image/png');
-        
+
         //download it
         let a = document.querySelector('.canvas-download-anchor');
         a.href = url;
     }
 
-    handleClearButtonClick(e){
-        if(this.snappedImage && e.target.innerText == this.clearButtonTexts.default){
+    /**
+     * handle clear button click
+     * @param {Event} e 
+     */
+    handleClearButtonClick(e) {
+        if (this.snappedImage && e.target.innerText == this.clearButtonTexts.default) {
             this.setCanvasBackgroundImage(this.snappedImage);
             e.target.innerText = this.clearButtonTexts.bgToClear;
-        }else{
+        } else {
             this.setCanvasBackgroundColor(this.canvasBackgroundColor);
-            if(this.snappedImage){
+            if (this.snappedImage) {
                 this.snappedImage = null;
                 e.target.innerText = this.clearButtonTexts.default;
             }
         }
     }
 
-    handleCamButtonClick(e){
+    /**
+     * handle cam button click
+     * @param {Event} e 
+     */
+    handleCamButtonClick(e) {
         let button = e.target;
         let vid = document.querySelector('#draw-template-wrapper #webcam-input');
 
-        if(vid.classList.contains('active')){ //snap a picture on click
+        if (vid.classList.contains('active')) { //snap a picture on click
             //draw the current image on the canvas
             this.setCanvasBackgroundImage(vid);
-            
+
             //store the snapped image for later use
             this.snappedImage = new Image();
             this.snappedImage.src = this.cElem.toDataURL('image/png');
@@ -206,18 +274,18 @@ export default class DrawTemplate extends React.Component {
             vid.classList.remove('active');
 
             //stop the webcam stream
-            vid.srcObject.getTracks().forEach((track)=>{
+            vid.srcObject.getTracks().forEach((track) => {
                 track.stop();
             });
-        }else{ //setup the webcam stream on click
-            let permissionRequest = { audio: false, video: {width: 1280, height: 720, aspectRatio: 16/9} };
-            if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){ //if these are falsy, the browser does not support webcam input
+        } else { //setup the webcam stream on click
+            let permissionRequest = { audio: false, video: { width: 1280, height: 720, aspectRatio: 16 / 9 } };
+            if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) { //if these are falsy, the browser does not support webcam input
                 alert('Your browser does not support webcam input! :/');
                 button.disabled = true;
                 return;
             }
             navigator.mediaDevices.getUserMedia(permissionRequest)
-                .then((stream)=>{ //webcam access is granted
+                .then((stream) => { //webcam access is granted
                     //change the button to snap the current picture
                     button.innerText = this.camButtonTexts.streaming;
 
@@ -242,21 +310,24 @@ export default class DrawTemplate extends React.Component {
         }
     }
 
-    assembleUploadFormData(){
+    /**
+     * assemble all upload form data
+     */
+    assembleUploadFormData() {
         const formData = new FormData();
 
         let titleInput = document.querySelector('#draw-template-wrapper #in-title');
         let enteredTitle = titleInput.value;
-        if(!enteredTitle){
+        if (!enteredTitle) {
             titleInput.classList.add('invalid');
             return;
-        }else{
+        } else {
             titleInput.classList.remove('invalid');
         }
         formData.append('name', enteredTitle);
         let userId = createTokenProvider.userIdFromToken();
         formData.append('userID', userId);
-        if(!this.selectedVisibilityElem){
+        if (!this.selectedVisibilityElem) {
             document.querySelector('#draw-template-wrapper #visibilityOption-wrapper').classList.add('invalid');
             return null;
         }
@@ -265,15 +336,22 @@ export default class DrawTemplate extends React.Component {
         return formData;
     }
 
-    handleVisibilityOptionCheck(e){
+    /**
+     * handle visitbility options 
+     * @param {Event} e 
+     */
+    handleVisibilityOptionCheck(e) {
         let elem = e.target;
-        
-        if(elem.checked){
+
+        if (elem.checked) {
             this.selectedVisibilityElem = elem;
             document.querySelector('#draw-template-wrapper #visibilityOption-wrapper').classList.remove('invalid');
         }
     }
 
+    /**
+     * did mount -> set canvas properties
+     */
     componentDidMount = async () => {
         this.setCanvasReferences();
         this.setCanvasDimensions();
@@ -282,22 +360,25 @@ export default class DrawTemplate extends React.Component {
         this.setCanvasBackgroundColor(this.canvasBackgroundColor);
 
         let userId = createTokenProvider.userIdFromToken();
-        api.getTemplateVisibilityOptions(userId).then((response)=>{
+        api.getTemplateVisibilityOptions(userId).then((response) => {
             this.setState({
                 visibilityOptions: response.data.data,
                 visibilityOptionsLoading: false
             });
-        }).catch(err =>{
-            console.log('Failed to get visibility options: ',err);
+        }).catch(err => {
+            console.log('Failed to get visibility options: ', err);
         });
     }
 
-    componentDidUpdate(){
+    /**
+     * did update -> set canvas references
+     */
+    componentDidUpdate() {
         this.setCanvasReferences();
     }
 
-    render(){
-        let {visibilityOptionsLoading, visibilityOptions} = this.state;
+    render() {
+        let { visibilityOptionsLoading, visibilityOptions } = this.state;
         return (
             <div id="draw-template-wrapper" onMouseMove={this.handlePageMouseMove} onMouseUp={this.handlePageMouseUp}>
                 <h3>Draw Your Own Template!</h3>
@@ -353,15 +434,15 @@ export default class DrawTemplate extends React.Component {
                                             <Loader type="ThreeDots" height={200} width={200} color="#7ab2e1" visible={true} />
                                         </div>
                                     ) : (
-                                        <div id="visibilityOption-wrapper">
-                                        {visibilityOptions.map((vo)=>(
-                                            <p className="visibilityOption" key={'visibilityOption-'+vo.value}>
-                                            <input type="radio" name="visibility" id={"visibility-"+vo.value} value={vo.value} onChange={this.handleVisibilityOptionCheck} />
-                                            <label htmlFor={"visibility-"+vo.value}>{vo.name}</label>
-                                            </p>
-                                        ))}
-                                        </div>
-                                    )}
+                                            <div id="visibilityOption-wrapper">
+                                                {visibilityOptions.map((vo) => (
+                                                    <p className="visibilityOption" key={'visibilityOption-' + vo.value}>
+                                                        <input type="radio" name="visibility" id={"visibility-" + vo.value} value={vo.value} onChange={this.handleVisibilityOptionCheck} />
+                                                        <label htmlFor={"visibility-" + vo.value}>{vo.name}</label>
+                                                    </p>
+                                                ))}
+                                            </div>
+                                        )}
                                 </fieldset>
                                 <button type="button" id="camera-btn" onClick={this.handleCamButtonClick}>{this.camButtonTexts.default}</button>
                                 <button type="button" id="clear-btn" onClick={this.handleClearButtonClick}>{this.clearButtonTexts.default}</button>

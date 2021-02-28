@@ -7,7 +7,7 @@ import imageCompression from 'browser-image-compression';
  * Button to upload created meme in canvas
  */
 export default class CanvasUploadButton extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.buttonTexts = {
@@ -18,48 +18,48 @@ export default class CanvasUploadButton extends React.Component {
         this.state = {
             fileSizeValue: 5000
         };
-        
+
         //this binding for React event handlers
         [
             'handlePublishButtonClick',
             'handleFileSizeChange',
-        ].forEach((handler)=>{
+        ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
     }
 
     /**
-     * handling for publish button
+     * handling for click on publish button
      * @param {event} e 
      */
-    handlePublishButtonClick(e){
-        this.props.canvasRef.current.toBlob((blob)=>{
+    handlePublishButtonClick(e) {
+        this.props.canvasRef.current.toBlob((blob) => {
             //toBlob returns a image/png per default, could change with mimeType param but especially with drawn images PNG seems just fine.
-            
+
             const formData = this.props.assembleFormData();
-            if(!formData) return;
-            
-            let imageFile = new File([blob], formData.get('name').toString()+'.png', {
+            if (!formData) return;
+
+            let imageFile = new File([blob], formData.get('name').toString() + '.png', {
                 type: 'image/png'
             }); //for whatever reason, the File constructor needs the blob as part of an array and cannot deduce the filetype from the input blob
-            imageCompression(imageFile, {maxSizeMB: this.state.fileSizeValue/1000}).then((result)=>{
+            imageCompression(imageFile, { maxSizeMB: this.state.fileSizeValue / 1000 }).then((result) => {
                 //the browser-image-compression package returns a Blob, so let's wrap it back into a file
-                let newFile = new File([result], formData.get('name').toString()+'.png', {
+                let newFile = new File([result], formData.get('name').toString() + '.png', {
                     type: 'image/png'
                 });
                 formData.append('image', newFile);
-            }).catch((err)=>{
-                console.log('Failed to compress file: ',err);
+            }).catch((err) => {
+                console.log('Failed to compress file: ', err);
                 formData.append('image', imageFile);
-            }).finally(()=>{
+            }).finally(() => {
                 e.target.innerText = this.buttonTexts.loading;
-                api[this.props.apiFunctionName](formData).then((res)=>{
-                    if(res.data.success){
+                api[this.props.apiFunctionName](formData).then((res) => {
+                    if (res.data.success) {
                         this.props.uploadSuccessCallback(res.data.id);
                     }
-                }).catch(err =>{
-                    console.log('Failed to send Upload Meme: ',err);
-                }).finally(()=>{
+                }).catch(err => {
+                    console.log('Failed to send Upload Meme: ', err);
+                }).finally(() => {
                     e.target.innerText = this.buttonTexts.default;
                 });
             });
@@ -70,12 +70,12 @@ export default class CanvasUploadButton extends React.Component {
      * handles change of file size
      * @param {Event} e 
      */
-    handleFileSizeChange(e){
+    handleFileSizeChange(e) {
         let val = e.target.value;
-        this.setState({fileSizeValue: val});
+        this.setState({ fileSizeValue: val });
     }
 
-    render(){
+    render() {
         return (
             <div className="canvas-publish-wrapper">
                 <label>

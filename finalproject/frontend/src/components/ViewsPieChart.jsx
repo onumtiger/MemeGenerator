@@ -2,11 +2,17 @@ import React from "react";
 import * as d3 from "d3";
 import '../style/Charts.scss';
 
+/**
+ * views -> pie chart
+ */
 export default class ViewsPieChart extends React.Component {
     constructor(props) {
         super(props);
     }
 
+    /**
+     * draws the chart
+     */
     drawChart() {
         const { views, otherViews } = this.props;
         const portionOtherViews = otherViews-views;
@@ -14,7 +20,6 @@ export default class ViewsPieChart extends React.Component {
         const w = 300;
         const h = 200;
         var radius = Math.min(w, h) / 2     // ensure that the generated pie will fit into the bounds of the SVG
-
         let previousChart = document.querySelector(".viewpiechart .piechart svg")
         if(previousChart) previousChart.remove();
 
@@ -52,10 +57,16 @@ export default class ViewsPieChart extends React.Component {
             .attr("d", arc);
     }
 
+    /**
+     * when mounted -> draw chart
+     */
     componentDidMount(){
         this.drawChart();
     }
 
+    /**
+     * when updated -> draw chart
+     */
     componentDidUpdate(){
         this.drawChart();
     }

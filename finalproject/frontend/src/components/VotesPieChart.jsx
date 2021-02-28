@@ -2,11 +2,17 @@ import React from "react";
 import * as d3 from "d3";
 import '../style/Charts.scss';
 
+/**
+ * voting -> pie charts
+ */
 export default class VotesPieChart extends React.Component {
     constructor(props) {
         super(props);
     }
 
+    /**
+     * draws the chart 
+     */
     drawChart() {
         const { upvotes, downvotes } = this.props;
         var data = [upvotes, downvotes];
@@ -51,10 +57,16 @@ export default class VotesPieChart extends React.Component {
             .attr("d", arc);
     }
 
+    /**
+     * when mounted -> draw chart
+     */
     componentDidMount(){
         this.drawChart();
     }
 
+    /**
+     * when updated -> draw chart
+     */
     componentDidUpdate(){
         this.drawChart();
     }

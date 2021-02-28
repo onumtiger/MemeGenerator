@@ -1,5 +1,9 @@
 import '../style/CreateTemplateSelection.scss';
 
+/**
+ * buttons to select how you want to create a template
+ * @param {*} props //TODO
+ */
 export default function CreateTemplateSelection(props) {
     return (
         <>
