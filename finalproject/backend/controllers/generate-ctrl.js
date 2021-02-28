@@ -22,13 +22,6 @@ const testQueryParams = (req, res) => {
  */
 const getSearchImages = async (req, res) => {
 
-    // expects at least one of these URL query parameters with truthy string values:
-    //  - titleContains: meme title filter, only return memes that (case-insensitively) contain this string in the meme title
-    //  - fileFormat: one or multiple (separated by the '|' character) file extensions, only return memes that are of these file types
-    //  - maxImages: only return the first x matching memes
-    // example:
-    // http://localhost:3001/api/external/getImages?titleContains=Jan&fileFormat=png|jpg&maxImages=10
-
     try {
         const { titleContains, fileFormat, maxImages } = req.query;
         let zipArray = []; // needed for zip saving
@@ -87,52 +80,7 @@ const getSearchImages = async (req, res) => {
  * @param {Request} req - Express Request Object
  * @param {Response} req - Express Response Object
  */
-const executeImageCreation = async (req, res) => {
-
-    //TODO: Delete this array for submission
-
-    // URL query parameters - expected form:
-    // http://localhost:3001/api/external?images[0][name]=name1&images[0][captions][0][x]=10&images[0][captions][0][y]=10&images[0][captions][0][text]=caption1&images[0][captions][0][textColor]=%23ff3333&images[0][captions][1][x]=80&images[0][captions][1][y]=80&images[0][captions][1][text]=caption2&images[0][captions][1][textColor]=%2333ffff&images[1][name]=name2&images[1][captions][0][x]=10&images[1][captions][0][y]=10&images[1][captions][0][text]=caption3&images[1][captions][0][textColor]=%23d24dff&images[1][captions][1][x]=80&images[1][captions][1][y]=80&images[1][captions][1][text]=caption4&images[1][captions][1][textColor]=%23d9ff66&templateURL=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg
-    // translates to:
-    // {
-    //     templateURL: 'https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg', //URIEncoded template image URL
-    //     images: [
-    //         {
-    //             name: 'name1', //filename, .png will be appended. if this name already exists or none is given, another name will be chosen
-    //             captions: [
-    //                 {
-    //                     x: '10',
-    //                     y: '10',
-    //                     textColor: '%23ff3333', // hex color of text (URIEncoded!)
-    //                     text: 'caption1'
-    //                 },
-    //                 {
-    //                     x: '80',
-    //                     y: '80',
-    //                     textColor: '%2333ffff', // hex color of text (URIEncoded!)
-    //                     text: 'caption2'
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             name: 'name2', //filename, .png will be appended. if this name already exists or none is given, another name will be chosen
-    //             captions: [
-    //                 {
-    //                     x: '10',
-    //                     y: '10',
-    //                     textColor: '%23d24dff', // hex color of text (URIEncoded!)
-    //                     text: 'caption3'
-    //                 },
-    //                 {
-    //                     x: '80',
-    //                     y: '80',
-    //                     textColor: '%23d9ff66', // hex color of text (URIEncoded!)
-    //                     text: 'caption4'
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // }
+const executeImageCreation = async (req, res) => {  
 
     const { images, templateURL } = req.query;
     let zipArray = []; // needed for zip saving

@@ -30,13 +30,75 @@ The React app will open in development mode on localhost:3000, while the Express
 - To enable testing the backend server needs to be available
 - **Start the Server:** navigate into our `./backend` folder and run ``npm start``
 - The test check the frontend backend connection
-- **Run the Tets:** navigate intro our `./frontend` folder and run ``npm test ``
+- **Run the Test:** navigate into our `./frontend` folder and run ``npm test ``
 ## External tech we used during development
 
 - The React frontend was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-- The Express backend was generated with [express-generator](https://www.npmjs.com/package/express-generator). (TODO was it, still?)
 - The login/sign up screen UI was taken (changed afterwards) from the following source (https://codepen.io/FlorinPop17/pen/vPKWjd)
 - The API image creation is using the "JavaScript Image Manipulation Program"  - JIMP (https://www.npmjs.com/package/jimp)
 - The voice control and text reading function is based on the Web Speech Api (https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 - Creating a meme in our site is also possible via the ImgFlip API (https://imgflip.com/api)
+- The charts were created with D3.js, a JavaScript library for manipulating documents based on data (https://d3js.org)
 
+## How to use our (image creation) API:
+
+- (1) Image generation: 
+
+    URL query parameters - expected form:
+    http://localhost:3001/api/external?images[0][name]=name1&images[0][captions][0][x]=10&images[0][captions][0][y]=10&images[0][captions][0][text]=caption1&images[0][captions][0][textColor]=%23ff3333&images[0][captions][1][x]=80&images[0][captions][1][y]=80&images[0][captions][1][text]=caption2&images[0][captions][1][textColor]=%2333ffff&images[1][name]=name2&images[1][captions][0][x]=10&images[1][captions][0][y]=10&images[1][captions][0][text]=caption3&images[1][captions][0][textColor]=%23d24dff&images[1][captions][1][x]=80&images[1][captions][1][y]=80&images[1][captions][1][text]=caption4&images[1][captions][1][textColor]=%23d9ff66&templateURL=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg
+
+    translates to:
+    {
+        templateURL: 'https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg', //URIEncoded template image URL
+        images: [
+            {
+                name: 'name1', //filename, .png will be appended. if this name already exists or none is given, another name will be chosen
+                captions: [
+                    {
+                        x: '10',
+                        y: '10',
+                        textColor: '%23ff3333', // hex color of text (URIEncoded!)
+                        text: 'caption1'
+                    },
+                    {
+                        x: '80',
+                        y: '80',
+                        textColor: '%2333ffff', // hex color of text (URIEncoded!)
+                        text: 'caption2'
+                    }
+                ]
+            },
+            {
+                name: 'name2', //filename, .png will be appended. if this name already exists or none is given, another name will be chosen
+                captions: [
+                    {
+                        x: '10',
+                        y: '10',
+                        textColor: '%23d24dff', // hex color of text (URIEncoded!)
+                        text: 'caption3'
+                    },
+                    {
+                        x: '80',
+                        y: '80',
+                        textColor: '%23d9ff66', // hex color of text (URIEncoded!)
+                        text: 'caption4'
+                    }
+                ]
+            }
+        ]
+    } 
+
+
+- (2) Get a specific set of images using search parameters (provided as a zip file):
+
+    URL query parameters - expected form (example):
+    http://localhost:3001/api/external/getImages?titleContains=Jan&fileFormat=png|jpg&maxImages=10
+
+    It expects at least one of these URL query parameters with truthy string values:
+
+     - titleContains: meme title filter, only return memes that (case-insensitively) contain this string in the meme title
+     - fileFormat: one or multiple (separated by the '|' character) file extensions, only return memes that are of these file types
+     - maxImages: only return the first x matching memes
+
+  
+    
