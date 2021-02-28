@@ -1,5 +1,4 @@
-// const env = require('../../../backend/env.json')
-const env = require('./env.json') //TODO workaround for error due to unsupported relative import outside of src/ above
+const env = require('../../env.json') 
 const jwt = require('jsonwebtoken')
 
 
