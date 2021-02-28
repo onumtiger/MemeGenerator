@@ -15,6 +15,18 @@ describe("user controller test", () => {
         })).toBe(201);
       });
 
+    it('should indicate unsuccessful sign up', async () => {
+        const cred = {
+            signupEmail: "doeTest@test.de",
+            signupUsername: "doetest",
+            signupPassword: "doe"
+        }
+
+        expect(await apis.signup(cred).then((res) =>{
+            return res.status
+        })).toBe(409);
+      });
+
     it('should successfully login with username', async () => {
         const cred = {
             loginCred: "doetest",
@@ -24,6 +36,26 @@ describe("user controller test", () => {
             token = res.data.token
             return res.status
         })).toBe(200);
+      });
+
+      it('should indicate unsuccessfully login with username', async () => {
+        const cred = {
+            loginCred: "doetest1",
+            loginPassword: "doe"
+        }
+        expect(await apis.login(cred).then((res) =>{
+            return res.status
+        })).toBe(401);
+      });
+
+      it('should indicate unsuccessfully login with email', async () => {
+        const cred = {
+            loginCred: "doetest1@test.de",
+            loginPassword: "doe"
+        }
+        expect(await apis.login(cred).then((res) =>{
+            return res.status
+        })).toBe(401);
       });
 
     it('should successfully login with email', async () => {
