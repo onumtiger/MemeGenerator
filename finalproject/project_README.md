@@ -48,6 +48,40 @@ The React app will open in development mode on localhost:3000, while the Express
 - Jest (https://www.npmjs.com/package/jest) is a testing library which enables automated testing. It can be modified in several ways to enbale e.g. UI testing using puppeteer.
 - cors (https://www.npmjs.com/package/cors) is used to enable middleware usage
 
+## How to use our voice control:
+
+- The voice control only recognizes english language
+- It is active by clicking the "enable voice control" button within the "Custom Meme Creation" page
+- It stops when re-clicking on the same button or by saying the keywords "stop" or "thank you", alone or within a sentence
+- The voice control is answering after every voice input, so if there is no answer then there is something broken
+- The voice recognition is capable of understanding 90% of the page input possibilities, thus 90% of the pages functionality
+
+    (FUNCTION), (VOICE INPUT EXAMPLE)
+    -> Choose template (Y), example: "Choose template number one"
+    -> Create new template (Y), example: "Create a new template"
+    -> Use draft (Y), example: "Use draft"
+    -> Next template (Y), example: "Next template"
+    -> Previous template (Y), example: "Previous template"
+    -> Use this template (Y), example: "Use this template"
+    -> Create own image (Y), example: "Create own image"
+    -> Upload external image (Y), example: "Upload external image"
+    -> Entering a title (Y), example: "Enter title" (asking which title then)
+    -> Adding captions (Y), example: "Add caption"
+    -> Specific font styling (N), not supported now, but answers when asked to do so
+    -> Setting visibility (Y), example: "set to public"
+    -> Saving as draft (Y), example: "Save as draft"
+    -> Saving as new draft (Y), example: "Save as new draft"
+    -> Download image (Y), example: "download image"
+    -> Publish image (Y), example: "publish image"
+
+    -> If the recognition did not understand the voice input it asks you to say a command one more time 
+    -> If the voice control is not feeling confident with what she/he understood, she/he will say that
+
+    -> (gender equality), we encountered that the voice control is a man on apple devices and a women on windows devices
+    -> Furthermore we are pretty confident that the voice control is working better when no other program uses the microphone at the same time (this may be subjective and perhaps caused by some other disturbing sounds when connected to another voice channel like discord)
+    -> Only working on Google Chrome, but checked and handled when used by another browser. 
+
+
 ## How to use our (image creation) API:
 
 - (1) Image generation: 
