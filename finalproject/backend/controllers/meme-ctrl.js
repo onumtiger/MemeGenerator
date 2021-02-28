@@ -8,7 +8,7 @@ const IDManager = require('../db/id-manager');
 const constants = require('../utils/constants');
 const globalHelpers = require('../utils/globalHelpers');
 const idManager = require('../db/id-manager');
-
+const webcontentCtrl = require('./webcontent-ctrl');
 
 /**
  * create new meme
@@ -43,8 +43,18 @@ const createMeme = async (req, res) => {
         });
     } else if (body.imageURL) {
         body.id = IDManager.getNewEmptyMemeID();
-        body.url = body.imageURL;
-        saveMeme(body, res);
+        
+        try {
+            let localURL = await webcontentCtrl.loadAndStoreImageFromWeb(body.imageURL, 'memes');
+            body.url = localURL;
+            saveMeme(body, res);
+        }catch(err){
+            console.log('Failed to load remote meme', err.toString());
+            return res.status(500).json({
+                success: false,
+                error: 'Could not load remote meme!'
+            });
+        }
 
     } else {
         return res.status(400).json({

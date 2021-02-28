@@ -3,6 +3,7 @@ const TemplateStats = require('../db/models/templatestats-model');
 const IDManager = require('../db/id-manager');
 const constants = require('../utils/constants');
 const globalHelpers = require('../utils/globalHelpers');
+const webcontentCtrl = require('./webcontent-ctrl');
 
 /**
  * creates and saves am new template into the db
@@ -38,8 +39,17 @@ const createTemplate = async (req, res) => {
         });
     } else if (body.imageURL) {
         body.id = IDManager.getNewEmptyTemplateID();
-        body.url = body.imageURL;
-        saveTemplate(body, res);
+        try {
+            let localURL = await webcontentCtrl.loadAndStoreImageFromWeb(body.imageURL, 'templates');
+            body.url = localURL;
+            saveTemplate(body, res);
+        }catch(err){
+            console.log('Failed to load remote template', err.toString());
+            return res.status(500).json({
+                success: false,
+                error: 'Could not load remote template!'
+            });
+        }
 
     } else {
         return res.status(400).json({

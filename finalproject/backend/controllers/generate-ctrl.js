@@ -6,6 +6,16 @@ const Meme = require('../db/models/meme-model');
  */
 
 /**
+ * test how given URL query parameters are parsed into JSON
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
+ */
+const testQueryParams = (req, res) => {
+    console.log(req.query);
+    res.status(200).json(req.query);
+}
+
+/**
  * User calls API with search parameters, the HTTP response will be a zip file with the resulting images or a JSON object with an error message if mandatory parameters were omitted. Zip files will never contain more than 20 images.
  * @param {Request} req - Express Request Object
  * @param {Response} res - Express Response Object
@@ -187,5 +197,6 @@ const captionImage = async (template, font, captions, fileName) => {
 
 module.exports = {
     executeImageCreation,
-    getSearchImages
+    getSearchImages,
+    testQueryParams
 }
