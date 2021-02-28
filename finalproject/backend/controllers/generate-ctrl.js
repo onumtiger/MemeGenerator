@@ -59,7 +59,6 @@ const getSearchImages = async (req, res) => {
 
         // PUSH THE MEMES INTO ARRAY
         for (i = 0; (i < (memes.length) && i < hardLimit); i++) {
-            console.log("i", i)
             let path = memes[i].url
             //path              name
             zipArray.push({ path: './public' + path, name: path });

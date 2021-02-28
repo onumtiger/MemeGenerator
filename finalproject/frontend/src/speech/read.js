@@ -8,7 +8,6 @@ const readEnglish = (text) => {
     var utterThis = new SpeechSynthesisUtterance(text);
     utterThis.lang = 'en-US';
     synth.speak(utterThis);
-    console.log("tries to speak english");
 }
 
 /**

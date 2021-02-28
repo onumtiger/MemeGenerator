@@ -564,7 +564,6 @@ handlePublishedMeme(memeId) {
    * @param {Event} e 
    */
   handleDraftButtonClick(e) {
-    console.log("draft saved")
     let elem = e.target;
     
     let userId = createTokenProvider.userIdFromToken();

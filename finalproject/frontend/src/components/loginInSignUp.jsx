@@ -192,7 +192,6 @@ class loginInSignUp extends Component {
                 </div>
                 <div className="form-container" id="sign-in-container">
                     <form action="#">
-                        {/* TODO ACTUALLY require email & username... */}
                         <h1>Sign in</h1>
                         <input required type="text" placeholder="Email or Username" onChange={this.handleChangeInputLoginCred}/>
                         <input required type="password" placeholder="Password" onChange={this.handleChangeInputLoginPassword}/>

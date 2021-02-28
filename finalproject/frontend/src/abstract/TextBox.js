@@ -188,10 +188,9 @@ export default class TextBox {
         c.fillText(this.text, this.startX, this.startY); //draw the filled font without shadow
     }
 
-    // TODO set color TYPE
     /**
      * draw the outline
-     * @param {*} color - color
+     * @param {CSSColor} color - color
      */
     drawOutline(color) {
         //get the canvas drawing context

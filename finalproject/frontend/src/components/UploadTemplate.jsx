@@ -126,10 +126,9 @@ export default class UploadTemplate extends React.Component {
         }
     }
 
-    //TODO: add highlight type
     /**
-     * drop zone 
-     * @param {*} toHighlight 
+     * sets drop zone highlighting
+     * @param {Boolean} toHighlight - whether or not to highlight the drop zone
      */
     setDropZoneHighlighting(toHighlight){
         let elem = document.querySelector('#upload-template-table .dropzone');
