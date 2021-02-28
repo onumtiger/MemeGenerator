@@ -24,13 +24,13 @@ const resetDB = async() => {
 
     var defaultMeme = {
         _id: 0,
-        url: '/memes/jan_domi_zusammentreffen.png',
-        captions: ['Domi', 'Jan Jbernolte'],
-        name: 'Jan und Domi unterwegs',
+        url: '/memes/4_Andreas.png',
+        captions: ['Andreas'],
+        name: 'Andreas',
         comment_ids: [6],
         user_id: 0,
-        template_id: 1,
-        visibility: 0,
+        template_id: 6,
+        visibility: 2,
         creationDate: "2021/02/12",
         stats: {
             upvotes: [0, 2],
@@ -42,12 +42,12 @@ const resetDB = async() => {
 
     var defaultMeme2 = {
         _id: 1,
-        url: '/memes/jan_domi_punch.png',
-        captions: ['Domi', 'Jan Obernolte'],
-        name: 'Jan und Domis Gefühle füreinander',
+        url: '/memes/kunstwerk.png',
+        captions: ['abstrakte', 'Kunst'],
+        name: 'Kann das Weg?',
         comment_ids: [0, 1, 2, 3],
         user_id: 1,
-        template_id: 0,
+        template_id: 9,
         visibility: 2,
         creationDate: "2021/02/13",
         stats: {
@@ -60,12 +60,12 @@ const resetDB = async() => {
 
     var defaultMeme3 = {
         _id: 2,
-        url: '/memes/jan_domi_cat.jpg',
-        captions: ['Dominik', 'Jan Obernolte'],
-        name: 'Jan als Katze',
+        url: '/memes/OMM2.png',
+        captions: ['OMM'],
+        name: 'OMM',
         comment_ids: [4, 5],
         user_id: 2,
-        template_id: 1,
+        template_id: 2,
         visibility: 2,
         creationDate: "2021/02/14",
         stats: {
@@ -96,12 +96,12 @@ const resetDB = async() => {
 
     var defaultMeme5 = {
         _id: 4,
-        url: '/memes/AfterOMM.png',
-        captions: ['OMM'],
-        name: 'Crying out of happiness',
+        url: '/memes/3_CreatedMeme.png',
+        captions: ['I am once again asking'],
+        name: 'What?',
         comment_ids: [],
         user_id: 0,
-        template_id: 8,
+        template_id: 0,
         visibility: 2,
         creationDate: "2021/02/25",
         stats: {
@@ -113,18 +113,18 @@ const resetDB = async() => {
     IDManager.registerNewMemeEntry();
 
     var defaultMeme6 = {
-        _id: 4,
-        url: '/memes/derBums.png',
-        captions: ['jetzt geht der Bums aber'],
-        name: 'Alles muss funktionieren',
+        _id: 5,
+        url: '/memes/7_ChauDomi-kleinerSpa.png',
+        captions: ['Chau', 'Domi'],
+        name: 'Witzkekse',
         comment_ids: [],
         user_id: 2,
-        template_id: 0,
+        template_id: 3,
         visibility: 2,
         creationDate: "2021/02/24",
         stats: {
-            upvotes: [2],
-            downvotes: [3, 0, 1],
+            upvotes: [2, 0, 1],
+            downvotes: [0, 1],
             views: 0
         }
     };
@@ -263,7 +263,21 @@ const resetDB = async() => {
     };
     IDManager.registerNewTemplateEntry();
 
-    await db.collection('templates').insertMany([defaultTemplate, defaultTemplate2, defaultTemplate3, defaultTemplate4, defaultTemplate5, defaultTemplate6, defaultTemplate7, defaultTemplate8, defaultTemplate9]);
+    var defaultTemplate10 = {
+        _id: 9,
+        url: '/templates/0_drawnimage.png',
+        name: 'drawn image',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    };
+    IDManager.registerNewTemplateEntry();
+
+    await db.collection('templates').insertMany([defaultTemplate, defaultTemplate2, defaultTemplate3, defaultTemplate4, defaultTemplate5, defaultTemplate6, defaultTemplate7, defaultTemplate8, defaultTemplate9, defaultTemplate10]);
     console.log("Default templates inserted");
 
     // mongoose lokal db USER reset, without SCHMEMA
