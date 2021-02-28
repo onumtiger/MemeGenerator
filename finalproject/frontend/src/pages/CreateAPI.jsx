@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import api from '../api';
-
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-
 import '../style/CreateAPI.scss';
 
+/**
+ * create via API
+ */
 class CreateAPI extends Component { //TODO visibility options styling
     constructor(props) {
         super(props);
@@ -23,7 +24,7 @@ class CreateAPI extends Component { //TODO visibility options styling
             visibilityOptionsLoading: true,
             visibilityOptions: []
         };
-        
+
         this.generateButtonTexts = {
             default: 'Generate Meme',
             loading: 'Generating...'
@@ -35,36 +36,50 @@ class CreateAPI extends Component { //TODO visibility options styling
         };
         this.selectedVisibilityElem = null;
         this.captions = [];
-        
+
         //this binding for React event handlers
         [
             'handleTemplateClick',
             'handleGenerateButtonClick',
             'handleVisibilityOptionCheck',
             'handlePublishButtonClick',
-        ].forEach((handler)=>{
+        ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
     }
 
-    changeTemplateSelection(selectedElem){
+    /**
+     * change selected template
+     * @param {*} selectedElem 
+     */
+    changeTemplateSelection(selectedElem) {
         let prevSelection = document.querySelector('#create-api-page-wrapper #template-container .selected');
         if (prevSelection) prevSelection.classList.remove('selected');
-        if(selectedElem) selectedElem.classList.add('selected');
+        if (selectedElem) selectedElem.classList.add('selected');
     }
 
-    handleTemplateClick(e){
+    /**
+     * handles template click
+     * @param {*} e 
+     */
+    handleTemplateClick(e) {
         let elem = e.target;
-        let template = this.state.templates.find((t)=>(t.url == elem.src));
+        let template = this.state.templates.find((t) => (t.url == elem.src));
         this.changeTemplateSelection(elem);
-        this.setState({currentTemplate: {
-            id: template.id,
-            url: template.url,
-            name: template.name,
-            box_count: template.box_count
-        }});
+        this.setState({
+            currentTemplate: {
+                id: template.id,
+                url: template.url,
+                name: template.name,
+                box_count: template.box_count
+            }
+        });
     }
 
+    /**
+     * handles "generate" button
+     * @param {*} e 
+     */
     handleGenerateButtonClick = async (e) => {
         let params = {
             template_id: this.state.currentTemplate.id,
@@ -73,14 +88,14 @@ class CreateAPI extends Component { //TODO visibility options styling
         };
         let inputElems = document.querySelectorAll('#create-api-page-wrapper input');
         this.captions = [];
-        for(let i=0; i<this.state.currentTemplate.box_count; i++){
-            params['boxes['+i+'][text]'] = inputElems[i].value;
+        for (let i = 0; i < this.state.currentTemplate.box_count; i++) {
+            params['boxes[' + i + '][text]'] = inputElems[i].value;
             this.captions.push(inputElems[i].value);
         }
         let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
         e.target.textContent = this.generateButtonTexts.loading;
-        try{
+        try {
             let response = await fetch('https://api.imgflip.com/caption_image', {
                 method: 'POST',
                 headers: {
@@ -90,35 +105,43 @@ class CreateAPI extends Component { //TODO visibility options styling
             });
             let resJson = await response.json();
             e.target.textContent = this.generateButtonTexts.default;
-            if(resJson.success){
+            if (resJson.success) {
                 this.setState({
                     generatedMemeURL: resJson.data.url
                 });
             }
-        }catch(err){
-            console.log('Failed to generate meme: ',err);
+        } catch (err) {
+            console.log('Failed to generate meme: ', err);
             e.target.textContent = this.generateButtonTexts.default;
         }
     }
 
-    handleVisibilityOptionCheck(e){
-        if(e.target.checked){
+    /**
+     * handles visibility
+     * @param {*} e 
+     */
+    handleVisibilityOptionCheck(e) {
+        if (e.target.checked) {
             this.selectedVisibilityElem = e.target;
             document.querySelector('#create-api-page-wrapper #visibilityOption-wrapper').classList.remove('invalid');
         }
     }
 
-    handlePublishButtonClick = async(e)=>{
+    /**
+     * handles publishing
+     * @param {*} e 
+     */
+    handlePublishButtonClick = async (e) => {
         //collect all necessary data and check if anything is missing
         const formData = new FormData();
 
         //check for a given meme title
         let titleInput = document.querySelector('#create-api-page-wrapper #in-title');
         let enteredTitle = titleInput.value;
-        if(!enteredTitle){
+        if (!enteredTitle) {
             titleInput.classList.add('invalid');
             return;
-        }else{
+        } else {
             titleInput.classList.remove('invalid');
         }
 
@@ -129,7 +152,7 @@ class CreateAPI extends Component { //TODO visibility options styling
         formData.append('userID', 0); //TODO get current userID
 
         //check for a selected visibility
-        if(!this.selectedVisibilityElem){
+        if (!this.selectedVisibilityElem) {
             document.querySelector('#create-api-page-wrapper #visibilityOption-wrapper').classList.add('invalid');
             return;
         }
@@ -140,7 +163,7 @@ class CreateAPI extends Component { //TODO visibility options styling
         //add meme image URL and caption texts
         formData.append('imageURL', this.state.generatedMemeURL);
         formData.append('captions', this.captions);
-        
+
         //all data seems to be there, we have to upload the template first though. So let's assemble the data for that:
         let templateParams = {
             imageURL: this.state.currentTemplate.url,
@@ -148,70 +171,73 @@ class CreateAPI extends Component { //TODO visibility options styling
             userID: 0, //TODO userID
             visibility: 2 //public template
         };
-        
+
         let templateID;
 
         //upload the template
         e.target.textContent = this.publishButtonTexts.loading_template;
-        try{
+        try {
             let response = await api.insertTemplate(templateParams);
             templateID = response.data.id;
-        }catch(err){
-            console.log('Failed to publish template: ',err);
+        } catch (err) {
+            console.log('Failed to publish template: ', err);
             e.target.textContent = this.publishButtonTexts.default;
             return;
         }
 
         //append the new templateID to the formData
         formData.append('templateID', templateID);
-        
+
         //upload the meme
         e.target.textContent = this.publishButtonTexts.loading_meme;
-        try{
+        try {
             let response = await api.insertMeme(formData);
             let memeID = response.data.id;
-            this.props.history.push('/memes/view/'+memeID);
-        }catch(err){
-            console.log('Failed to publish meme: ',err);
+            this.props.history.push('/memes/view/' + memeID);
+        } catch (err) {
+            console.log('Failed to publish meme: ', err);
         }
         e.target.textContent = this.publishButtonTexts.default;
     }
 
-    componentDidMount = async()=>{
-        try{
+    /**
+     * gets memes from imgflip API
+     */
+    componentDidMount = async () => {
+        try {
             let response = await fetch('https://api.imgflip.com/get_memes');
             let resJson = await response.json();
-            if(resJson.success){
+            if (resJson.success) {
                 this.setState({
                     templates: resJson.data.memes,
                     templatesLoading: false
                 });
             }
-        }catch(err){
-            console.log('Failed to get templates from ImgFlip: ',err);
+        } catch (err) {
+            console.log('Failed to get templates from ImgFlip: ', err);
         }
 
-        try{
+        try {
             //TODO insert actual userId
             let response = await api.getMemeVisibilityOptions(0);
             this.setState({
                 visibilityOptions: response.data.data,
                 visibilityOptionsLoading: false
             });
-        }catch(err){
-            console.log('Failed to get visibility options: ',err);
+        } catch (err) {
+            console.log('Failed to get visibility options: ', err);
         }
     }
 
     render() {
         const { templatesLoading, templates, currentTemplate, generatedMemeURL, visibilityOptionsLoading, visibilityOptions } = this.state;
 
-        let captionInputs=[];
-        for(let i=0; i<currentTemplate.box_count; i++){
+        let captionInputs = [];
+        for (let i = 0; i < currentTemplate.box_count; i++) {
             captionInputs.push(
                 <>
-                <label htmlFor={'caption_'+i}>Caption #{i}:</label>
-                <input id={'caption_'+i} className="form-control" type="text" placeholder="Enter a Caption Text..." />
+                    <label htmlFor={'caption_' + i}>Caption #{i}:</label>
+                    <input id={'caption_' + i} className="form-control" type="text" placeholder="Enter a Caption Text..." />
                 </>
             );
         }
@@ -226,47 +252,47 @@ class CreateAPI extends Component { //TODO visibility options styling
                             <Loader type="ThreeDots" height={200} width={200} color="#7ab2e1" visible={true} />
                         </div>
                     ) : (
-                        templates.map((t)=>(
-                            <img src={t.url} alt={t.name} title={t.name} onClick={this.handleTemplateClick} key={'template-'+t.id} />
-                        ))
-                    )}
+                            templates.map((t) => (
+                                <img src={t.url} alt={t.name} title={t.name} onClick={this.handleTemplateClick} key={'template-' + t.id} />
+                            ))
+                        )}
                 </div>
 
                 {currentTemplate.url && !generatedMemeURL && (
                     <>
-                    <img id="template-current" src={currentTemplate.url} alt={currentTemplate.name} title={currentTemplate.name} />
-                
-                    <div id="caption-inputs-wrapper">
-                        {captionInputs}
-                    </div>
-                
-                    <button type="button" id="generate-btn" onClick={this.handleGenerateButtonClick}>{this.generateButtonTexts.default}</button>
+                        <img id="template-current" src={currentTemplate.url} alt={currentTemplate.name} title={currentTemplate.name} />
+
+                        <div id="caption-inputs-wrapper">
+                            {captionInputs}
+                        </div>
+
+                        <button type="button" id="generate-btn" onClick={this.handleGenerateButtonClick}>{this.generateButtonTexts.default}</button>
                     </>
                 )}
-                
+
                 {generatedMemeURL && (
                     <>
-                    <input id="in-title" type="text" placeholder={`Enter a name for your ${currentTemplate.name} meme...`} />
-                    <img id="generated-img" src={generatedMemeURL} alt="Your generated Meme" title="Your generated Meme" />
-                    
-                    <fieldset>
-                        <legend>Visibility</legend>
-                        {visibilityOptionsLoading ? (
-                            <div id="view-page-loader">
-                                <Loader type="ThreeDots" height={200} width={200} color="#7ab2e1" visible={true} />
-                            </div>
-                        ) : (
-                            <div id="visibilityOption-wrapper">
-                            {visibilityOptions.map((vo)=>(
-                                <p className="visibilityOption" key={'visibilityOption-'+vo.value}>
-                                <input type="radio" name="visibility" id={"visibility-"+vo.value} value={vo.value} onChange={this.handleVisibilityOptionCheck} />
-                                <label htmlFor={"visibility-"+vo.value}>{vo.name}</label>
-                                </p>
-                            ))}
-                            </div>
-                        )}
-                    </fieldset>
-                    <button type="button" id="publish-btn" onClick={this.handlePublishButtonClick}>{this.publishButtonTexts.default}</button>
+                        <input id="in-title" type="text" placeholder={`Enter a name for your ${currentTemplate.name} meme...`} />
+                        <img id="generated-img" src={generatedMemeURL} alt="Your generated Meme" title="Your generated Meme" />
+
+                        <fieldset>
+                            <legend>Visibility</legend>
+                            {visibilityOptionsLoading ? (
+                                <div id="view-page-loader">
+                                    <Loader type="ThreeDots" height={200} width={200} color="#7ab2e1" visible={true} />
+                                </div>
+                            ) : (
+                                    <div id="visibilityOption-wrapper">
+                                        {visibilityOptions.map((vo) => (
+                                            <p className="visibilityOption" key={'visibilityOption-' + vo.value}>
+                                                <input type="radio" name="visibility" id={"visibility-" + vo.value} value={vo.value} onChange={this.handleVisibilityOptionCheck} />
+                                                <label htmlFor={"visibility-" + vo.value}>{vo.name}</label>
+                                            </p>
+                                        ))}
+                                    </div>
+                                )}
+                        </fieldset>
+                        <button type="button" id="publish-btn" onClick={this.handlePublishButtonClick}>{this.publishButtonTexts.default}</button>
                     </>
                 )}
             </div>

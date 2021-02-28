@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
 import { MemeVoteCounter } from '../components';
 import api from '../api';
-
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-
 import createTokenProvider from '../api/createTokenProvider';
-
 import '../style/MyMemes.scss';
 
+/**
+ * list of own memes (user)
+ */
 export default class MyMemes extends Component {
 
     constructor(props) {
@@ -25,6 +24,10 @@ export default class MyMemes extends Component {
         };
     }
 
+    /**
+     * get the acutal date
+     * @param {*} inputDateString 
+     */
     getDateString(inputDateString) {
         let dateArray = inputDateString.split('/');
         let year = dateArray[0];
@@ -33,6 +36,9 @@ export default class MyMemes extends Component {
         return `${day}.${month}.${year}`
     }
 
+    /**
+     * get own memes
+     */
     componentDidMount = async () => {
         
         console.log('! userID',createTokenProvider.userIdFromToken());

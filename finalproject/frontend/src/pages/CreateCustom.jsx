@@ -46,6 +46,10 @@ export default class CreateCustom extends React.Component {
         });
     }
 
+    /**
+     * handle template selection
+     * @param {*} e 
+     */
     letAddTemplate(e){
         this.setState({
             showTemplateSelection: true,
@@ -54,6 +58,9 @@ export default class CreateCustom extends React.Component {
         });
     }
 
+    /**
+     * "upload" selected
+     */
     selectTemplateUpload(){
         this.setState({
             showTemplateSelection: false,
@@ -61,6 +68,9 @@ export default class CreateCustom extends React.Component {
         });
     }
 
+    /**
+     * create template
+     */
     selectTemplateCreation(){
         this.setState({
             showTemplateSelection: false,
@@ -68,6 +78,10 @@ export default class CreateCustom extends React.Component {
         });
     }
 
+    /**
+     * selecte a specific template
+     * @param {*} template 
+     */
     selectTemplate(template){ //src, id
         this.setState({
             showTemplateSelection: false,
@@ -78,6 +92,9 @@ export default class CreateCustom extends React.Component {
         });
     }
 
+    /**
+     * confirm the template
+     */
     confirmTemplate() {
         let src = this.state.selectedTemplate.url;
         let id = this.state.selectedTemplate._id;
@@ -97,6 +114,10 @@ export default class CreateCustom extends React.Component {
         });
     }
 
+    /**
+     * handles the draft selection from user
+     * @param {*} draft 
+     */
     handleDraftSelection(draft){
         this.setState({showEditor: false});
         this.initialTemplateId = draft.template_id;
@@ -110,6 +131,9 @@ export default class CreateCustom extends React.Component {
         }
     }
 
+    /**
+     * load the stored templates into the template list
+     */
     loadTemplatesIntoList = async ()=>{
         this.setState({
             templateListData: {
@@ -135,12 +159,20 @@ export default class CreateCustom extends React.Component {
         }
     }
 
+    /**
+     * selection changes made?
+     * @param {*} selectedElem 
+     */
     changeSelection(selectedElem){
         let prevSelection = document.querySelector('#template-container .selected');
         if (prevSelection) prevSelection.classList.remove('selected');
         if(selectedElem) selectedElem.classList.add('selected');
     }
 
+    /**
+     * handles publishing of template
+     * @param {*} templateID 
+     */
     handlePublishedTemplate = async (templateID)=>{
         await this.loadTemplatesIntoList();
         let selectedElem = document.querySelector('#create-custom-page-wrapper #template_'+templateID);
@@ -148,6 +180,11 @@ export default class CreateCustom extends React.Component {
         this.selectTemplate(selectedElem.src, templateID);
     }
 
+    /**
+     * handles voice status from main.js (speech) 
+     * @param {*} status which action has to be executed?
+     * @param {*} parameter for entered titles or captions
+     */
     handleVoiceInput(status, parameter){
 
         // get used objects

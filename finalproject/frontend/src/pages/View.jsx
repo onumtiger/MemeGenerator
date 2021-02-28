@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-
 import { MemesList, SlideShow, FilterMemes } from '../components';
 import api from '../api';
-
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-
 import '../style/View.scss';
 
+/**
+ * hierarchically first view
+ */
 export default class View extends Component {
 
     constructor(props) {
@@ -41,81 +41,100 @@ export default class View extends Component {
         });
     }
 
+    /**
+     * triggers when filters have to be applied
+     */
     triggerMemeListUpdate() {
         this.applyFilters();
     }
 
+    /**
+     * updates the current meme list
+     * @param {*} newArray 
+     */
     updateMemeList(newArray = this.state.memes) {
         this.setState({ memes: newArray });
         this.wasJustUpdated = true;
     }
 
-    setFilters(searchTerm, filter, sorting){
-        this.filters = {searchTerm, filter, sorting};
+    /**
+     * set filter 
+     * @param {*} searchTerm 
+     * @param {*} filter 
+     * @param {*} sorting 
+     */
+    setFilters(searchTerm, filter, sorting) {
+        this.filters = { searchTerm, filter, sorting };
         this.applyFilters();
     }
 
-    applyFilters(){
+    /**
+     * apply the chosen filter
+     */
+    applyFilters() {
         let newArray = [...this.initialMemes];
 
         //search by keyword
-        if(this.filters.searchTerm){
+        if (this.filters.searchTerm) {
             newArray = newArray.filter(meme => (
                 meme.name.toLowerCase().includes(this.filters.searchTerm.toLowerCase())
             ));
         }
 
         //filter by format: checks for strings ending on'.', followed by the string (or strings separated by '|') in filter
-        if(this.filters.filter){
-            newArray = newArray.filter(meme=> (
-                meme.url.match(new RegExp(`.+\\.(${this.filters.filter})$`,'i'))
+        if (this.filters.filter) {
+            newArray = newArray.filter(meme => (
+                meme.url.match(new RegExp(`.+\\.(${this.filters.filter})$`, 'i'))
             ));
         }
 
-        switch(this.filters.sorting){
+        switch (this.filters.sorting) {
             default:
                 break;
             case 'newest':
                 newArray.sort((a, b) => (
                     new Date(b.creationDate) - new Date(a.creationDate)
-                    ));
+                ));
                 break;
             case 'oldest':
                 newArray.sort((a, b) => (
                     new Date(a.creationDate) - new Date(b.creationDate)
-                    ));
+                ));
                 break;
             case 'bestRating':
                 newArray.sort((a, b) => (
                     ((b.stats.upvotes.length || 1) / (b.stats.downvotes.length || 1)) - ((a.stats.upvotes.length || 1) / (a.stats.downvotes.length || 1))
-                    ));
+                ));
                 break;
             case 'worstRating':
                 newArray.sort((a, b) => (
                     ((a.stats.upvotes.length || 1) / (a.stats.downvotes.length || 1)) - ((b.stats.upvotes.length || 1) / (b.stats.downvotes.length || 1))
-                    ));
+                ));
                 break;
             case 'mostViewed':
                 newArray.sort((a, b) => (
                     b.stats.views - a.stats.views
-                    ));
+                ));
                 break;
             case 'leastViewed':
                 newArray.sort((a, b) => (
                     a.stats.views - b.stats.views
-                    ));
+                ));
                 break;
             case 'random':
                 newArray.sort((a, b) => (
                     //the sorting function works by recognizing return values <0, ==0 or >0. So let's give it a random number between -1 and +1 for random sorting:
-                    (Math.random()*2) - 1
-                    ));
+                    (Math.random() * 2) - 1
+                ));
                 break;
         }
 
         this.updateMemeList(newArray);
     }
 
+    /**
+     * check if there was any update
+     */
     wasMemeListJustUpdated() {
         if (this.wasJustUpdated) {
             this.wasJustUpdated = false;
@@ -141,6 +160,9 @@ export default class View extends Component {
         return viewsOfAllMemes.reduce((pv, cv) => pv + cv, 0);
     }
 
+    /**
+     * get memes from database
+     */
     componentDidMount = async () => {
         try {
             //TODO: actual userid...

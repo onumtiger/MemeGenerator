@@ -2,6 +2,9 @@ import React, { createRef } from 'react';
 import { Link } from 'react-router-dom'
 import '../style/CreateLanding.scss';
 
+/**
+ * First screen when choosing "create meme" in navbar
+ */
 export default class Create extends React.Component {
     constructor(props){
         super(props);
