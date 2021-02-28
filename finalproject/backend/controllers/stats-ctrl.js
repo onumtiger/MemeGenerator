@@ -3,8 +3,8 @@ const TemplateStats = require('../db/models/templatestats-model');
 
 /**
  * Gets all stats for a specific meme by id
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getStatsForMeme = async (req, res) => {
     let memeId = req.params.id;
@@ -24,8 +24,8 @@ const getStatsForMeme = async (req, res) => {
 
 /**
  * Gets stats for a specific template by id
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getStatsForTemplate = async (req, res) => {
     let templateId = req.params.id;

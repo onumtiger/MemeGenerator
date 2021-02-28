@@ -75,7 +75,7 @@ const getSearchImages = async (req, res) => {
 /**
  * API image Manipulation/Creation method
  * @param {Request} req - Express Request Object
- * @param {Response} res - Express Response Object
+ * @param {Response} req - Express Response Object
  */
 const executeImageCreation = async (req, res) => {
 
