@@ -7,6 +7,8 @@ import api from '../api';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
+import createTokenProvider from '../api/createTokenProvider';
+
 import '../style/MyMemes.scss';
 
 export default class MyMemes extends Component {
@@ -31,30 +33,11 @@ export default class MyMemes extends Component {
         return `${day}.${month}.${year}`
     }
 
-    //DELETE?
-   /*  getComments = async () => {
-        let response = await api.getCommentsByMemeId(0);
-
-        let comments = response.data.data;
-
-        var messages = [];
-        var ids = [];
-        var date = [];
-
-        for (var i = 0; i < comments.length; i++) {
-            messages.push(comments[i].message);
-            ids.push(comments[i].user_id);
-            date.push(comments[i].creationDate)
-        }
-
-        this.setState({
-            commentMessages: messages,
-            commentIds: ids,
-            commentDate: date
-        })
-    } */
-
     componentDidMount = async () => {
+        
+        console.log('! userID',createTokenProvider.userIdFromToken());
+        console.log('! logged in',createTokenProvider.isLoggedIn());
+
         try {
             //TODO actual userid...
             let response = await api.getOwnMemes(0);

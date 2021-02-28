@@ -11,7 +11,7 @@ const signup = (req, res) => {
         .exec()
         .then(user => {
             if (user.length > 0) {
-                console.log(user)
+                console.log('Mail already registered!')
                 return res.status(409).json({
                     message: 'Mail already registered'
                 })
@@ -21,7 +21,7 @@ const signup = (req, res) => {
                     .exec()
                     .then(user => {
                         if (user.length > 0) {
-                            console.log(user)
+                            console.log("User already exists, ID: ",user._id);
                             return res.status(409).json({
                                 message: 'Username already registered'
                             })
@@ -29,7 +29,7 @@ const signup = (req, res) => {
                         else {
                             bcrypt.hash(req.body.signupPassword, 10, (err, hash) => {
                                 if (err) {
-                                    console.log(err)
+                                    console.log("Could not hash password: ",err);
                                     return res.status(500).json({
                                         error: err
                                     })
@@ -43,7 +43,6 @@ const signup = (req, res) => {
                                     user
                                         .save()
                                         .then( result => {
-                                            console.log(result);
                                             IDManager.registerNewUserEntry();
                                             const token = jwt.sign(
                                                 {
@@ -62,7 +61,7 @@ const signup = (req, res) => {
                                             })
                                         })
                                         .catch(err => {
-                                            console.log(err)
+                                            console.log("Signup failed: ",err)
                                             res.status(500).json({
                                                 error: err
                                             })
@@ -75,20 +74,19 @@ const signup = (req, res) => {
         })
 }
 const login = (req, res) => {
-    console.log(res)
     if (req.body.loginCred.indexOf('@') == -1 ){
         User.find({username: req.body.loginCred})
             .exec()
             .then(user => {
                 if (user.length < 1){
+                    console.log("Username not found");
                     return res.status(401).json({
                         message: "Auth failed"
-                        // message: "Username not found"
                     })
                 }
                 bcrypt.compare(req.body.loginPassword, user[0].password[0], (err, result) => {
                     if (err) {
-                        console.log(err)
+                        console.log("Wrong password via username: ",err)
                         return res.status(401).json({
                             message: "Auth failed"
                         })
@@ -113,7 +111,7 @@ const login = (req, res) => {
                 })
             })
             .catch(err => {
-                console.log(err)
+                console.log("Auth failed: ",err)
                 res.status(500).json({
                     error: err
                 })
@@ -124,17 +122,16 @@ const login = (req, res) => {
         .exec()
         .then(user => {
             if (user.length < 1){
+                console.log("email not found");
                 return res.status(401).json({
-                    message: "Auth faileddd"
-                    // message: "email not found"
+                    message: "Auth failed"
                 })
             }
             bcrypt.compare(req.body.loginPassword, user[0].password[0], (err, result) => {
                 if (err) {
-                    console.log(err)
+                    console.log("Wrong password via email: ",err)
                     return res.status(401).json({
                         message: "Auth failed"
-                        // message: "wrong password"
                     })
                 }
                 if (result) {
@@ -154,13 +151,14 @@ const login = (req, res) => {
                         token: token
                     })
                 }
+                console.log("Something else went wrong :/");
                 return res.status(401).json({
                     message: "Auth failed"
                 })
             })
         })
         .catch(err => {
-            console.log(err)
+            console.log("Auth failed: ",err)
             res.status(500).json({
                 error: err
             })
@@ -176,7 +174,7 @@ const deleteUser = (req, res) => {
         })
     })
     .catch(err => {
-        console.log(err)
+        console.log("Failed to delete user: ",err)
         res.status(500).json({
             error: err
         })

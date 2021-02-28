@@ -281,8 +281,6 @@ export default class DrawTemplate extends React.Component {
         this.setCanvasBackgroundColor(this.canvasBackgroundColor);
 
         //TODO insert actual userId
-        // console.log('! userID',createTokenProvider.userIdFromToken());
-        // console.log('! logged in',createTokenProvider.isLoggedIn());
 
         api.getTemplateVisibilityOptions(0).then((response)=>{
             this.setState({
