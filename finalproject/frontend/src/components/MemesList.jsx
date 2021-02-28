@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { MemeVoteCounter, MemeComment } from '.';
+import { MemeVoteCounter } from '.';
 
 import '../style/MemesList.scss';
 

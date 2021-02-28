@@ -1,0 +1,56 @@
+#comments-wrapper {
+    .commentContainer {
+        display: flex;
+        text-align: left;
+
+        .commentInfo {
+            margin-right: 10px;
+            flex: auto;
+            white-space: nowrap;
+            
+            .commentDate {
+                display: inline;
+                font-size: 12px;
+
+                &::after {
+                    content: ' - ';
+                }
+            }
+            
+            .userInfo {
+                display: inline;
+            }
+            
+            .username {
+                font-weight: bold;
+            }
+        }
+
+        .commentText {
+            background-color: rgb(117, 117, 238);
+            padding: 3px;
+            padding-left: 7px;
+            padding-right: 7px;
+            color: white;
+            border-radius: 0 5px 5px 5px;
+        }
+    }
+
+    .postContainer {
+        display: flex;
+        margin-top: 10px;
+        
+        #commentInput {
+            flex: auto;
+            border-radius: 10px 0 0 10px;
+        }
+
+        #postButton {
+            background-color: rgb(209, 79, 209);
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0 !important;
+            padding: 3px 13px;
+        }
+    }
+}

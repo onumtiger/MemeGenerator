@@ -16,10 +16,7 @@ export default class WYSIWYGEditor extends React.Component {
     
     this.textBoxes = []; //array containing all captions, each as an instance of class TextBox
     this.activeTextBoxes = ()=>this.textBoxes.filter((box)=>!box.disabled); //get all non-disabled entries of textBoxes
-    this.selectedTextBoxIndex = -1;
-    this.hoveringTextBoxIndex = -1;
-    this.draggingTextBox = false;
-    this.placeholderFileName = 'Your Meme';
+    this.reset();
 
     this.fontSizeMin = 10;
     this.fontSizeMax = 200;
@@ -31,12 +28,17 @@ export default class WYSIWYGEditor extends React.Component {
       fontSize: 60,
       colorR: this.colorValueMax,
       colorG: this.colorValueMax,
-      colorB: this.colorValueMax
+      colorB: this.colorValueMax,
+      bold: false,
+      italic: false,
+      fontFace: "Impact"
     };
     this.recordButtonActive = false;
     
     this.selectedVisibilityElem = null;
     
+    this.prevDraft = null;
+
     this.state = {
       image: null,
       templateId: -1,
@@ -66,6 +68,14 @@ export default class WYSIWYGEditor extends React.Component {
     ].forEach((handler)=>{
       this[handler] = this[handler].bind(this);
     });
+  }
+
+  reset(){
+    this.textBoxes = [];
+    this.selectedTextBoxIndex = -1;
+    this.hoveringTextBoxIndex = -1;
+    this.draggingTextBox = false;
+    this.placeholderFileName = 'Your Meme';
   }
 
   setTemplateImage(src, id){
@@ -183,7 +193,7 @@ export default class WYSIWYGEditor extends React.Component {
     this.repaint(true);
   }
 
-  addCaption(x, y, text, fontSize=this.textBoxDefaults.fontSize, colorR=this.textBoxDefaults.colorR, colorG=this.textBoxDefaults.colorG, colorB=this.textBoxDefaults.colorB, bold=false, italic=false, fontFace="Impact", fromUserClick=true){
+  addCaption(x, y, text="", fontSize=this.textBoxDefaults.fontSize, colorR=this.textBoxDefaults.colorR, colorG=this.textBoxDefaults.colorG, colorB=this.textBoxDefaults.colorB, bold=this.textBoxDefaults.bold, italic=this.textBoxDefaults.italic, fontFace=this.textBoxDefaults.fontFace, fromUserClick=true){
     
     //add new textbox
     let newIndex = this.textBoxes.length;
@@ -415,7 +425,7 @@ export default class WYSIWYGEditor extends React.Component {
     if(e.button!=0) return; //only watch for the left mouse button
     
     if(!this.draggingTextBox){
-      this.addCaption(e.offsetX, e.offsetY, "", this.textBoxDefaults.fontSize, this.textBoxDefaults.colorR, this.textBoxDefaults.colorG, this.textBoxDefaults.colorB, false, false, "Impact", true);
+      this.addCaption(e.offsetX, e.offsetY);
     } //else case will be handled once the event bubbles up to the document via handlePageWrapperMouseUp()
   }
 
@@ -536,6 +546,11 @@ export default class WYSIWYGEditor extends React.Component {
   }
 
   componentDidUpdate(){
+    if(this.props.draft != this.prevDraft){
+      this.prevDraft = this.props.draft;
+      this.reset();
+      this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId);
+    }
     this.repaint(false); //no clearing needed as the entire element is replaced
   }
   
@@ -545,7 +560,7 @@ export default class WYSIWYGEditor extends React.Component {
         <tbody>
           <tr>
             <td id="page-left">
-              <input id="in-title" class="in-title" type="text" placeholder="Enter a title for your meme post..." />
+              <input id="in-title" className="in-title" type="text" placeholder="Enter a title for your meme post..." />
               <canvas id="canvas-editor"
                 ref={this.canvasRef}
                 width={this.state.canvasWidth}
@@ -577,11 +592,11 @@ export default class WYSIWYGEditor extends React.Component {
                                   <span className="label-fontSize">{this.textBoxDefaults.fontSize+'px'}</span>
                                 </label>
                                 <label>
-                                  <input type="checkbox" class="boldBox" name="bold" />
+                                  <input type="checkbox" className="boldBox" name="bold" />
                                   bold
                                 </label>
                                 <label>
-                                  <input type="checkbox" class="italicBox" name="italic" />
+                                  <input type="checkbox" className="italicBox" name="italic" />
                                   italic
                                 </label>
                               </td>
@@ -623,7 +638,7 @@ export default class WYSIWYGEditor extends React.Component {
                   </li>
                 </ul>
                 <div id="visibilityOption-wrapper"></div>
-                <button type="button" id="save-draft-btn" class="draft-save-button" onClick={this.handleDraftButtonClick}>{this.draftButtonTexts.default}</button>
+                <button type="button" id="save-draft-btn" className="draft-save-button" onClick={this.handleDraftButtonClick}>{this.draftButtonTexts.default}</button>
                 <CanvasDownloadButton placeholderFileName={this.placeholderFileName+".png"} onButtonClick={this.handleDownloadButtonClick} />
                 <CanvasUploadButton canvasRef={this.canvasRef} uploadSuccessCallback={this.handlePublishedMeme} assembleFormData={this.assembleUploadFormData} apiFunctionName="insertMeme" />
               </form>

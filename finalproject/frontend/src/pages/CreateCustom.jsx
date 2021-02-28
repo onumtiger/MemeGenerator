@@ -36,6 +36,7 @@ export default class CreateCustom extends React.Component {
             'selectTemplateCreation',
             'handleDraftSelection',
             'handleVoiceInput',
+            'confirmTemplate',
         ].forEach((handler)=>{
             this[handler] = this[handler].bind(this);
         });
@@ -64,8 +65,18 @@ export default class CreateCustom extends React.Component {
     }
 
     selectTemplate(template){ //src, id
-        let src = template.url;
-        let id = template._id;
+        this.setState({
+            showTemplateSelection: false,
+            showUploadTemplate: false,
+            showDrawTemplate: false,
+            showTemplateDetails: true,
+            selectedTemplate: template
+        });
+    }
+
+    confirmTemplate() {
+        let src = this.state.selectedTemplate.url;
+        let id = this.state.selectedTemplate._id;
 
         if (this.state.showEditor){ //don't rerender the editor, or we will lose the input!
             this.editorRef.current.setTemplateImage(src, id);
@@ -77,15 +88,13 @@ export default class CreateCustom extends React.Component {
             });
         }
         this.setState({
-            showTemplateSelection: false,
-            showUploadTemplate: false,
-            showDrawTemplate: false,
-            showTemplateDetails: true,
-            selectedTemplate: template
+            selectedDraft: null,
+            showTemplateDetails: false
         });
     }
 
     handleDraftSelection(draft){
+        this.setState({showEditor: false});
         this.initialTemplateId = draft.template_id;
         let draftTemplate = this.state.templateListData.templates.find((t)=>(t._id == draft.template_id));
         if(draftTemplate){
@@ -252,7 +261,7 @@ export default class CreateCustom extends React.Component {
                 <h2>Custom Meme Creation</h2>
                 <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letAddTemplate} handleSelectionChange={this.changeSelection} />
                 {this.state.showTemplateDetails && 
-                    <TemplateDetails template={this.state.selectedTemplate} />
+                    <TemplateDetails template={this.state.selectedTemplate} confirmTemplate={this.confirmTemplate} />
                 }
                 <DraftList handleDraftSelection={this.handleDraftSelection} />
                 {this.state.showTemplateSelection &&

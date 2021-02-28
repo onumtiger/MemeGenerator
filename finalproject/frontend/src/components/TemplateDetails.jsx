@@ -82,7 +82,6 @@ export default class TemplateDetails extends React.Component {
     render() {
         return (
             <>
-            <h4>Your chosen template</h4>
             <div id="template-details-wrapper">
                 <div id="template-preview">
                     <img src={this.props.template.url} />
@@ -106,6 +105,7 @@ export default class TemplateDetails extends React.Component {
                                 date={this.state.templateStats.date}
                             />
                         )}
+                        <button type="button" id="confirm-button" onClick={this.props.confirmTemplate}>Use this Template</button>
                     </div>
                 </div>
             </div>

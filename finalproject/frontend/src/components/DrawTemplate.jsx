@@ -4,6 +4,7 @@ import '../style/DrawTemplate.scss';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import api from '../api';
+import createTokenProvider from '../api/createTokenProvider';
 
 export default class DrawTemplate extends React.Component {
     constructor(props){
@@ -280,6 +281,9 @@ export default class DrawTemplate extends React.Component {
         this.setCanvasBackgroundColor(this.canvasBackgroundColor);
 
         //TODO insert actual userId
+        // console.log('! userID',createTokenProvider.userIdFromToken());
+        // console.log('! logged in',createTokenProvider.isLoggedIn());
+
         api.getTemplateVisibilityOptions(0).then((response)=>{
             this.setState({
                 visibilityOptions: response.data.data,

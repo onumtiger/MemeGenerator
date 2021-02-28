@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { MemeComment, MemeVoteCounter } from '../components';
+import { MemeVoteCounter } from '../components';
 import api from '../api';
 
 import Loader from "react-loader-spinner";

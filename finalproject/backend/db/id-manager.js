@@ -17,7 +17,6 @@ module.exports = {
     reset,
     registerNewMemeEntry: ()=>{
         dbEntryCount.memes++;
-        console.log('Now '+dbEntryCount.memes+' meme entries');
     },
     registerNewTemplateEntry: ()=>{
         dbEntryCount.templates++;

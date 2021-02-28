@@ -1,6 +1,11 @@
+@import "_globalMixins.scss";
+
 #template-details-wrapper {
 
     margin-bottom: 100px;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 10px 0;
     display: flex;
 
     #template-preview {
@@ -11,7 +16,7 @@
         img {
             width: auto;
             height: auto;
-            max-height: 600px;
+            max-height: 700px;
             max-width: 100%;
         }
     }
@@ -30,6 +35,10 @@
     #loader, #loader div {
         display: inline-block;
         margin: 0 30px;
+    }
+
+    #confirm-button {
+        @include largeButton(#6079d7, #2f4dbb);
     }
     
 }

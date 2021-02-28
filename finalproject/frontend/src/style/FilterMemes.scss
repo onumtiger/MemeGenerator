@@ -8,7 +8,7 @@
 
     #search, #sort, #filter {
         margin-right: 20px;
-        border-radius: 12px;
+        border-radius: 5px;
         height: 30px;
         border-color: lightgrey;
         box-sizing: border-box;
@@ -23,7 +23,6 @@
     select {
         margin-left: 5px;
         border:1px solid #ccc;
-        //vertical-align:top;
         height:30px
     }
 }

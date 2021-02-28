@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../style/globalStyle.css';
+import '../style/MemeComment.scss';
 
 export default class Comment extends Component {
 
@@ -34,11 +34,11 @@ export default class Comment extends Component {
 
     render() {
         return (
-            <div>
+            <div id="comments-wrapper">
                 <p className="commentNumber">{this.props.comments.length} comments</p>
                 <div>
                     {this.props.comments.map((comment, index) => (
-                        <div key={index}>
+                        <div key={index} className="commentContainer">
                             <div className="commentInfo">
                                 <div className="commentDate">
                                     {this.getDateString(comment.creationDate)}
@@ -49,9 +49,9 @@ export default class Comment extends Component {
                         </div>
                     ))}
                 </div>
-                <div className="commentContainer">
+                <div className="postContainer">
                     <input id="commentInput" placeholder="add a comment..." onKeyPress={this.handleKeypress}></input>
-                    <button className="postButton" onClick={this.handlePost}>Post</button>
+                    <button id="postButton" onClick={this.handlePost}>Post</button>
                 </div>
             </div >
         );

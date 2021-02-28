@@ -63,21 +63,25 @@ export default class SingleView extends Component {
     handleDownloadClick(e) {
         //normally, we could just download the file with the download attribute. However, the request proxying we use for all links to the static server content at the API URL does not seem to work for these requests and we can't pass the API URL directly because it is not from the same Origin as the frontend and that means the download attribute no longer works. So we take the long way around:
 
-        //create virtual canvas element
-        let canvas = document.createElement('canvas');
+        try{ //try/catch because this will fail if the image does not come from our server but e.g. from ImgFlip
+            //create virtual canvas element
+            let canvas = document.createElement('canvas');
 
-        //get the image and apply its dimensions to the canvas
-        let img = document.querySelector('#single-view-wrapper #meme-img');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
+            //get the image and apply its dimensions to the canvas
+            let img = document.querySelector('#single-view-wrapper #meme-img');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
 
-        //draw the image to the canvas
-        let c = canvas.getContext('2d');
-        c.drawImage(img, 0, 0);
+            //draw the image to the canvas
+            let c = canvas.getContext('2d');
+            c.drawImage(img, 0, 0);
 
-        //compute the dataURL and apply it to the anchor element
-        let url = canvas.toDataURL();
-        e.target.href = url;
+            //compute the dataURL and apply it to the anchor element
+            let url = canvas.toDataURL();
+            e.target.href = url;
+        }catch(err){
+            console.log('Failed to download image - it is probably external: '+err);
+        }
     }
 
     /**
@@ -188,14 +192,16 @@ export default class SingleView extends Component {
         return (
             <div id="single-view-wrapper">
                 <hr />
-                <table id="title-table">
-                    <tbody>
-                        <tr>
-                        <td><p id="meme-title">{meme.name}</p></td>
-                        <td><button type="button" className="read-button" id="read-button" title="read caption">read aloud</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div className="title-row">
+                    <span id="meme-title">{meme.name}</span>
+                    {meme.visibility == 1 && (
+                        <img src="/ui/lock-unlisted.png" alt="unlisted meme" title="unlisted meme" />
+                    )}
+                    {meme.visibility == 0 && (
+                        <img src="/ui/lock-private.png" alt="private meme" title="private meme" />
+                    )}
+                    <button type="button" className="read-button" id="read-button" title="read caption">read aloud</button>
+                </div>
                 <hr />
                 <img id="meme-img" src={meme.url} alt={meme.name}></img>
                 <table id="stats-table">

@@ -5,26 +5,39 @@
 
 #single-view-wrapper {
 
-    #read-button {
-        font-size: 11px;
-        text-align: center;
-        background-color: transparent;
-        vertical-align: middle;
-        margin: 8px 0;
-        padding: 4px;
-        border-radius: 13px;
-        border-color: lightgrey;
-       
-    }
 
-    #meme-title {
+    .title-row {
+        @include content;
+        // //padding: 10px;
+        // text-align: center;
         text-align: center;
-        font-size: 130%;
-        vertical-align: middle;
-        vertical-align: middle;
-        margin: 8px 0;
-        //font-weight: bold;
+        position: relative;
+
+        #meme-title {
+            font-size: 130%;
+            vertical-align: bottom;
+        }
+
+        img {
+            width: 2em;
+            height: 2em;
+            // vertical-align: bottom;
+            margin-left: 8px;
+        }
         
+        #read-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            font-size: 11px;
+            text-align: center;
+            background-color: transparent;
+            vertical-align: bottom;
+            padding: 5px 10px;
+            border-radius: 13px;
+            border-color: lightgrey;
+        }
     }
 
     #meme-img {
@@ -42,12 +55,6 @@
                 padding: 12px 12px 12px 12px;
               }
         
-    }
-
-    #title-table {
-        @include content;
-        //padding: 10px;
-        text-align: center;
     }
 
     #share-options {

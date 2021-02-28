@@ -149,20 +149,28 @@ class CreateAPI extends Component { //TODO visibility options styling
             visibility: 2 //public template
         };
         
+        let templateID;
+
         //upload the template
         e.target.textContent = this.publishButtonTexts.loading_template;
         try{
-            await api.insertTemplate(templateParams);
+            let response = await api.insertTemplate(templateParams);
+            templateID = response.data.id;
         }catch(err){
             console.log('Failed to publish template: ',err);
             e.target.textContent = this.publishButtonTexts.default;
             return;
         }
+
+        //append the new templateID to the formData
+        formData.append('templateID', templateID);
         
         //upload the meme
         e.target.textContent = this.publishButtonTexts.loading_meme;
         try{
-            await api.insertMeme(formData);
+            let response = await api.insertMeme(formData);
+            let memeID = response.data.id;
+            this.props.history.push('/memes/view/'+memeID);
         }catch(err){
             console.log('Failed to publish meme: ',err);
         }

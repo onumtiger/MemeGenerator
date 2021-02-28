@@ -175,17 +175,17 @@ export default class SlideShow extends Component {
                 <table id="slideshow-table">
                     <tbody>
                     <tr>
-                    <td className="button-column">
+                    <td className="button-column left-col">
                         <Link to={this.props.urlPath+'/'+this.getPrevMemeId()}>
-                            <button type="button" className="slideButton leftBtn disable-during-diashow" onClick={this.checkForDisabledButton}>←</button>
+                            <button type="button" className="slideButton disable-during-diashow" onClick={this.checkForDisabledButton}>←</button>
                         </Link>
                     </td>
                     <td>
                         <SingleView meme={meme} getAllOtherViews={this.props.getAllOtherViews} triggerMemeListUpdate={this.props.triggerMemeListUpdate} />
                     </td>
-                    <td className="button-column">
+                    <td className="button-column right-col">
                         <Link to={this.props.urlPath+'/'+this.getNextMemeId()}>
-                            <button type="button" className="slideButton rightBtn disable-during-diashow" onClick={this.checkForDisabledButton}>→</button>
+                            <button type="button" className="slideButton disable-during-diashow" onClick={this.checkForDisabledButton}>→</button>
                         </Link>
                     </td>
                     </tr>

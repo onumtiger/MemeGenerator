@@ -44,7 +44,18 @@
             width: 60px;
 
             a{
-                display: block;
+                // display: block;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                transition: background-color .3s;
+                text-decoration: none;
+
+                &:hover {
+                    background-color: #f1faff;
+                }
                 
                 .slideButton {
                     @include buttonStyle;
@@ -52,28 +63,17 @@
                     color: rgb(95, 95, 95);
                     padding: 15px 10px;
                     font-size: 30px;
-                    height: 100%;
-                    width: 100%;
                     border: none;
-
-                    
-                    top: 0;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-
-                    $innerColor: transparent;
-                    $outerColor: lightgray;
-
-                    &.leftBtn {
-                        border-radius: 5px 0 0 5px;
-                        //background-image: linear-gradient(to left, #{$innerColor} 20%, #{$outerColor})
-                    }
-                    &.rightBtn {
-                        border-radius: 0 5px 5px 0;
-                        //background-image: linear-gradient(to right, #{$innerColor} 20%, #{$outerColor})
-                    }
+                    display: block;
+                    margin: 20px auto 0;
                 }
+            }
+            
+            &.left-col a {
+                border-radius: 7px 0 0 7px;
+            }
+            &.right-col a {
+                border-radius: 0 7px 7px 0;
             }
         }
 

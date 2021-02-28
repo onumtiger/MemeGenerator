@@ -84,7 +84,7 @@ export default class TemplatesList extends React.Component {
     render() {
         return (
             <div id="template-list-wrapper">
-                <button class="voice-control-button">enable voice control</button>
+                <button className="voice-control-button">enable voice control</button>
                 <h3>First, choose a template
                 {this.state.showNavButtons && (
                         <span id="navbutton-wrapper">
@@ -107,7 +107,7 @@ export default class TemplatesList extends React.Component {
                                 <img src={t.url} alt={t.name} title={t.name} id={'template_' + t._id} key={'template_' + t._id} data-templateid={t._id} className="templateImg" onClick={this.handleTemplateClick} />
                             ))
                         )}
-                    <img id="template-plus" class="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />
+                    <img id="template-plus" className="template-plus" src="/ui/plus.png" alt="Add your own template" title="Add your own template" onClick={this.handlePlusButtonClick} />
                 </div>
             </div>
         );

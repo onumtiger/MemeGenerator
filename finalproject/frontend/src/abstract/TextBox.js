@@ -1,5 +1,5 @@
 export default class TextBox {
-    constructor(canvasRef, x, y, t, fs, cr, cg, cb, b=false, i=false, ff="Impact"){
+    constructor(canvasRef, x, y, t, fs, cr, cg, cb, b, i, ff){
         this.textBoxPadding = 8; //buffer (in pixels) between textbox border and actual font
 
         this.canvasRef = canvasRef; //React reference to the canvas

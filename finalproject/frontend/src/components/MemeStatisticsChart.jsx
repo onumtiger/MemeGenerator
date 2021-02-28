@@ -1,5 +1,4 @@
 import React from "react";
-import '../style/globalStyle.css';
 import {VotesPieChart, ViewsPieChart, MemeBarChart} from '.';
 
 export default class MemeStatisticsChart extends React.Component {

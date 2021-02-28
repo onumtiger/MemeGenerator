@@ -254,7 +254,6 @@ const getCommentsByMemeId = async(req, res) => {
             if (user) entry.user_name = user.username;
         }
 
-        console.log("comments", comments)
         return res.status(200).json({ success: true, data: resultArray })
     } catch (err) {
         console.log(err);
@@ -282,7 +281,6 @@ const postComment = async(req, res) => {
             //SAVE COMMENT
         comment.save(function(err, doc) {
             if (err) return console.error(err);
-            console.log("Document inserted successfully!");
         });
         idManager.registerNewCommentEntry()
         return res.status(200).json({ success: true, comment_id: comment_id });
@@ -294,7 +292,6 @@ const postComment = async(req, res) => {
 
 // TODO: CHECK IF USED?!
 const patchMeme = async function(req, res) {
-    console.log("Patch Meme generic")
     var body = req.body;
     var memeId = req.params.id;
     var updatedProperty = body.toUpdate
@@ -344,7 +341,6 @@ const addTemplateUse = async(templateId) => {
             if (!templateStats) {
                 await TemplateStats.updateOne({ _id: templateId }, { $push: { 'days': { date: date, uses: 1 } } })
             }
-            return res.status(200).json({ success: true });
         })
     } catch (err) {
         console.log(err);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import '../style/loginInSignUp.css';
-import api from '../api'
-import createTokenProvider from '../api/createTokenProvider'
+import '../style/Login.scss';
+import api from '../api';
+import createTokenProvider from '../api/createTokenProvider';
 
 class loginInSignUp extends Component {
     constructor(props) {
@@ -77,12 +77,12 @@ class loginInSignUp extends Component {
     }
     
     activateRightPanel = () => {
-        const container = document.getElementById('container');
+        const container = document.getElementById('login-page-wrapper');
         container.classList.add("right-panel-active");
     }
 
     deactivateRightPanel = () => {
-        const container = document.getElementById('container');
+        const container = document.getElementById('login-page-wrapper');
         container.classList.remove("right-panel-active");
     }
 
@@ -118,8 +118,8 @@ class loginInSignUp extends Component {
 
     render(){
         return (
-            <div class="container" id="container">
-                <div class="form-container sign-up-container">
+            <div id="login-page-wrapper">
+                <div className="form-container" id="sign-up-container">
                     <form action="#">
                         <h1>Create Account</h1>
                         <input required type="text" placeholder={this.state.Usernameplaceholder} onFocus={this.clearUsernamePlaceholder} onChange={this.handleChangeInputSignupUsername}/>
@@ -128,27 +128,26 @@ class loginInSignUp extends Component {
                         <button onClick={this.signUp}>Sign Up</button>
                     </form>
                 </div>
-                <div class="form-container sign-in-container">
+                <div className="form-container" id="sign-in-container">
                     <form action="#">
                         {/* TODO ACTUALLY require email & username... */}
                         <h1>Sign in</h1>
                         <input required type="text" placeholder="Email or Username" onChange={this.handleChangeInputLoginCred}/>
                         <input required type="password" placeholder="Password" onChange={this.handleChangeInputLoginPassword}/>
-                        <a href="#">Forgot your password?</a>
                         <button onClick={this.logIn}>Sign In</button>
                     </form>
                 </div>
-                <div class="overlay-container">
-                    <div class="overlay">
-                        <div class="overlay-panel overlay-left">
+                <div className="overlay-container">
+                    <div className="overlay">
+                        <div className="overlay-panel" id="overlay-left">
                             <h1>Welcome Back!</h1>
                             <p>To be a meme master login with your personal info</p>
-                            <button class="ghost" id="signIn" onClick={this.deactivateRightPanel}>Sign In</button>
+                            <button id="signIn" onClick={this.deactivateRightPanel}>Sign In</button>
                         </div>
-                        <div class="overlay-panel overlay-right">
+                        <div className="overlay-panel" id="overlay-right">
                             <h1>Hello, Friend!</h1>
                             <p>Enter your personal details and enjoy the meme universe</p>
-                            <button class="ghost" id="signUp" onClick={this.activateRightPanel}>Sign Up</button>
+                            <button id="signUp" onClick={this.activateRightPanel}>Sign Up</button>
                         </div>
                     </div>
                 </div>
