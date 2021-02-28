@@ -27,7 +27,7 @@ export default class MyMemes extends Component {
 
     /**
      * get the acutal date
-     * @param {*} inputDateString 
+     * @param {String} inputDateString 
      */
     getDateString(inputDateString) {
         let dateArray = inputDateString.split('/');

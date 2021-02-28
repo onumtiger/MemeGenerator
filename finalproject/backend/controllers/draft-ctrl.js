@@ -3,8 +3,8 @@ const IDManager = require('../db/id-manager');
 
 /**
  * Get saved drafts for meme creation
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getDrafts = async (req, res) => {
     let userId = req.query.userId;
@@ -19,8 +19,8 @@ const getDrafts = async (req, res) => {
 
 /**
  * inserts a draft into the db
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const insertDraft = async (req, res) => {
     let body = req.body;
@@ -61,8 +61,8 @@ const insertDraft = async (req, res) => {
 
 /**
  * removes a draft from the database
- * @param {} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const deleteDraft = async (req, res) => {
     let draftId = req.params.draftId;

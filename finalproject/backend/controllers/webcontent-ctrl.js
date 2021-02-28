@@ -3,8 +3,8 @@ const puppeteer = require('puppeteer');
 
 /**
  * test
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const testQueryParams = (req, res) => {
     console.log(req.query);
@@ -13,8 +13,8 @@ const testQueryParams = (req, res) => {
 
 /**
  * get web image
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const getWebImage = async (req, res) => {
     let remoteUrl = decodeURIComponent(req.params.url);
@@ -45,8 +45,8 @@ const getWebImage = async (req, res) => {
 
 /**
  * get web snapshot
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getWebSnapshot = async (req, res) => {
     let remoteUrl = decodeURIComponent(req.params.url);

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import '../style/MemeComment.scss';
 import createTokenProvider from '../api/createTokenProvider';
 
+/**
+ * Comment component to post comments to memes
+ */
 export default class Comment extends Component {
 
     constructor(props) {
@@ -10,18 +13,28 @@ export default class Comment extends Component {
         this.loggedIn = createTokenProvider.isLoggedIn();
     }
 
+    /**
+     * handles 'post'-button click
+     */
     handlePost = async () => {
         if(!this.loggedIn) return;
 
+        //get value of input field
         const input = document.getElementById('commentInput').value;
 
         let message = input;
 
+        //post comment
         await this.props.postComment(message);
 
+        //clear input field
         document.getElementById('commentInput').value = '';
     }
 
+    /**
+     * checks which key is pressed and calls a function
+     * @param {Event} e 
+     */
     handleKeypress = e => {
         if(!this.loggedIn) return;
         //triggers by pressing the enter key
@@ -30,6 +43,11 @@ export default class Comment extends Component {
         }
     };
 
+    /**
+     * displays the date (yyyy/mm/dd) as another notation
+     * @param {String} inputDateString - date String
+     * @returns {String} - date in the format: dd.mm.yyy
+     */
     getDateString = (inputDateString) => {
         let dateArray = inputDateString.split('/');
         let year = dateArray[0];

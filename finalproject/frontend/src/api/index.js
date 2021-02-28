@@ -47,14 +47,14 @@ export const postComment = (userId, memeId, message) => api.post(`/meme/comments
 /**
  * Use credentials to login
  * creds must contain email/pw or username/pw
- * @param {*} cred 
+ * @param {any[]} cred 
  */
 export const login = cred => api.post('/user/login', cred);
 
 /**
  * Use credentials to signup
  * creds must contain email, username and password
- * @param {*} cred 
+ * @param {any[]} cred 
  */
 export const signup = cred => api.post('/user/signup', cred);
 
@@ -62,7 +62,7 @@ export const signup = cred => api.post('/user/signup', cred);
  * Use userId and token to delete user from db
  * config must contain jwt token
  * @param {number} userId 
- * @param {*} config 
+ * @param {any[]} config 
  */
 export const deleteUser = (userId, config) => api.delete(`/user/${userId}`, config)
 

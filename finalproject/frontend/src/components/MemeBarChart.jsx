@@ -2,11 +2,19 @@ import React from "react";
 import * as d3 from "d3";
 import '../style/Charts.scss';
 
+/**
+ * creating the barchart for memes
+ */
 export default class MemeBarChart extends React.Component {
     constructor(props) {
         super(props);
     }
 
+    /**
+     * displays the date (yyyy/mm/dd) as another notation
+     * @param {String} inputDateString - date String
+     * @returns {String} - date in the format: dd.mm.yyy
+     */
     getDateString(inputDateString){
         let dateArray = inputDateString.split('/');
         let year = dateArray[0];
@@ -15,6 +23,9 @@ export default class MemeBarChart extends React.Component {
         return `${day}.${month}.${year}`
     }
 
+    /**
+     * create barchart with D3js
+     */
     drawChart() {
         const { upvotes, downvotes, views, date } = this.props;
         const w = 630;
@@ -31,7 +42,7 @@ export default class MemeBarChart extends React.Component {
             .attr("width", w)
             .attr("height", h)
             .attr("class", "bar");
-        //upvotes
+        //create upvote bars
         svg
             .selectAll("rect").select(".upVotes")
             .data(upvotes)
@@ -49,7 +60,7 @@ export default class MemeBarChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        //downvotes
+        //create downvote bars
         svg
             .selectAll("rect").select(".downVotes")
             .data(downvotes)
@@ -67,7 +78,7 @@ export default class MemeBarChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        //views
+        //create view bars
         svg
             .selectAll("rect").select(".viewsBar")
             .data(views)
@@ -85,7 +96,7 @@ export default class MemeBarChart extends React.Component {
             })
             .append("title")
             .text(d => d);
-        //dates in x-axis as labels
+        //create date labels in x-axis
         svg
             .selectAll("text").select(".dateText")
             .data(date)
@@ -101,20 +112,27 @@ export default class MemeBarChart extends React.Component {
             .text(d => this.getDateString(d))
             .attr("transform", "rotate(-90)");
 
-        // Create scale
+        //create scale
+        /**
+         * scaleLinear creates a scale with a linear relationship between input and output
+         */
         var xScale = d3.scaleLinear()
             .domain([])
             .range([0, w / 1.41 + 150]);
 
-        // Add scales to axis
+        //add scales to axis
+        /**
+         * axisBottom constructs a new bottom-oriented axis generator for the given scale
+         */
         var x_axis = d3.axisBottom()
             .scale(xScale);
 
-        //Append group and insert axis
+        //append group and insert axis
         svg.append("g")
             .attr("transform", "translate(30," + (h - 82) + ")")
             .call(x_axis);
 
+        //create y-axis
         var yScale = d3.scaleLinear()
             .domain([0, 100])
             .range([h - 100, 0]);
@@ -127,10 +145,16 @@ export default class MemeBarChart extends React.Component {
             .call(y_axis);
     }
 
+    /**
+     * creates chart when component did mount
+     */
     componentDidMount(){
         this.drawChart();
     }
 
+    /**
+     * creates chart when component did update
+     */
     componentDidUpdate(){
         this.drawChart();
     }

@@ -6,8 +6,8 @@ const globalHelpers = require('../utils/globalHelpers');
 
 /**
  * creates and saves am new template into the db
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const createTemplate = async (req, res) => {
     const body = req.body;
@@ -102,8 +102,8 @@ const saveTemplate = (params, res) => {
 
 /**
  * deletes a specific template from the database
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const deleteTemplate = async (req, res) => {
     await Template.findOneAndDelete({ _id: req.params.id }, (err, template) => {
@@ -123,8 +123,8 @@ const deleteTemplate = async (req, res) => {
 
 /**
  * gets a specific template by a given id
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getTemplateById = async (req, res) => {
     await Template.findOne({ _id: req.params.id }, (err, template) => {
@@ -143,8 +143,8 @@ const getTemplateById = async (req, res) => {
 
 /**
  * gets all templates from database
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getTemplates = async (req, res) => {
     let userId = req.query.userId; //will be undefined if none is sent, and thus match no template user_id
@@ -160,8 +160,8 @@ const getTemplates = async (req, res) => {
 
 /**
  * functionality when a template is upvoted
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const toggleUpvoteTemplate = async (req, res) => {
     try {
@@ -194,8 +194,8 @@ const toggleUpvoteTemplate = async (req, res) => {
 
 /**
  * functionality when a template is downvoted
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const toggleDownvoteTemplate = async (req, res) => {
     try {

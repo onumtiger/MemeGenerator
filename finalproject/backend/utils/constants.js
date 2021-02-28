@@ -1,3 +1,4 @@
+// VISIBILITY CONSTANTS FOR MEME AND/OR TEMPLATES
 module.exports = {
     VISIBILITY: {
         PRIVATE: 0,

@@ -3,6 +3,9 @@ import '../style/CanvasUploadButton.scss';
 import api from '../api';
 import imageCompression from 'browser-image-compression';
 
+/**
+ * Button to upload created meme in canvas
+ */
 export default class CanvasUploadButton extends React.Component {
     constructor(props){
         super(props);
@@ -25,6 +28,10 @@ export default class CanvasUploadButton extends React.Component {
         });
     }
 
+    /**
+     * handling for publish button
+     * @param {event} e 
+     */
     handlePublishButtonClick(e){
         this.props.canvasRef.current.toBlob((blob)=>{
             //toBlob returns a image/png per default, could change with mimeType param but especially with drawn images PNG seems just fine.
@@ -59,6 +66,10 @@ export default class CanvasUploadButton extends React.Component {
         });
     }
 
+    /**
+     * handles change of file size
+     * @param {Event} e 
+     */
     handleFileSizeChange(e){
         let val = e.target.value;
         this.setState({fileSizeValue: val});

@@ -5,6 +5,9 @@ import '../style/NavBar.scss';
 
 import createTokenProvider from '../api/createTokenProvider';
 
+/**
+ * Navigationbar - includes Links for each page
+ */
 class NavBar extends Component {
     logout = () => {
         createTokenProvider.setToken(null);
@@ -13,7 +16,7 @@ class NavBar extends Component {
 
     render() {
         return (
-            <div id="navbar-wrapper"  className="container" >
+            <div id="navbar-wrapper" className="container" >
                 <div id="navlinks" className="navbar navbar-expand-lg">
                     <Link to="/memes/view" className="nav-link navbar-brand">
                         <span id="logo">memify</span>
@@ -50,7 +53,6 @@ class NavBar extends Component {
                         </div>
                     </div>
                 </div>
-                
             </div>
         )
     }

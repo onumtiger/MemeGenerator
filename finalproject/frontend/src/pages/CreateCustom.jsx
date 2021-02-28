@@ -50,7 +50,7 @@ export default class CreateCustom extends React.Component {
 
     /**
      * handle template selection
-     * @param {*} e 
+     * @param {Event} e 
      */
     letAddTemplate(e){
         this.setState({
@@ -82,7 +82,7 @@ export default class CreateCustom extends React.Component {
 
     /**
      * selecte a specific template
-     * @param {*} template 
+     * @param {TemplateDBEntry} template - template (database)
      */
     selectTemplate(template){ //src, id
         this.setState({
@@ -119,7 +119,7 @@ export default class CreateCustom extends React.Component {
 
     /**
      * handles the draft selection from user
-     * @param {*} draft 
+     * @param {DraftDBEntry} draft - a draft (database)
      */
     handleDraftSelection(draft){
         this.changeSelection(null);
@@ -175,7 +175,7 @@ export default class CreateCustom extends React.Component {
 
     /**
      * handles publishing of template
-     * @param {*} templateID 
+     * @param {Number} templateID 
      */
     handlePublishedTemplate = async (templateID)=>{
         await this.loadTemplatesIntoList();
@@ -186,8 +186,8 @@ export default class CreateCustom extends React.Component {
 
     /**
      * handles voice status from main.js (speech) 
-     * @param {*} status which action has to be executed?
-     * @param {*} parameter for entered titles or captions
+     * @param {String} status which action has to be executed?
+     * @param {String} parameter for entered titles or captions
      */
     handleVoiceInput(status, parameter){
 

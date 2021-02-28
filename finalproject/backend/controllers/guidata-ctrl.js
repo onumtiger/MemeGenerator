@@ -3,8 +3,8 @@ const constants = require('../utils/constants');
 
 /**
  * Gets information about the memes visibility
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const getMemeVisibilityOptions = async (req, res) => {
     let userId = parseInt(req.query.userId);
@@ -28,8 +28,8 @@ const getMemeVisibilityOptions = async (req, res) => {
 
 /**
  * Gets the information about a templates visibility
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getTemplateVisibilityOptions = async (req, res) => {
     let userId = parseInt(req.query.userId);

@@ -12,8 +12,8 @@ const idManager = require('../db/id-manager');
 
 /**
  * create new meme
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const createMeme = async (req, res) => {
     const body = req.body;
@@ -56,8 +56,8 @@ const createMeme = async (req, res) => {
 
 /**
  * Save a meme to the database
- * @param {*} params 
- * @param {*} res 
+ * @param {{String}} params 
+ * @param {Response} res 
  */
 const saveMeme = (params, res) => {
     const meme = new Meme({
@@ -114,8 +114,8 @@ const saveMeme = (params, res) => {
 
 /**
  * Delete a meme from the database
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const deleteMeme = async (req, res) => {
     await Meme.findOneAndDelete({ _id: req.params.id }, (err, meme) => {
@@ -135,8 +135,8 @@ const deleteMeme = async (req, res) => {
 
 /**
  * Get a meme by given id
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getMemeById = async (req, res) => {
     await Meme.findOne({ _id: req.params.id }, (err, meme) => {
@@ -155,8 +155,8 @@ const getMemeById = async (req, res) => {
 
 /**
  * Get all memes in the database
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const getMemes = async (req, res) => {
     let userId = req.query.userId; //will be undefined if none is sent, and thus match no meme user_id
@@ -193,8 +193,8 @@ const getMemes = async (req, res) => {
 
 /**
  * Get all created memes by user id
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const getOwnMemes = async (req, res) => {
     let userId = req.query.userId;
@@ -226,8 +226,8 @@ const getOwnMemes = async (req, res) => {
 
 /**
  * Get all comments by given meme id
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const getCommentsByMemeId = async (req, res) => {
     try {
@@ -263,8 +263,8 @@ const getCommentsByMemeId = async (req, res) => {
 
 /**
  * Saves comment under new id into db
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const postComment = async (req, res) => {
 
@@ -301,8 +301,8 @@ const patchMeme = async function (req, res) {
 
 /**
  * Adds a SINGLE view to database meme.stats by given id when called
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const viewMeme = async (req, res) => {
     try {
@@ -327,7 +327,7 @@ const viewMeme = async (req, res) => {
 
 /**
  * Template used
- * @param {*} templateId 
+ * @param {Number} templateId 
  */
 const addTemplateUse = async (templateId) => {
     try {
@@ -349,8 +349,8 @@ const addTemplateUse = async (templateId) => {
 
 /**
  * updates upvotes per meme
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
  */
 const toggleUpvoteMeme = async (req, res) => {
     try {
@@ -384,8 +384,8 @@ const toggleUpvoteMeme = async (req, res) => {
 
 /**
  * Updates downvotes per meme
- * @param {*} req 
- * @param {*} res 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object 
  */
 const toggleDownvoteMeme = async (req, res) => {
     try {

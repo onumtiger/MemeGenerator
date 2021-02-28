@@ -1,3 +1,4 @@
+// GLOBAL FUNCTION TO GET DATE
 module.exports = {
     getTodayString: ()=>{
         let d = new Date();
