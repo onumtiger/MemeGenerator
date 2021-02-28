@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import createTokenProvider from '../api/createTokenProvider';
 
 class Links extends Component {
+    activateRightPanel = () => {
+        createTokenProvider.setToken(null)
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -28,6 +33,9 @@ class Links extends Component {
                         <div className="navbar-collapse">
                             <Link to="/login" className="nav-link">
                                 Login
+                            </Link>
+                            <Link to="/memes/view" className="nav-link" onClick={this.logout}>
+                                Logout
                             </Link>
                         </div>
 
