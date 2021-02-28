@@ -40,8 +40,13 @@ const createTemplate = async (req, res) => {
     } else if (body.imageURL) {
         body.id = IDManager.getNewEmptyTemplateID();
         try {
-            let localURL = await webcontentCtrl.loadAndStoreImageFromWeb(body.imageURL, 'templates');
-            body.url = localURL;
+            //check if we have to load the image from the web or it is already on our server
+            if(body.imageURL.indexOf('/templates') == 0){
+                body.url = body.imageURL;
+            }else{
+                let localURL = await webcontentCtrl.loadAndStoreImageFromWeb(body.imageURL, 'templates');
+                body.url = localURL;
+            }
             saveTemplate(body, res);
         }catch(err){
             console.log('Failed to load remote template', err.toString());

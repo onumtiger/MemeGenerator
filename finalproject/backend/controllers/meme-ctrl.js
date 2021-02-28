@@ -45,8 +45,13 @@ const createMeme = async (req, res) => {
         body.id = IDManager.getNewEmptyMemeID();
         
         try {
-            let localURL = await webcontentCtrl.loadAndStoreImageFromWeb(body.imageURL, 'memes');
-            body.url = localURL;
+            //check if we have to load the image from the web or it is already on our server
+            if(body.imageURL.indexOf('/memes') == 0){
+                body.url = body.imageURL;
+            }else{
+                let localURL = await webcontentCtrl.loadAndStoreImageFromWeb(body.imageURL, 'memes');
+                body.url = localURL;
+            }
             saveMeme(body, res);
         }catch(err){
             console.log('Failed to load remote meme', err.toString());
