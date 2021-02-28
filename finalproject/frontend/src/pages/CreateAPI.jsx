@@ -6,7 +6,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import '../style/CreateAPI.scss';
 
-class CreateAPI extends Component {
+class CreateAPI extends Component { //TODO visibility options styling
     constructor(props) {
         super(props);
 
@@ -30,7 +30,8 @@ class CreateAPI extends Component {
         };
         this.publishButtonTexts = {
             default: 'Publish this Meme',
-            loading: 'Publishing...'
+            loading_template: 'Publishing Template...',
+            loading_meme: 'Publishing Meme...'
         };
         this.selectedVisibilityElem = null;
         this.captions = [];
@@ -107,30 +108,65 @@ class CreateAPI extends Component {
         }
     }
 
-    handlePublishButtonClick(e){
+    handlePublishButtonClick = async(e)=>{
+        //collect all necessary data and check if anything is missing
         const formData = new FormData();
 
-        let enteredTitle = document.querySelector('#create-api-page-wrapper #in-title').value;
-        formData.append('name', enteredTitle || this.state.currentTemplate.name);
+        //check for a given meme title
+        let titleInput = document.querySelector('#create-api-page-wrapper #in-title');
+        let enteredTitle = titleInput.value;
+        if(!enteredTitle){
+            titleInput.classList.add('invalid');
+            return;
+        }else{
+            titleInput.classList.remove('invalid');
+        }
+
+        //we have a title, let's add it
+        formData.append('name', enteredTitle);
+
+        //add userID
         formData.append('userID', 0); //TODO get current userID
+
+        //check for a selected visibility
         if(!this.selectedVisibilityElem){
             document.querySelector('#create-api-page-wrapper #visibilityOption-wrapper').classList.add('invalid');
             return;
         }
+
+        //we have a visibility value, let's add it
         formData.append('visibility', this.selectedVisibilityElem.value);
+
+        //add meme image URL and caption texts
         formData.append('imageURL', this.state.generatedMemeURL);
         formData.append('captions', this.captions);
         
-        e.target.textContent = this.publishButtonTexts.loading;
-        api.insertMeme(formData).then((res)=>{
-            if(res.data.success){
-                //new meme ID now at res.data.id
-            }
+        //all data seems to be there, we have to upload the template first though. So let's assemble the data for that:
+        let templateParams = {
+            imageURL: this.state.currentTemplate.url,
+            name: this.state.currentTemplate.name,
+            userID: 0, //TODO userID
+            visibility: 2 //public template
+        };
+        
+        //upload the template
+        e.target.textContent = this.publishButtonTexts.loading_template;
+        try{
+            await api.insertTemplate(templateParams);
+        }catch(err){
+            console.log('Failed to publish template: ',err);
             e.target.textContent = this.publishButtonTexts.default;
-        }).catch(err =>{
+            return;
+        }
+        
+        //upload the meme
+        e.target.textContent = this.publishButtonTexts.loading_meme;
+        try{
+            await api.insertMeme(formData);
+        }catch(err){
             console.log('Failed to publish meme: ',err);
-            e.target.textContent = this.publishButtonTexts.default;
-        });
+        }
+        e.target.textContent = this.publishButtonTexts.default;
     }
 
     componentDidMount = async()=>{
@@ -149,7 +185,7 @@ class CreateAPI extends Component {
 
         try{
             //TODO insert actual userId
-            let response = await api.getTemplateVisibilityOptions(0);
+            let response = await api.getMemeVisibilityOptions(0);
             this.setState({
                 visibilityOptions: response.data.data,
                 visibilityOptionsLoading: false

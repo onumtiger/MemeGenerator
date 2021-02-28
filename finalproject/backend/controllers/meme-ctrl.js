@@ -161,7 +161,7 @@ const getMemeById = async(req, res) => {
 const getMemes = async(req, res) => {
     let userId = req.query.userId; //will be undefined if none is sent, and thus match no meme user_id
     //send own, public and unlisted memes (unlisted to enable access via direct links), but non-public memes will be filtered out in the frontend from regular navigation and lists
-    await Meme.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { visibility: constants.VISIBILITY.UNLISTED }, { user_id: userId }] }, async(err, memes) => {
+    await Meme.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { visibility: constants.VISIBILITY.UNLISTED }, { user_id: userId }] }, async (err, memes) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -198,11 +198,29 @@ const getMemes = async(req, res) => {
  */
 const getOwnMemes = async(req, res) => {
     let userId = req.query.userId;
-    await Meme.find({ user_id: userId }, (err, memes) => {
+    await Meme.find({ user_id: userId }, async (err, memes) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        return res.status(200).json({ success: true, data: memes })
+        
+        let resultArray = [];
+
+        //convert the results from Documents to JSON objects, otherwise we can't add properties that are not defined in the model
+        memes.forEach((m) => {
+            resultArray.push(m.toJSON());
+        });
+
+        //add username from User DB model
+        for (let i = 0; i < resultArray.length; i++) {
+            let entry = resultArray[i];
+
+            let userID = entry.user_id;
+
+            let user = await User.findOne({ _id: userID });
+            if (user) entry.user_name = user.username;
+        }
+        
+        return res.status(200).json({ success: true, data: resultArray })
     }).catch(err => console.log(err))
 }
 

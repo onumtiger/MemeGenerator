@@ -15,15 +15,21 @@
     border-radius: 5px;
 }
 
+.commentContainer {
+    display: flex;
+}
+
+.commentInput {
+    flex: auto;
+    border-radius: 10px 0 0 10px;
+}
+
 .postButton {
     background-color: rgb(209, 79, 209);
     color: white;
-    border-radius: 7px;
-    margin-left: 5px;
-    border: white;
-    padding: 3px;
-    padding-left: 7px;
-    padding-right: 7px;
+    border: none;
+    border-radius: 0 10px 10px 0 !important;
+    padding: 3px 13px;
 }
 
 .commentInfo {

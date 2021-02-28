@@ -139,7 +139,7 @@ export default class MemeBarChart extends React.Component {
         return (
             <div className="meme-barchart-wrapper">
                 <div className="barchart">
-                    <h4>Upvotes, downvotes and views over the last 14 days</h4>
+                    <h4>The last 14 days of activity</h4>
                 </div>
                 <div className="legende">
                     <div className="upvoteColor"></div> upvotes

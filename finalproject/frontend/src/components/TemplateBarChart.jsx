@@ -135,7 +135,7 @@ export default class TemplateBarChart extends React.Component {
         return (
             <div className="template-barchart-wrapper">
                 <div className="barchart">
-                    <h4>Upvotes, downvotes and usage over the last 14 days</h4>
+                    <h4>The last 14 days of activity</h4>
                 </div>
                 <div className="legende">
                     <div className="upvoteColor"></div> upvotes
