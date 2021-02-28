@@ -1,22 +1,35 @@
 import React, { Component } from 'react';
 import '../style/MemeComment.scss';
 
+/**
+ * Comment component to post comments to memes
+ */
 export default class Comment extends Component {
 
     constructor(props) {
         super(props);
     }
 
+    /**
+     * handles 'post'-button click
+     */
     handlePost = async () => {
+        //get value of input field
         const input = document.getElementById('commentInput').value;
 
         let message = input;
 
+        //post comment
         await this.props.postComment(message);
 
+        //clear input field
         document.getElementById('commentInput').value = '';
     }
 
+    /**
+     * checks which key is pressed and calls a function
+     * @param {Event} e 
+     */
     handleKeypress = e => {
         //triggers by pressing the enter key
         if (e.which == 13 || e.keyCode == 13) {
@@ -24,6 +37,11 @@ export default class Comment extends Component {
         }
     };
 
+    /**
+     * displays the date (yyyy/mm/dd) as another notation
+     * @param {String} inputDateString - date String
+     * @returns {String} - date in the format: dd.mm.yyy
+     */
     getDateString = (inputDateString) => {
         let dateArray = inputDateString.split('/');
         let year = dateArray[0];

@@ -1,6 +1,9 @@
 import React from "react";
 import {VotesPieChart, ViewsPieChart, MemeBarChart} from '.';
 
+/**
+ * MemeStatistics: includes barchart for up-, downvotes and views, piechart for up- and downvotes and piechart for the portion of views
+ */
 export default class MemeStatisticsChart extends React.Component {
     constructor(props) {
         super(props);

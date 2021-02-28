@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
 import { MemeVoteCounter } from '.';
-
 import '../style/MemesList.scss';
 
-
-// ---- DOMI ---- // 
-// endless scroll, image & title, passive information (views, votes, comments), interaction (up/down vote, download, share) //
-
+/**
+ * MemeList: endless scroll, image & title, passive information (views, votes, comments), interaction (up/down vote, download, share)
+ */
 export default class MemesList extends Component {
 
     constructor(props) {
         super(props);
     }
 
+    /**
+     * displays the date (yyyy/mm/dd) as another notation
+     * @param {String} inputDateString - date String
+     * @returns {String} - date in the format: dd.mm.yyy
+     */
     getDateString(inputDateString) {
         let dateArray = inputDateString.split('/');
         let year = dateArray[0];
@@ -42,9 +44,9 @@ export default class MemesList extends Component {
                         <table className="stats-table">
                             <tbody>
                                 <tr>
-                                    <td><p>{meme.stats.views} views</p></td>     
-                                    <td><p>{meme.comment_ids.length} comments</p></td>                                    
-                                    <td><MemeVoteCounter meme={meme} triggerMemeListUpdate={this.props.triggerMemeListUpdate} /></td>                             
+                                    <td><p>{meme.stats.views} views</p></td>
+                                    <td><p>{meme.comment_ids.length} comments</p></td>
+                                    <td><MemeVoteCounter meme={meme} triggerMemeListUpdate={this.props.triggerMemeListUpdate} /></td>
                                     <td><p>{meme.user_name}</p></td>
                                     <td><p>{this.getDateString(meme.creationDate)}</p></td>
                                 </tr>
