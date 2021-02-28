@@ -76,7 +76,62 @@ const resetDB = async() => {
     };
     IDManager.registerNewMemeEntry();
 
-    await db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]);
+    var defaultMeme4 = {
+        _id: 3,
+        url: '/memes/crying.png',
+        captions: ['nothing works'],
+        name: 'Crying because nothing works',
+        comment_ids: [],
+        user_id: 1,
+        template_id: 8,
+        visibility: 2,
+        creationDate: "2021/02/24",
+        stats: {
+            upvotes: [0, 3, 1, 2],
+            downvotes: [],
+            views: 0
+        }
+    };
+    IDManager.registerNewMemeEntry();
+
+    var defaultMeme5 = {
+        _id: 4,
+        url: '/memes/AfterOMM.png',
+        captions: ['OMM'],
+        name: 'Crying out of happiness',
+        comment_ids: [],
+        user_id: 0,
+        template_id: 8,
+        visibility: 2,
+        creationDate: "2021/02/25",
+        stats: {
+            upvotes: [0, 1, 2],
+            downvotes: [3],
+            views: 0
+        }
+    };
+    IDManager.registerNewMemeEntry();
+
+    var defaultMeme6 = {
+        _id: 4,
+        url: '/memes/derBums.png',
+        captions: ['jetzt geht der Bums aber'],
+        name: 'Alles muss funktionieren',
+        comment_ids: [],
+        user_id: 2,
+        template_id: 0,
+        visibility: 2,
+        creationDate: "2021/02/24",
+        stats: {
+            upvotes: [2],
+            downvotes: [3, 0, 1],
+            views: 0
+        }
+    };
+    IDManager.registerNewMemeEntry();
+
+
+    await db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3, defaultMeme4, defaultMeme5, defaultMeme6]);
     console.log("Default memes inserted");
 
     await db.collection('templates').deleteMany({});
