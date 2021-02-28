@@ -22,25 +22,12 @@ class loginInSignUp extends Component {
         const creds = { loginCred, loginPassword }
 
         await api.login(creds).then(res => {
-            console.log(res)
             if (res.status == 401) {
                 window.alert(`You entered wrong credentials`)
-                this.setState({
-                    loginCred: '',
-                    loginPassword: '',
-                    signupUsername: '',
-                    signupEmail: '',
-                    signupPassword: '',
-                })
+                this.clearInput()
             }
             else {
-                this.setState({
-                    loginCred: '',
-                    loginPassword: '',
-                    signupUsername: '',
-                    signupEmail: '',
-                    signupPassword: '',
-                })
+                this.clearInput()
                 createTokenProvider.setToken(res.data.token)
                 window.open("http://localhost:3000/memes","_self");
             }
@@ -50,30 +37,20 @@ class loginInSignUp extends Component {
     signUp = async () => {
         const { signupEmail, signupUsername, signupPassword } = this.state
         const creds = { signupEmail, signupUsername, signupPassword }
+        console.log(creds)
 
-        await api.signup(creds).then(res => {
-            if (res.stauts == 401) {
-                window.alert(`You entered alredy registered credentials`)
-                this.setState({
-                    loginCred: '',
-                    loginPassword: '',
-                    signupUsername: '',
-                    signupEmail: '',
-                    signupPassword: '',
-                })
-            }
-            else {
-                this.setState({
-                    loginCred: '',
-                    loginPassword: '',
-                    signupUsername: '',
-                    signupEmail: '',
-                    signupPassword: '',
-                })
-                createTokenProvider.setToken(res.data.token)
-                window.open("http://localhost:3000/memes/view","_self");
-            }
-        })
+            await api.signup(creds).then(res => {
+                if (res.status == 201) {
+                    this.clearInput()
+                    createTokenProvider.setToken(res.data.token)
+                    window.open("http://localhost:3000/memes/view","_self");
+                }
+                else {
+      
+                    this.clearInput()
+                    window.alert(`You entered already registered credentials`)
+                }
+            })
     }
     
     activateRightPanel = () => {
@@ -116,6 +93,20 @@ class loginInSignUp extends Component {
         this.setState({ Usernameplaceholder })
     }
 
+    clearInput = () => {
+        const inputField = document.getElementsByTagName("input")
+        for (let i = 0; i < inputField.length; i ++){ 
+            inputField[i].value = "";
+        }
+        this.setState({
+            loginCred: '',
+            loginPassword: '',
+            signupUsername: '',
+            signupEmail: '',
+            signupPassword: '',
+        })
+    }
+
     render(){
         return (
             <div id="login-page-wrapper">
@@ -124,7 +115,7 @@ class loginInSignUp extends Component {
                         <h1>Create Account</h1>
                         <input required type="text" placeholder={this.state.Usernameplaceholder} onFocus={this.clearUsernamePlaceholder} onChange={this.handleChangeInputSignupUsername}/>
                         <input required type="email" placeholder="Email" onChange={this.handleChangeInputSignupEmail}/>
-                        <input required type="password" placeholder="Password" onChange={this.handleChangeInputLoginPassword}/>
+                        <input required type="password" placeholder="Password" onChange={this.handleChangeInputSignupPassword}/>
                         <button onClick={this.signUp}>Sign Up</button>
                     </form>
                 </div>
