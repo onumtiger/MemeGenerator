@@ -20,7 +20,15 @@ export default class Comment extends Component {
         if(!this.loggedIn) return;
 
         //get value of input field
-        const input = document.getElementById('commentInput').value;
+        let elem = document.getElementById('commentInput');
+        const input = elem.value;
+
+        if(!input){
+            elem.classList.add('invalid');
+            return;
+        }else{
+            elem.classList.remove('invalid');
+        }
 
         let message = input;
 

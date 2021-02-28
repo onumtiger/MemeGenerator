@@ -278,22 +278,24 @@ const getCommentsByMemeId = async (req, res) => {
  */
 const postComment = async (req, res) => {
 
-    let received_user_id = req.params.id
-    let meme_id = req.body.memeId
-    let received_message = req.body.message
-    let comment_id = idManager.getNewEmptyCommentID()
+    let received_user_id = req.body.userId;
+    let meme_id = req.params.id;
+    let received_message = req.body.message;
+    let comment_id = idManager.getNewEmptyCommentID();
     let date = globalHelpers.getTodayString();
-    let comment = new Comment({ _id: comment_id, user_id: received_user_id, message: received_message, creationDate: date });
 
     try {
-        // UPDATE MEME -> COMMENT ID INSERTED
-        await Meme.updateOne({ _id: meme_id }, { $push: { 'comment_ids': comment_id } })
+        let comment = new Comment({ _id: comment_id, user_id: received_user_id, message: received_message, creationDate: date });
+
         //SAVE COMMENT
-        comment.save(function (err, doc) {
-            if (err) return console.error(err);
+        comment.save(async (err, doc) => {
+            if (err) throw new Error(err);
+
+            // UPDATE MEME -> COMMENT ID INSERTED
+            await Meme.updateOne({ _id: meme_id }, { $push: { 'comment_ids': comment_id } });
+            idManager.registerNewCommentEntry()
+            return res.status(200).json({ success: true, comment_id: comment_id });
         });
-        idManager.registerNewCommentEntry()
-        return res.status(200).json({ success: true, comment_id: comment_id });
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: err.toString() });
