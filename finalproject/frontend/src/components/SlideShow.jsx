@@ -31,7 +31,7 @@ export default class SlideShow extends Component {
     }
 
     /**
-     * get the id of the previous meme
+     * get the id of the previous meme from the current meme index
      * @param {Number} prevFrom - index of the current meme
      */
     getPrevMemeId(prevFrom = this.currentMemeIndex) {
@@ -56,6 +56,10 @@ export default class SlideShow extends Component {
         }
     }
 
+    /**
+     * get the id of the next meme from the current meme index
+     * @param {Number} nextFrom - index of the current meme
+     */
     getNextMemeId(nextFrom = this.currentMemeIndex) {
         //slideIndex: count up when clicked forward, count down when clicked backwards
         let newIndex = nextFrom + 1;
@@ -78,6 +82,10 @@ export default class SlideShow extends Component {
         }
     }
 
+    /**
+     * handles diashow button (play or stop diashow)
+     * @param {Event} e 
+     */
     handleDiashowButtonClick(e) {
         let button = e.target;
         if (this.diashowButtonTimeout) {
@@ -96,12 +104,19 @@ export default class SlideShow extends Component {
         }
     }
 
+    /**
+     * plays diashow (displays the next meme every 2 seconds)
+     */
     playDiashow() {
         //this will adhere to the current sorting, including a random order. With this approach, you are guaranteed to get no repetitions in the slideshow until you have iterated over every other meme.
         this.props.history.push(this.props.urlPath + '/' + this.getNextMemeId());
         this.diashowButtonTimeout = setTimeout(this.playDiashow, 2000);
     }
 
+    /**
+     * gets a random meme id other than the current meme id
+     * @param {Number} otherThan 
+     */
     getRandomMemeId(otherThan = this.currentMemeIndex) {
         let { memes } = this.props;
         let randomIndex = Math.floor(Math.random() * memes.length);
@@ -124,6 +139,10 @@ export default class SlideShow extends Component {
         }
     }
 
+    /**
+     * check if button is disabled
+     * @param {Event} e 
+     */
     checkForDisabledButton(e) {
         if (e.target.classList.contains('inactive')) {
             e.preventDefault();
