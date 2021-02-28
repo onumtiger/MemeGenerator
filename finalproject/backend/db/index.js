@@ -24,13 +24,13 @@ const resetDB = async() => {
 
     var defaultMeme = {
         _id: 0,
-        url: '/memes/jan_domi_zusammentreffen.png',
-        captions: ['Domi', 'Jan Jbernolte'],
-        name: 'Jan und Domi unterwegs',
+        url: '/memes/4_Andreas.png',
+        captions: ['Andreas'],
+        name: 'Andreas',
         comment_ids: [6],
         user_id: 0,
-        template_id: 1,
-        visibility: 0,
+        template_id: 6,
+        visibility: 2,
         creationDate: "2021/02/12",
         stats: {
             upvotes: [0, 2],
@@ -42,12 +42,12 @@ const resetDB = async() => {
 
     var defaultMeme2 = {
         _id: 1,
-        url: '/memes/jan_domi_punch.png',
-        captions: ['Domi', 'Jan Obernolte'],
-        name: 'Jan und Domis Gefühle füreinander',
+        url: '/memes/kunstwerk.png',
+        captions: ['abstrakte', 'Kunst'],
+        name: 'Kann das Weg?',
         comment_ids: [0, 1, 2, 3],
         user_id: 1,
-        template_id: 0,
+        template_id: 9,
         visibility: 2,
         creationDate: "2021/02/13",
         stats: {
@@ -60,12 +60,12 @@ const resetDB = async() => {
 
     var defaultMeme3 = {
         _id: 2,
-        url: '/memes/jan_domi_cat.jpg',
-        captions: ['Dominik', 'Jan Obernolte'],
-        name: 'Jan als Katze',
+        url: '/memes/OMM2.png',
+        captions: ['OMM'],
+        name: 'OMM',
         comment_ids: [4, 5],
         user_id: 2,
-        template_id: 1,
+        template_id: 2,
         visibility: 2,
         creationDate: "2021/02/14",
         stats: {
@@ -76,7 +76,62 @@ const resetDB = async() => {
     };
     IDManager.registerNewMemeEntry();
 
-    await db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3]);
+    var defaultMeme4 = {
+        _id: 3,
+        url: '/memes/crying.png',
+        captions: ['nothing works'],
+        name: 'Crying because nothing works',
+        comment_ids: [],
+        user_id: 1,
+        template_id: 8,
+        visibility: 2,
+        creationDate: "2021/02/24",
+        stats: {
+            upvotes: [0, 3, 1, 2],
+            downvotes: [],
+            views: 0
+        }
+    };
+    IDManager.registerNewMemeEntry();
+
+    var defaultMeme5 = {
+        _id: 4,
+        url: '/memes/3_CreatedMeme.png',
+        captions: ['I am once again asking'],
+        name: 'What?',
+        comment_ids: [],
+        user_id: 0,
+        template_id: 0,
+        visibility: 2,
+        creationDate: "2021/02/25",
+        stats: {
+            upvotes: [0, 1, 2],
+            downvotes: [3],
+            views: 0
+        }
+    };
+    IDManager.registerNewMemeEntry();
+
+    var defaultMeme6 = {
+        _id: 5,
+        url: '/memes/7_ChauDomi-kleinerSpa.png',
+        captions: ['Chau', 'Domi'],
+        name: 'Witzkekse',
+        comment_ids: [],
+        user_id: 2,
+        template_id: 3,
+        visibility: 2,
+        creationDate: "2021/02/24",
+        stats: {
+            upvotes: [2, 0, 1],
+            downvotes: [0, 1],
+            views: 0
+        }
+    };
+    IDManager.registerNewMemeEntry();
+
+
+    await db.collection('memes').insertMany([defaultMeme, defaultMeme2, defaultMeme3, defaultMeme4, defaultMeme5, defaultMeme6]);
     console.log("Default memes inserted");
 
     await db.collection('templates').deleteMany({});
@@ -208,7 +263,21 @@ const resetDB = async() => {
     };
     IDManager.registerNewTemplateEntry();
 
-    await db.collection('templates').insertMany([defaultTemplate, defaultTemplate2, defaultTemplate3, defaultTemplate4, defaultTemplate5, defaultTemplate6, defaultTemplate7, defaultTemplate8, defaultTemplate9]);
+    var defaultTemplate10 = {
+        _id: 9,
+        url: '/templates/0_drawnimage.png',
+        name: 'drawn image',
+        user_id: 0,
+        visibility: 2,
+        stats: {
+            upvotes: [],
+            downvotes: [],
+            uses: 0
+        }
+    };
+    IDManager.registerNewTemplateEntry();
+
+    await db.collection('templates').insertMany([defaultTemplate, defaultTemplate2, defaultTemplate3, defaultTemplate4, defaultTemplate5, defaultTemplate6, defaultTemplate7, defaultTemplate8, defaultTemplate9, defaultTemplate10]);
     console.log("Default templates inserted");
 
     // mongoose lokal db USER reset, without SCHMEMA
@@ -1387,7 +1456,96 @@ const resetDB = async() => {
         ]
     }
 
-    await db.collection('templatestats').insertMany([defaultTemplateStats, defaultTemplateStats2, defaultTemplateStats3, defaultTemplateStats4, defaultTemplateStats5, defaultTemplateStats6, defaultTemplateStats7, defaultTemplateStats8, defaultTemplateStats9]);
+    var defaultTemplateStats10 = {
+        _id: 9,
+        days: [{
+                date: "2021/02/09",
+                upvotes: 2,
+                downvotes: 75,
+                uses: 4
+            },
+            {
+                date: "2021/02/10",
+                upvotes: 6,
+                downvotes: 52,
+                uses: 6
+            },
+            {
+                date: "2021/02/11",
+                upvotes: 3,
+                downvotes: 43,
+                uses: 7
+            },
+            {
+                date: "2021/02/12",
+                upvotes: 7,
+                downvotes: 42,
+                uses: 1
+            },
+            {
+                date: "2021/02/13",
+                upvotes: 8,
+                downvotes: 53,
+                uses: 6
+            },
+            {
+                date: "2021/02/14",
+                upvotes: 5,
+                downvotes: 34,
+                uses: 3
+            },
+            {
+                date: "2021/02/15",
+                upvotes: 6,
+                downvotes: 33,
+                uses: 6
+            },
+            {
+                date: "2021/02/16",
+                upvotes: 3,
+                downvotes: 43,
+                uses: 3
+            },
+            {
+                date: "2021/02/17",
+                upvotes: 6,
+                downvotes: 58,
+                uses: 2
+            },
+            {
+                date: "2021/02/18",
+                upvotes: 7,
+                downvotes: 42,
+                uses: 1
+            },
+            {
+                date: "2021/02/19",
+                upvotes: 7,
+                downvotes: 24,
+                uses: 2
+            },
+            {
+                date: "2021/02/20",
+                upvotes: 5,
+                downvotes: 38,
+                uses: 4
+            },
+            {
+                date: "2021/02/21",
+                upvotes: 8,
+                downvotes: 45,
+                uses: 2
+            },
+            {
+                date: "2021/02/22",
+                upvotes: 3,
+                downvotes: 23,
+                uses: 1
+            }
+        ]
+    }
+
+    await db.collection('templatestats').insertMany([defaultTemplateStats, defaultTemplateStats2, defaultTemplateStats3, defaultTemplateStats4, defaultTemplateStats5, defaultTemplateStats6, defaultTemplateStats7, defaultTemplateStats8, defaultTemplateStats9, defaultTemplateStats10]);
     console.log("Default templatestats inserted");
 
 

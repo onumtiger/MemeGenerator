@@ -30,7 +30,7 @@ The React app will open in development mode on localhost:3000, while the Express
 - To enable testing the backend server needs to be available
 - **Start the Server:** navigate into our `./backend` folder and run ``npm start``
 - The test check the frontend backend connection
-- **Run the Test:** navigate into our `./frontend` folder and run ``npm test ``
+- **Run the Test:** navigate into our `./frontend` folder and run ``npm test``
 ## External tech we used during development
 
 - The React frontend was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -39,6 +39,48 @@ The React app will open in development mode on localhost:3000, while the Express
 - The voice control and text reading function is based on the Web Speech Api (https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 - Creating a meme in our site is also possible via the ImgFlip API (https://imgflip.com/api)
 - The charts were created with D3.js, a JavaScript library for manipulating documents based on data (https://d3js.org)
+- the jwt token is created using the jsonwebtoken package (https://www.npmjs.com/package/jsonwebtoken). JWT are used to encode information store at them at the client
+- the password is encrypted and decrypted with bcrypt (https://www.npmjs.com/package/bcrypt). Bcrypt uses a given salt to hash e.g. passwords 
+- the communication between backend and frontend is done with axios (https://www.npmjs.com/package/axios). With axios http requests are generated to use a restful api.
+- creating memes via screenshots is done with puppeteer (https://www.npmjs.com/package/puppeteer). Puppeteer enanbles interacting with the browser via code e.g. to navigate between pages.
+- the body-parser (https://www.npmjs.com/package/body-parser) is used to use bodies of http requests in our middleware.
+- Using nodemon (https://www.npmjs.com/package/nodemon) real time changes in our backend are possible as it reloads everytime a change is saved
+- Jest (https://www.npmjs.com/package/jest) is a testing library which enables automated testing. It can be modified in several ways to enbale e.g. UI testing using puppeteer.
+- cors (https://www.npmjs.com/package/cors) is used to enable middleware usage
+
+## How to use our voice control:
+
+- The voice control only recognizes english language
+- It is active by clicking the "enable voice control" button within the "Custom Meme Creation" page
+- It stops when re-clicking on the same button or by saying the keywords "stop" or "thank you", alone or within a sentence
+- The voice control is answering after every voice input, so if there is no answer then there is something broken
+- The voice recognition is capable of understanding 90% of the page input possibilities, thus 90% of the pages functionality
+
+    (FUNCTION) (Y/N), (VOICE INPUT EXAMPLE)
+    -> Choose template (Y), example: "Choose template number one"
+    -> Create new template (Y), example: "Create a new template"
+    -> Use draft (Y), example: "Use draft"
+    -> Next template (Y), example: "Next template"
+    -> Previous template (Y), example: "Previous template"
+    -> Use this template (Y), example: "Use this template"
+    -> Create own image (Y), example: "Create own image"
+    -> Upload external image (Y), example: "Upload external image"
+    -> Entering a title (Y), example: "Enter title" (asking which title then)
+    -> Adding captions (Y), example: "Add caption"
+    -> Specific font styling (N), not supported now, but answers when asked to do so
+    -> Setting visibility (Y), example: "set to public"
+    -> Saving as draft (Y), example: "Save as draft"
+    -> Saving as new draft (Y), example: "Save as new draft"
+    -> Download image (Y), example: "download image"
+    -> Publish image (Y), example: "publish image"
+
+    -> If the recognition did not understand the voice input it asks you to say a command one more time 
+    -> If the voice control is not feeling confident with what she/he understood, she/he will say that
+
+    -> (gender equality), we encountered that the voice control is a man on apple devices and a women on windows devices
+    -> Furthermore we are pretty confident that the voice control is working better when no other program uses the microphone at the same time (this may be subjective and perhaps caused by some other disturbing sounds when connected to another voice channel like discord)
+    -> Only working on Google Chrome, but checked and handled when used by another browser. 
+
 
 ## How to use our (image creation) API:
 
