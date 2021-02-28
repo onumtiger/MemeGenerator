@@ -1,8 +1,8 @@
 const express = require('express');
 const MemeCtrl = require('../controllers/meme-ctrl');
-
 const router = express.Router();
 
+// MEME
 router.get('/', MemeCtrl.getMemes);
 router.get('/own', MemeCtrl.getOwnMemes);
 router.post('/', MemeCtrl.createMeme);

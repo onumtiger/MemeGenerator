@@ -4,6 +4,11 @@ const IDManager = require('../db/id-manager');
 const constants = require('../utils/constants');
 const globalHelpers = require('../utils/globalHelpers');
 
+/**
+ * creates and saves am new template into the db
+ * @param {*} req 
+ * @param {*} res 
+ */
 const createTemplate = async (req, res) => {
     const body = req.body;
 
@@ -14,13 +19,13 @@ const createTemplate = async (req, res) => {
         })
     }
 
-    if(req.files && req.files.image){ //check if we actually received a file
+    if (req.files && req.files.image) { //check if we actually received a file
         let img = req.files.image;
         let id = IDManager.getNewEmptyTemplateID();
-        let filename = id+"_"+img.name; //ID in addition to name in order to prevent unwanted overrides
-        let url = '/templates/'+filename;
-        img.mv('public'+url, async function(err){ //this overwrites an existing image at that filepath if there is one!
-            if(err){
+        let filename = id + "_" + img.name; //ID in addition to name in order to prevent unwanted overrides
+        let url = '/templates/' + filename;
+        img.mv('public' + url, async function (err) { //this overwrites an existing image at that filepath if there is one!
+            if (err) {
                 return res.status(500).json({
                     success: false,
                     error: err.toString()
@@ -31,12 +36,12 @@ const createTemplate = async (req, res) => {
             saveTemplate(body, res);
 
         });
-    }else if(body.imageURL){
+    } else if (body.imageURL) {
         body.id = IDManager.getNewEmptyTemplateID();
         body.url = body.imageURL;
         saveTemplate(body, res);
 
-    }else{
+    } else {
         return res.status(400).json({
             success: false,
             error: 'No valid file received!'
@@ -44,6 +49,11 @@ const createTemplate = async (req, res) => {
     }
 }
 
+/**
+ * save template (helper method)
+ * @param {*} params 
+ * @param {*} res 
+ */
 const saveTemplate = (params, res) => {
     const template = new Template({
         _id: params.id,
@@ -67,11 +77,11 @@ const saveTemplate = (params, res) => {
 
     template
         .save()
-        .then(()=>{
+        .then(() => {
             const statEntry = new TemplateStats({
                 _id: params.id
             });
-        
+
             return statEntry.save();
         })
         .then(() => {
@@ -90,6 +100,11 @@ const saveTemplate = (params, res) => {
         })
 }
 
+/**
+ * deletes a specific template from the database
+ * @param {*} req 
+ * @param {*} res 
+ */
 const deleteTemplate = async (req, res) => {
     await Template.findOneAndDelete({ _id: req.params.id }, (err, template) => {
         if (err) {
@@ -106,6 +121,11 @@ const deleteTemplate = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+/**
+ * gets a specific template by a given id
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getTemplateById = async (req, res) => {
     await Template.findOne({ _id: req.params.id }, (err, template) => {
         if (err) {
@@ -121,30 +141,39 @@ const getTemplateById = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+/**
+ * gets all templates from database
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getTemplates = async (req, res) => {
     let userId = req.query.userId; //will be undefined if none is sent, and thus match no template user_id
     //send own and public templates
-    await Template.find({ $or: [ {visibility: constants.VISIBILITY.PUBLIC}, {user_id: userId} ] }, (err, templateArray) => {
+    await Template.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { user_id: userId }] }, (err, templateArray) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        
+
         return res.status(200).json({ success: true, data: templateArray })
     }).catch(err => console.log(err))
 }
 
-
-const toggleUpvoteTemplate = async(req, res) => {
+/**
+ * functionality when a template is upvoted
+ * @param {*} req 
+ * @param {*} res 
+ */
+const toggleUpvoteTemplate = async (req, res) => {
     try {
         let templateId = req.params.id;
         let userId = req.body.userId;
         let newValue = req.body.newValue;
 
-        if(newValue){ //check if we want to upvote or de-upvote
+        if (newValue) { //check if we want to upvote or de-upvote
             await Template.updateOne({ _id: templateId }, { $push: { 'stats.upvotes': userId } });
 
             let date = globalHelpers.getTodayString();
-            TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.upvotes': 1 } }, async(err, templateStats) => {
+            TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.upvotes': 1 } }, async (err, templateStats) => {
                 if (err) {
                     return res.status(400).json({ success: false, error: err });
                 }
@@ -153,7 +182,7 @@ const toggleUpvoteTemplate = async(req, res) => {
                 }
                 return res.status(200).json({ success: true });
             })
-        }else{
+        } else {
             await Template.updateOne({ _id: templateId }, { $pull: { 'stats.upvotes': userId } });
             return res.status(200).json({ success: true });
         }
@@ -163,17 +192,22 @@ const toggleUpvoteTemplate = async(req, res) => {
     }
 }
 
-const toggleDownvoteTemplate = async(req, res) => {
+/**
+ * functionality when a template is downvoted
+ * @param {*} req 
+ * @param {*} res 
+ */
+const toggleDownvoteTemplate = async (req, res) => {
     try {
         let templateId = req.params.id;
         let userId = req.body.userId;
         let newValue = req.body.newValue;
 
-        if(newValue){ //check if we want to downvote or de-downvote
+        if (newValue) { //check if we want to downvote or de-downvote
             await Template.updateOne({ _id: templateId }, { $push: { 'stats.downvotes': userId } });
 
             let date = globalHelpers.getTodayString();
-            TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async(err, templateStats) => {
+            TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async (err, templateStats) => {
                 if (err) {
                     return res.status(400).json({ success: false, error: err });
                 }
@@ -182,7 +216,7 @@ const toggleDownvoteTemplate = async(req, res) => {
                 }
                 return res.status(200).json({ success: true });
             })
-        }else{
+        } else {
             await Template.updateOne({ _id: templateId }, { $pull: { 'stats.downvotes': userId } });
             return res.status(200).json({ success: true });
         }

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// MODEL FOR STATS (TEMPLATE)
 const TemplateStatsSchema = new Schema({
     _id: { type: Number, required: true }, // matching TEMPLATE (!) id
     days: [{
@@ -9,7 +10,7 @@ const TemplateStatsSchema = new Schema({
         downvotes: { type: Number, default: 0 }, // number of downvotes on this day
         uses: { type: Number, default: 0 } // number of uses on this day
     }],
-}, { collection: 'templatestats' });
+}, { collection: 'templatestats' }); // collection templatestats
 
 
 module.exports = mongoose.model('templatestats', TemplateStatsSchema);

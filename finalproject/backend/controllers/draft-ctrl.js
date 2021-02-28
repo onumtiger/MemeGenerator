@@ -1,17 +1,27 @@
 const Draft = require('../db/models/draft-model');
 const IDManager = require('../db/id-manager');
 
+/**
+ * Get saved drafts for meme creation
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getDrafts = async (req, res) => {
     let userId = req.query.userId;
     await Draft.find({ user_id: userId }, (err, draftArray) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
         }
-        
+
         return res.status(200).json({ success: true, data: draftArray });
     }).catch(err => console.log(err))
 }
 
+/**
+ * inserts a draft into the db
+ * @param {*} req 
+ * @param {*} res 
+ */
 const insertDraft = async (req, res) => {
     let body = req.body;
     let draftId = IDManager.getNewEmptyDraftID();
@@ -49,6 +59,11 @@ const insertDraft = async (req, res) => {
         })
 }
 
+/**
+ * removes a draft from the database
+ * @param {} req 
+ * @param {*} res 
+ */
 const deleteDraft = async (req, res) => {
     let draftId = req.params.draftId;
 

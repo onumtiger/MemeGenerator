@@ -1,11 +1,21 @@
 const Jimp = require('jimp');
 const puppeteer = require('puppeteer');
 
+/**
+ * test
+ * @param {*} req 
+ * @param {*} res 
+ */
 const testQueryParams = (req, res) => {
     console.log(req.query);
     res.status(200).json(req.query);
 }
 
+/**
+ * get web image
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getWebImage = async (req, res) => {
     let remoteUrl = decodeURIComponent(req.params.url);
     
@@ -33,6 +43,11 @@ const getWebImage = async (req, res) => {
     }
 }
 
+/**
+ * get web snapshot
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getWebSnapshot = async (req, res) => {
     let remoteUrl = decodeURIComponent(req.params.url);
     try{

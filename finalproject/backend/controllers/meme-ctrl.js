@@ -15,7 +15,7 @@ const idManager = require('../db/id-manager');
  * @param {*} req 
  * @param {*} res 
  */
-const createMeme = async(req, res) => {
+const createMeme = async (req, res) => {
     const body = req.body;
 
     if (!body) {
@@ -30,7 +30,7 @@ const createMeme = async(req, res) => {
         let id = IDManager.getNewEmptyMemeID();
         let filename = id + "_" + img.name; //ID in addition to name in order to prevent unwanted overrides
         let url = '/memes/' + filename;
-        img.mv('public' + url, async function(err) { //this overwrites an existing image at that filepath if there is one!
+        img.mv('public' + url, async function (err) { //this overwrites an existing image at that filepath if there is one!
             if (err) {
                 return res.status(500).json({
                     success: false,
@@ -86,13 +86,13 @@ const saveMeme = (params, res) => {
 
     meme
         .save()
-        .then(()=>{
+        .then(() => {
             const statEntry = new MemeStats({
                 _id: params.id
             });
             return statEntry.save();
         })
-        .then(async() => {
+        .then(async () => {
             await addTemplateUse(params.templateID);
         })
         .then(() => {
@@ -117,7 +117,7 @@ const saveMeme = (params, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const deleteMeme = async(req, res) => {
+const deleteMeme = async (req, res) => {
     await Meme.findOneAndDelete({ _id: req.params.id }, (err, meme) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -138,7 +138,7 @@ const deleteMeme = async(req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getMemeById = async(req, res) => {
+const getMemeById = async (req, res) => {
     await Meme.findOne({ _id: req.params.id }, (err, meme) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -158,7 +158,7 @@ const getMemeById = async(req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getMemes = async(req, res) => {
+const getMemes = async (req, res) => {
     let userId = req.query.userId; //will be undefined if none is sent, and thus match no meme user_id
     //send own, public and unlisted memes (unlisted to enable access via direct links), but non-public memes will be filtered out in the frontend from regular navigation and lists
     await Meme.find({ $or: [{ visibility: constants.VISIBILITY.PUBLIC }, { visibility: constants.VISIBILITY.UNLISTED }, { user_id: userId }] }, async (err, memes) => {
@@ -196,13 +196,13 @@ const getMemes = async(req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getOwnMemes = async(req, res) => {
+const getOwnMemes = async (req, res) => {
     let userId = req.query.userId;
     await Meme.find({ user_id: userId }, async (err, memes) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        
+
         let resultArray = [];
 
         //convert the results from Documents to JSON objects, otherwise we can't add properties that are not defined in the model
@@ -219,7 +219,7 @@ const getOwnMemes = async(req, res) => {
             let user = await User.findOne({ _id: userID });
             if (user) entry.user_name = user.username;
         }
-        
+
         return res.status(200).json({ success: true, data: resultArray })
     }).catch(err => console.log(err))
 }
@@ -229,7 +229,7 @@ const getOwnMemes = async(req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getCommentsByMemeId = async(req, res) => {
+const getCommentsByMemeId = async (req, res) => {
     try {
         let memeId = req.params.id;
         let meme = await Meme.findOne({ _id: memeId })
@@ -266,7 +266,7 @@ const getCommentsByMemeId = async(req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const postComment = async(req, res) => {
+const postComment = async (req, res) => {
 
     let received_user_id = req.params.id
     let meme_id = req.body.memeId
@@ -278,8 +278,8 @@ const postComment = async(req, res) => {
     try {
         // UPDATE MEME -> COMMENT ID INSERTED
         await Meme.updateOne({ _id: meme_id }, { $push: { 'comment_ids': comment_id } })
-            //SAVE COMMENT
-        comment.save(function(err, doc) {
+        //SAVE COMMENT
+        comment.save(function (err, doc) {
             if (err) return console.error(err);
         });
         idManager.registerNewCommentEntry()
@@ -291,7 +291,7 @@ const postComment = async(req, res) => {
 }
 
 // TODO: CHECK IF USED?!
-const patchMeme = async function(req, res) {
+const patchMeme = async function (req, res) {
     var body = req.body;
     var memeId = req.params.id;
     var updatedProperty = body.toUpdate
@@ -304,13 +304,13 @@ const patchMeme = async function(req, res) {
  * @param {*} req 
  * @param {*} res 
  */
-const viewMeme = async(req, res) => {
+const viewMeme = async (req, res) => {
     try {
         let memeId = req.params.id;
         await Meme.updateOne({ _id: memeId }, { $inc: { 'stats.views': 1 } });
 
         let date = globalHelpers.getTodayString();
-        MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.views': 1 } }, async(err, memeStats) => {
+        MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.views': 1 } }, async (err, memeStats) => {
             if (err) {
                 return res.status(400).json({ success: false, error: err })
             }
@@ -329,12 +329,12 @@ const viewMeme = async(req, res) => {
  * Template used
  * @param {*} templateId 
  */
-const addTemplateUse = async(templateId) => {
+const addTemplateUse = async (templateId) => {
     try {
         await Template.updateOne({ _id: templateId }, { $inc: { 'stats.uses': 1 } });
 
         let date = globalHelpers.getTodayString();
-        TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.uses': 1 } }, async(err, templateStats) => {
+        TemplateStats.findOneAndUpdate({ _id: templateId, 'days.date': date }, { $inc: { 'days.$.uses': 1 } }, async (err, templateStats) => {
             if (err) {
                 throw new Error("Could not update template used counter!");
             }
@@ -352,7 +352,7 @@ const addTemplateUse = async(templateId) => {
  * @param {*} req 
  * @param {*} res 
  */
-const toggleUpvoteMeme = async(req, res) => {
+const toggleUpvoteMeme = async (req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
@@ -363,7 +363,7 @@ const toggleUpvoteMeme = async(req, res) => {
 
             //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
             let date = globalHelpers.getTodayString();
-            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.upvotes': 1 } }, async(err, memeStats) => {
+            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.upvotes': 1 } }, async (err, memeStats) => {
                 if (err) {
                     return res.status(400).json({ success: false, error: err });
                 }
@@ -387,7 +387,7 @@ const toggleUpvoteMeme = async(req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const toggleDownvoteMeme = async(req, res) => {
+const toggleDownvoteMeme = async (req, res) => {
     try {
         let memeId = req.params.id;
         let userId = req.body.userId;
@@ -398,7 +398,7 @@ const toggleDownvoteMeme = async(req, res) => {
 
             //daily stats only register votes, no de-votes. Assuming users don't go overboard with this option, this makes it easier to compare "real" interactions over time, and also makes for better testing.
             let date = globalHelpers.getTodayString();
-            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async(err, memeStats) => {
+            MemeStats.findOneAndUpdate({ _id: memeId, 'days.date': date }, { $inc: { 'days.$.downvotes': 1 } }, async (err, memeStats) => {
                 if (err) {
                     return res.status(400).json({ success: false, error: err });
                 }

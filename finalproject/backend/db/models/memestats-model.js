@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// MODEL FOR STATS (MEME) 
 const MemeStatsSchema = new Schema({
     _id: { type: Number, required: true }, // matching MEME (!) id
     days: [{
@@ -9,7 +10,7 @@ const MemeStatsSchema = new Schema({
         downvotes: { type: Number, default: 0 }, // number of downvotes on this day
         views: { type: Number, default: 0 } // number of views on this day
     }],
-}, { collection: 'memestats' });
+}, { collection: 'memestats' }); // collection memeStats
 
 
 module.exports = mongoose.model('memestats', MemeStatsSchema);
