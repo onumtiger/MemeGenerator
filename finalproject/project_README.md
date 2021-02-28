@@ -29,10 +29,10 @@ The React app will open in development mode on localhost:3000, while the Express
 - To enable testing the backend server needs to be available
 - **Start the Server:** navigate into our `./backend` folder and run ``npm start``
 - The test check the frontend backend connection
-- **Run the Tets:** navigate intro our `./frontend` folder and run ``npm start ``
+- **Run the Tets:** navigate intro our `./frontend` folder and run ``npm test ``
 ## External tech we used during development
 
 - The React frontend was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 - The Express backend was generated with [express-generator](https://www.npmjs.com/package/express-generator). (TODO was it, still?)
-- The login/sign up screen was implemented with the following source (https://codepen.io/FlorinPop17/pen/vPKWjd)
+- The login/sign up screen UI was implemented with the following source (https://codepen.io/FlorinPop17/pen/vPKWjd)
 
