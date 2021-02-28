@@ -11,8 +11,8 @@ var numbers;
 
 /**
  * handles all voice input
- * @param {*} globalVoiceControlButtonParameter 
- * @param {*} voiceInputCallback 
+ * @param {*} globalVoiceControlButtonParameter // button to enable
+ * @param {*} voiceInputCallback // function to call when input is spoken
  */
 const activateFullVoiceControl = (globalVoiceControlButtonParameter, voiceInputCallback) => {
 
@@ -81,7 +81,7 @@ const result2 = (event) => {
         Read.readEnglish("Alright, how do you want to create your template?")
         handleVoiceInput("create_new_template", "")
     }
-    else if(res.includes("template")||res.includes("choose")||res.includes("take")&&(!res.includes("next")||!res.includes("previous"))){
+    else if(!res.includes("this")&&!res.includes("use")&&res.includes("template")||res.includes("choose")||res.includes("take")&&!(!res.includes("next")||!res.includes("previous"))){
         let parameter = null
 
         // check template number
@@ -95,7 +95,7 @@ const result2 = (event) => {
         else {Read.readEnglish("Oh I think it is besser when you choose, I am not feeling good at the moment. Sorry!")}
         
     } // NEXT BUTTON
-    else if(res.includes("next")){
+    else if(res.includes("next")&&!res.includes("caption")){
         Read.readEnglish("Oh okay, next one!")
         handleVoiceInput("next_template", "")
     } // PREVIOUS BUTTON
@@ -106,6 +106,10 @@ const result2 = (event) => {
     else if(res.includes("draft")&&!(res.includes("save"))){
         Read.readEnglish("Ok, lets work on your last draft")
         handleVoiceInput("draft", "")
+    } // USE THIS TEMPLATE
+    else if(res.includes("this")&&(res.includes("template")||res.includes("use")&&res.includes("this"))){
+        Read.readEnglish("Ok, lets use it")
+        handleVoiceInput("use_template", "")
     } // ENTER TITLE
     else if(res.includes("title")||res.includes("titel")){
         Read.readEnglish("Dictate your desired title now!")
@@ -142,10 +146,10 @@ const result2 = (event) => {
         handleVoiceInput("external_image", "")
     } // PUBLISH
     else if(res.includes("publish")){
-        Read.readEnglish("Yeah boy! It is live!")
+        Read.readEnglish("Yeah nice! It is life!")
         handleVoiceInput("publish", "")
     } // SAVE AS DRAFT
-    else if(res.includes("draft")&&res.includes("save")){
+    else if((res.includes("draft")&&res.includes("save"))||(res.includes("again")&&res.includes("save"))){
         Read.readEnglish("Saved as draft!")
         handleVoiceInput("save_draft", "")
     } // SCROLL UP
@@ -193,13 +197,14 @@ const stopSpeechRecognition = () => {
  * called when recording starts
  */
 const startRecording = () => {
-    //console.log("ACTIVE")
+    console.log("ACTIVE")
 }
 
 /**
  * called when recording ends
  */
 const stopRecording = () => {
+    console.log("INACTIVE")
     globalVoiceControlButton.innerHTML = "enable voice control"
     globalVoiceControlButton.style.backgroundColor = "initial" 
 }

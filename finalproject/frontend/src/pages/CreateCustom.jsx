@@ -4,7 +4,11 @@ import api from '../api';
 import '../style/CreateCustom.scss';
 import Main from '../speech/main';
 
+/**
+ * Custom creation of a meme by choosing template, using draft ...
+ */
 export default class CreateCustom extends React.Component {
+
     constructor(props){
         super(props);
         this.voiceControl = false;
@@ -146,7 +150,7 @@ export default class CreateCustom extends React.Component {
 
     handleVoiceInput(status, parameter){
 
-        // get needed objects
+        // get used objects
         let plusButton = document.querySelector('.template-plus');
         let prevButton = document.querySelector('.previousButton');
         let nextButton = document.querySelector('.nextButton');
@@ -161,6 +165,7 @@ export default class CreateCustom extends React.Component {
         let publishButton = document.querySelector('.canvas-publish-btn');
         let createOwnTemplate = document.querySelector('.create-own-template');
         let externalImage = document.querySelector('.external-image');
+        let useTemplateButton = document.querySelector('.use-template');
 
        
         // REACT ACCORDING TO STATUS
@@ -229,21 +234,22 @@ export default class CreateCustom extends React.Component {
             case "down":
                 window.scrollTo(0,document.body.scrollHeight);
             break;
-            case "set_caption_bold":
-                //TODO
-            break;
-            case "set_caption_italic":
-                //TODO
+            case "use_template":
+                useTemplateButton.click()
+                window.scrollTo(0,document.body.scrollHeight);
             break;
             default:
             break; 
             }         
-
     }
 
+    /**
+     * Mainly used for speech recognition, contains click handler for enable button
+     */
     componentDidMount(){
         this.loadTemplatesIntoList();
-        
+
+        // Voice button handler calls methods accordingly
         let voiceControlButton = document.querySelector('.voice-control-button');
         voiceControlButton.addEventListener('click', (e)=>{
             if(!this.voiceControl){
