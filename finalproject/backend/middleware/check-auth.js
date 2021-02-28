@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 /**
  * This middleware can be used to protect routs
  * if route is procted token is needed to access it
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
+ * @param {Request} req - Express Request Object
+ * @param {Response} res - Express Response Object
+ * @param {Function} next - Next function
  */
 module.exports = (req, res, next) => {
     try {
