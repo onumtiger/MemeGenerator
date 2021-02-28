@@ -11,8 +11,8 @@ var numbers;
 
 /**
  * handles all voice input
- * @param {*} globalVoiceControlButtonParameter // button to enable
- * @param {*} voiceInputCallback // function to call when input is spoken
+ * @param {Element} globalVoiceControlButtonParameter // button to enable
+ * @param {Function} voiceInputCallback // function to call when input is spoken
  */
 const activateFullVoiceControl = (globalVoiceControlButtonParameter, voiceInputCallback) => {
 

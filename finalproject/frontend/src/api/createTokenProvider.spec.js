@@ -1,6 +1,8 @@
 import apis from './index.js'
 import createTokenProvider from './createTokenProvider.js'
 
+// TEST
+
 describe("create token test", () => {
     it('should successfully sign up and store token', async () => {
         let userId

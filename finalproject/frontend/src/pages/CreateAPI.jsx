@@ -50,7 +50,7 @@ class CreateAPI extends Component { //TODO visibility options styling
 
     /**
      * change selected template
-     * @param {*} selectedElem 
+     * @param {EventTarget} selectedElem - target
      */
     changeTemplateSelection(selectedElem) {
         let prevSelection = document.querySelector('#create-api-page-wrapper #template-container .selected');
@@ -60,7 +60,7 @@ class CreateAPI extends Component { //TODO visibility options styling
 
     /**
      * handles template click
-     * @param {*} e 
+     * @param {Event} e 
      */
     handleTemplateClick(e) {
         let elem = e.target;
@@ -78,7 +78,7 @@ class CreateAPI extends Component { //TODO visibility options styling
 
     /**
      * handles "generate" button
-     * @param {*} e 
+     * @param {Event} e 
      */
     handleGenerateButtonClick = async (e) => {
         let params = {
@@ -118,7 +118,7 @@ class CreateAPI extends Component { //TODO visibility options styling
 
     /**
      * handles visibility
-     * @param {*} e 
+     * @param {Event} e 
      */
     handleVisibilityOptionCheck(e) {
         if (e.target.checked) {
@@ -129,7 +129,7 @@ class CreateAPI extends Component { //TODO visibility options styling
 
     /**
      * handles publishing
-     * @param {*} e 
+     * @param {Event} e 
      */
     handlePublishButtonClick = async (e) => {
         //collect all necessary data and check if anything is missing

@@ -2,7 +2,7 @@ var synth = window.speechSynthesis;
 
 /**
  * Read englisch content 
- * @param {*} text 
+ * @param {String} text - text to read
  */
 const readEnglish = (text) => {
     var utterThis = new SpeechSynthesisUtterance(text);
@@ -13,7 +13,7 @@ const readEnglish = (text) => {
 
 /**
  * Read captions
- * @param {*} captionContent 
+ * @param {String} captionContent - caption to read
  */
 const readCaption = (captionContent) => {
     var utterThis = new SpeechSynthesisUtterance(captionContent);

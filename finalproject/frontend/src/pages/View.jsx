@@ -50,7 +50,7 @@ export default class View extends Component {
 
     /**
      * updates the current meme list
-     * @param {*} newArray 
+     * @param {{MemeDBEntry}} newArray - Memes Array (database)
      */
     updateMemeList(newArray = this.state.memes) {
         this.setState({ memes: newArray });
@@ -59,9 +59,9 @@ export default class View extends Component {
 
     /**
      * set filter 
-     * @param {*} searchTerm 
-     * @param {*} filter 
-     * @param {*} sorting 
+     * @param {String} searchTerm - searched text
+     * @param {String} filter - filtered content
+     * @param {String} sorting - sorted type
      */
     setFilters(searchTerm, filter, sorting) {
         this.filters = { searchTerm, filter, sorting };
