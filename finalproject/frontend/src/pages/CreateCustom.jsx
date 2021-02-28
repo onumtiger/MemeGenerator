@@ -4,6 +4,7 @@ import api from '../api';
 import '../style/CreateCustom.scss';
 import Main from '../speech/main';
 import createTokenProvider from '../api/createTokenProvider';
+import { NavBar } from '../components';
 
 /**
  * Custom creation of a meme by choosing template, using draft ...
@@ -303,6 +304,8 @@ export default class CreateCustom extends React.Component {
 
     render(){
         return (
+            <>
+            <NavBar />
             <div id="create-custom-page-wrapper">
                 <h2>Custom Meme Creation</h2>
                 <TemplatesList data={this.state.templateListData} handleTemplateSelection={this.selectTemplate} handlePlusButtonClick={this.letAddTemplate} handleSelectionChange={this.changeSelection} />
@@ -323,6 +326,7 @@ export default class CreateCustom extends React.Component {
                     <WYSIWYGEditor ref={this.editorRef} templateImagePath={this.initialTemplateSrc} templateImageId={this.initialTemplateId} draft={this.state.selectedDraft} history={this.props.history} />
                 }
             </div>
+            </>
         );
     }
 }

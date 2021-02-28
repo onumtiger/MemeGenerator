@@ -6,6 +6,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import createTokenProvider from '../api/createTokenProvider';
 import '../style/MyMemes.scss';
+import { NavBar } from '../components';
 
 /**
  * list of own memes (user)
@@ -57,6 +58,8 @@ export default class MyMemes extends Component {
         let { memes, isLoading } = this.state;
         
         return (
+            <>
+            <NavBar />
             <div id="mymemes-page-wrapper">
                 {isLoading ? (
                     <div id="mymemes-page-loader">
@@ -97,6 +100,7 @@ export default class MyMemes extends Component {
                         </>
                     )}
             </div>
+            </>
         )
     }
 }

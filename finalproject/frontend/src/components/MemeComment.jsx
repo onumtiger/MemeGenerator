@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import '../style/MemeComment.scss';
+import createTokenProvider from '../api/createTokenProvider';
 
 export default class Comment extends Component {
 
     constructor(props) {
         super(props);
+        this.userId = createTokenProvider.userIdFromToken();
+        this.loggedIn = createTokenProvider.isLoggedIn();
     }
 
     handlePost = async () => {
+        if(!this.loggedIn) return;
+
         const input = document.getElementById('commentInput').value;
 
         let message = input;
@@ -18,6 +23,7 @@ export default class Comment extends Component {
     }
 
     handleKeypress = e => {
+        if(!this.loggedIn) return;
         //triggers by pressing the enter key
         if (e.which == 13 || e.keyCode == 13) {
             this.handlePost();
@@ -50,8 +56,8 @@ export default class Comment extends Component {
                     ))}
                 </div>
                 <div className="postContainer">
-                    <input id="commentInput" placeholder="add a comment..." onKeyPress={this.handleKeypress}></input>
-                    <button id="postButton" onClick={this.handlePost}>Post</button>
+                    <input id="commentInput" disabled={!this.loggedIn} placeholder={this.loggedIn ? 'Add a comment...' : 'You have to log in to post comments'} onKeyPress={this.handleKeypress}></input>
+                    <button id="postButton" onClick={this.handlePost} className={this.loggedIn ? '' : 'disabled'} title={this.loggedIn ? 'Post your comment' : 'You have to log in to post comments'}>Post</button>
                 </div>
             </div >
         );

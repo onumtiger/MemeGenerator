@@ -49,20 +49,14 @@ export const postComment = (userId, memeId, message) => api.post(`/meme/comments
  * creds must contain email/pw or username/pw
  * @param {*} cred 
  */
-export const login = cred => api.post('/user/login', cred).catch(() => {
-    const res = { status: 401}
-    return res
-})
+export const login = cred => api.post('/user/login', cred);
 
 /**
  * Use credentials to signup
  * creds must contain email, username and password
  * @param {*} cred 
  */
-export const signup = cred => api.post('/user/signup', cred).catch(() => {
-    const res = { status: 409}
-    return res
-})
+export const signup = cred => api.post('/user/signup', cred);
 
 /**
  * Use userId and token to delete user from db

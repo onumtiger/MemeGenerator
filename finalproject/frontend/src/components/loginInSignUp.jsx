@@ -23,21 +23,25 @@ class loginInSignUp extends Component {
      * login success: redirect to memes overview
      * login fail: user notification
      */
-    logIn = async () => {
-        const { loginCred, loginPassword } = this.state
-        const creds = { loginCred, loginPassword }
+    logIn = async (e) => {
+        e.preventDefault();
+        const { loginCred, loginPassword } = this.state;
+        const creds = { loginCred, loginPassword };
+
+        if(!loginCred || !loginPassword){
+            this.clearLoginInput();
+            return;
+        }
 
         await api.login(creds).then(res => {
-            if (res.status == 401) {
-                window.alert(`You entered wrong credentials`);
-                this.clearInput();
-            }
-            else {
-                this.clearInput();
+            if (res.status = 200) {
                 createTokenProvider.setToken(res.data.token);
                 this.props.history.push('/memes/view/');
             }
-        })
+            this.clearLoginInput();
+        }).catch(()=>{
+            window.alert(`You entered wrong credentials`);
+        });
     }
 
     /**
@@ -46,22 +50,25 @@ class loginInSignUp extends Component {
      * success: redirect to memes overview
      * fail: user notification
      */
-    signUp = async () => {
-        const { signupEmail, signupUsername, signupPassword } = this.state
-        const creds = { signupEmail, signupUsername, signupPassword }
-        console.log(creds)
+    signUp = async (e) => {
+        e.preventDefault();
+        const { signupEmail, signupUsername, signupPassword } = this.state;
+        const creds = { signupEmail, signupUsername, signupPassword };
 
-            await api.signup(creds).then(res => {
-                if (res.status == 201) {
-                    this.clearInput();
-                    createTokenProvider.setToken(res.data.token);
-                    this.props.history.push('/memes/view/');
-                }
-                else {
-                    this.clearInput();
-                    window.alert(`You entered already registered credentials`);
-                }
-            })
+        if(!signupEmail || !signupUsername || !signupPassword){
+            this.clearSignupInput();
+            return;
+        }
+
+        await api.signup(creds).then(res => {
+            if (res.status == 201) {
+                createTokenProvider.setToken(res.data.token);
+                this.props.history.push('/memes/view/');
+            }
+            this.clearSignupInput();
+        }).catch(()=>{
+            window.alert(`You entered invalid or already registered credentials!`);
+        });
     }
 
     useWithoutLogin = () => {
@@ -139,16 +146,28 @@ class loginInSignUp extends Component {
     }
 
     /**
-     * clear inputs fields as well as state
+     * clear inputs fields as well as state for login
      */
-    clearInput = () => {
-        const inputField = document.getElementsByTagName("input")
-        for (let i = 0; i < inputField.length; i ++){ 
-            inputField[i].value = "";
+    clearLoginInput = () => {
+        const inputFields = document.querySelectorAll("#sign-in-container input");
+        for (let i = 0; i < inputFields.length; i ++){ 
+            inputFields[i].value = "";
         }
         this.setState({
             loginCred: '',
             loginPassword: '',
+        })
+    }
+
+    /**
+     * clear inputs fields as well as state for signup
+     */
+    clearSignupInput = () => {
+        const inputFields = document.querySelectorAll("#sign-up-container input");
+        for (let i = 0; i < inputFields.length; i ++){ 
+            inputFields[i].value = "";
+        }
+        this.setState({
             signupUsername: '',
             signupEmail: '',
             signupPassword: '',
@@ -156,6 +175,10 @@ class loginInSignUp extends Component {
     }
 
     render(){
+        if(createTokenProvider.isLoggedIn()){
+            this.props.history.push('/memes/view/');
+            return null;
+        }
         return (
             <div id="login-page-wrapper">
                 <div className="form-container" id="sign-up-container">

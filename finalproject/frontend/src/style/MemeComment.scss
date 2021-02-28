@@ -54,11 +54,16 @@
         }
 
         #postButton {
-            background-color: rgb(209, 79, 209);
+            background-color: #d14fd1;
             color: white;
             border: none;
             border-radius: 0 10px 10px 0 !important;
             padding: 3px 13px;
+
+            &.disabled {
+                background-color: #af71af;
+                cursor: not-allowed;
+            }
         }
     }
 }

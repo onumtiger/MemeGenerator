@@ -81,8 +81,8 @@ export default class VoteButtons extends Component {
 
         return (
             <div className="vote-counter-wrapper">
-                <button className={`votebutton upvotes${this.loggedIn ? (isUpvoted ? ' active' : '') : ' disabled'}`} onClick={this.upvote}>↑ {upvotes}</button>
-                <button className={`votebutton downvotes${this.loggedIn ? (isDownvoted ? ' active' : '') : ' disabled'}`} onClick={this.downvote}>↓ {downvotes}</button>
+                <button className={`votebutton upvotes${this.loggedIn ? (isUpvoted ? ' active' : '') : ' disabled'}`} onClick={this.upvote} title={this.loggedIn ? (isUpvoted ? 'Click to upvote' : 'Click to retract your upvote') : 'You have to log in to upvote'}>↑ {upvotes}</button>
+                <button className={`votebutton downvotes${this.loggedIn ? (isDownvoted ? ' active' : '') : ' disabled'}`} onClick={this.downvote} title={this.loggedIn ? (isUpvoted ? 'Click to downvote' : 'Click to retract your downvote') : 'You have to log in to downvote'}>↓ {downvotes}</button>
             </div>
         );
     }

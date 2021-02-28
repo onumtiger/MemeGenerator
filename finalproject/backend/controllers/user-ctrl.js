@@ -7,7 +7,7 @@ const User = require('../db/models/user-model')
 
 /**
  * Create a new user in database with the information received in request
- * return success or error message in case of unsusscessful registration
+ * return success or error message in case of unsuccessful registration
  * @param {*} req 
  * @param {*} res 
  */
@@ -66,8 +66,8 @@ const signup = (req, res) => {
                                             })
                                         })
                                         .catch(err => {
-                                            console.log("Signup failed: ",err)
-                                            res.status(500).json({
+                                            console.log("Signup failed, invalid input: ",err)
+                                            res.status(400).json({
                                                 error: err
                                             })
                                         })
@@ -98,8 +98,8 @@ const login = (req, res) => {
                 }
                 bcrypt.compare(req.body.loginPassword, user[0].password[0], (err, result) => {
                     if (err) {
-                        console.log("Wrong password via username: ",err)
-                        return res.status(401).json({
+                        console.log("Could not validate password via username")
+                        return res.status(500).json({
                             message: "Auth failed"
                         })
                     }
@@ -120,10 +120,14 @@ const login = (req, res) => {
                             token: token
                         })
                     }
+                    console.log("Wrong password via username")
+                    return res.status(401).json({
+                        message: "Auth failed"
+                    })
                 })
             })
             .catch(err => {
-                console.log("Auth failed: ",err)
+                console.log("Auth failed via username: ",err)
                 res.status(500).json({
                     error: err
                 })
@@ -141,8 +145,8 @@ const login = (req, res) => {
             }
             bcrypt.compare(req.body.loginPassword, user[0].password[0], (err, result) => {
                 if (err) {
-                    console.log("Wrong password via email: ",err)
-                    return res.status(401).json({
+                    console.log("Could not validate password via email")
+                    return res.status(500).json({
                         message: "Auth failed"
                     })
                 }
@@ -163,14 +167,14 @@ const login = (req, res) => {
                         token: token
                     })
                 }
-                console.log("Something else went wrong :/");
+                console.log("Wrong password via email")
                 return res.status(401).json({
                     message: "Auth failed"
                 })
             })
         })
         .catch(err => {
-            console.log("Auth failed: ",err)
+            console.log("Auth failed via email: ",err)
             res.status(500).json({
                 error: err
             })

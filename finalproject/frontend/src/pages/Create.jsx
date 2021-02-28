@@ -1,6 +1,7 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom'
 import '../style/CreateLanding.scss';
+import { NavBar } from '../components';
 
 /**
  * First screen when choosing "create meme" in navbar
@@ -12,6 +13,8 @@ export default class Create extends React.Component {
 
     render(){
         return (
+            <>
+            <NavBar />
             <div id="create-page-wrapper">
                 <h2>How Do You Want To Create Your Meme?</h2>
                 <table id="main-table">
@@ -39,6 +42,7 @@ export default class Create extends React.Component {
                     </tbody>
                 </table>
             </div>
+            </>
         );
     }
 }

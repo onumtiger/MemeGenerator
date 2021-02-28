@@ -217,22 +217,25 @@ const resetDB = async () => {
 
     var defaultUser = {
         _id: 0,
-        username: 'username_one',
-        password: '123'
+        username: 'TestUser1',
+        email: 'test1@test.test',
+        password: ['$2b$10$bPh0307ndeaDa8rTPuNbVemVeKDS0HAlKCMKsDuIgikxuSjYAr7Hq'] // "test1"
     };
     IDManager.registerNewUserEntry();
 
     var defaultUser2 = {
         _id: 1,
-        username: 'username_two',
-        password: '123'
+        username: 'TestUser2',
+        email: 'test2@test.test',
+        password: ['$2b$10$orDSwYLdBzucVXrglLYgOe4DD61N1tqBC9NsD6Qzr7bqXnv9wwS7i'] // "test2"
     };
     IDManager.registerNewUserEntry();
 
     var defaultUser3 = {
         _id: 2,
-        username: 'username_three',
-        password: '123'
+        username: 'TestUser3',
+        email: 'test3@test.test',
+        password: ['$2b$10$VnOz32TUvmvyTUM8mA8t9eDI/bSJLl9nnt9Sgz8f9fIxrNVgmivWq'] // "test3"
     };
     IDManager.registerNewUserEntry();
 
@@ -270,7 +273,7 @@ const resetDB = async () => {
 
     var defaultComment4 = {
         _id: 3,
-        user_id: 3,
+        user_id: 2,
         message: 'Was willst du damit sagen?',
         creationDate: '2021/02/25'
     };
@@ -303,23 +306,6 @@ const resetDB = async () => {
 
     await db.collection('comments').insertMany([defaultComment, defaultComment2, defaultComment3, defaultComment4, defaultComment5, defaultComment6, defaultComment7]);
     console.log("Default comments inserted");
-
-
-    // mongoose lokal db Chart insert/reset, without SCHMEMA
-    await db.collection('charts').deleteMany({});
-    console.log("Old charts deleted");
-
-    var defaultChart = {
-        _id: 0,
-        upvotes: [20, 45, 33, 67, 54, 24, 25, 35, 64, 35, 23, 14, 53, 45],
-        downvotes: [2, 4, 3, 7, 4, 4, 5, 3, 4, 3, 3, 1, 3, 5],
-        views: [300, 412, 456, 234, 345, 765, 345, 123, 234, 345, 234, 123, 567, 345]
-    };
-
-
-    await db.collection('charts').insertMany([defaultChart]);
-    console.log("Default charts inserted");
-
 
     // mongoose lokal db MemeStats insert/reset, without SCHMEMA
     await db.collection('memestats').deleteMany({});

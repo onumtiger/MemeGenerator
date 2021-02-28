@@ -4,6 +4,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import '../style/CreateAPI.scss';
 import createTokenProvider from '../api/createTokenProvider';
+import { NavBar } from '../components';
 
 /**
  * create via API
@@ -245,6 +246,8 @@ class CreateAPI extends Component {
         }
 
         return (
+            <>
+            <NavBar />
             <div className="form-group" id="create-api-page-wrapper">
                 <h2>Create a Meme via the ImgFlip API</h2>
 
@@ -298,6 +301,7 @@ class CreateAPI extends Component {
                     </>
                 )}
             </div>
+            </>
         )
     }
 }

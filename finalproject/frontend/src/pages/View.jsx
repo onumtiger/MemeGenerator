@@ -6,6 +6,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import '../style/View.scss';
 import createTokenProvider from '../api/createTokenProvider';
+import { NavBar } from '../components';
 
 /**
  * hierarchically first view
@@ -180,6 +181,8 @@ export default class View extends Component {
 
     render() {
         return (
+            <>
+            <NavBar />
             <div id="view-page-wrapper">
                 {this.state.isLoading ? (
                     <div id="view-page-loader">
@@ -207,7 +210,8 @@ export default class View extends Component {
                             </Switch>
                         </>
                     )}
-            </div >
+            </div>
+            </>
         )
     }
 }

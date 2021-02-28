@@ -20,8 +20,7 @@ const UserSchema = new Schema(
       unique: true,
       match: /^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/
     }, // displayed username 
-    password: { type: [String], required: true }, // password for login
-    meme_ids: { type: [Number], required: false} // user created memes (Array)
+    password: { type: [String], required: true } // password for login
  }, { collection: 'users' }); 
 
 
