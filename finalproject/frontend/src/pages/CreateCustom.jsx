@@ -90,8 +90,7 @@ export default class CreateCustom extends React.Component {
             showUploadTemplate: false,
             showDrawTemplate: false,
             showTemplateDetails: true,
-            selectedTemplate: template,
-            selectedDraft: null
+            selectedTemplate: template
         });
     }
 
@@ -102,11 +101,11 @@ export default class CreateCustom extends React.Component {
         let src = this.state.selectedTemplate.url;
         let id = this.state.selectedTemplate._id;
 
+        this.initialTemplateSrc = src;
+        this.initialTemplateId = id;
         if (this.state.showEditor){ //don't rerender the editor, or we will lose the input!
             this.editorRef.current.setTemplateImage(src, id);
         }else{
-            this.initialTemplateSrc = src;
-            this.initialTemplateId = id;
             this.setState({
                 showEditor: true
             });
@@ -124,10 +123,10 @@ export default class CreateCustom extends React.Component {
     handleDraftSelection(draft){
         this.changeSelection(null);
         this.setState({showEditor: false});
-        this.initialTemplateId = draft.template_id;
         let draftTemplate = this.state.templateListData.templates.find((t)=>(t._id == draft.template_id));
         if(draftTemplate){
             this.initialTemplateSrc = draftTemplate.url;
+            this.initialTemplateId = draft.template_id;
             this.setState({
                 selectedDraft: draft,
                 showEditor: true

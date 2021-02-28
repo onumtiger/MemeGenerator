@@ -79,19 +79,29 @@ export default class WYSIWYGEditor extends React.Component {
    * reset everything
    */
   reset() {
+    //reset variables
     this.textBoxes = [];
     this.selectedTextBoxIndex = -1;
     this.hoveringTextBoxIndex = -1;
     this.draggingTextBox = false;
     this.placeholderFileName = 'Your Meme';
+    //remove leftover Caption input elements
+    let captionContainer = document.querySelector('#wysiwyg-wrapper #in-captions-list');
+    if(captionContainer){
+      console.log('!!!',captionContainer.children);
+      for(let i=captionContainer.children.length-1; i>0; i--){
+        captionContainer.children[i].remove();
+      }
+    }
   }
 
   /**
    * Set the template image
    * @param {String} src - path
    * @param {Number} id - id
+   * @param {Boolean} newDraft - if a draft exists, is it a new one?
    */
-  setTemplateImage(src, id) {
+  setTemplateImage(src, id, newDraft) {
     if (src.length) {
       let img = new Image();
       img.src = src;
@@ -115,7 +125,7 @@ export default class WYSIWYGEditor extends React.Component {
           templateId: id
         });
 
-        if (this.props.draft) this.applyDraft();
+        if (this.props.draft && newDraft) this.applyDraft();
       });
     } else {
       this.setState({ image: null, templateId: -1 });
@@ -126,7 +136,8 @@ export default class WYSIWYGEditor extends React.Component {
   /**
    * apply the draft
    */
-  applyDraft() { //TODO reset
+  applyDraft() {
+    this.reset();
     let draft = this.props.draft;
     document.querySelector('#wysiwyg-wrapper #in-title').value = draft.title;
     draft.captions.forEach((d) => {
@@ -637,7 +648,7 @@ handlePublishedMeme(memeId) {
    * everything that has to be set when component did mount
    */
   componentDidMount() {
-    this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId);
+    this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId, true);
 
     let userId = createTokenProvider.userIdFromToken();
     api.getMemeVisibilityOptions(userId).then((response) => {
@@ -667,10 +678,11 @@ handlePublishedMeme(memeId) {
    * on update
    */
   componentDidUpdate() {
-    if (this.props.draft != this.prevDraft) {
-      this.prevDraft = this.props.draft;
+    let newDraft = this.props.draft != this.prevDraft;
+    if (newDraft) {
       this.reset();
-      this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId);
+      this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId, newDraft);
+      this.prevDraft = this.props.draft;
     }
     this.repaint(false); //no clearing needed as the entire element is replaced
   }
