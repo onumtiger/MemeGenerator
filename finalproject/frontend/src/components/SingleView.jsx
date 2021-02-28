@@ -40,7 +40,6 @@ export default class SingleView extends Component {
     componentDidMount() {
         let readButton = document.querySelector('.read-button');
         readButton.addEventListener('click', (e) => {
-            console.log("clicked")
             let templateDescription = this.props.meme.template_name
             let captions = ""
             for (let i = 0; i < this.props.meme.captions.length; i++) {
@@ -188,7 +187,6 @@ export default class SingleView extends Component {
      * @param {Number} memeId 
      */
     sendView(memeId) {
-        console.log("send view for id: ", memeId);
         this.props.meme.stats.views++; //update in-memory meme object until we get updated data from the API
         return api.viewMeme(memeId).catch(err => {
             console.log('Failed to post views: ', err);

@@ -8,7 +8,6 @@ router.get('/own', MemeCtrl.getOwnMemes);
 router.post('/', MemeCtrl.createMeme);
 router.get('/:id', MemeCtrl.getMemeById);
 router.delete('/:id', MemeCtrl.deleteMeme);
-router.patch('/:id', MemeCtrl.patchMeme);
 router.post('/upvote/:id', MemeCtrl.toggleUpvoteMeme);
 router.post('/downvote/:id', MemeCtrl.toggleDownvoteMeme);
 router.post('/view/:id', MemeCtrl.viewMeme);

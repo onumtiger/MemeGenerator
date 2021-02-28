@@ -302,15 +302,6 @@ const postComment = async (req, res) => {
     }
 }
 
-// TODO: CHECK IF USED?!
-const patchMeme = async function (req, res) {
-    var body = req.body;
-    var memeId = req.params.id;
-    var updatedProperty = body.toUpdate
-    const result = await Meme.updateOne({ _id: memeId }, updatedProperty)
-    console.log(result);
-}
-
 /**
  * Adds a SINGLE view to database meme.stats by given id when called
  * @param {Request} req - Express Request Object
@@ -433,7 +424,6 @@ const toggleDownvoteMeme = async (req, res) => {
 module.exports = {
     createMeme,
     deleteMeme,
-    patchMeme,
     viewMeme,
     toggleUpvoteMeme,
     toggleDownvoteMeme,

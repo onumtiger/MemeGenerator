@@ -171,7 +171,6 @@ const result2 = (event) => {
     } // STOPS
     else if(res.includes("stop")){
         Read.readEnglish("ok good, I am out!")
-        console.log("voice control disabled");
         globalVoiceControlButton.innerHTML = "enable voice control"
         globalVoiceControlButton.style.backgroundColor = "initial" 
         stopSpeechRecognition()

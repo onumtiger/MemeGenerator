@@ -2,7 +2,7 @@ import '../style/CreateTemplateSelection.scss';
 
 /**
  * buttons to select how you want to create a template
- * @param {*} props //TODO
+ * @param {ReactProps} props - React props object with .handleUploadButtonClick() and .handleCreateButtonClick() defined
  */
 export default function CreateTemplateSelection(props) {
     return (

@@ -28,8 +28,6 @@ export default class MemesList extends Component {
     render() {
         const memes = this.props.memes;
 
-        console.log('TCL: memesList -> render -> memes', memes);
-
         return (
             <div id="memes-list-wrapper">
                 {/* filtering the view for public memes */}

@@ -14,7 +14,6 @@ export const getAllMemes = userId => api.get(`/meme`, { params: { userId } });
 export const getOwnMemes = userId => api.get(`/meme/own`, { params: { userId } });
 export const getMemeById = id => api.get(`/meme/${id}`);
 export const deleteMemeById = id => api.delete(`/meme/${id}`);
-export const patchMeme = (memeData, id) => api.patch(`/meme/${id}`, memeData);
 export const viewMeme = id => api.post(`/meme/view/${id}`);
 // MEME VOTES
 export const toggleUpvoteMeme = (memeId, userId, newValue) => api.post(`/meme/upvote/${memeId}`, { userId, newValue });
@@ -74,7 +73,6 @@ const apis = {
     toggleDownvoteMeme,
     toggleUpvoteTemplate,
     toggleDownvoteTemplate,
-    patchMeme,
     getAllMemes,
     getOwnMemes,
     getMemeById,
