@@ -24,11 +24,15 @@ After installation you have to start the project in three main steps:
 
 The React app will open in development mode on localhost:3000, while the Express backend will run in the background on localhost:3001 (we proxy HTTP requests from the frontend to the right port in package.json to simplify the URLs for static content).
 
+## How to run the automated tests
+
+- To enable testing the backend server needs to be available
+- **Start the Server:** navigate into our `./backend` folder and run ``npm start``
+- The test check the frontend backend connection
+- **Run the Tets:** navigate intro our `./frontend` folder and run ``npm start ``
 ## External tech we used during development
 
 - The React frontend was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 - The Express backend was generated with [express-generator](https://www.npmjs.com/package/express-generator). (TODO was it, still?)
+- The login/sign up screen was implemented with the following source (https://codepen.io/FlorinPop17/pen/vPKWjd)
 
-## TODO
-
-- ...
