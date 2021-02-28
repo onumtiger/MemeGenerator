@@ -1,6 +1,5 @@
 import apis from './index.js'
 
-
 describe("user controller test", () => {
     let userId
     let token

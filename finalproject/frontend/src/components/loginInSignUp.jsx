@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../style/loginInSignUp.css';
 import api from '../api'
+import createTokenProvider from '../api/createTokenProvider'
 
 class loginInSignUp extends Component {
     constructor(props) {
@@ -40,6 +41,7 @@ class loginInSignUp extends Component {
                     signupEmail: '',
                     signupPassword: '',
                 })
+                createTokenProvider.setToken(res.data.token)
                 window.open("http://localhost:3000/memes","_self");
             }
         })
@@ -68,6 +70,7 @@ class loginInSignUp extends Component {
                     signupEmail: '',
                     signupPassword: '',
                 })
+                createTokenProvider.setToken(res.data.token)
                 window.open("http://localhost:3000/memes/view","_self");
             }
         })
