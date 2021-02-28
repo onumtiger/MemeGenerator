@@ -29,13 +29,13 @@ class loginInSignUp extends Component {
 
         await api.login(creds).then(res => {
             if (res.status == 401) {
-                window.alert(`You entered wrong credentials`)
-                this.clearInput()
+                window.alert(`You entered wrong credentials`);
+                this.clearInput();
             }
             else {
-                this.clearInput()
-                createTokenProvider.setToken(res.data.token)
-                window.open("http://localhost:3000/memes/view","_self");
+                this.clearInput();
+                createTokenProvider.setToken(res.data.token);
+                this.props.history.push('/memes/view/');
             }
         })
     }
@@ -53,16 +53,19 @@ class loginInSignUp extends Component {
 
             await api.signup(creds).then(res => {
                 if (res.status == 201) {
-                    this.clearInput()
-                    createTokenProvider.setToken(res.data.token)
-                    window.open("http://localhost:3000/memes/view","_self");
+                    this.clearInput();
+                    createTokenProvider.setToken(res.data.token);
+                    this.props.history.push('/memes/view/');
                 }
                 else {
-      
-                    this.clearInput()
-                    window.alert(`You entered already registered credentials`)
+                    this.clearInput();
+                    window.alert(`You entered already registered credentials`);
                 }
             })
+    }
+
+    useWithoutLogin = () => {
+        this.props.history.push('/memes/view/');
     }
     
     /**
@@ -176,14 +179,16 @@ class loginInSignUp extends Component {
                 <div className="overlay-container">
                     <div className="overlay">
                         <div className="overlay-panel" id="overlay-left">
-                            <h1>Welcome Back!</h1>
-                            <p>To be a meme master login with your personal info</p>
-                            <button id="signIn" onClick={this.deactivateRightPanel}>Sign In</button>
-                        </div>
-                        <div className="overlay-panel" id="overlay-right">
                             <h1>Hello, Friend!</h1>
                             <p>Enter your personal details and enjoy the meme universe</p>
-                            <button id="signUp" onClick={this.activateRightPanel}>Sign Up</button>
+                            <button id="signIn" onClick={this.deactivateRightPanel}>Sign In Instead</button>
+                            <button className="nologin" onClick={this.useWithoutLogin}>Continue Without an Account</button>
+                        </div>
+                        <div className="overlay-panel" id="overlay-right">
+                            <h1>Welcome Back!</h1>
+                            <p>To be a meme master login with your personal info</p>
+                            <button id="signUp" onClick={this.activateRightPanel}>Sign Up Instead</button>
+                            <button className="nologin" onClick={this.useWithoutLogin}>Continue Without an Account</button>
                         </div>
                     </div>
                 </div>

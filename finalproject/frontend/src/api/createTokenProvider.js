@@ -17,11 +17,11 @@ export const getToken = async () => {
 };
 
 /**
- * returns true if token is set 
- * otheriwse returns false
+ * returns true if UserId is not -1 as determined by userIdFromToken()
+ * otherwise returns false
  */
 export const isLoggedIn = () => {
-    return !!_token;
+    return userIdFromToken() != -1;
 };
 
 /**
@@ -39,16 +39,18 @@ export const setToken = (token) => {
 
 /**
  * returns userId which is stored in token
- * return -1 if no token is set
+ * return -1 if no token is set or one is set but expired
  */
 export const userIdFromToken = () => {
-    if(_token){
+    try{
+        if(!_token) throw new Error("No token");
+
         const decodedToken = jwt.verify(_token, env.jwtKey);
 
-        return decodedToken.userId
-    }
-    else {
-        return -1
+        return decodedToken.userId;
+        
+    }catch(err){
+        return -1;
     }
 }
     

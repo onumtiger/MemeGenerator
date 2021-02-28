@@ -88,7 +88,8 @@ export default class CreateCustom extends React.Component {
             showUploadTemplate: false,
             showDrawTemplate: false,
             showTemplateDetails: true,
-            selectedTemplate: template
+            selectedTemplate: template,
+            selectedDraft: null
         });
     }
 
@@ -119,6 +120,7 @@ export default class CreateCustom extends React.Component {
      * @param {*} draft 
      */
     handleDraftSelection(draft){
+        this.changeSelection(null);
         this.setState({showEditor: false});
         this.initialTemplateId = draft.template_id;
         let draftTemplate = this.state.templateListData.templates.find((t)=>(t._id == draft.template_id));

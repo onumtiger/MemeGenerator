@@ -1,7 +1,15 @@
 #comments-wrapper {
+    $subcontainerPadding: 0 10px;
+
+    #existing-comments-container {
+        max-height: 300px;
+        overflow: hidden auto;
+        padding: $subcontainerPadding;
+    }
     .commentContainer {
         display: flex;
         text-align: left;
+        padding: $subcontainerPadding;
 
         .commentInfo {
             margin-right: 10px;
@@ -32,7 +40,7 @@
             padding-left: 7px;
             padding-right: 7px;
             color: white;
-            border-radius: 0 5px 5px 5px;
+            border-radius: 0 9px 9px 9px;
         }
     }
 

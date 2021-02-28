@@ -36,7 +36,7 @@ export default class Comment extends Component {
         return (
             <div id="comments-wrapper">
                 <p className="commentNumber">{this.props.comments.length} comments</p>
-                <div>
+                <div id="existing-comments-container">
                     {this.props.comments.map((comment, index) => (
                         <div key={index} className="commentContainer">
                             <div className="commentInfo">

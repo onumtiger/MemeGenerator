@@ -9,10 +9,14 @@
         border-radius: 12px;
         font-size: 17px;
 
-        span{
-            font-size: 24px;
-            color: rgb(102, 194, 255);
-            font-family: 'Impact' !important
+        .navbar-brand {
+            padding: .5rem 0;
+
+            span{
+                font-size: 24px;
+                color: rgb(102, 194, 255);
+                font-family: 'Impact' !important
+            }
         }
 
         a {
