@@ -83,7 +83,7 @@ class loginInSignUp extends Component {
 
     /**
      * update state with provided information
-     * @param {*} event 
+     * @param {Event} event 
      */
     handleChangeInputLoginCred= async event => {
         const loginCred = event.target.value
@@ -92,7 +92,7 @@ class loginInSignUp extends Component {
 
     /**
      * update state with provided information
-     * @param {*} event 
+     * @param {Event} event 
      */
     handleChangeInputLoginPassword= async event => {
         const loginPassword = event.target.value
@@ -101,7 +101,7 @@ class loginInSignUp extends Component {
 
     /**
      * update state with provided information
-     * @param {*} event 
+     * @param {Event} event 
      */
     handleChangeInputSignupUsername= async event => {
         const signupUsername = event.target.value
@@ -110,7 +110,7 @@ class loginInSignUp extends Component {
 
     /**
      * update state with provided information
-     * @param {*} event 
+     * @param {Event} event 
      */
     handleChangeInputSignupEmail= async event => {
         const signupEmail = event.target.value
@@ -119,7 +119,7 @@ class loginInSignUp extends Component {
 
     /**
      * update state with provided information
-     * @param {*} event 
+     * @param {Event} event 
      */
     handleChangeInputSignupPassword= async event => {
         const signupPassword = event.target.value
@@ -128,7 +128,7 @@ class loginInSignUp extends Component {
 
     /**
      * update state with provided information
-     * @param {*} event 
+     * @param {Event} event 
      */
     clearUsernamePlaceholder=  () => {
         const Usernameplaceholder = ''

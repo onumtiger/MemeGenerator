@@ -1,21 +1,26 @@
 import React, { createRef } from 'react';
-import {CanvasDownloadButton, CanvasUploadButton} from '.';
+import { CanvasDownloadButton, CanvasUploadButton } from '.';
 import TextBox from '../abstract/TextBox';
 import '../style/WYSIWYG.scss';
 import api from '../api';
 import Main from '../speech/main';
 
-// not sensible to divide this up further into React components as the canvas and the form have to be highly interconnected and achieving the desired outcome with dedicated components would result in some truly nightmarish code.
+/**
+ * WYSIWYG Editor
+ * not sensible to divide this up further into React components as the canvas and the form have to be highly 
+ * interconnected and achieving the desired outcome with dedicated components would result in some truly nightmarish code.
+ */
 
 export default class WYSIWYGEditor extends React.Component {
-  constructor(props){
+
+  constructor(props) {
     super(props);
     this.canvasRef = createRef();
-    this.cElem = ()=>this.canvasRef.current; //returns the current canvas element
-    this.cContext = ()=>this.canvasRef.current.getContext('2d'); //returns the current drawing object
-    
+    this.cElem = () => this.canvasRef.current; //returns the current canvas element
+    this.cContext = () => this.canvasRef.current.getContext('2d'); //returns the current drawing object
+
     this.textBoxes = []; //array containing all captions, each as an instance of class TextBox
-    this.activeTextBoxes = ()=>this.textBoxes.filter((box)=>!box.disabled); //get all non-disabled entries of textBoxes
+    this.activeTextBoxes = () => this.textBoxes.filter((box) => !box.disabled); //get all non-disabled entries of textBoxes
     this.reset();
 
     this.fontSizeMin = 10;
@@ -34,9 +39,9 @@ export default class WYSIWYGEditor extends React.Component {
       fontFace: "Impact"
     };
     this.recordButtonActive = false;
-    
+
     this.selectedVisibilityElem = null;
-    
+
     this.prevDraft = null;
 
     this.state = {
@@ -51,7 +56,7 @@ export default class WYSIWYGEditor extends React.Component {
       done: 'Draft Saved! Save again?',
       loading: 'Saving...'
     };
-    
+
     //this binding for React event handlers
     [
       'handlePageWrapperMouseUp',
@@ -63,14 +68,17 @@ export default class WYSIWYGEditor extends React.Component {
       'handlePublishedMeme',
       'assembleUploadFormData',
       'handleVisibilityOptionCheck',
-      'handleDraftButtonClick', 
+      'handleDraftButtonClick',
       'updateText'
-    ].forEach((handler)=>{
+    ].forEach((handler) => {
       this[handler] = this[handler].bind(this);
     });
   }
 
-  reset(){
+  /**
+   * reset everything
+   */
+  reset() {
     this.textBoxes = [];
     this.selectedTextBoxIndex = -1;
     this.hoveringTextBoxIndex = -1;
@@ -78,12 +86,17 @@ export default class WYSIWYGEditor extends React.Component {
     this.placeholderFileName = 'Your Meme';
   }
 
-  setTemplateImage(src, id){
-    if(src.length){
+  /**
+   * Set the template image
+   * @param {String} src - path
+   * @param {Number} id - id
+   */
+  setTemplateImage(src, id) {
+    if (src.length) {
       let img = new Image();
       img.src = src;
 
-      img.addEventListener('load', ()=>{
+      img.addEventListener('load', () => {
         //the image should be of the same size as the canvas, but the canvas width can't be predetermined in HTML due to only absolute pixel values being allowed in the width attribute (which we have to use as CSS styling messes with stuff like mouse coords)
         //so, let's determine the maximum available width for the canvas (50% of the viewport width minus padding & border)
         let actualStyles = window.getComputedStyle(document.querySelector('#wysiwyg-wrapper #page-left'));
@@ -91,7 +104,7 @@ export default class WYSIWYGEditor extends React.Component {
         let actualPaddingLeft = parseInt(actualStyles.getPropertyValue('padding-left'));
         let actualPaddingRight = parseInt(actualStyles.getPropertyValue('padding-right'));
         let borderWidth = 1;
-        let innerWidth = actualWidth-actualPaddingLeft-actualPaddingRight-borderWidth;
+        let innerWidth = actualWidth - actualPaddingLeft - actualPaddingRight - borderWidth;
         //determine the height that correctly scales the image based on the calculated width
         let scaledImageHeight = parseInt(innerWidth * img.height / img.width);
         //apply these values
@@ -101,26 +114,33 @@ export default class WYSIWYGEditor extends React.Component {
           image: img,
           templateId: id
         });
-        
-        if(this.props.draft) this.applyDraft();
+
+        if (this.props.draft) this.applyDraft();
       });
-    }else{
-      this.setState({image: null, templateId: -1});
+    } else {
+      this.setState({ image: null, templateId: -1 });
       this.cContext().clearRect(0, 0, this.state.canvasWidth, this.state.canvasHeight);
     }
   }
 
-  applyDraft(){ //TODO reset
+  /**
+   * apply the draft
+   */
+  applyDraft() { //TODO reset
     let draft = this.props.draft;
     document.querySelector('#wysiwyg-wrapper #in-title').value = draft.title;
-    draft.captions.forEach((d)=>{
+    draft.captions.forEach((d) => {
       this.addCaption(d.x, d.y, d.text, d.fontSize, d.colorR, d.colorG, d.colorB, d.bold, d.italic, d.fontFace, false);
     });
     this.deselectAllCaptions();
   }
 
-  repaint(clear){
-    if(clear){
+  /**
+   * repaint
+   * @param {Boolean} clear - true -> clear canvas
+   */
+  repaint(clear) {
+    if (clear) {
       //clear the canvas
       this.cContext().clearRect(0, 0, this.state.canvasWidth, this.state.canvasHeight);
     }
@@ -133,50 +153,75 @@ export default class WYSIWYGEditor extends React.Component {
     this.drawHoveredOutline();
   }
 
-  drawImage(){
-    if(this.state.image){
+  /**
+   * draw the actual image
+   */
+  drawImage() {
+    if (this.state.image) {
       this.cContext().drawImage(this.state.image, 0, 0, this.state.canvasWidth, this.state.canvasHeight);
     }
   }
 
-  drawText(){
+  /**
+   * draw the aktual text
+   */
+  drawText() {
     this.activeTextBoxes().forEach((box) => {
       box.drawText();
     })
   }
 
-  drawSelectedOutline(){
-    if(this.selectedTextBoxIndex > -1){
+  /**
+   * draw the outline
+   */
+  drawSelectedOutline() {
+    if (this.selectedTextBoxIndex > -1) {
       this.textBoxes[this.selectedTextBoxIndex].drawOutline("black");
     }
   }
 
-  drawHoveredOutline(){
-    if(this.hoveringTextBoxIndex > -1 && (this.selectedTextBoxIndex != this.hoveringTextBoxIndex)){
+  /**
+   * draw the outline (on hover)
+   */
+  drawHoveredOutline() {
+    if (this.hoveringTextBoxIndex > -1 && (this.selectedTextBoxIndex != this.hoveringTextBoxIndex)) {
       this.textBoxes[this.hoveringTextBoxIndex].drawOutline("gray");
     }
   }
 
-  deselectAllCaptions(){
-      this.selectedTextBoxIndex = -1;
-      this.repaint(true);
-      this.hideAllCaptionBoxesExcept(null);
+  /**
+   * deselect the captions
+   */
+  deselectAllCaptions() {
+    this.selectedTextBoxIndex = -1;
+    this.repaint(true);
+    this.hideAllCaptionBoxesExcept(null);
   }
 
-  checkForHoverChange(mouseX, mouseY){
-    let hov = this.textBoxes.findIndex((box)=>{
-        return (!box.disabled && box.contains(mouseX, mouseY));
+  /**
+   * check if there is any hover change
+   * @param {Number} mouseX - X position
+   * @param {Number} mouseY - Y position
+   */
+  checkForHoverChange(mouseX, mouseY) {
+    let hov = this.textBoxes.findIndex((box) => {
+      return (!box.disabled && box.contains(mouseX, mouseY));
     });
-    let ret = (hov!=this.hoveringTextBoxIndex);
+    let ret = (hov != this.hoveringTextBoxIndex);
     this.hoveringTextBoxIndex = hov;
     return ret;
   }
 
-  checkForSelectionChange(mouseX, mouseY){
-    let sel = this.textBoxes.findIndex((box)=>{
-        return (!box.disabled && box.contains(mouseX, mouseY));
+  /**
+   * check if there is any selection changes
+   * @param {Number} mouseX - X position
+   * @param {Number} mouseY - Y position
+   */
+  checkForSelectionChange(mouseX, mouseY) {
+    let sel = this.textBoxes.findIndex((box) => {
+      return (!box.disabled && box.contains(mouseX, mouseY));
     });
-    let ret = (sel!=this.selectedTextBoxIndex);
+    let ret = (sel != this.selectedTextBoxIndex);
     this.selectedTextBoxIndex = sel;
     return ret;
   }
@@ -187,14 +232,28 @@ export default class WYSIWYGEditor extends React.Component {
    * @param {String} value 
    * @param {Boolean} recordButtonActive 
    */
-  updateText(textBox, value, recordButtonActive){
+  updateText(textBox, value, recordButtonActive) {
     this.recordButtonActive = recordButtonActive
     textBox.updateText(value);
     this.repaint(true);
   }
 
-  addCaption(x, y, text="", fontSize=this.textBoxDefaults.fontSize, colorR=this.textBoxDefaults.colorR, colorG=this.textBoxDefaults.colorG, colorB=this.textBoxDefaults.colorB, bold=this.textBoxDefaults.bold, italic=this.textBoxDefaults.italic, fontFace=this.textBoxDefaults.fontFace, fromUserClick=true){
-    
+  /**
+   * Add a caption
+   * @param {Number} x - X position
+   * @param {Number} y - Y position
+   * @param {String} text - text as String
+   * @param {Number} fontSize - font size
+   * @param {Number} colorR - red
+   * @param {Number} colorG - green
+   * @param {Number} colorB - blue
+   * @param {Boolean} bold - bold?
+   * @param {Boolean} italic - italic?
+   * @param {String} fontFace - font
+   * @param {Boolean} fromUserClick - user click?
+   */
+  addCaption(x, y, text = "", fontSize = this.textBoxDefaults.fontSize, colorR = this.textBoxDefaults.colorR, colorG = this.textBoxDefaults.colorG, colorB = this.textBoxDefaults.colorB, bold = this.textBoxDefaults.bold, italic = this.textBoxDefaults.italic, fontFace = this.textBoxDefaults.fontFace, fromUserClick = true) {
+
     //add new textbox
     let newIndex = this.textBoxes.length;
     let newTextBox = new TextBox(this.canvasRef, parseInt(x), parseInt(y), text, fontSize, colorR, colorG, colorB, bold, italic, fontFace);
@@ -229,7 +288,7 @@ export default class WYSIWYGEditor extends React.Component {
     captionInput.value = text;
     let saneFontSize = Math.max(this.fontSizeMin, Math.min(this.fontSizeMax, fontSize));
     fontSizeInput.value = saneFontSize;
-    fontSizeLabel.textContent = saneFontSize+'px';
+    fontSizeLabel.textContent = saneFontSize + 'px';
     let saneColorR = Math.max(this.colorValueMin, Math.min(this.colorValueMax, colorR));
     colorControls.inputR.value = saneColorR;
     colorControls.labelR.textContent = saneColorR;
@@ -241,60 +300,60 @@ export default class WYSIWYGEditor extends React.Component {
     colorControls.labelB.textContent = saneColorB;
     boldInput.checked = bold;
     italicInput.checked = italic;
-    fontFaceInput.value = this.fontFaces.find((v)=>(v==fontFace)) || "Impact";
+    fontFaceInput.value = this.fontFaces.find((v) => (v == fontFace)) || "Impact";
 
     //add EventListeners for the new input elements
-    li.addEventListener('focus', (e)=>{
-      if(e.target != captionRemove){
-        if(!captionDetails.open) this.showCaptionBox(captionDetails);
+    li.addEventListener('focus', (e) => {
+      if (e.target != captionRemove) {
+        if (!captionDetails.open) this.showCaptionBox(captionDetails);
         this.hideAllCaptionBoxesExcept(captionDetails);
         this.selectedTextBoxIndex = newIndex;
         this.repaint(true);
       }
     }, true); //this one should fire during capturing so that when the inner text <input> gets focus, this code is executed before standard focus handling of the input and can't mess with it afterwards
-    li.addEventListener('click', (e)=>{
-      if(e.target != captionRemove){
+    li.addEventListener('click', (e) => {
+      if (e.target != captionRemove) {
         //stop the de-selection onclick EventListener from reaching the caption <li>s
         e.stopPropagation();
       }
     }, true); //just to be sure, let this also fire during capturing for stopPropagation() to affect the click listener on #page-right
 
-    captionRemove.addEventListener('click', (e)=>{
+    captionRemove.addEventListener('click', (e) => {
       // e.stopPropagation();
       newTextBox.disable();
       this.selectedTextBoxIndex = -1;
       this.repaint(true);
       li.style.display = 'none';
     });
-    captionInput.addEventListener('input', (e)=>{
+    captionInput.addEventListener('input', (e) => {
       this.updateText(newTextBox, e.target.value);
     });
-    fontSizeInput.addEventListener('input', (e)=>{
+    fontSizeInput.addEventListener('input', (e) => {
       newTextBox.updateFontSize(parseInt(e.target.value));
       this.repaint(true);
-      fontSizeLabel.textContent = e.target.value+'px';
+      fontSizeLabel.textContent = e.target.value + 'px';
     });
-    boldInput.addEventListener('change', (e)=>{
+    boldInput.addEventListener('change', (e) => {
       newTextBox.updateBold(e.target.checked);
       this.repaint(true);
     });
-    italicInput.addEventListener('change', (e)=>{
+    italicInput.addEventListener('change', (e) => {
       newTextBox.updateItalic(e.target.checked);
       this.repaint(true);
     });
-    ['R','G','B'].forEach((col)=>{
-      colorControls['input'+col].addEventListener('input', (e)=>{
+    ['R', 'G', 'B'].forEach((col) => {
+      colorControls['input' + col].addEventListener('input', (e) => {
         newTextBox.updateColor(colorControls.inputR.value, colorControls.inputG.value, colorControls.inputB.value);
         this.repaint(true);
-        colorControls['label'+col].textContent = e.target.value;
+        colorControls['label' + col].textContent = e.target.value;
       });
     });
-    fontFaceInput.addEventListener('change', (e)=>{
+    fontFaceInput.addEventListener('change', (e) => {
       newTextBox.updateFontFamily(e.target.value);
       this.repaint(true);
     });
-    
-    if(fromUserClick){
+
+    if (fromUserClick) {
       //select and highlight the new input elements for immediate input
       captionInput.focus();
       captionInput.select();
@@ -303,41 +362,60 @@ export default class WYSIWYGEditor extends React.Component {
       this.hideAllCaptionBoxesExcept(captionDetails);
     }
 
-    return {newTextBox, captionInput}
+    return { newTextBox, captionInput }
   }
 
-  createCaptionInputLi(){
+  /**
+   * create caption input list
+   */
+  createCaptionInputLi() {
     let li = document.createElement('li');
     let child = document.querySelector('#wysiwyg-wrapper #in-captions-template-li').firstChild.cloneNode(true);
     li.appendChild(child);
     return li;
   }
 
-  hideAllCaptionBoxesExcept(element){
-    document.querySelectorAll('#wysiwyg-wrapper #in-captions-list details').forEach((el)=>{
-      if(el!=element){
+  /**
+   * hide all captions exect element
+   * @param {Element} element 
+   */
+  hideAllCaptionBoxesExcept(element) {
+    document.querySelectorAll('#wysiwyg-wrapper #in-captions-list details').forEach((el) => {
+      if (el != element) {
         el.style.backgroundColor = "transparent";
         el.open = false;
       }
     });
   }
 
-  showCaptionBox(element){
+  /**
+   * show caption box
+   * @param {Element} element 
+   */
+  showCaptionBox(element) {
     element.open = true;
     element.style.backgroundColor = "#d9e5ee";
   }
 
-  setCanvasCursor(cursor){
+  /**
+   * set the canvas cursor
+   * @param {Element} cursor 
+   */
+  setCanvasCursor(cursor) {
     this.cElem().style.cursor = cursor;
   }
 
-  handlePageWrapperMouseUp(e){
+  /**
+   * handle page wrapper -> mouse up
+   * @param {Event} e 
+   */
+  handlePageWrapperMouseUp(e) {
     e = e.nativeEvent; //React events don't have offsetX/Y
 
-    if(e.button!=0) return; //only watch for the left mouse button
-    
+    if (e.button != 0) return; //only watch for the left mouse button
+
     //if we are / were dragging a textbox around...
-    if(this.draggingTextBox) {
+    if (this.draggingTextBox) {
       //exit dragging mode
       this.draggingTextBox = false;
       //reset hover
@@ -349,41 +427,53 @@ export default class WYSIWYGEditor extends React.Component {
     }
   }
 
-  handlePageRightClick(e){
+  /**
+   * Handle right click
+   * @param {Event} e 
+   */
+  handlePageRightClick(e) {
     //if we click on the blank space around the caption boxes on the right side of the page, de-select it and the corresponding textbox in the canvas
     this.deselectAllCaptions();
   }
 
-  handleDownloadButtonClick(e){
+  /**
+   * handle download button click
+   * @param {Event} e 
+   */
+  handleDownloadButtonClick(e) {
     // remove all caption outlines
     this.deselectAllCaptions();
     //get the current canvas image
     let url = this.cElem().toDataURL('image/png');
-    
+
     //download it
     let a = document.querySelector('#wysiwyg-wrapper .canvas-download-anchor');
     //use the entered Meme title as filename if there is one
     let enteredTitle = document.querySelector('#wysiwyg-wrapper #in-title').value;
-    a.download = (enteredTitle || 'Your Meme')+'.png';
+    a.download = (enteredTitle || 'Your Meme') + '.png';
     a.href = url;
     //we don't have to do the deselection again, so let's prevent the event from bubbling up to #page-right
     e.stopPropagation();
   }
 
-  handleCanvasMouseDown(e){
+  /**
+   * handle canvas mouse klick down
+   * @param {Event} e 
+   */
+  handleCanvasMouseDown(e) {
     e = e.nativeEvent; //React events don't have offsetX/Y
 
-    if(e.button!=0) return; //only watch for the left mouse button
-    
+    if (e.button != 0) return; //only watch for the left mouse button
+
     let oldSel = this.selectedTextBoxIndex;
     //check if the mousedown is a new selection of any of our textboxes
-    if(this.checkForSelectionChange(e.offsetX, e.offsetY)){
+    if (this.checkForSelectionChange(e.offsetX, e.offsetY)) {
       //we can get away without a full repaint if nothing else was selected before
-      if(oldSel > -1) this.repaint(true);
+      if (oldSel > -1) this.repaint(true);
       else this.drawSelectedOutline();
     }
 
-    if(this.selectedTextBoxIndex > -1){ //if we selected a box, enter dragging mode
+    if (this.selectedTextBoxIndex > -1) { //if we selected a box, enter dragging mode
       this.draggingTextBox = true;
       //set the dragOffset / move anchor
       this.textBoxes[this.selectedTextBoxIndex].setDragAnchor(e.offsetX, e.offsetY);
@@ -394,59 +484,79 @@ export default class WYSIWYGEditor extends React.Component {
       this.showCaptionBox(this.textBoxes[this.selectedTextBoxIndex].controller);
     }
   }
-  
-  handleCanvasMouseMove(e){
+
+  /**
+   * hanlde canvas mouse moving
+   * @param {Event} e 
+   */
+  handleCanvasMouseMove(e) {
     e = e.nativeEvent; //React events don't have offsetX/Y
 
     //first, check if we are currently moving a textbox
-    if(this.draggingTextBox){ //if so, just apply the current mouse coords to the box position
+    if (this.draggingTextBox) { //if so, just apply the current mouse coords to the box position
       this.textBoxes[this.selectedTextBoxIndex].moveTo(e.offsetX, e.offsetY);
       this.repaint(true);
-    }else{ //if not, check if we are hovering over any of our textboxes
+    } else { //if not, check if we are hovering over any of our textboxes
       let oldHov = this.hoveringTextBoxIndex;
-      if(this.checkForHoverChange(e.offsetX, e.offsetY)) { //make sure this is a new hover to prevent unnecessarily redoing the same thing
-        if(this.hoveringTextBoxIndex > -1){ //if we are hovering over a textbox we haven't been hovering over just before...
+      if (this.checkForHoverChange(e.offsetX, e.offsetY)) { //make sure this is a new hover to prevent unnecessarily redoing the same thing
+        if (this.hoveringTextBoxIndex > -1) { //if we are hovering over a textbox we haven't been hovering over just before...
           //highlight that textbox via outline (we can get away without a full repaint if nothing else was hovered over before)
-          if(oldHov > -1) this.repaint(true);
+          if (oldHov > -1) this.repaint(true);
           else this.drawHoveredOutline();
           // indicate that we're ready to grab via cursor
           this.setCanvasCursor('grab');
-        }else{ //if we are not hovering over a textbox but have before, remove the highlighting and reset the cursor
+        } else { //if we are not hovering over a textbox but have before, remove the highlighting and reset the cursor
           this.repaint(true);
           this.setCanvasCursor('text');
         }
       }
     }
   }
-  
-  handleCanvasMouseUp(e){
+
+  /**
+   * handle canvas mouse -> up
+   * @param {Event} e 
+   */
+  handleCanvasMouseUp(e) {
     e = e.nativeEvent; //React events don't have offsetX/Y
 
-    if(e.button!=0) return; //only watch for the left mouse button
-    
-    if(!this.draggingTextBox){
+    if (e.button != 0) return; //only watch for the left mouse button
+
+    if (!this.draggingTextBox) {
       this.addCaption(e.offsetX, e.offsetY);
     } //else case will be handled once the event bubbles up to the document via handlePageWrapperMouseUp()
   }
 
-  handlePublishedMeme(memeId){
-    if(this.props.draft){
+  /**
+   * handle publishing meme
+   * @param {Number} memeId 
+   */
+  handlePublishedMeme(memeId) {
+    if (this.props.draft) {
       //TODO actual user ID...
       api.deleteDraft(0, this.props.draft._id);
     }
-    this.props.history.push('/memes/view/'+memeId);
+    this.props.history.push('/memes/view/' + memeId);
   }
 
-  handleVisibilityOptionCheck(e){
+  /**
+   * handle visibility settings
+   * @param {Event} e 
+   */
+  handleVisibilityOptionCheck(e) {
     let elem = e.target;
-    
-    if(elem.checked){
+
+    if (elem.checked) {
       this.selectedVisibilityElem = elem;
       document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper').classList.remove('invalid');
     }
   }
 
-  handleDraftButtonClick(e){
+  /**
+   * handle draft button click
+   * @param {Event} e 
+   */
+  handleDraftButtonClick(e) {
     console.log("draft saved")
     let elem = e.target;
 
@@ -474,35 +584,38 @@ export default class WYSIWYGEditor extends React.Component {
     elem.textContent = this.draftButtonTexts.loading;
     elem.classList.add('inactive');
 
-    api.insertDraft(draftData).then((res)=>{
-        if(res.data.success){
-            elem.textContent = this.draftButtonTexts.done;
-        }
-    }).catch(err =>{
-        console.log('Failed to upload draft: ',err);
-        elem.textContent = this.draftButtonTexts.default;
-    }).finally(()=>{
-        elem.classList.remove('inactive');
+    api.insertDraft(draftData).then((res) => {
+      if (res.data.success) {
+        elem.textContent = this.draftButtonTexts.done;
+      }
+    }).catch(err => {
+      console.log('Failed to upload draft: ', err);
+      elem.textContent = this.draftButtonTexts.default;
+    }).finally(() => {
+      elem.classList.remove('inactive');
     });
   }
-  
-  assembleUploadFormData(){
+
+  /**
+   * assemble all upload form data
+   */
+  assembleUploadFormData() {
     this.deselectAllCaptions();
     const formData = new FormData();
 
     let titleInput = document.querySelector('#wysiwyg-wrapper #in-title');
     let enteredTitle = titleInput.value;
-    if(!enteredTitle){
+    if (!enteredTitle) {
       titleInput.classList.add('invalid');
       return null;
-    }else{
+    } else {
       titleInput.classList.remove('invalid');
     }
     formData.append('name', enteredTitle);
     formData.append('userID', 0); //TODO get current userID
     formData.append('templateID', this.state.templateId);
-    
-    if(!this.selectedVisibilityElem){
+
+    if (!this.selectedVisibilityElem) {
       document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper').classList.add('invalid');
       return null;
     }
@@ -517,12 +630,15 @@ export default class WYSIWYGEditor extends React.Component {
 
     return formData;
   }
-  
-  componentDidMount(){
+
+  /**
+   * everything that has to be set when component did mount
+   */
+  componentDidMount() {
     this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId);
 
     //TODO insert actual userId
-    api.getMemeVisibilityOptions(0).then((response)=>{
+    api.getMemeVisibilityOptions(0).then((response) => {
       let voWrapper = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper');
       response.data.data.forEach(vo => {
         let p = document.createElement('p');
@@ -530,31 +646,34 @@ export default class WYSIWYGEditor extends React.Component {
         let input = document.createElement('input');
         input.type = 'radio';
         input.name = 'visibility';
-        input.id = "visibility-"+vo.value;
+        input.id = "visibility-" + vo.value;
         input.value = vo.value;
         let label = document.createElement('label');
-        label.htmlFor = "visibility-"+vo.value;
+        label.htmlFor = "visibility-" + vo.value;
         label.textContent = vo.name;
         p.appendChild(input);
         p.appendChild(label);
         voWrapper.appendChild(p);
         input.addEventListener('change', this.handleVisibilityOptionCheck);
       });
-    }).catch(err =>{
-        console.log('Failed to get visibility options: ',err);
+    }).catch(err => {
+      console.log('Failed to get visibility options: ', err);
     });
   }
 
-  componentDidUpdate(){
-    if(this.props.draft != this.prevDraft){
+  /**
+   * on update
+   */
+  componentDidUpdate() {
+    if (this.props.draft != this.prevDraft) {
       this.prevDraft = this.props.draft;
       this.reset();
       this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId);
     }
     this.repaint(false); //no clearing needed as the entire element is replaced
   }
-  
-  render(){
+
+  render() {
     return (
       <table id="wysiwyg-wrapper" className="fullsizetable" onMouseUp={this.handlePageWrapperMouseUp}>
         <tbody>
@@ -589,7 +708,7 @@ export default class WYSIWYGEditor extends React.Component {
                               <td>
                                 <label>
                                   <input type="range" name="fontSize" min={this.fontSizeMin} max={this.fontSizeMax} defaultValue={this.textBoxDefaults.fontSize} step="1" />
-                                  <span className="label-fontSize">{this.textBoxDefaults.fontSize+'px'}</span>
+                                  <span className="label-fontSize">{this.textBoxDefaults.fontSize + 'px'}</span>
                                 </label>
                                 <label>
                                   <input type="checkbox" className="boldBox" name="bold" />
@@ -625,7 +744,7 @@ export default class WYSIWYGEditor extends React.Component {
                               <th>Font Face:</th>
                               <td>
                                 <select name="fontFace">
-                                  {this.fontFaces.map((name)=>(
+                                  {this.fontFaces.map((name) => (
                                     <option value={name} key={name}>{name}</option>
                                   ))}
                                 </select>
@@ -639,7 +758,7 @@ export default class WYSIWYGEditor extends React.Component {
                 </ul>
                 <div id="visibilityOption-wrapper"></div>
                 <button type="button" id="save-draft-btn" className="draft-save-button" onClick={this.handleDraftButtonClick}>{this.draftButtonTexts.default}</button>
-                <CanvasDownloadButton placeholderFileName={this.placeholderFileName+".png"} onButtonClick={this.handleDownloadButtonClick} />
+                <CanvasDownloadButton placeholderFileName={this.placeholderFileName + ".png"} onButtonClick={this.handleDownloadButtonClick} />
                 <CanvasUploadButton canvasRef={this.canvasRef} uploadSuccessCallback={this.handlePublishedMeme} assembleFormData={this.assembleUploadFormData} apiFunctionName="insertMeme" />
               </form>
             </td>

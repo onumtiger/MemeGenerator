@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import createTokenProvider from '../api/createTokenProvider';
 
+/**
+ * all links within the navbar
+ */
 class Links extends Component {
     activateRightPanel = () => {
         createTokenProvider.setToken(null)

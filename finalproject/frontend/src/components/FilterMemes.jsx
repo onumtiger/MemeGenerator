@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import '../style/FilterMemes.scss';
 
+/**
+ * filter memes component
+ */
 export default class FilterMemes extends Component {
+
     constructor(props) {
         super(props);
 
@@ -10,36 +14,51 @@ export default class FilterMemes extends Component {
             filter: null,
             sorting: "default"
         };
-        
+
         //this binding for React event handlers
         [
             'startSearch',
             'setFilter',
             'sortMemeList',
 
-        ].forEach((handler)=>{
+        ].forEach((handler) => {
             this[handler] = this[handler].bind(this);
         });
     }
 
+    /**
+     * start the actual search
+     * @param {Event} e 
+     */
     startSearch(e) {
         let keyword = e.target.value;
         this.selection.searchTerm = keyword.length ? keyword : null;
         this.processSelection();
     }
 
-    setFilter(e){
+    /**
+     * set the filter
+     * @param {Event} e 
+     */
+    setFilter(e) {
         let filter = e.target.value;
-        this.selection.filter = filter!="all" ? filter : null;
+        this.selection.filter = filter != "all" ? filter : null;
         this.processSelection();
     }
 
-    sortMemeList(e){
+    /**
+     * sort the meme list according to input
+     * @param {Event} e 
+     */
+    sortMemeList(e) {
         this.selection.sorting = e.target.value;
         this.processSelection();
     }
 
-    processSelection(){
+    /**
+     * process the actual selection
+     */
+    processSelection() {
         this.props.setFilters(this.selection.searchTerm, this.selection.filter, this.selection.sorting);
     }
 
@@ -65,9 +84,6 @@ export default class FilterMemes extends Component {
                     <option value="jpg|png|gif">image</option>
                     <option value="mp4|mov">video</option>
                 </select></label>
-                
-               
-
             </div>
         )
     }

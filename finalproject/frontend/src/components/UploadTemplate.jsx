@@ -4,6 +4,9 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import api from '../api';
 
+/**
+ * upload a template
+ */
 export default class UploadTemplate extends React.Component {
     constructor(props){
         super(props);
@@ -49,6 +52,10 @@ export default class UploadTemplate extends React.Component {
         });
     }
 
+    /**
+     * handle the publish button onclick
+     * @param {Event} e 
+     */
     handlePublishButtonClick(e){
         let elem = e.target;
 
@@ -91,6 +98,10 @@ export default class UploadTemplate extends React.Component {
         });
     }
 
+    /**
+     * visibility buttons handling
+     * @param {Event} e 
+     */
     handleVisibilityOptionCheck(e){
         let elem = e.target;
         
@@ -100,6 +111,10 @@ export default class UploadTemplate extends React.Component {
         }
     }
 
+    /**
+     * handle local file added -> via a button
+     * @param {Event} e 
+     */
     handleLocalFileAddedViaButton(e){
         let elem = e.target;
         
@@ -109,6 +124,11 @@ export default class UploadTemplate extends React.Component {
         }
     }
 
+    //TODO: add highlight type
+    /**
+     * drop zone 
+     * @param {*} toHighlight 
+     */
     setDropZoneHighlighting(toHighlight){
         let elem = document.querySelector('#upload-template-table .dropzone');
         
@@ -119,24 +139,40 @@ export default class UploadTemplate extends React.Component {
         }
     }
 
+    /**
+     * handle drop zone -> drag enter
+     * @param {Event} e 
+     */
     handleDropZoneDragEnter(e){
         e.preventDefault();
         e.stopPropagation();
         this.setDropZoneHighlighting(true);
     }
 
+    /**
+     * handle drop zone -> drag over
+     * @param {Event} e 
+     */
     handleDropZoneDragOver(e){
         e.preventDefault();
         e.stopPropagation();
         this.setDropZoneHighlighting(true);
     }
     
+    /**
+     * handle drop zone -> drag leave
+     * @param {Event} e 
+     */
     handleDropZoneDragLeave(e){
         e.preventDefault();
         e.stopPropagation();
         this.setDropZoneHighlighting(false);
     }
 
+    /**
+     * handle drop zone -> actual drop
+     * @param {Event} e 
+     */
     handleDropZoneDrop(e){
         e.preventDefault();
         e.stopPropagation();
@@ -149,6 +185,10 @@ export default class UploadTemplate extends React.Component {
         }
     }
 
+    /**
+     * processing of local file input
+     * @param {String} imgFile 
+     */
     processLocalFileInput(imgFile){
         this.uploadImageAsURL = false;
         this.uploadImageFile = imgFile;
@@ -159,6 +199,10 @@ export default class UploadTemplate extends React.Component {
         });
     }
 
+    /**
+     * handle upload file url -> button click
+     * @param {Event} e 
+     */
     handleUploadFileURLButtonClick(e){
         let elem = e.target;
 
@@ -193,6 +237,10 @@ export default class UploadTemplate extends React.Component {
         });
     }
 
+    /**
+     * handle upload snapshot button click
+     * @param {Event} e 
+     */
     handleUploadSnapshotURLButtonClick(e){
         let elem = e.target;
         
@@ -227,6 +275,9 @@ export default class UploadTemplate extends React.Component {
         });
     }
 
+    /**
+     * component did mount -> get visbility options
+     */
     componentDidMount = async () => {
         //TODO insert actual userId
         api.getTemplateVisibilityOptions(0).then((response)=>{
