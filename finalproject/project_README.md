@@ -39,4 +39,4 @@ The React app will open in development mode on localhost:3000, while the Express
 - The API image creation is using the "JavaScript Image Manipulation Program"  - JIMP (https://www.npmjs.com/package/jimp)
 - The voice control and text reading function is based on the Web Speech Api (https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 - Creating a meme in our site is also possible via the ImgFlip API (https://imgflip.com/api)
-
+- The charts were created with D3.js, a JavaScript library for manipulating documents based on data (https://d3js.org)
