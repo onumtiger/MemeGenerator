@@ -2,6 +2,7 @@ import axios from 'axios'
 
 /**
  * API 
+ * backend connection
  */
 const api = axios.create({
     baseURL: 'http://localhost:3001/api',
@@ -42,14 +43,32 @@ export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 export const getCommentsByMemeId = id => api.get(`/meme/comments/${id}`);
 export const postComment = (userId, memeId, message) => api.post(`/meme/comments/${userId}`, { memeId, message });
 
+/**
+ * Use credentials to login
+ * creds must contain email/pw or username/pw
+ * @param {*} cred 
+ */
 export const login = cred => api.post('/user/login', cred).catch(() => {
     const res = { status: 401}
     return res
 })
+
+/**
+ * Use credentials to signup
+ * creds must contain email, username and password
+ * @param {*} cred 
+ */
 export const signup = cred => api.post('/user/signup', cred).catch(() => {
     const res = { status: 409}
     return res
 })
+
+/**
+ * Use userId and token to delete user from db
+ * config must contain jwt token
+ * @param {number} userId 
+ * @param {*} config 
+ */
 export const deleteUser = (userId, config) => api.delete(`/user/${userId}`, config)
 
 

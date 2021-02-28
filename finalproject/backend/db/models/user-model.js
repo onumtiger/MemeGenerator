@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+/**
+ * User model used in db
+ * required attributes are id, email, username and password
+ */
 const UserSchema = new Schema(
   {
     _id: { type: Number, required: true},
