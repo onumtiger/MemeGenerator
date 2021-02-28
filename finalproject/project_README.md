@@ -31,6 +31,7 @@ The React app will open in development mode on localhost:3000, while the Express
 - **Start the Server:** navigate into our `./backend` folder and run ``npm start``
 - The test check the frontend backend connection
 - **Run the Test:** navigate into our `./frontend` folder and run ``npm test``
+
 ## External tech we used during development
 
 - The React frontend was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -42,11 +43,12 @@ The React app will open in development mode on localhost:3000, while the Express
 - the jwt token is created using the jsonwebtoken package (https://www.npmjs.com/package/jsonwebtoken). JWT are used to encode information store at them at the client
 - the password is encrypted and decrypted with bcrypt (https://www.npmjs.com/package/bcrypt). Bcrypt uses a given salt to hash e.g. passwords 
 - the communication between backend and frontend is done with axios (https://www.npmjs.com/package/axios). With axios http requests are generated to use a restful api.
-- creating memes via screenshots is done with puppeteer (https://www.npmjs.com/package/puppeteer). Puppeteer enanbles interacting with the browser via code e.g. to navigate between pages.
+- creating memes via screenshots is done with puppeteer (https://www.npmjs.com/package/puppeteer). Puppeteer enables interacting with the browser via code e.g. to navigate between pages.
 - the body-parser (https://www.npmjs.com/package/body-parser) is used to use bodies of http requests in our middleware.
-- Using nodemon (https://www.npmjs.com/package/nodemon) real time changes in our backend are possible as it reloads everytime a change is saved
-- Jest (https://www.npmjs.com/package/jest) is a testing library which enables automated testing. It can be modified in several ways to enbale e.g. UI testing using puppeteer.
+- Using nodemon (https://www.npmjs.com/package/nodemon) real time changes in our backend are possible as it reloads every time a change is saved
+- Jest (https://www.npmjs.com/package/jest) is a testing library which enables automated testing. It can be modified in several ways to enable e.g. UI testing using puppeteer.
 - cors (https://www.npmjs.com/package/cors) is used to enable middleware usage
+- Bootstrap (https://www.npmjs.com/package/bootstrap) and Sass (in the form of node-sass: https://www.npmjs.com/package/node-sass) were used to be able to write nicer CSS code
 
 ## How to use our voice control:
 
@@ -84,12 +86,15 @@ The React app will open in development mode on localhost:3000, while the Express
 
 ## How to use our (image creation) API:
 
-- (1) Image generation: 
+- (1) Image generation:
 
-    URL query parameters - expected form:
-    http://localhost:3001/api/external?images[0][name]=name1&images[0][captions][0][x]=10&images[0][captions][0][y]=10&images[0][captions][0][text]=caption1&images[0][captions][0][textColor]=%23ff3333&images[0][captions][1][x]=80&images[0][captions][1][y]=80&images[0][captions][1][text]=caption2&images[0][captions][1][textColor]=%2333ffff&images[1][name]=name2&images[1][captions][0][x]=10&images[1][captions][0][y]=10&images[1][captions][0][text]=caption3&images[1][captions][0][textColor]=%23d24dff&images[1][captions][1][x]=80&images[1][captions][1][y]=80&images[1][captions][1][text]=caption4&images[1][captions][1][textColor]=%23d9ff66&templateURL=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg
+    This part of the API expects the meme creation parameters as nested queryParameters in this form:
 
-    translates to:
+    http://localhost:3001/api/external/generate?images[0][name]=name1&images[0][captions][0][x]=10&images[0][captions][0][y]=10&images[0][captions][0][text]=caption1&images[0][captions][0][textColor]=%23ff3333&images[0][captions][1][x]=80&images[0][captions][1][y]=80&images[0][captions][1][text]=caption2&images[0][captions][1][textColor]=%2333ffff&images[1][name]=name2&images[1][captions][0][x]=10&images[1][captions][0][y]=10&images[1][captions][0][text]=caption3&images[1][captions][0][textColor]=%23d24dff&images[1][captions][1][x]=80&images[1][captions][1][y]=80&images[1][captions][1][text]=caption4&images[1][captions][1][textColor]=%23d9ff66&templateURL=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg
+
+    which will be translated to JSON. The above example would be:
+
+    ```
     {
         templateURL: 'https%3A%2F%2Fi.ytimg.com%2Fvi%2FjSiVi800um0%2Fhqdefault.jpg', //URIEncoded template image URL
         images: [
@@ -128,13 +133,18 @@ The React app will open in development mode on localhost:3000, while the Express
                 ]
             }
         ]
-    } 
+    }
+    ```
+
+    You can use our queryTest API function to test for the JSON translation of query parameters:
+
+    http://localhost:3001/api/external/queryTest?someprop=somevalue
 
 
 - (2) Get a specific set of images using search parameters (provided as a zip file):
 
-    URL query parameters - expected form (example):
-    http://localhost:3001/api/external/getImages?titleContains=Jan&fileFormat=png|jpg&maxImages=10
+    This one also uses URL query parameters - expected form (example):
+    http://localhost:3001/api/external/getImages?titleContains=Andreas&fileFormat=png|jpg&maxImages=10
 
     It expects at least one of these URL query parameters with truthy string values:
 
@@ -142,5 +152,6 @@ The React app will open in development mode on localhost:3000, while the Express
      - fileFormat: one or multiple (separated by the '|' character) file extensions, only return memes that are of these file types
      - maxImages: only return the first x matching memes
 
-  
-    
+## Other Notes
+
+- The sorting / filtering feature within the Slide Show / Single View will rearrange the memes list around the current one. In other words, you will stay on the current meme but the links to the next and previous one will change. Only if the current meme is not in the new filtered selection, another meme will be displayed immediately. So no immediately visible change in the Slide Show after sorting is not an indicator that something went wrong.
