@@ -42,8 +42,14 @@ export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 export const getCommentsByMemeId = id => api.get(`/meme/comments/${id}`);
 export const postComment = (userId, memeId, message) => api.post(`/meme/comments/${userId}`, { memeId, message });
 
-export const login = cred => api.post('/user/login', cred)
-export const signup = cred => api.post('/user/signup', cred)
+export const login = cred => api.post('/user/login', cred).catch(() => {
+    const res = { status: 401}
+    return res
+})
+export const signup = cred => api.post('/user/signup', cred).catch(() => {
+    const res = { status: 409}
+    return res
+})
 export const deleteUser = (userId, config) => api.delete(`/user/${userId}`, config)
 
 
