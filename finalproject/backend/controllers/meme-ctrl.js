@@ -181,10 +181,10 @@ const getMemes = async (req, res) => {
             let templateID = entry.template_id;
 
             let user = await User.findOne({ _id: userID });
-            if (user) entry.user_name = user.username;
+            entry.user_name = user ? user.username : '(anonymous)';
 
             let template = await Template.findOne({ _id: templateID });
-            if (template) entry.template_name = template.name;
+            entry.template_name = template ? template.name : 'no template data';
         }
 
         return res.status(200).json({ success: true, data: resultArray })
@@ -217,7 +217,7 @@ const getOwnMemes = async (req, res) => {
             let userID = entry.user_id;
 
             let user = await User.findOne({ _id: userID });
-            if (user) entry.user_name = user.username;
+            entry.user_name = user ? user.username : '(anonymous)';
         }
 
         return res.status(200).json({ success: true, data: resultArray })
@@ -251,7 +251,7 @@ const getCommentsByMemeId = async (req, res) => {
             let userID = entry.user_id;
 
             let user = await User.findOne({ _id: userID });
-            if (user) entry.user_name = user.username;
+            entry.user_name = user ? user.username : '(anonymous)';
         }
 
         return res.status(200).json({ success: true, data: resultArray })

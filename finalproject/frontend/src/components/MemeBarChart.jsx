@@ -25,7 +25,7 @@ export default class MemeBarChart extends React.Component {
         let previousChart = document.querySelector(".meme-barchart-wrapper .barchart svg")
         if(previousChart) previousChart.remove();
 
-        const svg = d3 //TODO clear/remove?
+        const svg = d3
             .select(".meme-barchart-wrapper .barchart")
             .append("svg")
             .attr("width", w)

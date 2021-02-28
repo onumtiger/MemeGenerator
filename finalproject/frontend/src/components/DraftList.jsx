@@ -3,6 +3,7 @@ import '../style/DraftList.scss';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import api from '../api';
+import createTokenProvider from '../api/createTokenProvider';
 
 export default class DraftList extends React.Component {
     constructor(props) {
@@ -32,7 +33,8 @@ export default class DraftList extends React.Component {
 
     componentDidMount = async ()=>{
         try{
-            let draftArray = await api.getAllDrafts(0); //TODO actual userID...
+            let userId = createTokenProvider.userIdFromToken();
+            let draftArray = await api.getAllDrafts(userId);
             if (draftArray.data.success){
                 this.setState({
                     drafts: draftArray.data.data,

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import '../style/VoteCounter.scss';
+import createTokenProvider from '../api/createTokenProvider';
 
 export default class VoteButtons extends Component {
     constructor(props) {
         super(props);
 
-        //TODO actual userid...
-        this.userId = 0;
-        this.loggedIn = this.userId != null; //TODO login logic
+        this.userId = createTokenProvider.userIdFromToken();
+        this.loggedIn = createTokenProvider.isLoggedIn();
 
         this.values = this.getValues();
 
@@ -32,13 +32,13 @@ export default class VoteButtons extends Component {
             
             this.values = this.getValues();
 
-            this.props.handleUpvote(false);
+            this.props.handleUpvote(false, this.userId);
         }else{ //it wasn't upvoted, now it will be
             this.props.stats.upvotes.push(this.userId);
             
             this.values = this.getValues();
 
-            this.props.handleUpvote(true);
+            this.props.handleUpvote(true, this.userId);
         }
 
         this.forceUpdate();
@@ -55,13 +55,13 @@ export default class VoteButtons extends Component {
             
             this.values = this.getValues();
 
-            this.props.handleDownvote(false);
+            this.props.handleDownvote(false, this.userId);
         }else{ //it wasn't downvoted, now it will be
             this.props.stats.downvotes.push(this.userId);
 
             this.values = this.getValues();
 
-            this.props.handleDownvote(true);
+            this.props.handleDownvote(true, this.userId);
         }
 
         this.forceUpdate();

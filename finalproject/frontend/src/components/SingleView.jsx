@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import api from '../api';
+import createTokenProvider from '../api/createTokenProvider';
 import Read from '../speech/read'
 
 import { MemeVoteCounter, MemeComment } from '.';
@@ -106,8 +107,8 @@ export default class SingleView extends Component {
 
     postComment = async (message)=>{
         try{
-            //TODO userID
-            await api.postComment(0, this.props.meme._id, message).then((res)=>{
+            let userId = createTokenProvider.userIdFromToken();
+            await api.postComment(userId, this.props.meme._id, message).then((res)=>{
                 this.props.meme.comment_ids.push(res.data.comment_id);
                 this.props.triggerMemeListUpdate();
             });

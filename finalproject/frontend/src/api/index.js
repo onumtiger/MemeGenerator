@@ -37,6 +37,7 @@ export const getTemplateVisibilityOptions = userId => api.get(`/guidata/visibili
 export const getAllDrafts = (userId) => api.get(`/drafts/`, { params: { userId } });
 export const insertDraft = (draftData) => api.post(`/drafts/`, draftData);
 export const deleteDraft = (draftId) => api.delete(`/drafts/${draftId}`);
+// WEB TEMPLATE UPLOADS
 export const fetchWebImage = url => api.get(`/webcontent/image/${url}`);
 export const fetchWebSnapshot = url => api.get(`/webcontent/snapshot/${url}`);
 // COMMENTS

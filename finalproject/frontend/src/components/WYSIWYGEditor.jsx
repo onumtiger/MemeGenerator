@@ -3,7 +3,7 @@ import {CanvasDownloadButton, CanvasUploadButton} from '.';
 import TextBox from '../abstract/TextBox';
 import '../style/WYSIWYG.scss';
 import api from '../api';
-import Main from '../speech/main';
+import createTokenProvider from '../api/createTokenProvider';
 
 // not sensible to divide this up further into React components as the canvas and the form have to be highly interconnected and achieving the desired outcome with dedicated components would result in some truly nightmarish code.
 
@@ -431,8 +431,7 @@ export default class WYSIWYGEditor extends React.Component {
 
   handlePublishedMeme(memeId){
     if(this.props.draft){
-      //TODO actual user ID...
-      api.deleteDraft(0, this.props.draft._id);
+      api.deleteDraft(this.props.draft._id);
     }
     this.props.history.push('/memes/view/'+memeId);
   }
@@ -449,10 +448,12 @@ export default class WYSIWYGEditor extends React.Component {
   handleDraftButtonClick(e){
     console.log("draft saved")
     let elem = e.target;
+    
+    let userId = createTokenProvider.userIdFromToken();
 
     let draftData = {
       template_id: this.state.templateId,
-      user_id: 0, //TODO actual user ID...
+      user_id: userId,
       title: document.querySelector('#wysiwyg-wrapper #in-title').value || 'Created Meme',
       captions: []
     };
@@ -499,7 +500,8 @@ export default class WYSIWYGEditor extends React.Component {
       titleInput.classList.remove('invalid');
     }
     formData.append('name', enteredTitle);
-    formData.append('userID', 0); //TODO get current userID
+    let userId = createTokenProvider.userIdFromToken();
+    formData.append('userID', userId);
     formData.append('templateID', this.state.templateId);
     
     if(!this.selectedVisibilityElem){
@@ -521,8 +523,8 @@ export default class WYSIWYGEditor extends React.Component {
   componentDidMount(){
     this.setTemplateImage(this.props.templateImagePath, this.props.templateImageId);
 
-    //TODO insert actual userId
-    api.getMemeVisibilityOptions(0).then((response)=>{
+    let userId = createTokenProvider.userIdFromToken();
+    api.getMemeVisibilityOptions(userId).then((response)=>{
       let voWrapper = document.querySelector('#wysiwyg-wrapper #visibilityOption-wrapper');
       response.data.data.forEach(vo => {
         let p = document.createElement('p');

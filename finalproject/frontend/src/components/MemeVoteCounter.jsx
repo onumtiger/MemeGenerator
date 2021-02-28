@@ -16,16 +16,16 @@ export default class MemeVoteCounter extends Component {
         });
     }
 
-    handleDownvote(newValue){
-        api.toggleDownvoteMeme(this.props.meme._id, this.userId, newValue).then(()=>{
+    handleDownvote(newValue, userId){
+        api.toggleDownvoteMeme(this.props.meme._id, userId, newValue).then(()=>{
             if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
         }).catch(err =>{
             console.log('Failed to send downvotes: ',err);
         });
     }
 
-    handleUpvote(newValue){
-        api.toggleUpvoteMeme(this.props.meme._id, this.userId, newValue).then(()=>{
+    handleUpvote(newValue, userId){
+        api.toggleUpvoteMeme(this.props.meme._id, userId, newValue).then(()=>{
             if(this.props.triggerMemeListUpdate) this.props.triggerMemeListUpdate();
         }).catch(err =>{
             console.log('Failed to send upvotes: ',err);

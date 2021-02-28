@@ -254,7 +254,8 @@ export default class DrawTemplate extends React.Component {
             titleInput.classList.remove('invalid');
         }
         formData.append('name', enteredTitle);
-        formData.append('userID', 0); //TODO get current userID
+        let userId = createTokenProvider.userIdFromToken();
+        formData.append('userID', userId);
         if(!this.selectedVisibilityElem){
             document.querySelector('#draw-template-wrapper #visibilityOption-wrapper').classList.add('invalid');
             return null;
@@ -280,9 +281,8 @@ export default class DrawTemplate extends React.Component {
         //make the background white instead of transparent (to be removed once we're drawing on top of images)
         this.setCanvasBackgroundColor(this.canvasBackgroundColor);
 
-        //TODO insert actual userId
-
-        api.getTemplateVisibilityOptions(0).then((response)=>{
+        let userId = createTokenProvider.userIdFromToken();
+        api.getTemplateVisibilityOptions(userId).then((response)=>{
             this.setState({
                 visibilityOptions: response.data.data,
                 visibilityOptionsLoading: false

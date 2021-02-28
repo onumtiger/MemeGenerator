@@ -16,16 +16,16 @@ export default class TemplateVoteCounter extends Component {
         });
     }
 
-    handleDownvote(newValue){
-        api.toggleDownvoteTemplate(this.props.template._id, this.userId, newValue).then(()=>{
+    handleDownvote(newValue, userId){
+        api.toggleDownvoteTemplate(this.props.template._id, userId, newValue).then(()=>{
             this.props.triggerTemplateDetailsUpdate();
         }).catch(err =>{
             console.log('Failed to send downvotes: ',err);
         });
     }
 
-    handleUpvote(newValue){
-        api.toggleUpvoteTemplate(this.props.template._id, this.userId, newValue).then(()=>{
+    handleUpvote(newValue, userId){
+        api.toggleUpvoteTemplate(this.props.template._id, userId, newValue).then(()=>{
             this.props.triggerTemplateDetailsUpdate();
         }).catch(err =>{
             console.log('Failed to send upvotes: ',err);

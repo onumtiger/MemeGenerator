@@ -40,13 +40,9 @@ export default class MyMemes extends Component {
      * get own memes
      */
     componentDidMount = async () => {
-        
-        console.log('! userID',createTokenProvider.userIdFromToken());
-        console.log('! logged in',createTokenProvider.isLoggedIn());
-
         try {
-            //TODO actual userid...
-            let response = await api.getOwnMemes(0);
+            let userId = createTokenProvider.userIdFromToken();
+            let response = await api.getOwnMemes(userId);
             this.setState({
                 memes: response.data.data,
                 isLoading: false

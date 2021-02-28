@@ -3,11 +3,12 @@ import api from '../api';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import '../style/CreateAPI.scss';
+import createTokenProvider from '../api/createTokenProvider';
 
 /**
  * create via API
  */
-class CreateAPI extends Component { //TODO visibility options styling
+class CreateAPI extends Component {
     constructor(props) {
         super(props);
 
@@ -149,7 +150,8 @@ class CreateAPI extends Component { //TODO visibility options styling
         formData.append('name', enteredTitle);
 
         //add userID
-        formData.append('userID', 0); //TODO get current userID
+        let userId = createTokenProvider.userIdFromToken();
+        formData.append('userID', userId);
 
         //check for a selected visibility
         if (!this.selectedVisibilityElem) {
@@ -168,7 +170,7 @@ class CreateAPI extends Component { //TODO visibility options styling
         let templateParams = {
             imageURL: this.state.currentTemplate.url,
             name: this.state.currentTemplate.name,
-            userID: 0, //TODO userID
+            userID: userId,
             visibility: 2 //public template
         };
 
@@ -218,8 +220,8 @@ class CreateAPI extends Component { //TODO visibility options styling
         }
 
         try {
-            //TODO insert actual userId
-            let response = await api.getMemeVisibilityOptions(0);
+            let userId = createTokenProvider.userIdFromToken();
+            let response = await api.getMemeVisibilityOptions(userId);
             this.setState({
                 visibilityOptions: response.data.data,
                 visibilityOptionsLoading: false

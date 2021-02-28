@@ -3,6 +3,7 @@ import '../style/UploadTemplate.scss';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import api from '../api';
+import createTokenProvider from '../api/createTokenProvider';
 
 export default class UploadTemplate extends React.Component {
     constructor(props){
@@ -64,7 +65,8 @@ export default class UploadTemplate extends React.Component {
             titleInput.classList.remove('invalid');
         }
         formData.append('name', enteredTitle);
-        formData.append('userID', 0); //TODO get current userID
+        let userId = createTokenProvider.userIdFromToken();
+        formData.append('userID', userId);
         if(!this.selectedVisibilityElem){
             document.querySelector('#upload-template-table #visibilityOption-wrapper').classList.add('invalid');
             return;
@@ -228,8 +230,8 @@ export default class UploadTemplate extends React.Component {
     }
 
     componentDidMount = async () => {
-        //TODO insert actual userId
-        api.getTemplateVisibilityOptions(0).then((response)=>{
+        let userId = createTokenProvider.userIdFromToken();
+        api.getTemplateVisibilityOptions(userId).then((response)=>{
             this.setState({
                 visibilityOptions: response.data.data,
                 visibilityOptionsLoading: false

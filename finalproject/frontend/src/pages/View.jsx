@@ -5,6 +5,7 @@ import api from '../api';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import '../style/View.scss';
+import createTokenProvider from '../api/createTokenProvider';
 
 /**
  * hierarchically first view
@@ -165,8 +166,8 @@ export default class View extends Component {
      */
     componentDidMount = async () => {
         try {
-            //TODO: actual userid...
-            let response = await api.getAllMemes(0);
+            let userId = createTokenProvider.userIdFromToken();
+            let response = await api.getAllMemes(userId);
             this.initialMemes = response.data.data;
             this.setState({
                 memes: response.data.data,

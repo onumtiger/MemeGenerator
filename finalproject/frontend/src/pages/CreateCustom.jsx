@@ -3,6 +3,7 @@ import {DrawTemplate, WYSIWYGEditor, TemplatesList, CreateTemplateSelection, Upl
 import api from '../api';
 import '../style/CreateCustom.scss';
 import Main from '../speech/main';
+import createTokenProvider from '../api/createTokenProvider';
 
 /**
  * Custom creation of a meme by choosing template, using draft ...
@@ -144,8 +145,8 @@ export default class CreateCustom extends React.Component {
             }
         });
         try{
-            //TODO actual userid...
-            let templatesArray = await api.getAllTemplates(0);
+            let userId = createTokenProvider.userIdFromToken();
+            let templatesArray = await api.getAllTemplates(userId);
             if (templatesArray.data.success){
                 this.setState({
                     templateListData: {
