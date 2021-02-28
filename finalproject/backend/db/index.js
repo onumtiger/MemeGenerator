@@ -33,7 +33,7 @@ const resetDB = async () => {
         visibility: 0,
         creationDate: "2021/02/12",
         stats: {
-            upvotes: [0, 2, 3],
+            upvotes: [0, 2],
             downvotes: [1],
             views: 0
         }
@@ -52,7 +52,7 @@ const resetDB = async () => {
         creationDate: "2021/02/13",
         stats: {
             upvotes: [0],
-            downvotes: [1, 2, 3],
+            downvotes: [1, 2],
             views: 0
         }
     };
@@ -89,7 +89,7 @@ const resetDB = async () => {
         user_id: 0,
         visibility: 2,
         stats: {
-            upvotes: [0, 2, 3],
+            upvotes: [0, 2],
             downvotes: [1],
             uses: 0
         }
@@ -104,7 +104,7 @@ const resetDB = async () => {
         visibility: 0,
         stats: {
             upvotes: [0],
-            downvotes: [1, 2, 3],
+            downvotes: [1, 2],
             uses: 0
         }
     };
